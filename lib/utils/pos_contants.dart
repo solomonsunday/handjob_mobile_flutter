@@ -1,0 +1,2 @@
+const String AUTH_TOKEN_KEY = "AUTH_TOKEN_KEY";
+const String AUTH_REFRESH_KEY = "AUTH_REFRESH_KEY";
