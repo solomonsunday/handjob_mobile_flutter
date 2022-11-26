@@ -8,8 +8,9 @@ class ColorManager {
   static const Color kErrorTextColor = Color(0xffC80000);
   static const Color kWhiteColor = Color(0xffFFFFFF);
   static const Color kGrey = Colors.grey;
-  static const Color kGrey1 = Color(0xff555555);
-  static const Color kGrey2 = Color(0xff888888);
+  // static const Color kGrey1 = Color(0xff555555);
+  // static const Color kGrey2 = Color(0xff888888);
+  static const Color kLightGrey = Color(0xffD9D9D9);
   static const Color kNavNonActiveColor = Color(0xff777777);
   static const Color kGreyOpacity = Color.fromRGBO(55, 72, 70, 0.5);
   static const Color kGreyOpacity2 = Color.fromRGBO(170, 170, 170, 0.6);
@@ -23,7 +24,7 @@ class ColorManager {
   static const Color kInputBgColor = Color(0xffF9F9F9);
   static const Color kTurquoiseDarkColor = Color(0xff374846);
   static const Color kNavDarkColor = Color(0xff050F1A);
-  static const Color kDarkColor = Color(0xff43514F);
+  static const Color kDarkColor = Color(0xff000000);
   static const Color kBackgroundolor = Color(0xffF0F1FD);
   static const Color kGreyBtn = Color(0xffE5E5E5);
   static const Color kRed = Color(0xffD10000);
@@ -53,4 +54,10 @@ class ColorManager {
   static const Color kLightIndigoBg = Color(0xffF0F2FD);
   static const Color kFacebookColor = Color(0xff4267B2);
   static const Color kGoogleColor = Color(0xffDB4437);
+
+  static const Color kGrey1 = Color(0xffCCCCCC);
+  static const Color kGrey2 = Color(0xffAAAAAA);
+  static const Color kGrey3 = Color(0xff808080);
+  static const Color kGrey4 = Color(0xff555555);
+  static const Color kGrey5 = Color(0xff393939);
 }

@@ -38,9 +38,9 @@ class SplashViewViewModel extends FutureViewModel<User> {
 
       return response;
     } on DioError catch (error) {
-      print('error: ${error.response!.data['message']}');
+      print('error: ${error.response!.data}');
       _isLoggedIn = false;
-      throw Exception(error.response!.data['message']);
+      throw Exception(error.response!.data);
     } finally {
       print('done');
       if (_isLoggedIn) {

@@ -116,15 +116,19 @@ class InputField extends StatelessWidget {
                 fontSize: FontSize.s16),
             border: border ??
                 OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(color: ColorManager.kTransparent),
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: ColorManager.kDarkColor),
                 ),
             enabledBorder: enabledBorder ??
                 OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(color: ColorManager.kTransparent),
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: ColorManager.kNavDarkColor),
                 ),
-            focusedBorder: focusedBorder,
+            focusedBorder: focusedBorder ??
+                OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: ColorManager.kNavDarkColor),
+                ),
             // alignLabelWithHint: true,
             // labelText: label,
             isDense: true,

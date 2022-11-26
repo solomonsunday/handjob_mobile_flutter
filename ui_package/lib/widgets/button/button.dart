@@ -29,11 +29,9 @@ class DefaultButton extends StatelessWidget {
   final BorderRadiusType borderRadiusType;
 
   final bool? disabled;
-  final double? height;
 
   DefaultButton({
     Key? key,
-    this.height,
     this.borderRadius = 8.0,
     this.border,
     this.fontSize = 14.0,
@@ -123,10 +121,9 @@ class DefaultButton extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        height: height ?? 40,
         padding: const EdgeInsets.symmetric(
           horizontal: 24.0,
-          // vertical: 23.0,
+          vertical: 23.0,
         ),
         decoration: BoxDecoration(
           borderRadius: _constructBorderRadius(borderRadiusType),

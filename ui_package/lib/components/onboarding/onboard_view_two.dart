@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../ui_package.dart';
+import 'onboard_indicator.dart';
 
 class OnboardingViewTwo extends StatelessWidget {
   OnboardingViewTwo({
@@ -17,65 +19,84 @@ class OnboardingViewTwo extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
-      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 8),
-      decoration: BoxDecoration(color: ColorManager.kWhiteColor),
+      padding: const EdgeInsets.symmetric(
+        vertical: AppSize.s40,
+        horizontal: AppPadding.p8,
+      ),
+      decoration: const BoxDecoration(color: ColorManager.kWhiteColor),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              GestureDetector(
-                onTap: onSkipPressed,
-                child: Text(
-                  AppString.skip,
-                  style: getBoldStyle(
-                      color: ColorManager.kDarkCharcoal,
-                      fontSize: FontSize.s16),
-                ),
-              )
-            ],
-          ),
-          const SizedBox(height: 24),
-          Expanded(
-            child: Container(
-              height: 200,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  width: 1,
-                  color: ColorManager.kGrey,
-                ),
-              ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: AppPadding.p8,
+              horizontal: AppPadding.p16,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset('assets/images/favicon.png'),
+                GestureDetector(
+                  onTap: onSkipPressed,
+                  child: Text(
+                    AppString.skip,
+                    style: getRegularStyle(
+                        color: ColorManager.kDarkColor, fontSize: FontSize.s14),
+                  ),
+                )
+              ],
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 80),
+          SvgPicture.asset(
+            'assets/images/job_hunt.svg',
+          ),
           Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppPadding.p24,
+              vertical: AppPadding.p16,
+            ),
+            decoration: const BoxDecoration(),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  AppString.track,
-                  style: getBoldStyle(
-                      color: ColorManager.kPrimaryColor,
-                      fontSize: FontSize.s24),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                  child: Text(
+                    "Find Instant \nJobs",
+                    style: getBoldStyle(
+                      color: Colors.black,
+                      fontSize: FontSize.s24,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  AppString.onBoardSub2,
+                  'You can now apply for instant handy jobs around you from the comfort of your home.',
                   style: getMediumStyle(
-                      color: ColorManager.kGrey1, fontSize: FontSize.s16),
+                    color: Colors.black,
+                    fontSize: FontSize.s12,
+                  ),
                   textAlign: TextAlign.center,
                 ),
+                const SizedBox(height: 24),
+                OnboardIndicator(activeIndex: 1),
                 const SizedBox(
                   height: 40,
                 ),
+                DefaultButton(
+                  onPressed: () {},
+                  title: 'Next',
+                  buttonBgColor: Colors.black,
+                )
               ],
             ),
-          )
+          ),
+          const SizedBox(height: 24)
         ],
       ),
     );

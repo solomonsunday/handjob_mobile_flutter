@@ -92,6 +92,8 @@ class AppString {
   static String submitFeedback = "Submit Feedback";
 
   static String transactions = "Transactions";
+
+  static String requestInstantService = "Request Instant\n Service";
   static String verifyEmailSubText(String email) =>
       "We sent a six-digit code to your email address ($email) for verification.";
   static const String otpCodeText = "OTP Code";
