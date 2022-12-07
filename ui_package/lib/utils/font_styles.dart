@@ -28,4 +28,6 @@ class FontSize {
   static const double s40 = 40.0;
 
   static const double s11 = 11.0;
+
+  static const double s9 = 9.0;
 }

@@ -26,6 +26,8 @@ class DefaultButton extends StatelessWidget {
   final IconData? trailingIcon;
   final double trailingIconSpace;
   final double leadingIconSpace;
+  final double? paddingHeight;
+  final double? paddingWidth;
   final BorderRadiusType borderRadiusType;
 
   final bool? disabled;
@@ -50,6 +52,8 @@ class DefaultButton extends StatelessWidget {
     this.buttonType = ButtonType.fill,
     this.borderRadiusType = BorderRadiusType.none,
     this.disabled = false,
+    this.paddingHeight,
+    this.paddingWidth,
   });
 
   Color getBackgroundColor() {
@@ -121,9 +125,9 @@ class DefaultButton extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24.0,
-          vertical: 23.0,
+        padding: EdgeInsets.symmetric(
+          horizontal: paddingHeight ?? 24.0,
+          vertical: paddingWidth ?? 23.0,
         ),
         decoration: BoxDecoration(
           borderRadius: _constructBorderRadius(borderRadiusType),

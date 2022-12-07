@@ -6,7 +6,9 @@ import 'package:handjob_mobile/services/authentication.service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class SignupViewModel extends BaseViewModel {
+import '../../../../app/app.router.dart';
+
+class CustomerSignupViewModel extends BaseViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
@@ -75,5 +77,7 @@ class SignupViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  register() {}
+  register() {
+    _navigationService.navigateTo(Routes.verifyEmailView);
+  }
 }

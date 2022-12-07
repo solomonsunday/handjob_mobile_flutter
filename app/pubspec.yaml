@@ -43,6 +43,7 @@ dependencies:
   material_design_icons_flutter: ^6.0.7096
   ui_package:
     path: ../ui_package
+  google_fonts: ^3.0.1
 
 dev_dependencies:
   flutter_test:

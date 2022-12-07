@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 
 class ColorManager {
-  static const Color kPrimaryColor = Color(0xff5A2846);
-  static const Color kPrimaryDarkColor = Color(0xff0E3A35);
-  static const Color kSecondaryColor = Color(0xff6FCF97);
+  static const Color kPrimaryColor = Color(0xff000000);
+  static const Color kPrimary500Color = Color(0xff393939);
+  static const Color kPrimary400Color = Color(0xff555555);
+  static const Color kPrimary300Color = Color(0xff808080);
+  static const Color kPrimary200Color = Color(0xffAAAAAA);
+  static const Color kPrimary100Color = Color(0xffCCCCCC);
+
+  static const Color kSecondaryColor = Color(0xff367C3C);
+  static const Color kSecondary500Color = Color(0xff57925C);
+  static const Color kSecondary400Color = Color(0xff79A87D);
+  static const Color kSecondary300Color = Color(0xff9ABD9D);
+  static const Color kSecondary200Color = Color(0xffBCD3BE);
+  static const Color kSecondary100Color = Color(0xffD7E5D8);
+
   static const Color kErrorBgColor = Color(0xffFFE3E3);
   static const Color kErrorTextColor = Color(0xffC80000);
   static const Color kWhiteColor = Color(0xffFFFFFF);

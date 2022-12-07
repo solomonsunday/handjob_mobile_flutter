@@ -92,9 +92,10 @@ class InputField extends StatelessWidget {
             if (labelRightItem != null) labelRightItem!
           ],
         ),
-        const SizedBox(
-          height: AppSize.s4,
-        ),
+        if (label.isNotEmpty)
+          const SizedBox(
+            height: AppSize.s4,
+          ),
         TextFormField(
           initialValue: initialValue,
           showCursor: showCursor,

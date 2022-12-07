@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handjob_mobile/ui/main/home/home_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
@@ -37,10 +38,17 @@ class MainView extends StatelessWidget {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
-                    Icons.chat_bubble,
+                    Icons.add_box_outlined,
                     color: ColorManager.kWhiteColor,
                   ),
-                  label: 'Chats',
+                  label: 'Post',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.handyman_sharp,
+                    color: ColorManager.kWhiteColor,
+                  ),
+                  label: 'Instant Hire',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
@@ -51,17 +59,10 @@ class MainView extends StatelessWidget {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
-                    Icons.settings_applications,
+                    Icons.chat_bubble,
                     color: ColorManager.kWhiteColor,
                   ),
-                  label: 'Instant Hire',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.people,
-                    color: ColorManager.kWhiteColor,
-                  ),
-                  label: 'Contacts',
+                  label: 'Chats',
                 ),
               ],
               currentIndex: model.currentIndex,
@@ -76,18 +77,19 @@ class MainView extends StatelessWidget {
   }
 
   static const int HOME_VIEW = 0;
-  static const int CHAT_VIEW = 1;
-  static const int JOB_VIEW = 2;
-  static const int INSTANT_HIRE_VIEW = 3;
-  static const int CONTACT_VIEW = 4;
+  static const int POST_VIEW = 1;
+  static const int INSTANT_HIRE_VIEW = 2;
+  static const int JOB_VIEW = 3;
+  static const int CHAT_VIEW = 4;
 
   getView(int currentIndex) {
     switch (currentIndex) {
       case HOME_VIEW:
-      case CHAT_VIEW:
-      case JOB_VIEW:
+        return HomeView();
+      case POST_VIEW:
       case INSTANT_HIRE_VIEW:
-      case CONTACT_VIEW:
+      case JOB_VIEW:
+      case CHAT_VIEW:
         return Center(
           child: Text('chat View'),
         );

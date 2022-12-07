@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../ui_package.dart';
 
@@ -6,11 +7,8 @@ import '../ui_package.dart';
 
 TextStyle _getTextStyle(
     double fontSize, String fontFamily, FontWeight fontWeight, Color color) {
-  return TextStyle(
-      fontSize: fontSize,
-      fontFamily: fontFamily,
-      fontWeight: fontWeight,
-      color: color);
+  return GoogleFonts.redHatDisplay(
+      fontSize: fontSize, fontWeight: fontWeight, color: color);
 }
 
 TextStyle getLightStyle(

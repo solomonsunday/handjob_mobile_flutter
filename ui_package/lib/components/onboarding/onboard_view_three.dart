@@ -84,14 +84,18 @@ class OnboardingViewThree extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
-                OnboardIndicator(activeIndex: 2),
+                const OnboardIndicator(activeIndex: 2),
                 const SizedBox(
                   height: 40,
                 ),
                 DefaultButton(
-                  onPressed: () {},
-                  title: 'Next',
+                  onPressed: onFinishPressed,
+                  title: 'Get Started',
+                  buttonTextColor: ColorManager.kWhiteColor,
                   buttonBgColor: Colors.black,
+                  borderRadius: AppSize.s12,
+                  trailingIcon: Icons.arrow_forward,
+                  trailingIconColor: ColorManager.kWhiteColor,
                 )
               ],
             ),

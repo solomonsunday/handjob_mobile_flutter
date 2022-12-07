@@ -14,10 +14,10 @@ class SplashViewViewModel extends FutureViewModel<User> {
       locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
-  void navigateToOnboard() =>
-      _navigationService.replaceWith(Routes.onboardView);
+  void navigateToOnboard() async =>
+      await _navigationService.replaceWith(Routes.onboardView);
   void navigateToLogin() => _navigationService.replaceWith(Routes.loginView);
-  void navigateToSignup() => _navigationService.replaceWith(Routes.signupView);
+  // void navigateToSignup() => _navigationService.replaceWith(Routes.signupView);
   bool _isLoggedIn = true;
   bool get isLoggedIn => _isLoggedIn;
 

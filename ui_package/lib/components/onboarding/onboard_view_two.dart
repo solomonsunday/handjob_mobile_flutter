@@ -89,7 +89,7 @@ class OnboardingViewTwo extends StatelessWidget {
                   height: 40,
                 ),
                 DefaultButton(
-                  onPressed: () {},
+                  onPressed: onNextPressed,
                   title: 'Next',
                   buttonBgColor: Colors.black,
                 )

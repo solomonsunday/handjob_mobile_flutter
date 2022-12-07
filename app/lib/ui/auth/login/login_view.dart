@@ -29,10 +29,20 @@ class LoginView extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
+                  const SizedBox(height: AppSize.s12),
+                  Text(
+                    'Login to your account',
+                    style: getMediumStyle(
+                      color: ColorManager.kDarkColor,
+                      fontSize: FontSize.s16,
+                    ),
+                  ),
+                  const SizedBox(height: AppSize.s12),
                   InputField(
                     hintText: 'Username',
                     onChanged: model.handleEmail,
                     keyBoardType: TextInputType.emailAddress,
+                    fillColor: ColorManager.kWhiteColor,
                   ),
                   SizedBox(height: AppSize.s12),
                   InputField(

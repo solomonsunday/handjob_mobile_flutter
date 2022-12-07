@@ -10,7 +10,7 @@ class SplashView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<SplashViewViewModel>.reactive(
       viewModelBuilder: () => SplashViewViewModel(),
-      onModelReady: (model) => model.getCurrentUser(),
+      // onModelReady: (model) => model.getCurrentUser(),
       builder: (context, viewModel, child) {
         return Scaffold(
           body: viewModel.isBusy
@@ -36,7 +36,7 @@ class SplashView extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   DefaultButton(
-                                    onPressed: viewModel.navigateToSignup,
+                                    onPressed: () {},
                                     title: 'Join Now',
                                     buttonBgColor: ColorManager.kSecondaryColor,
                                   ),
