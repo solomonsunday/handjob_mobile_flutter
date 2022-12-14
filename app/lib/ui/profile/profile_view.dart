@@ -44,46 +44,7 @@ class ProfileView extends StatelessWidget {
                 // ProfileTab(),
               ];
             },
-            body: DefaultTabController(
-              length: 2,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TabBar(
-                    tabs: [
-                      Tab(
-                        child: Text(
-                          'Applied jobs',
-                          style: getRegularStyle(
-                            color: ColorManager.kDarkColor,
-                          ),
-                        ),
-                      ),
-                      Tab(
-                        child: Text(
-                          'Instant hires',
-                          style: getRegularStyle(
-                            color: ColorManager.kDarkColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        Container(
-                          child: Text("Applied jobs container"),
-                        ),
-                        Container(
-                          child: Text("Instant hires container"),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
+            body: ProfileTab(),
           ),
         );
 
