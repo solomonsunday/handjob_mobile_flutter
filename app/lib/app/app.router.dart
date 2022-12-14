@@ -5,7 +5,7 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i10;
+import 'package:flutter/material.dart' as _i11;
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/dialogs/account_created.dialog.dart' as _i7;
 import 'package:handjob_mobile/ui/auth/login/login_view.dart' as _i4;
@@ -17,16 +17,17 @@ import 'package:handjob_mobile/ui/auth/verify_email/verify_email_view.dart'
     as _i8;
 import 'package:handjob_mobile/ui/main/main_view.dart' as _i9;
 import 'package:handjob_mobile/ui/onboarding/onboarding_view.dart' as _i3;
+import 'package:handjob_mobile/ui/profile/profile_view.dart' as _i10;
 import 'package:handjob_mobile/ui/splash/splash_view.dart' as _i2;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i11;
+import 'package:stacked_services/stacked_services.dart' as _i12;
 
 class Routes {
   static const splashView = '/splash-view';
 
-  static const onboardView = '/';
+  static const onboardView = '/onboard-view';
 
-  static const loginView = '/login-view';
+  static const loginView = '/';
 
   static const artisanSignupView = '/artisan-signup-view';
 
@@ -38,6 +39,8 @@ class Routes {
 
   static const mainView = '/main-view';
 
+  static const profileView = '/profile-view';
+
   static const all = <String>{
     splashView,
     onboardView,
@@ -47,6 +50,7 @@ class Routes {
     accountCreatedDialog,
     verifyEmailView,
     mainView,
+    profileView,
   };
 }
 
@@ -83,6 +87,10 @@ class StackedRouter extends _i1.RouterBase {
     _i1.RouteDef(
       Routes.mainView,
       page: _i9.MainView,
+    ),
+    _i1.RouteDef(
+      Routes.profileView,
+      page: _i10.ProfileView,
     ),
   ];
 
@@ -140,6 +148,12 @@ class StackedRouter extends _i1.RouterBase {
         settings: data,
       );
     },
+    _i10.ProfileView: (data) {
+      return _i1.buildAdaptivePageRoute<dynamic>(
+        builder: (context) => const _i10.ProfileView(),
+        settings: data,
+      );
+    },
   };
 
   @override
@@ -151,7 +165,7 @@ class StackedRouter extends _i1.RouterBase {
 class OnboardViewArguments {
   const OnboardViewArguments({this.key});
 
-  final _i10.Key? key;
+  final _i11.Key? key;
 }
 
 class AccountCreatedDialogArguments {
@@ -161,14 +175,14 @@ class AccountCreatedDialogArguments {
     required this.completer,
   });
 
-  final _i10.Key? key;
+  final _i11.Key? key;
 
-  final _i11.DialogRequest<dynamic> request;
+  final _i12.DialogRequest<dynamic> request;
 
-  final dynamic Function(_i11.DialogResponse<dynamic>) completer;
+  final dynamic Function(_i12.DialogResponse<dynamic>) completer;
 }
 
-extension NavigatorStateExtension on _i11.NavigationService {
+extension NavigatorStateExtension on _i12.NavigationService {
   Future<dynamic> navigateToSplashView([
     int? routerId,
     bool preventDuplicates = true,
@@ -184,7 +198,7 @@ extension NavigatorStateExtension on _i11.NavigationService {
   }
 
   Future<dynamic> navigateToOnboardView({
-    _i10.Key? key,
+    _i11.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -242,9 +256,9 @@ extension NavigatorStateExtension on _i11.NavigationService {
   }
 
   Future<dynamic> navigateToAccountCreatedDialog({
-    _i10.Key? key,
-    required _i11.DialogRequest<dynamic> request,
-    required dynamic Function(_i11.DialogResponse<dynamic>) completer,
+    _i11.Key? key,
+    required _i12.DialogRequest<dynamic> request,
+    required dynamic Function(_i12.DialogResponse<dynamic>) completer,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -282,6 +296,20 @@ extension NavigatorStateExtension on _i11.NavigationService {
         transition,
   ]) async {
     return navigateTo<dynamic>(Routes.mainView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToProfileView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.profileView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

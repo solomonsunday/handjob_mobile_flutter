@@ -7,19 +7,21 @@ import 'package:handjob_mobile/ui/auth/signup/customer/customer_signup_view.dart
 import 'package:handjob_mobile/ui/auth/verify_email/verify_email_view.dart';
 import 'package:handjob_mobile/ui/main/main_view.dart';
 import 'package:handjob_mobile/ui/onboarding/onboarding_view.dart';
+import 'package:handjob_mobile/ui/profile/profile_view.dart';
 import 'package:handjob_mobile/ui/splash/splash_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 @StackedApp(routes: [
   AdaptiveRoute(page: SplashView),
-  AdaptiveRoute(page: OnboardView, initial: true),
-  AdaptiveRoute(page: LoginView),
+  AdaptiveRoute(page: OnboardView),
+  AdaptiveRoute(page: LoginView, initial: true),
   AdaptiveRoute(page: ArtisanSignupView),
   AdaptiveRoute(page: CustomerSignupView),
   AdaptiveRoute(page: AccountCreatedDialog),
   AdaptiveRoute(page: VerifyEmailView),
   AdaptiveRoute(page: MainView),
+  AdaptiveRoute(page: ProfileView),
 ], dependencies: [
   LazySingleton(classType: NavigationService),
   LazySingleton(classType: DialogService),

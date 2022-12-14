@@ -94,6 +94,13 @@ class AppString {
   static String transactions = "Transactions";
 
   static String requestInstantService = "Request Instant\n Service";
+
+  static String connectionRequestTitleText = "Connection Requests";
+  static String contactsTitleText = "Contacts";
+  static String settingsTitleText = "Settings";
+  static String helpAndSupportTitleText = "Help and Suppport";
+  static String signOutTitleText = "Sign Out";
+
   static String verifyEmailSubText(String email) =>
       "We sent a six-digit code to your email address ($email) for verification.";
   static const String otpCodeText = "OTP Code";

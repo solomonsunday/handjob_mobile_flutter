@@ -24,7 +24,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
   final TextStyle? leadingStyle;
   final TextStyle? leadingBottomStyle;
   final TextStyle? titleStyle;
-  final Icon? leadingIcon;
+  final Widget? leadingIcon;
   final String? profileImage;
 
   const Navbar({
@@ -60,6 +60,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: leadingIcon,
+      titleSpacing: 0,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
