@@ -13,7 +13,7 @@ class OnboardingViewModel extends BaseViewModel {
   final _dialogService = locator<DialogService>();
 
   navigateToAuth() async {
-    _navigatorService.replaceWith(Routes.loginView);
+    _navigatorService.replaceWith(Routes.authView);
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setBool(IS_FIRST_TIME_USER, false);
   }

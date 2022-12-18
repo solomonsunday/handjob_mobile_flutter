@@ -18,77 +18,97 @@ class ProfileView extends StatelessWidget {
       viewModelBuilder: () => ProfileViewModel(),
       builder: (context, model, child) {
         return Scaffold(
-          body: NestedScrollView(
-            scrollBehavior: ScrollBehavior(),
-            headerSliverBuilder: (context, value) {
-              return [
-                SliverToBoxAdapter(child: ProfileHeader()),
-                SliverToBoxAdapter(child: SizedBox(height: AppSize.s12)),
-                SliverToBoxAdapter(child: ProfileActionButtons()),
-                SliverToBoxAdapter(child: SizedBox(height: AppSize.s32)),
-                SliverToBoxAdapter(child: ProfileBio()),
-                SliverToBoxAdapter(
-                  child: Divider(
-                    color: ColorManager.kPrimary100Color,
-                    thickness: 1,
+          appBar: AppBar(
+            backgroundColor: ColorManager.kWhiteColor,
+            leading: GestureDetector(
+              onTap: () {
+                model.goBack();
+              },
+              child: Icon(
+                Icons.arrow_back,
+                size: 24,
+                color: ColorManager.kDarkColor,
+              ),
+            ),
+            titleSpacing: 0,
+            title: Text(
+              'Profile',
+              style: getBoldStyle(
+                color: ColorManager.kDarkColor,
+                fontSize: FontSize.s16,
+              ),
+            ),
+          ),
+          body: DefaultTabController(
+            length: 3,
+            child: NestedScrollView(
+              scrollBehavior: ScrollBehavior(),
+              headerSliverBuilder: (context, value) {
+                return [
+                  SliverToBoxAdapter(child: ProfileHeader()),
+                  SliverToBoxAdapter(child: SizedBox(height: AppSize.s12)),
+                  SliverToBoxAdapter(child: ProfileActionButtons()),
+                  SliverToBoxAdapter(child: SizedBox(height: AppSize.s32)),
+                  SliverToBoxAdapter(child: ProfileBio()),
+                  SliverToBoxAdapter(
+                    child: Divider(
+                      color: ColorManager.kPrimary100Color,
+                      thickness: 1,
+                    ),
                   ),
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: AppSize.s12)),
-                SliverToBoxAdapter(child: ProfilePortfolio()),
-                SliverToBoxAdapter(
-                  child: Divider(
-                    color: ColorManager.kPrimary100Color,
-                    thickness: 1,
+                  // SliverToBoxAdapter(child: SizedBox(height: AppSize.s12)),
+                  SliverToBoxAdapter(child: ProfilePortfolio()),
+                  SliverToBoxAdapter(
+                    child: Divider(
+                      color: ColorManager.kPrimary100Color,
+                      thickness: 1,
+                    ),
                   ),
-                )
-                // ProfileTab(),
-              ];
-            },
-            body: ProfileTab(),
+                  // ProfileTab(),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppPadding.p24,
+                      ),
+                      child: TabBar(
+                          indicatorColor: ColorManager.kSecondaryColor,
+                          tabs: [
+                            Tab(
+                              child: Text(
+                                'Applied jobs',
+                                style: getRegularStyle(
+                                  color: ColorManager.kDarkColor,
+                                ),
+                              ),
+                            ),
+                            Tab(
+                              child: Text(
+                                'Instant hires',
+                                style: getRegularStyle(
+                                  color: ColorManager.kDarkColor,
+                                ),
+                              ),
+                            ),
+                            Tab(
+                              child: Text(
+                                'Reviews',
+                                style: getRegularStyle(
+                                  color: ColorManager.kDarkColor,
+                                ),
+                              ),
+                            ),
+                          ]),
+                    ),
+                  )
+                ];
+              },
+              body: const Padding(
+                padding: EdgeInsets.only(top: AppPadding.p16),
+                child: ProfileTab(),
+              ),
+            ),
           ),
         );
-
-        // return Scaffold(
-        //   appBar: Navbar(
-        //     leadingIcon: GestureDetector(
-        //       onTap: model.goBack,
-        //       child: const Icon(
-        //         Icons.arrow_back,
-        //         color: ColorManager.kPrimaryColor,
-        //       ),
-        //     ),
-        //     title: "Profile",
-        //     titleStyle: getBoldStyle(
-        //       color: ColorManager.kDarkColor,
-        //       fontSize: FontSize.s16,
-        //     ),
-        //   ),
-        //   body: SingleChildScrollView(
-        //     child: Column(
-        //       mainAxisAlignment: MainAxisAlignment.start,
-        //       crossAxisAlignment: CrossAxisAlignment.start,
-        //       mainAxisSize: MainAxisSize.min,
-        //       children: const [
-        //         ProfileHeader(),
-        //         SizedBox(height: AppSize.s12),
-        //         ProfileActionButtons(),
-        //         SizedBox(height: AppSize.s32),
-        //         ProfileBio(),
-        //         Divider(
-        //           color: ColorManager.kPrimary100Color,
-        //           thickness: 1,
-        //         ),
-        //         SizedBox(height: AppSize.s12),
-        //         ProfilePortfolio(),
-        //         Divider(
-        //           color: ColorManager.kPrimary100Color,
-        //           thickness: 1,
-        //         ),
-        //         // ProfileTab(),
-        //       ],
-        //     ),
-        //   ),
-        // );
       },
     );
   }

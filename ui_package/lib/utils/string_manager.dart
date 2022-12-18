@@ -98,7 +98,8 @@ class AppString {
   static String connectionRequestTitleText = "Connection Requests";
   static String contactsTitleText = "Contacts";
   static String settingsTitleText = "Settings";
-  static String helpAndSupportTitleText = "Help and Suppport";
+  static String faqs = "FAQs";
+  static String helpAndSupportTitleText = "Help and Support";
   static String signOutTitleText = "Sign Out";
 
   static String verifyEmailSubText(String email) =>

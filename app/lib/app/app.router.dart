@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart' as _i11;
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/dialogs/account_created.dialog.dart' as _i7;
-import 'package:handjob_mobile/ui/auth/login/login_view.dart' as _i4;
+import 'package:handjob_mobile/ui/auth/auth_view.dart' as _i4;
 import 'package:handjob_mobile/ui/auth/signup/artisan/artisan_signup_view.dart'
     as _i5;
 import 'package:handjob_mobile/ui/auth/signup/customer/customer_signup_view.dart'
@@ -23,11 +23,11 @@ import 'package:stacked/stacked.dart' as _i1;
 import 'package:stacked_services/stacked_services.dart' as _i12;
 
 class Routes {
-  static const splashView = '/splash-view';
+  static const splashView = '/';
 
   static const onboardView = '/onboard-view';
 
-  static const loginView = '/';
+  static const authView = '/auth-view';
 
   static const artisanSignupView = '/artisan-signup-view';
 
@@ -44,7 +44,7 @@ class Routes {
   static const all = <String>{
     splashView,
     onboardView,
-    loginView,
+    authView,
     artisanSignupView,
     customerSignupView,
     accountCreatedDialog,
@@ -65,8 +65,8 @@ class StackedRouter extends _i1.RouterBase {
       page: _i3.OnboardView,
     ),
     _i1.RouteDef(
-      Routes.loginView,
-      page: _i4.LoginView,
+      Routes.authView,
+      page: _i4.AuthView,
     ),
     _i1.RouteDef(
       Routes.artisanSignupView,
@@ -110,9 +110,9 @@ class StackedRouter extends _i1.RouterBase {
         settings: data,
       );
     },
-    _i4.LoginView: (data) {
+    _i4.AuthView: (data) {
       return _i1.buildAdaptivePageRoute<dynamic>(
-        builder: (context) => const _i4.LoginView(),
+        builder: (context) => const _i4.AuthView(),
         settings: data,
       );
     },
@@ -213,14 +213,14 @@ extension NavigatorStateExtension on _i12.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToLoginView([
+  Future<dynamic> navigateToAuthView([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
   ]) async {
-    return navigateTo<dynamic>(Routes.loginView,
+    return navigateTo<dynamic>(Routes.authView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

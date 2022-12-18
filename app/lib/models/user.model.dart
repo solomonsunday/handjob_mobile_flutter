@@ -6,26 +6,67 @@ part 'user.model.g.dart';
 class User {
   String? id;
   String? email;
-  String? password;
-  bool? isVerified;
+  String? firstName;
+  String? lastName;
+  String? imageUrl;
+  String? address;
+  String? profession;
+  String? companyName;
+  String? contactPhoneNumber;
+  String? postalCode;
+  String? contactEmail;
+  List<dynamic>? locations;
+  String? phoneNumber;
+  bool? emailVerified;
+  bool? phoneNumberVerified;
+  dynamic profile;
+  String? accountType;
   String? role;
-  String? token;
-  bool? disabled;
-  String? tokenExp;
-  String? createdAt;
-  String? updatedAt;
-
+  dynamic dateOfBirth;
+  List<dynamic>? hobbies;
+  List<dynamic>? interests;
+  List<dynamic>? services;
+  dynamic city;
+  List<dynamic>? skills;
+  List<dynamic>? experiences;
+  List<dynamic>? educations;
+  List<dynamic>? reviews;
+  dynamic yearOfEstablishment;
+  dynamic website;
+  dynamic noOfEmployees;
+  List<dynamic>? portfolios;
   User({
     this.id,
     this.email,
-    this.password,
-    this.isVerified,
+    this.firstName,
+    this.lastName,
+    this.imageUrl,
+    this.address,
+    this.profession,
+    this.companyName,
+    this.contactPhoneNumber,
+    this.postalCode,
+    this.contactEmail,
+    this.locations,
+    this.phoneNumber,
+    this.emailVerified,
+    this.phoneNumberVerified,
+    this.profile,
+    this.accountType,
     this.role,
-    this.token,
-    this.disabled,
-    this.tokenExp,
-    this.createdAt,
-    this.updatedAt,
+    this.dateOfBirth,
+    this.hobbies,
+    this.interests,
+    this.services,
+    this.city,
+    this.skills,
+    this.experiences,
+    this.educations,
+    this.reviews,
+    this.yearOfEstablishment,
+    this.website,
+    this.noOfEmployees,
+    this.portfolios,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

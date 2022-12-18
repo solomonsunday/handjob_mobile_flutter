@@ -36,6 +36,7 @@ class AuthenticationService with ReactiveServiceMixin {
       '/auth/signin',
       data: formData,
     );
+    // print('login detail: ${response.data}');
     Auth auth = Auth.fromJson(response.data);
     /**Persist the access token into a shared preference */
     await preferences.setString(AUTH_TOKEN_KEY, auth.accessToken.toString());
@@ -47,6 +48,7 @@ class AuthenticationService with ReactiveServiceMixin {
     var response = await dioClient.get(
       '/accounts/profile/active',
     );
+    print('user to json: ${response.data}');
     User authUser = User.fromJson(response.data);
     _currentBaseUser.value = authUser;
     return authUser;

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:handjob_mobile/ui/profile/profile_view_model.dart';
+import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
 import 'profile_avatar.dart';
 import 'profile_edit_icon.dart';
 
-class ProfileHeader extends StatelessWidget {
+class ProfileHeader extends ViewModelWidget<ProfileViewModel> {
   const ProfileHeader({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ProfileViewModel model) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +47,7 @@ class ProfileHeader extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: AppPadding.p24),
           child: Text(
-            'John Demola',
+            '${model.currentUser!.firstName} ${model.currentUser!.lastName}',
             style: getBoldStyle(
               color: ColorManager.kDarkColor,
               fontSize: FontSize.s14,
@@ -55,7 +57,7 @@ class ProfileHeader extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: AppPadding.p24),
           child: Text(
-            'Professional electrician',
+            '${model.currentUser?.profession ?? model.currentUser!.accountType}',
             style: getRegularStyle(
               color: ColorManager.kDarkColor,
               fontSize: FontSize.s12,

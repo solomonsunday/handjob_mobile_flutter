@@ -7,9 +7,10 @@ import 'package:handjob_mobile/services/authentication.service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class LoginViewModel extends BaseViewModel {
+class AuthViewModel extends BaseViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
+
   String? _email;
   String? _password;
   bool _visibility = true;
@@ -33,9 +34,9 @@ class LoginViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  login() async {
-    // await runBusyFuture(loginTask());
-    _navigationService.replaceWith(Routes.mainView);
+  login() {
+    runBusyFuture(loginTask());
+    // _navigationService.replaceWith(Routes.mainView);
   }
 
   Future<Auth> loginTask() async {
@@ -52,7 +53,9 @@ class LoginViewModel extends BaseViewModel {
       _navigationService.replaceWith(Routes.mainView);
       return response;
     } on DioError catch (err) {
-      throw Exception(err.response!.data['message']);
+      print("An error occured: please enter a valid credential");
+
+      throw Exception("An error occured: please enter a valid credential");
     } finally {
       setBusy(false);
       notifyListeners();

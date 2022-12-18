@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:handjob_mobile/ui/auth/login/login_view_model.dart';
+import 'package:handjob_mobile/ui/auth/auth_view_model.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
-class LoginView extends StatelessWidget {
-  const LoginView({Key? key}) : super(key: key);
+class AuthView extends StatelessWidget {
+  const AuthView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<LoginViewModel>.reactive(
-      viewModelBuilder: () => LoginViewModel(),
+    return ViewModelBuilder<AuthViewModel>.reactive(
+      viewModelBuilder: () => AuthViewModel(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: ColorManager.kWhiteColor,
         body: SafeArea(
@@ -48,6 +48,7 @@ class LoginView extends StatelessWidget {
                   InputField(
                     hintText: 'Password',
                     onChanged: model.handlePassword,
+                    fillColor: ColorManager.kWhiteColor,
                     obscureText: model.visibility,
                     suffixIcon: GestureDetector(
                       onTap: model.toggleVisibility,
@@ -93,6 +94,14 @@ class LoginView extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: AppSize.s40),
+                  if (model.hasError)
+                    Text(
+                      '${model.modelError}',
+                      style: getMediumStyle(
+                        color: ColorManager.kRed,
+                        fontSize: FontSize.s14,
+                      ),
+                    ),
                   DefaultButton(
                     onPressed: model.login,
                     title: 'Login',

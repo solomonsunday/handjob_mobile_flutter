@@ -16,7 +16,7 @@ class SplashViewViewModel extends FutureViewModel<User> {
 
   void navigateToOnboard() async =>
       await _navigationService.replaceWith(Routes.onboardView);
-  void navigateToLogin() => _navigationService.replaceWith(Routes.loginView);
+  void navigateToLogin() => _navigationService.replaceWith(Routes.authView);
   // void navigateToSignup() => _navigationService.replaceWith(Routes.signupView);
   bool _isLoggedIn = true;
   bool get isLoggedIn => _isLoggedIn;

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/ui/main/home/home_view.dart';
 import 'package:handjob_mobile/ui/profile/profile_view.dart';
@@ -132,7 +133,7 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                   GestureDetector(
                     onTap: () {},
                     child: const Icon(
-                      Icons.cancel,
+                      Icons.close,
                       color: ColorManager.kPrimaryColor,
                       size: AppSize.s24,
                     ),
@@ -144,20 +145,42 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: AppSize.s12),
-                  const CircleAvatar(
+                  CircleAvatar(
                     backgroundColor: ColorManager.kDarkColor,
                     radius: AppSize.s40,
+                    child: model.currentUser == null
+                        ? Container()
+                        : CachedNetworkImage(
+                            imageUrl: model.currentUser?.imageUrl ??
+                                "https://i.picsum.photos/id/866/200/200.jpg?hmac=i0ngmQOk9dRZEzhEosP31m_vQnKBQ9C19TBP1CGoIUA",
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                  colorFilter: const ColorFilter.mode(
+                                    Colors.red,
+                                    BlendMode.colorBurn,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
                   ),
                   const SizedBox(height: AppSize.s8),
                   Text(
-                    'John Demola',
+                    '${model.currentUser!.firstName} ${model.currentUser!.lastName}',
                     style: getBoldStyle(
                       color: ColorManager.kDarkColor,
                       fontSize: FontSize.s14,
                     ),
                   ),
                   Text(
-                    'Electrician',
+                    '${model.currentUser?.profession ?? model.currentUser!.accountType}',
                     style: getRegularStyle(
                       color: ColorManager.kDarkColor,
                       fontSize: FontSize.s12,
@@ -215,6 +238,21 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                 ),
                 title: Text(
                   AppString.settingsTitleText,
+                  style: getRegularStyle(
+                    color: ColorManager.kDarkColor,
+                    fontSize: FontSize.s14,
+                  ),
+                ),
+                horizontalTitleGap: 1,
+              ),
+              ListTile(
+                onTap: () {},
+                leading: const Icon(
+                  Icons.help,
+                  color: ColorManager.kDarkColor,
+                ),
+                title: Text(
+                  AppString.faqs,
                   style: getRegularStyle(
                     color: ColorManager.kDarkColor,
                     fontSize: FontSize.s14,

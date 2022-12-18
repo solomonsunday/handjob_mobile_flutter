@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class DioClient {
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'https://jobplicant-api.herokuapp.com',
+      baseUrl: 'https://api-jobplicant.herokuapp.com',
       connectTimeout: 15000,
       // receiveTimeout: 3000,
     ),

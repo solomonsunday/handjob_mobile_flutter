@@ -23,7 +23,7 @@ class ProfilePortfolio extends ViewModelWidget<ProfileViewModel> {
             children: [
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.picture_as_pdf,
                     size: AppSize.s24,
                     color: ColorManager.kDarkColor,
@@ -48,8 +48,12 @@ class ProfilePortfolio extends ViewModelWidget<ProfileViewModel> {
               )
             ],
           ),
-          const Divider(),
+          const Divider(
+            thickness: 1,
+            color: ColorManager.kGrey,
+          ),
           const ProfilePortfolioGallery(),
+          const SizedBox(height: AppSize.s8),
           GestureDetector(
             onTap: () {},
             child: Text(

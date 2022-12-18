@@ -12,25 +12,19 @@ class ProfilePortfolioGallery extends ViewModelWidget<ProfileViewModel> {
 
   @override
   Widget build(BuildContext context, ProfileViewModel model) {
-    return Container(
-      height: 390,
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 1,
-          color: ColorManager.kSecondaryColor,
-        ),
-      ),
-      child: GridView.count(
-        crossAxisCount: 3,
-        mainAxisSpacing: 4,
-        crossAxisSpacing: 4,
-        children: List.generate(
-          9,
-          (index) => Container(
-            decoration: BoxDecoration(
-              color: ColorManager.kSecondaryColor,
-              borderRadius: BorderRadius.circular(AppSize.s4),
-            ),
+    return GridView.count(
+      shrinkWrap: true,
+      crossAxisCount: 3,
+      mainAxisSpacing: 4,
+      crossAxisSpacing: 4,
+      padding: EdgeInsets.zero,
+      children: List.generate(
+        9,
+        (index) => ClipRRect(
+          borderRadius: BorderRadius.circular(AppSize.s4),
+          child: Image.asset(
+            'assets/images/gallery/${1 + index}.png',
+            fit: BoxFit.cover,
           ),
         ),
       ),

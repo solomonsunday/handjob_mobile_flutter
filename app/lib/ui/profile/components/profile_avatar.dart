@@ -15,12 +15,12 @@ class ProfileAvatar extends StatelessWidget {
         Container(
           width: AppSize.s100,
           height: AppSize.s100,
-          decoration: BoxDecoration(
-            color: ColorManager.kSecondaryColor,
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(
-              width: 1,
-              color: ColorManager.kWhiteColor,
+            image: DecorationImage(
+              image: AssetImage(
+                'assets/images/gallery/1.png',
+              ),
             ),
           ),
         ),
