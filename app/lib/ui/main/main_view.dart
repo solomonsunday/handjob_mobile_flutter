@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:handjob_mobile/ui/main/chat/chat_view.dart';
 import 'package:handjob_mobile/ui/main/home/home_view.dart';
 import 'package:handjob_mobile/ui/main/instant_hire/instant_hire_view.dart';
 import 'package:handjob_mobile/ui/main/jobs/jobs_view.dart';
+import 'package:handjob_mobile/ui/main/post/post_view.dart';
 import 'package:handjob_mobile/ui/profile/profile_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
@@ -93,14 +95,13 @@ class MainView extends StatelessWidget {
       case HOME_VIEW:
         return HomeView();
       case POST_VIEW:
+        return PostView();
       case INSTANT_HIRE_VIEW:
         return InstantHireView();
       case JOB_VIEW:
         return JobsView();
       case CHAT_VIEW:
-        return Center(
-          child: Text('chat View'),
-        );
+        return ChatView();
       default:
         return Container();
     }
@@ -136,7 +137,7 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: model.navigateBack,
                     child: const Icon(
                       Icons.close,
                       color: ColorManager.kPrimaryColor,
@@ -160,6 +161,7 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                                 "https://i.picsum.photos/id/866/200/200.jpg?hmac=i0ngmQOk9dRZEzhEosP31m_vQnKBQ9C19TBP1CGoIUA",
                             imageBuilder: (context, imageProvider) => Container(
                               decoration: BoxDecoration(
+                                shape: BoxShape.circle,
                                 image: DecorationImage(
                                   image: imageProvider,
                                   fit: BoxFit.cover,
@@ -178,14 +180,14 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                   ),
                   const SizedBox(height: AppSize.s8),
                   Text(
-                    '${model.currentUser!.firstName} ${model.currentUser!.lastName}',
+                    '${model.currentUser?.firstName} ${model.currentUser?.lastName}',
                     style: getBoldStyle(
                       color: ColorManager.kDarkColor,
                       fontSize: FontSize.s14,
                     ),
                   ),
                   Text(
-                    '${model.currentUser?.profession ?? model.currentUser!.accountType}',
+                    '${model.currentUser?.profession ?? model.currentUser?.accountType}',
                     style: getRegularStyle(
                       color: ColorManager.kDarkColor,
                       fontSize: FontSize.s12,
@@ -206,7 +208,7 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                 thickness: 1,
               ),
               ListTile(
-                onTap: () {},
+                onTap: model.navigateToConnectionRequests,
                 leading: const Icon(
                   Icons.groups_sharp,
                   color: ColorManager.kDarkColor,
@@ -221,7 +223,7 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                 horizontalTitleGap: 1,
               ),
               ListTile(
-                onTap: () {},
+                onTap: model.navigateToContacts,
                 leading: const Icon(
                   Icons.perm_contact_cal,
                   color: ColorManager.kDarkColor,
@@ -236,7 +238,7 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                 horizontalTitleGap: 1,
               ),
               ListTile(
-                onTap: () {},
+                onTap: model.navigateToSettings,
                 leading: const Icon(
                   Icons.settings,
                   color: ColorManager.kDarkColor,
@@ -251,7 +253,7 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                 horizontalTitleGap: 1,
               ),
               ListTile(
-                onTap: () {},
+                onTap: model.navigateToFAQs,
                 leading: const Icon(
                   Icons.help,
                   color: ColorManager.kDarkColor,
@@ -266,7 +268,7 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                 horizontalTitleGap: 1,
               ),
               ListTile(
-                onTap: () {},
+                onTap: model.navigateToHelpAndSupport,
                 leading: const Icon(
                   Icons.help_outline,
                   color: ColorManager.kDarkColor,
@@ -281,7 +283,7 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                 horizontalTitleGap: 1,
               ),
               ListTile(
-                onTap: () {},
+                onTap: model.logout,
                 leading: const Icon(
                   Icons.logout,
                   color: ColorManager.kDarkColor,

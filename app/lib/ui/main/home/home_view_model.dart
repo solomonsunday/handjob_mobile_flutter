@@ -9,4 +9,6 @@ class HomeViewModel extends IndexTrackingViewModel {
   void onPostImageClick() {
     _navigationService.navigateTo(Routes.postDetailView);
   }
+
+  void navigateToNotification() {}
 }

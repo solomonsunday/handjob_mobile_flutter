@@ -8,7 +8,7 @@ import '../../models/user.model.dart';
 import '../../services/authentication.service.dart';
 
 class MainViewModel extends ReactiveViewModel {
-  final _navigatorService = locator<NavigationService>();
+  final _navigationService = locator<NavigationService>();
   final _authenticationService = locator<AuthenticationService>();
   final _sharedService = locator<SharedService>();
 
@@ -16,7 +16,7 @@ class MainViewModel extends ReactiveViewModel {
 
   User? get currentUser => _authenticationService.currentUser;
 
-  navigateToProfile() => _navigatorService.navigateTo(Routes.profileView);
+  navigateToProfile() => _navigationService.navigateTo(Routes.profileView);
 
   setCurrentIndex(int value) {
     _sharedService.setCurrentIndex(value);
@@ -25,4 +25,22 @@ class MainViewModel extends ReactiveViewModel {
 
   @override
   List<ReactiveServiceMixin> get reactiveServices => [_sharedService];
+
+  void navigateBack() => _navigationService.back();
+
+  Future<void> logout() async {
+    await _authenticationService.logout();
+    _navigationService.replaceWith(Routes.authView);
+  }
+
+  void navigateToHelpAndSupport() =>
+      _navigationService.navigateTo(Routes.helpAndSupportView);
+
+  void navigateToFAQs() => _navigationService.navigateTo(Routes.fAQsView);
+
+  void navigateToSettings() {}
+
+  void navigateToContacts() {}
+
+  void navigateToConnectionRequests() {}
 }

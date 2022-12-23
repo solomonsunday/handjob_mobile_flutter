@@ -14,13 +14,18 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.nonReactive(
       viewModelBuilder: () => HomeViewModel(),
-      builder: (context, model, child) => Scaffold(
+      builder: (_, model, child) => Scaffold(
         appBar: AppBar(
           backgroundColor: ColorManager.kDarkColor,
-          leading: Icon(
-            Icons.menu,
-            size: AppSize.s24,
-            color: ColorManager.kWhiteColor,
+          leading: GestureDetector(
+            onTap: () {
+              Scaffold.of(context).openDrawer();
+            },
+            child: Icon(
+              Icons.menu,
+              size: AppSize.s24,
+              color: ColorManager.kWhiteColor,
+            ),
           ),
           title: Text(
             'HandJob',
@@ -28,7 +33,7 @@ class HomeView extends StatelessWidget {
           ),
           actions: [
             GestureDetector(
-              onTap: () {},
+              onTap: model.navigateToNotification,
               child: Stack(
                 alignment: Alignment.center,
                 children: [

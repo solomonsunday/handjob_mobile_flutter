@@ -44,6 +44,13 @@ class AuthenticationService with ReactiveServiceMixin {
     return auth;
   }
 
+  Future<void> logout() async {
+    final preferences = await SharedPreferences.getInstance();
+
+    await preferences.remove(AUTH_TOKEN_KEY);
+    await preferences.remove(AUTH_REFRESH_KEY);
+  }
+
   Future<User> getCurrentBaseUser() async {
     var response = await dioClient.get(
       '/accounts/profile/active',

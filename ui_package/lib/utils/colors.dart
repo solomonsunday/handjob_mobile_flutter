@@ -27,6 +27,7 @@ class ColorManager {
   static const Color kGreyOpacity2 = Color.fromRGBO(170, 170, 170, 0.6);
   static const Color kTransparent = Color.fromRGBO(255, 255, 255, 0.1);
   static const Color kDarkCharcoal = Color(0xff333333);
+  static const Color kDarkerCharcoal = Color(0xff333333);
   static const Color kLightGreen = Color(0xffDCEBE3);
   static const Color kDarkBlue = Color(0xff263238);
   static const Color kLightGreen1 = Color(0xffE8FFFC);
