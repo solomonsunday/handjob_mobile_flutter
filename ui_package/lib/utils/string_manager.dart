@@ -94,6 +94,7 @@ class AppString {
   static String transactions = "Transactions";
 
   static String requestInstantService = "Request Instant\n Service";
+  static String requestInstantServiceTitle = "Request Instant Service";
 
   static String connectionRequestTitleText = "Connection Requests";
   static String contactsTitleText = "Contacts";
@@ -101,6 +102,8 @@ class AppString {
   static String faqs = "FAQs";
   static String helpAndSupportTitleText = "Help and Support";
   static String signOutTitleText = "Sign Out";
+
+  static var allInstantJobTitle = "All instant jobs";
 
   static String verifyEmailSubText(String email) =>
       "We sent a six-digit code to your email address ($email) for verification.";

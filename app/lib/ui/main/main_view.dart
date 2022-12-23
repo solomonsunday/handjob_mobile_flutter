@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/ui/main/home/home_view.dart';
+import 'package:handjob_mobile/ui/main/instant_hire/instant_hire_view.dart';
+import 'package:handjob_mobile/ui/main/jobs/jobs_view.dart';
 import 'package:handjob_mobile/ui/profile/profile_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
@@ -69,7 +71,7 @@ class MainView extends StatelessWidget {
                 ),
               ],
               currentIndex: model.currentIndex,
-              onTap: (value) => model.setIndex(value),
+              onTap: (value) => model.setCurrentIndex(value),
               backgroundColor: ColorManager.kPrimaryColor,
               type: BottomNavigationBarType.fixed,
             ),
@@ -86,12 +88,15 @@ class MainView extends StatelessWidget {
   static const int CHAT_VIEW = 4;
 
   getView(int currentIndex) {
+    print('reacted to chanages: $currentIndex');
     switch (currentIndex) {
       case HOME_VIEW:
         return HomeView();
       case POST_VIEW:
       case INSTANT_HIRE_VIEW:
+        return InstantHireView();
       case JOB_VIEW:
+        return JobsView();
       case CHAT_VIEW:
         return Center(
           child: Text('chat View'),

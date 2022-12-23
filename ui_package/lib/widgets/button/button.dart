@@ -126,8 +126,8 @@ class DefaultButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: paddingHeight ?? 24.0,
-          vertical: paddingWidth ?? 23.0,
+          horizontal: paddingWidth ?? 24.0,
+          vertical: paddingHeight ?? 23.0,
         ),
         decoration: BoxDecoration(
           borderRadius: _constructBorderRadius(borderRadiusType),

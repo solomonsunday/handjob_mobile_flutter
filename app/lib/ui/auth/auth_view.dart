@@ -9,7 +9,7 @@ class AuthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<AuthViewModel>.reactive(
+    return ViewModelBuilder<AuthViewModel>.nonReactive(
       viewModelBuilder: () => AuthViewModel(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: ColorManager.kWhiteColor,
@@ -40,14 +40,14 @@ class AuthView extends StatelessWidget {
                   const SizedBox(height: AppSize.s12),
                   InputField(
                     hintText: 'Username',
-                    onChanged: model.handleEmail,
+                    controller: model.emailController,
                     keyBoardType: TextInputType.emailAddress,
                     fillColor: ColorManager.kWhiteColor,
                   ),
-                  SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s12),
                   InputField(
                     hintText: 'Password',
-                    onChanged: model.handlePassword,
+                    controller: model.passwordController,
                     fillColor: ColorManager.kWhiteColor,
                     obscureText: model.visibility,
                     suffixIcon: GestureDetector(

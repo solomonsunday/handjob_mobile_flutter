@@ -5,7 +5,7 @@ import 'package:ui_package/utils/font_styles.dart';
 import 'package:ui_package/utils/text_styles.dart';
 import 'package:ui_package/utils/values_manager.dart';
 
-class InputField extends StatelessWidget {
+class Textarea extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final AutovalidateMode? autovalidateMode;
   final TextAlign? textAlign;
@@ -36,12 +36,9 @@ class InputField extends StatelessWidget {
   final Widget? labelRightItem;
   final TextStyle? labelStyle;
   final int? minLines;
-  final String? initialValue;
-  final double? paddingLeft;
-  final double? paddingTop;
-  final double? paddingBottom;
+  final int? maxLines;
 
-  const InputField({
+  const Textarea({
     this.autovalidateMode,
     this.inputFormatters,
     this.textAlign,
@@ -62,6 +59,7 @@ class InputField extends StatelessWidget {
     this.onTap,
     this.maxLength,
     this.minLines,
+    this.maxLines,
     this.enabled = true,
     this.border,
     this.enabledBorder,
@@ -72,10 +70,6 @@ class InputField extends StatelessWidget {
     this.readOnly = false,
     this.labelRightItem,
     this.labelStyle,
-    this.initialValue,
-    this.paddingLeft,
-    this.paddingBottom,
-    this.paddingTop,
   });
 
   @override
@@ -84,34 +78,26 @@ class InputField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (label.isNotEmpty)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                label,
-                style: labelStyle ??
-                    getRegularStyle(
-                      color: ColorManager.kDarkCharcoal,
-                      fontSize: FontSize.s14,
-                    ),
+        Text(
+          label,
+          style: labelStyle ??
+              getRegularStyle(
+                color: ColorManager.kDarkCharcoal,
+                fontSize: FontSize.s14,
               ),
-              if (labelRightItem != null) labelRightItem!
-            ],
-          ),
-        if (label.isNotEmpty)
-          const SizedBox(
-            height: AppSize.s4,
-          ),
-        TextFormField(
-          initialValue: initialValue,
+        ),
+        if (labelRightItem != null) labelRightItem!,
+        const SizedBox(
+          height: AppSize.s4,
+        ),
+        TextField(
           showCursor: showCursor,
           readOnly: readOnly,
           maxLength: maxLength,
           enabled: enabled,
           onTap: onTap,
           minLines: minLines,
-          autovalidateMode: autovalidateMode,
+          maxLines: maxLines,
           focusNode: focusnode,
           controller: controller,
           textInputAction: TextInputAction.next,
@@ -124,29 +110,22 @@ class InputField extends StatelessWidget {
                 fontSize: FontSize.s16),
             border: border ??
                 OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: ColorManager.kDarkColor),
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: BorderSide(color: ColorManager.kTransparent),
                 ),
             enabledBorder: enabledBorder ??
                 OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: ColorManager.kNavDarkColor),
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: BorderSide(color: ColorManager.kTransparent),
                 ),
-            focusedBorder: focusedBorder ??
-                OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: ColorManager.kNavDarkColor),
-                ),
+            focusedBorder: focusedBorder,
             // alignLabelWithHint: true,
             // labelText: label,
             isDense: true,
             hintText: hintText,
             errorText: formError,
-            contentPadding: EdgeInsets.only(
-              left: paddingLeft ?? 16,
-              top: paddingTop ?? 18,
-              bottom: paddingBottom ?? 16,
-            ),
+            contentPadding:
+                const EdgeInsets.only(left: 16, top: 18, bottom: 16),
             suffixIcon: suffixIcon,
             prefixIcon: prefixIcon,
             fillColor: fillColor ?? ColorManager.kInputBgColor,
@@ -154,11 +133,10 @@ class InputField extends StatelessWidget {
           ),
           textAlign: textAlign ?? TextAlign.start,
           style: getRegularStyle(
-            color: ColorManager.kDarkCharcoal,
+            color: ColorManager.kGrey2,
             fontSize: FontSize.s16,
           ),
           inputFormatters: inputFormatters,
-          validator: validationCallback,
           keyboardType: keyBoardType,
           // onChanged: (val) {
           //   if (clearForm != null) {

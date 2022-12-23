@@ -77,10 +77,9 @@ class HomeSearchWidget extends ViewModelWidget<HomeViewModel> {
   @override
   Widget build(BuildContext context, HomeViewModel model) {
     return Container(
-      padding: const EdgeInsets.only(
-        left: AppPadding.p8,
-        right: AppPadding.p8,
-        bottom: AppPadding.p8,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppPadding.p24,
+        vertical: AppPadding.p12,
       ),
       decoration: const BoxDecoration(
         border: Border(
@@ -95,24 +94,29 @@ class HomeSearchWidget extends ViewModelWidget<HomeViewModel> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 40,
-            height: 40,
+            width: 36,
+            height: 36,
             decoration: BoxDecoration(
-              border: Border.all(
-                width: 1,
-                color: ColorManager.kDarkCharcoal,
+              borderRadius: BorderRadius.circular(24),
+              color: Color(0xffd9d9d9),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(
+                    'https://xsgames.co/randomusers/avatar.php?g=male'),
               ),
-              borderRadius: BorderRadius.circular(AppSize.s20),
             ),
           ),
           SizedBox(width: AppSize.s8),
           Expanded(
             child: InputField(
               hintText: 'Search',
+              paddingBottom: 0,
+              paddingTop: 0,
               prefixIcon: Icon(
                 Icons.search,
-                size: AppSize.s20,
+                color: ColorManager.kGrey3,
               ),
+              // onChanged: model.handleSearch,
             ),
           ),
         ],
@@ -129,7 +133,11 @@ class HomePostWidget extends ViewModelWidget<HomeViewModel> {
     return ListView.builder(
       itemCount: 10,
       itemBuilder: (BuildContext context, int index) {
-        return HomeCard();
+        return HomeCard(
+          onImageClick: () {
+            model.onPostImageClick();
+          },
+        );
       },
     );
   }

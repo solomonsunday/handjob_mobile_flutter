@@ -35,7 +35,6 @@ dependencies:
   shared_preferences: ^2.0.15
   logger:
   flutter_svg: ^1.1.6
-  intl: ^0.17.0
   dropdown_button2: ^1.9.0
   stacked: ^2.3.3
   stacked_services:
@@ -45,6 +44,8 @@ dependencies:
     path: ../ui_package
   google_fonts: ^3.0.1
   cached_network_image: ^3.2.1
+  uuid: ^3.0.7
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:

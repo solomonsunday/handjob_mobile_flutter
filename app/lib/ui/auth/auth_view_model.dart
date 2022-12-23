@@ -11,12 +11,15 @@ class AuthViewModel extends BaseViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
-  String? _email;
-  String? _password;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  // String? _email;
+  // String? _password;
   bool _visibility = true;
 
-  String? get email => _email;
-  String? get password => _password;
+  String? get email => emailController.text;
+  String? get password => passwordController.text;
   bool get visibility => _visibility;
 
   toggleVisibility() {
@@ -24,15 +27,15 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  handleEmail(String? value) {
-    _email = value;
-    notifyListeners();
-  }
+  // handleEmail(String? value) {
+  //   _email = value;
+  //   notifyListeners();
+  // }
 
-  handlePassword(String? value) {
-    _password = value;
-    notifyListeners();
-  }
+  // handlePassword(String? value) {
+  //   _password = value;
+  //   notifyListeners();
+  // }
 
   login() {
     runBusyFuture(loginTask());
