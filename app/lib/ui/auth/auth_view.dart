@@ -9,7 +9,7 @@ class AuthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<AuthViewModel>.nonReactive(
+    return ViewModelBuilder<AuthViewModel>.reactive(
       viewModelBuilder: () => AuthViewModel(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: ColorManager.kWhiteColor,
@@ -113,7 +113,7 @@ class AuthView extends StatelessWidget {
                   Row(
                     children: [],
                   ),
-                  const SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s24),
                   Row(
                     children: [
                       Expanded(
@@ -155,6 +155,7 @@ class AuthView extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(height: AppSize.s12),
                   RichText(
                     text: TextSpan(
                         text: "Don't have an account",

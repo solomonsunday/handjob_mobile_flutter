@@ -53,6 +53,7 @@ class AuthViewModel extends BaseViewModel {
 
     try {
       Auth response = await _authenticationService.login(formData);
+      await _authenticationService.getCurrentBaseUser();
       _navigationService.replaceWith(Routes.mainView);
       return response;
     } on DioError catch (err) {

@@ -29,6 +29,11 @@ class SplashView extends StatelessWidget {
                             'assets/images/jb.png',
                             fit: BoxFit.cover,
                           ),
+                          if (viewModel.hasError)
+                            Text('${viewModel.modelError}',
+                                style: getMediumStyle(
+                                  color: Colors.red,
+                                )),
                           Padding(
                               padding: const EdgeInsets.all(12),
                               child: Column(

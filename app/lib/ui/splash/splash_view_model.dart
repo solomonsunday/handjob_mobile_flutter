@@ -8,7 +8,7 @@ import '../../app/app.logger.dart';
 import '../../models/user.model.dart';
 import '../../services/authentication.service.dart';
 
-class SplashViewViewModel extends FutureViewModel<User> {
+class SplashViewViewModel extends BaseViewModel {
   final log = getLogger('MyViewModel');
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
@@ -21,7 +21,7 @@ class SplashViewViewModel extends FutureViewModel<User> {
   bool _isLoggedIn = true;
   bool get isLoggedIn => _isLoggedIn;
 
-  Future<User> getCurrentUser() async {
+  Future<User?> getCurrentUserRequest() async {
     log.i('');
     try {
       var response = await _authenticationService.getCurrentBaseUser();
@@ -38,9 +38,9 @@ class SplashViewViewModel extends FutureViewModel<User> {
 
       return response;
     } on DioError catch (error) {
-      print('error: ${error.response!.data}');
+      print('error: ${error.response?.data}');
       _isLoggedIn = false;
-      throw Exception(error.response!.data);
+      throw Exception(error.response?.data["message"]);
     } finally {
       print('done');
       if (_isLoggedIn) {
@@ -51,8 +51,9 @@ class SplashViewViewModel extends FutureViewModel<User> {
     }
   }
 
-  @override
-  Future<User> futureToRun() => getCurrentUser();
+  Future<void> getCurrentUser() async {
+    await runBusyFuture(getCurrentUserRequest());
+  }
 
   @override
   void onError(error) {
