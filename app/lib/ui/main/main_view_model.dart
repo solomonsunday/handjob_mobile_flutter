@@ -38,9 +38,11 @@ class MainViewModel extends ReactiveViewModel {
 
   void navigateToFAQs() => _navigationService.navigateTo(Routes.fAQsView);
 
-  void navigateToSettings() {}
+  void navigateToSettings() =>
+      _navigationService.navigateTo(Routes.settingView);
 
-  void navigateToContacts() {}
+  void navigateToContacts() =>
+      _navigationService.navigateTo(Routes.contactView);
 
   void navigateToConnectionRequests() {}
 }

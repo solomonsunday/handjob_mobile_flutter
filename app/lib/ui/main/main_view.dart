@@ -207,21 +207,21 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                 color: ColorManager.kPrimary100Color,
                 thickness: 1,
               ),
-              ListTile(
-                onTap: model.navigateToConnectionRequests,
-                leading: const Icon(
-                  Icons.groups_sharp,
-                  color: ColorManager.kDarkColor,
-                ),
-                title: Text(
-                  AppString.connectionRequestTitleText,
-                  style: getRegularStyle(
-                    color: ColorManager.kDarkColor,
-                    fontSize: FontSize.s14,
-                  ),
-                ),
-                horizontalTitleGap: 1,
-              ),
+              // ListTile(
+              //   onTap: model.navigateToConnectionRequests,
+              //   leading: const Icon(
+              //     Icons.groups_sharp,
+              //     color: ColorManager.kDarkColor,
+              //   ),
+              //   title: Text(
+              //     AppString.connectionRequestTitleText,
+              //     style: getRegularStyle(
+              //       color: ColorManager.kDarkColor,
+              //       fontSize: FontSize.s14,
+              //     ),
+              //   ),
+              //   horizontalTitleGap: 1,
+              // ),
               ListTile(
                 onTap: model.navigateToContacts,
                 leading: const Icon(

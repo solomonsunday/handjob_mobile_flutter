@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:stacked_services/stacked_services.dart';
-
 import 'utils/setup_dialog_ui.dart';
 
 void main() {
