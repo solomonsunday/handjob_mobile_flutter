@@ -39,7 +39,7 @@ class ProfilePortfolio extends ViewModelWidget<ProfileViewModel> {
                 ],
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: model.showPortfolioSheet,
                 child: const Icon(
                   Icons.add_circle_outline,
                   size: AppSize.s24,

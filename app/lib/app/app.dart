@@ -45,7 +45,7 @@ import '../ui/settings/change_password/change_password_view.dart';
 ], dependencies: [
   LazySingleton(classType: NavigationService),
   LazySingleton(classType: DialogService),
-  // LazySingleton(classType: SnackbarService),
+  LazySingleton(classType: BottomSheetService),
   LazySingleton(classType: DioClient),
   LazySingleton(classType: AuthenticationService),
   FactoryWithParam(classType: LocationService),

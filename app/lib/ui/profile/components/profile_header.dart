@@ -3,6 +3,7 @@ import 'package:handjob_mobile/ui/profile/profile_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
+import '../../rating/rating.dart';
 import 'profile_avatar.dart';
 import 'profile_edit_icon.dart';
 
@@ -39,7 +40,29 @@ class ProfileHeader extends ViewModelWidget<ProfileViewModel> {
             Positioned(
               bottom: -40,
               left: 10,
-              child: ProfileAvatar(),
+              child: Row(
+                children: [
+                  ProfileAvatar(),
+                ],
+              ),
+            ),
+            Positioned(
+              bottom: -40,
+              left: 124,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Rating(),
+                  Text(
+                    '79 connections',
+                    style: getBoldStyle(
+                      color: ColorManager.kSecondaryColor,
+                      fontSize: FontSize.s12,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

@@ -9,6 +9,8 @@ import 'package:ui_package/utils/text_styles.dart';
 import 'package:ui_package/utils/values_manager.dart';
 import 'package:ui_package/widgets/input/input.dart';
 
+import '../rating/rating.dart';
+
 class ContactView extends StatelessWidget {
   const ContactView({Key? key}) : super(key: key);
 
@@ -437,32 +439,6 @@ class ContactButton extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class Rating extends StatelessWidget {
-  const Rating({
-    Key? key,
-    this.mainAxisAlignment,
-    this.crossAxisAlignment,
-  }) : super(key: key);
-
-  final CrossAxisAlignment? crossAxisAlignment;
-  final MainAxisAlignment? mainAxisAlignment;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.start,
-      crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.start,
-      children: [
-        SvgPicture.asset('assets/images/rating_filled.svg'),
-        SvgPicture.asset('assets/images/rating_filled.svg'),
-        SvgPicture.asset('assets/images/rating_empty.svg'),
-        SvgPicture.asset('assets/images/rating_empty.svg'),
-        SvgPicture.asset('assets/images/rating_empty.svg'),
-      ],
     );
   }
 }

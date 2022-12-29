@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:handjob_mobile/ui/profile/components/profile_contact.dart';
+import 'package:handjob_mobile/ui/profile/components/profile_education_apprenticeship.dart';
+import 'package:handjob_mobile/ui/profile/components/profile_services.dart';
 import 'package:handjob_mobile/ui/profile/profile_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
 import 'components/profile_action_buttons.dart';
 import 'components/profile_bio.dart';
+import 'components/profile_experience.dart';
 import 'components/profile_header.dart';
 import 'components/profile_portfolio.dart';
 import 'components/profile_tab.dart';
@@ -47,9 +51,11 @@ class ProfileView extends StatelessWidget {
                 return [
                   SliverToBoxAdapter(child: ProfileHeader()),
                   SliverToBoxAdapter(child: SizedBox(height: AppSize.s12)),
-                  SliverToBoxAdapter(child: ProfileActionButtons()),
-                  SliverToBoxAdapter(child: SizedBox(height: AppSize.s32)),
-                  SliverToBoxAdapter(child: ProfileBio()),
+                  SliverToBoxAdapter(child: ProfileServices()),
+                  SliverToBoxAdapter(child: SizedBox(height: AppSize.s12)),
+                  SliverToBoxAdapter(child: ProfileExperience()),
+                  SliverToBoxAdapter(child: ProfileEducationApprenticeship()),
+                  SliverToBoxAdapter(child: ProfileContact()),
                   SliverToBoxAdapter(
                     child: Divider(
                       color: ColorManager.kPrimary100Color,

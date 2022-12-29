@@ -7,11 +7,11 @@ import 'package:ui_package/utils/values_manager.dart';
 
 import '../profile_view_model.dart';
 
-class ProfilePortfolioGallery extends ViewModelWidget<ProfileViewModel> {
+class ProfilePortfolioGallery extends StatelessWidget {
   const ProfilePortfolioGallery({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ProfileViewModel model) {
+  Widget build(BuildContext context) {
     return GridView.count(
       shrinkWrap: true,
       crossAxisCount: 3,
