@@ -11,13 +11,20 @@ const String CUSTOMER = "CUSTOMER";
 const String ARTISAN = "ARTISAN";
 const String CREATE_ACCOUNT = "CREATE_ACCOUNT";
 
-class AccountTypeDialog extends StatelessWidget {
+class AccountTypeDialog extends StatefulWidget {
   final DialogRequest request;
   final Function(DialogResponse) completer;
   const AccountTypeDialog(
       {Key? key, required this.request, required this.completer})
       : super(key: key);
 
+  @override
+  State<AccountTypeDialog> createState() => _AccountTypeDialogState();
+}
+
+class _AccountTypeDialogState extends State<AccountTypeDialog> {
+  String? _selectedAccountType;
+  String? _showError;
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -36,40 +43,90 @@ class AccountTypeDialog extends StatelessWidget {
                 fontSize: FontSize.s14,
               ),
             ),
+            if (_showError != null)
+              Text(
+                '$_showError',
+                style: getRegularStyle(
+                  color: ColorManager.kRed,
+                  fontSize: FontSize.s14,
+                ),
+              ),
             const SizedBox(height: AppSize.s24),
             DefaultButton(
               onPressed: () {
-                completer(DialogResponse(confirmed: true, data: CUSTOMER));
+                setState(() {
+                  _selectedAccountType = CUSTOMER;
+                });
               },
               title: 'Customer',
+              buttonTextColor: _selectedAccountType == CUSTOMER
+                  ? ColorManager.kWhiteColor
+                  : ColorManager.kDarkColor,
               fontSize: FontSize.s14,
               fontWeight: FontWeightManager.regular,
-              leadingIcon: Icon(Icons.person_outline),
+              leadingIcon: Icon(
+                Icons.person_outline,
+                color: _selectedAccountType == CUSTOMER
+                    ? ColorManager.kWhiteColor
+                    : ColorManager.kDarkColor,
+              ),
               leadingIconColor: ColorManager.kPrimaryColor,
-              buttonType: ButtonType.outline,
+              buttonBgColor: _selectedAccountType == CUSTOMER
+                  ? ColorManager.kSecondaryColor
+                  : Colors.transparent,
+              border: _selectedAccountType == CUSTOMER
+                  ? null
+                  : Border.all(
+                      width: 1,
+                      color: ColorManager.kDarkCharcoal,
+                    ),
             ),
             const SizedBox(height: AppSize.s24),
             DefaultButton(
               onPressed: () {
-                completer(DialogResponse(confirmed: true, data: ARTISAN));
+                setState(() {
+                  _selectedAccountType = ARTISAN;
+                });
               },
               title: 'Artisan',
-              buttonBgColor: ColorManager.kSecondaryColor,
+              buttonTextColor: _selectedAccountType == ARTISAN
+                  ? ColorManager.kWhiteColor
+                  : ColorManager.kDarkColor,
               fontSize: FontSize.s14,
               fontWeight: FontWeightManager.bold,
               leadingIcon: Icon(
                 Icons.handyman_sharp,
                 size: AppSize.s24,
-                color: ColorManager.kWhiteColor,
+                color: _selectedAccountType == ARTISAN
+                    ? ColorManager.kWhiteColor
+                    : ColorManager.kDarkColor,
               ),
               leadingIconColor: ColorManager.kWhiteColor,
               buttonType: ButtonType.fill,
+              buttonBgColor: _selectedAccountType == ARTISAN
+                  ? ColorManager.kSecondaryColor
+                  : Colors.transparent,
+              border: _selectedAccountType == ARTISAN
+                  ? null
+                  : Border.all(
+                      width: 1,
+                      color: ColorManager.kDarkCharcoal,
+                    ),
             ),
             const SizedBox(height: AppSize.s24),
             DefaultButton(
               onPressed: () {
-                completer(
-                    DialogResponse(confirmed: true, data: CREATE_ACCOUNT));
+                if (_selectedAccountType == null) {
+                  setState(() {
+                    _showError = "Please choose an account type";
+                  });
+                  return;
+                }
+                setState(() {
+                  _showError = null;
+                });
+                widget.completer(DialogResponse(
+                    confirmed: true, data: _selectedAccountType));
               },
               title: 'Create Account',
               fontWeight: FontWeightManager.regular,

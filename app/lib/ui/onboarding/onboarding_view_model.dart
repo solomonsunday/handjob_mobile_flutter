@@ -33,7 +33,7 @@ class OnboardingViewModel extends BaseViewModel {
           break;
         default:
           {
-            _navigatorService.navigateTo(Routes.customerSignupView);
+            // _navigatorService.navigateTo(Routes.customerSignupView);
           }
 
           SharedPreferences preferences = await SharedPreferences.getInstance();
