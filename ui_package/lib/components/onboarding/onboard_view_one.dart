@@ -17,8 +17,8 @@ class OnboardingViewOne extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
+      // width: MediaQuery.of(context).size.width,
+      // height: MediaQuery.of(context).size.height,
       padding: const EdgeInsets.symmetric(
         vertical: AppSize.s40,
         horizontal: AppPadding.p8,
@@ -27,6 +27,7 @@ class OnboardingViewOne extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -52,8 +53,11 @@ class OnboardingViewOne extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 80),
-          SvgPicture.asset(
-            'assets/images/request_instance_service.svg',
+          Expanded(
+            child: SvgPicture.asset(
+              'assets/images/request_instance_service.svg',
+              fit: BoxFit.cover,
+            ),
           ),
           Container(
             padding: const EdgeInsets.symmetric(

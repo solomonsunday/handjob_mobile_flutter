@@ -50,8 +50,12 @@ class OnboardingViewThree extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 80),
-          SvgPicture.asset(
-            'assets/images/people_search.svg',
+          Expanded(
+            child: SvgPicture.asset(
+              'assets/images/people_search.svg',
+              fit: BoxFit.cover,
+              cacheColorFilter: true,
+            ),
           ),
           Container(
             padding: const EdgeInsets.symmetric(

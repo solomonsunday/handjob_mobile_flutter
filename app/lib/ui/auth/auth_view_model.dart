@@ -7,12 +7,19 @@ import 'package:handjob_mobile/services/authentication.service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../dialogs/account_type.dialog.dart';
+import '../../enums/dialog.enum.dart';
+
 class AuthViewModel extends BaseViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  final _dialogService = locator<DialogService>();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  navigateToForgotPassword() =>
+      _navigationService.navigateTo(Routes.forgotPasswordView);
 
   // String? _email;
   // String? _password;
@@ -57,12 +64,30 @@ class AuthViewModel extends BaseViewModel {
       _navigationService.replaceWith(Routes.mainView);
       return response;
     } on DioError catch (err) {
-      print("An error occured: please enter a valid credential");
-
       throw Exception("An error occured: please enter a valid credential");
     } finally {
       setBusy(false);
       notifyListeners();
+    }
+  }
+
+  //show dialog
+  showDialog() async {
+    var response =
+        await _dialogService.showCustomDialog(variant: DialogType.ACCOUNT_TYPE);
+    if (response!.confirmed) {
+      switch (response.data) {
+        case CUSTOMER:
+          // do a customer job
+          _navigationService.navigateTo(Routes.customerSignupView);
+          break;
+        case ARTISAN:
+          // do an artisan job
+          _navigationService.navigateTo(Routes.artisanSignupView);
+          break;
+        default:
+          _navigationService.navigateTo(Routes.customerSignupView);
+      }
     }
   }
 }

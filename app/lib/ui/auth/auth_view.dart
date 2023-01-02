@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:handjob_mobile/ui/auth/auth_view_model.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:stacked/stacked.dart';
@@ -22,14 +24,9 @@ class AuthView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  SizedBox(
-                    height: AppSize.s100,
-                    child: Image.asset(
-                      'assets/images/favicon.png',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s24),
+                  Image.asset('assets/images/favicon.png'),
+                  const SizedBox(height: AppSize.s24),
                   Text(
                     'Login to your account',
                     style: getMediumStyle(
@@ -37,7 +34,7 @@ class AuthView extends StatelessWidget {
                       fontSize: FontSize.s16,
                     ),
                   ),
-                  const SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s24),
                   InputField(
                     hintText: 'Username',
                     controller: model.emailController,
@@ -82,7 +79,7 @@ class AuthView extends StatelessWidget {
                         ),
                       ),
                       InkWell(
-                        onTap: () {},
+                        onTap: model.navigateToForgotPassword,
                         child: Text(
                           'Forgot password?',
                           style: getRegularStyle(
@@ -109,24 +106,57 @@ class AuthView extends StatelessWidget {
                     buttonBgColor: ColorManager.kDarkColor,
                     fontWeight: FontWeight.w400,
                   ),
-                  const SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s40),
                   Row(
-                    children: [],
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 0.5,
+                              color: ColorManager.kDarkColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: AppSize.s12),
+                      Text(
+                        'OR',
+                        style: getRegularStyle(
+                          color: ColorManager.kDarkColor,
+                          fontSize: FontSize.s16,
+                        ),
+                      ),
+                      SizedBox(width: AppSize.s12),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 0.5,
+                              color: ColorManager.kDarkColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: AppSize.s24),
+                  const SizedBox(height: AppSize.s40),
                   Row(
                     children: [
                       Expanded(
                         child: SizedBox(
                           child: DefaultButton(
+                            paddingHeight: AppPadding.p20,
                             onPressed: () {},
                             title: 'Via Facebook',
                             fontSize: FontSize.s12,
-                            leadingIcon: Icons.facebook_sharp,
+                            leadingIcon: SvgPicture.asset(
+                              'assets/images/facebook_icon.svg',
+                            ),
                             leadingIconColor: ColorManager.kDarkColor,
                             buttonBgColor: ColorManager.kWhiteColor,
                             border: Border.all(
-                              width: 2,
+                              width: 1,
                               color: ColorManager.kDarkColor,
                             ),
                             borderRadius: AppSize.s12,
@@ -138,14 +168,17 @@ class AuthView extends StatelessWidget {
                       Expanded(
                         child: SizedBox(
                           child: DefaultButton(
+                            paddingHeight: 22,
                             onPressed: () {},
                             title: 'Via Google',
                             fontSize: FontSize.s12,
-                            leadingIcon: MdiIcons.google,
+                            leadingIcon: SvgPicture.asset(
+                              'assets/images/google_icon.svg',
+                            ),
                             leadingIconColor: ColorManager.kDarkColor,
                             buttonBgColor: ColorManager.kWhiteColor,
                             border: Border.all(
-                              width: 2,
+                              width: 1,
                               color: ColorManager.kDarkColor,
                             ),
                             borderRadius: AppSize.s12,
@@ -155,7 +188,7 @@ class AuthView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s32),
                   RichText(
                     text: TextSpan(
                         text: "Don't have an account",
@@ -164,10 +197,13 @@ class AuthView extends StatelessWidget {
                             fontSize: FontSize.s11),
                         children: [
                           TextSpan(
-                            text: 'SIGN UP',
+                            text: ' SIGN UP ',
                             style: getMediumStyle(
-                                color: ColorManager.kPrimaryColor,
-                                fontSize: FontSize.s12),
+                              color: ColorManager.kSecondaryColor,
+                              fontSize: FontSize.s12,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => model.showDialog(),
                           ),
                           TextSpan(text: ' here')
                         ]),

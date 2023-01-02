@@ -15,7 +15,7 @@ class VerifyEmailViewModel extends BaseViewModel {
     var response = await _dialogService.showCustomDialog(
         variant: DialogType.ACCOUNT_CREATED);
     if (response!.confirmed) {
-      _navigationService.navigateTo(Routes.mainView);
+      _navigationService.navigateTo(Routes.authView);
     }
   }
 }

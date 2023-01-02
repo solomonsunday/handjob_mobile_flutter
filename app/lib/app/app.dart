@@ -4,6 +4,8 @@ import 'package:handjob_mobile/services/authentication.service.dart';
 import 'package:handjob_mobile/services/instant_job.service.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:handjob_mobile/ui/auth/auth_view.dart';
+import 'package:handjob_mobile/ui/auth/forgot_password/forgot_password_view.dart';
+import 'package:handjob_mobile/ui/auth/reset_password/reset_password_view.dart';
 import 'package:handjob_mobile/ui/auth/signup/artisan/artisan_signup_view.dart';
 import 'package:handjob_mobile/ui/auth/signup/customer/customer_signup_view.dart';
 import 'package:handjob_mobile/ui/auth/verify_email/verify_email_view.dart';
@@ -32,6 +34,8 @@ import '../ui/settings/change_password/change_password_view.dart';
   AdaptiveRoute(page: CustomerSignupView),
   AdaptiveRoute(page: AccountCreatedDialog),
   AdaptiveRoute(page: VerifyEmailView),
+  AdaptiveRoute(page: ForgotPasswordView),
+  AdaptiveRoute(page: ResetPasswordView),
   AdaptiveRoute(page: MainView),
   AdaptiveRoute(page: ProfileView),
   AdaptiveRoute(page: PostDetailView),

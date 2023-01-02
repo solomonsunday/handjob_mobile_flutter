@@ -13,6 +13,7 @@ class DefaultButton extends StatelessWidget {
   final double fontSize;
   final String title;
   final bool busy;
+  final Color? busyColor;
   final Border? border;
   // final bool fullwidth;
   Function() onPressed;
@@ -22,7 +23,7 @@ class DefaultButton extends StatelessWidget {
   final Color? trailingIconColor;
   final FontWeight fontWeight;
   final ButtonType? buttonType;
-  final IconData? leadingIcon;
+  final Widget? leadingIcon;
   final IconData? trailingIcon;
   final double trailingIconSpace;
   final double leadingIconSpace;
@@ -49,6 +50,7 @@ class DefaultButton extends StatelessWidget {
     this.leadingIconColor = ColorManager.kPrimaryColor,
     this.trailingIconColor = ColorManager.kPrimaryColor,
     this.busy = false,
+    this.busyColor,
     this.buttonType = ButtonType.fill,
     this.borderRadiusType = BorderRadiusType.none,
     this.disabled = false,
@@ -146,11 +148,11 @@ class DefaultButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (leadingIcon != null)
-              Icon(
-                leadingIcon,
-                color: leadingIconColor,
-              ),
+            if (leadingIcon != null) Container(child: leadingIcon),
+            // Icon(
+            //   leadingIcon,
+            //   color: leadingIconColor,
+            // ),
             if (leadingIcon != null) SizedBox(width: leadingIconSpace),
             Text(
               title,
@@ -165,11 +167,11 @@ class DefaultButton extends StatelessWidget {
               ),
             if (busy) const SizedBox(width: AppSize.s20),
             if (busy)
-              const SizedBox(
+              SizedBox(
                 width: 15,
                 height: 15,
                 child: CircularProgressIndicator(
-                  color: ColorManager.kWhiteColor,
+                  color: busyColor,
                   strokeWidth: 2,
                 ),
               )

@@ -78,7 +78,10 @@ class _OnboardViewState extends State<OnboardView> {
                     onSkipPressed: () => model.navigateToAuth(),
                   ),
                   OnboardingViewThree(
-                    onFinishPressed: () => model.showDialog(),
+                    onFinishPressed: () {
+                      _timer?.cancel();
+                      model.showDialog();
+                    },
                     onSkipPressed: () => model.navigateToAuth(),
                   )
                 ],

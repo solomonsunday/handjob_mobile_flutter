@@ -1,0 +1,1 @@
+enum AuthType { CUSTOMER, ARTISAN }

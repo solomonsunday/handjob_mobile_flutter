@@ -21,63 +21,81 @@ class MainView extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         body: getView(model.currentIndex),
         drawer: MainDrawerWidget(),
-        bottomNavigationBar: BottomAppBar(
-          notchMargin: 12,
-          color: ColorManager.kNavDarkColor,
-          elevation: 0,
-          child: SizedBox(
-            height: 60,
-            child: BottomNavigationBar(
-              unselectedLabelStyle: getRegularStyle(
-                color: ColorManager.kWhiteColor,
+        bottomNavigationBar: CustomBottomBar(
+          containerHeight: 70,
+          backgroundColor: Colors.black,
+          selectedIndex: model.currentIndex,
+          showElevation: true,
+          itemCornerRadius: 24,
+          curve: Curves.easeIn,
+          onItemSelected: (index) => model.setCurrentIndex(index),
+          items: [
+            BottomNavBarItem(
+              icon: Icons.home,
+              title: Text(
+                'Home',
+                style: getBoldStyle(
+                  color: ColorManager.kWhiteColor,
+                  fontSize: FontSize.s9,
+                ),
               ),
-              selectedLabelStyle: getMediumStyle(
-                color: ColorManager.kWhiteColor,
-              ),
-              showSelectedLabels: true,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.home,
-                    color: ColorManager.kWhiteColor,
-                  ),
-                  label: 'Home',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.add_box_outlined,
-                    color: ColorManager.kWhiteColor,
-                  ),
-                  label: 'Post',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.handyman_sharp,
-                    color: ColorManager.kWhiteColor,
-                  ),
-                  label: 'Instant Hire',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.card_giftcard,
-                    color: ColorManager.kWhiteColor,
-                  ),
-                  label: 'Jobs',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.chat_bubble,
-                    color: ColorManager.kWhiteColor,
-                  ),
-                  label: 'Chats',
-                ),
-              ],
-              currentIndex: model.currentIndex,
-              onTap: (value) => model.setCurrentIndex(value),
-              backgroundColor: ColorManager.kPrimaryColor,
-              type: BottomNavigationBarType.fixed,
+              inactiveColor: ColorManager.kWhiteColor,
+              activeColor: ColorManager.kSecondaryColor,
+              textAlign: TextAlign.center,
             ),
-          ),
+            BottomNavBarItem(
+              icon: Icons.add_box_outlined,
+              title: Text(
+                'Post',
+                style: getBoldStyle(
+                  color: ColorManager.kWhiteColor,
+                  fontSize: FontSize.s9,
+                ),
+              ),
+              inactiveColor: ColorManager.kWhiteColor,
+              activeColor: ColorManager.kSecondaryColor,
+              textAlign: TextAlign.center,
+            ),
+            BottomNavBarItem(
+              icon: Icons.handyman_sharp,
+              title: Text(
+                'Instant Hire',
+                style: getBoldStyle(
+                  color: ColorManager.kWhiteColor,
+                  fontSize: FontSize.s9,
+                ),
+              ),
+              inactiveColor: ColorManager.kWhiteColor,
+              activeColor: ColorManager.kSecondaryColor,
+              textAlign: TextAlign.center,
+            ),
+            BottomNavBarItem(
+              icon: Icons.card_giftcard,
+              title: Text(
+                'Jobs',
+                style: getBoldStyle(
+                  color: ColorManager.kWhiteColor,
+                  fontSize: FontSize.s9,
+                ),
+              ),
+              inactiveColor: ColorManager.kWhiteColor,
+              activeColor: ColorManager.kSecondaryColor,
+              textAlign: TextAlign.center,
+            ),
+            BottomNavBarItem(
+              icon: Icons.chat_bubble,
+              title: Text(
+                'Chats',
+                style: getBoldStyle(
+                  color: ColorManager.kWhiteColor,
+                  fontSize: FontSize.s9,
+                ),
+              ),
+              inactiveColor: ColorManager.kWhiteColor,
+              activeColor: ColorManager.kSecondaryColor,
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );

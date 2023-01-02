@@ -177,7 +177,7 @@ class JobItem extends StatelessWidget {
               DefaultButton(
                 onPressed: () {},
                 title: 'Today',
-                leadingIcon: Icons.calendar_month_rounded,
+                leadingIcon: Icon(Icons.calendar_month_rounded),
                 leadingIconColor: ColorManager.kSecondaryColor,
                 buttonType: ButtonType.outline,
                 paddingHeight: 12,
@@ -188,7 +188,7 @@ class JobItem extends StatelessWidget {
               DefaultButton(
                 onPressed: () {},
                 title: 'Alimosho',
-                leadingIcon: Icons.pin_drop_outlined,
+                leadingIcon: Icon(Icons.pin_drop_outlined),
                 leadingIconColor: ColorManager.kSecondaryColor,
                 buttonType: ButtonType.outline,
                 paddingHeight: 12,

@@ -27,10 +27,14 @@ class HomeView extends StatelessWidget {
               color: ColorManager.kWhiteColor,
             ),
           ),
-          title: Text(
-            'HandJob',
-            style: getBoldStyle(color: ColorManager.kWhiteColor),
+          // title: Text(
+          //   'HandJob',
+          //   style: getBoldStyle(color: ColorManager.kWhiteColor),
+          // ),
+          title: Image.asset(
+            'assets/images/HandJobs.png',
           ),
+          centerTitle: true,
           actions: [
             GestureDetector(
               onTap: model.navigateToNotification,

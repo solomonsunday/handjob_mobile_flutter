@@ -166,7 +166,7 @@ class TabItem extends StatelessWidget {
               DefaultButton(
                 onPressed: () {},
                 title: '2021/01/28  -  2021/02/14',
-                leadingIcon: Icons.calendar_month_rounded,
+                leadingIcon: Icon(Icons.calendar_month_rounded),
                 leadingIconColor: ColorManager.kSecondaryColor,
                 buttonType: ButtonType.outline,
                 paddingHeight: 12,

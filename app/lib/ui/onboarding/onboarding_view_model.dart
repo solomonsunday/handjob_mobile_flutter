@@ -32,7 +32,12 @@ class OnboardingViewModel extends BaseViewModel {
           _navigatorService.navigateTo(Routes.artisanSignupView);
           break;
         default:
-          _navigatorService.navigateTo(Routes.customerSignupView);
+          {
+            _navigatorService.navigateTo(Routes.customerSignupView);
+          }
+
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          await preferences.setBool(IS_FIRST_TIME_USER, false);
       }
     }
   }

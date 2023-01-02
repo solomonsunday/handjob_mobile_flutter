@@ -50,8 +50,11 @@ class OnboardingViewTwo extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 80),
-          SvgPicture.asset(
-            'assets/images/job_hunt.svg',
+          Expanded(
+            child: SvgPicture.asset(
+              'assets/images/job_hunt.svg',
+              fit: BoxFit.cover,
+            ),
           ),
           Container(
             padding: const EdgeInsets.symmetric(

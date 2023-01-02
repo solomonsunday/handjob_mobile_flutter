@@ -1,21 +1,33 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:handjob_mobile/ui/auth/signup/artisan/artisan_signup_view.form.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked/stacked_annotations.dart';
 import 'package:ui_package/ui_package.dart';
 
 import 'artisan_signup_view_model.dart';
 
 const List<String> accountTypes = ["Job Seeker", "Employer"];
 
-class ArtisanSignupView extends StatelessWidget {
-  const ArtisanSignupView({Key? key}) : super(key: key);
+@FormView(fields: [
+  FormTextField(name: 'firstname'),
+  FormTextField(name: 'lastname'),
+  FormTextField(name: 'username'),
+  FormTextField(name: 'email'),
+  FormTextField(name: 'phone'),
+  FormTextField(name: 'password'),
+])
+class ArtisanSignupView extends StatelessWidget with $ArtisanSignupView {
+  ArtisanSignupView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ArtisanSignupViewModel>.reactive(
       viewModelBuilder: () => ArtisanSignupViewModel(),
+      onModelReady: (model) => listenToFormUpdated(model),
+      onDispose: (_) => disposeForm(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: ColorManager.kWhiteColor,
         body: Padding(
@@ -27,7 +39,7 @@ class ArtisanSignupView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
-                const SizedBox(height: AppSize.s12),
+                const SizedBox(height: AppSize.s24),
                 Image.asset('assets/images/favicon.png'),
                 const SizedBox(height: AppSize.s12),
                 Text(
@@ -37,28 +49,39 @@ class ArtisanSignupView extends StatelessWidget {
                     fontSize: FontSize.s16,
                   ),
                 ),
+                const SizedBox(height: AppSize.s24),
                 const SizedBox(height: AppSize.s12),
                 InputField(
-                  hintText: 'Username',
-                  onChanged: model.handleEmail,
+                  hintText: 'Firstname',
+                  controller: firstnameController,
                   fillColor: ColorManager.kWhiteColor,
                   keyBoardType: TextInputType.emailAddress,
                 ),
+                const SizedBox(height: AppSize.s12),
+                InputField(
+                  hintText: 'Lastname',
+                  controller: lastnameController,
+                  fillColor: ColorManager.kWhiteColor,
+                  keyBoardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: AppSize.s12),
                 InputField(
                   hintText: 'Email',
-                  onChanged: model.handleEmail,
+                  controller: emailController,
                   fillColor: ColorManager.kWhiteColor,
                   keyBoardType: TextInputType.emailAddress,
                 ),
+                const SizedBox(height: AppSize.s12),
                 InputField(
                   hintText: 'Phone No.',
-                  onChanged: model.handlePhone,
+                  controller: phoneController,
                   fillColor: ColorManager.kWhiteColor,
                   keyBoardType: TextInputType.phone,
                 ),
+                const SizedBox(height: AppSize.s12),
                 InputField(
                   hintText: 'Password',
-                  onChanged: model.handlePassword,
+                  controller: passwordController,
                   obscureText: model.passwordVisibility,
                   suffixIcon: GestureDetector(
                     onTap: model.togglePasswordVisibility,
@@ -118,15 +141,22 @@ class ArtisanSignupView extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSize.s24),
                 DefaultButton(
-                  onPressed: model.register,
+                  onPressed: model.formIsValid ? model.register : () {},
                   title: 'Sign Up',
                   busy: model.isBusy,
+                  fontWeight: FontWeightManager.regular,
+                  fontSize: FontSize.s12,
+                  disabled: !model.formIsValid,
                 ),
-                const SizedBox(height: AppSize.s24),
+                const SizedBox(height: AppSize.s48),
                 DefaultButton(
                   onPressed: () {},
                   title: "Sign up with your Google account",
-                  leadingIcon: MdiIcons.google,
+                  fontWeight: FontWeightManager.regular,
+                  fontSize: FontSize.s12,
+                  leadingIcon: SvgPicture.asset(
+                    'assets/images/google_icon.svg',
+                  ),
                   buttonType: ButtonType.outline,
                   borderRadius: AppSize.s12,
                   paddingHeight: 10,
@@ -145,7 +175,7 @@ class ArtisanSignupView extends StatelessWidget {
                     ),
                     const SizedBox(width: AppSize.s4),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: model.navigateToLogin,
                       child: Text(
                         "LOG IN",
                         style: getBoldStyle(
