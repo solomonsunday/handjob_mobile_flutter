@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/ui/auth/auth_view_model.dart';
+import 'package:handjob_mobile/ui/auth/forgot_password/forgot_password_view.form.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -9,13 +10,17 @@ import 'package:ui_package/ui_package.dart';
 import 'forgot_password_view_model.dart';
 
 @FormView(fields: [FormTextField(name: 'email')])
-class ForgotPasswordView extends StatelessWidget {
+class ForgotPasswordView extends StatelessWidget with $ForgotPasswordView {
   ForgotPasswordView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ForgotPasswordViewModel>.reactive(
       viewModelBuilder: () => ForgotPasswordViewModel(),
+      onModelReady: (model) {
+        listenToFormUpdated(model);
+      },
+      onDispose: (_) => disposeForm(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: ColorManager.kWhiteColor,
         body: SafeArea(
@@ -48,7 +53,7 @@ class ForgotPasswordView extends StatelessWidget {
                   const SizedBox(height: AppSize.s12),
                   InputField(
                     hintText: 'Email',
-                    // controller: model.emailController,
+                    controller: emailController,
                     keyBoardType: TextInputType.emailAddress,
                     fillColor: ColorManager.kWhiteColor,
                   ),

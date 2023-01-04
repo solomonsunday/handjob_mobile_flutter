@@ -97,8 +97,10 @@ class CustomerSignupViewModel extends FormViewModel {
         "firstName": firstnameValue,
         "lastName": lastnameValue,
       };
+      print('form data customer: $formData');
       await _authenticationService.createUser(formData);
-      _navigationService.navigateTo(Routes.verifyEmailView);
+      _navigationService.navigateTo(Routes.verifyEmailView,
+          arguments: VerifyEmailViewArguments(email: emailValue!));
     } on DioError catch (error) {
       throw Exception(error.response?.data["message"]);
     } finally {

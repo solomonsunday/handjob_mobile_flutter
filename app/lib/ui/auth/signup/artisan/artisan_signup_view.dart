@@ -26,7 +26,10 @@ class ArtisanSignupView extends StatelessWidget with $ArtisanSignupView {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ArtisanSignupViewModel>.reactive(
       viewModelBuilder: () => ArtisanSignupViewModel(),
-      onModelReady: (model) => listenToFormUpdated(model),
+      onModelReady: (model) async {
+        listenToFormUpdated(model);
+        await model.fetchProfessionTypes();
+      },
       onDispose: (_) => disposeForm(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: ColorManager.kWhiteColor,
@@ -108,12 +111,17 @@ class ArtisanSignupView extends StatelessWidget with $ArtisanSignupView {
                     borderRadius: BorderRadius.circular(AppSize.s12),
                   ),
                   buttonWidth: MediaQuery.of(context).size.width,
+                  dropdownWidth: MediaQuery.of(context).size.width,
                   buttonHeight: AppSize.s48,
                 ),
+                if (model.busy(PROFESSION_TYPES))
+                  LinearProgressIndicator(
+                    color: ColorManager.kPrimaryColor,
+                  ),
                 const SizedBox(height: AppSize.s24),
                 DefaultCheckBox(
-                  value: false,
-                  onChanged: (value) {},
+                  value: model.tos,
+                  onChanged: model.handleTos,
                   richText: Expanded(
                     child: RichText(
                       textAlign: TextAlign.left,

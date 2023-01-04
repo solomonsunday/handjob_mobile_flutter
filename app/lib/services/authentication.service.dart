@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:handjob_mobile/models/profession_type.model.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
@@ -16,17 +17,18 @@ class AuthenticationService with ReactiveServiceMixin {
   AuthenticationService() {
     listenToReactiveValues([
       currentUser,
-      // _currentAdminUser,
+      professionTypes,
       // _currentSuperAdminUser,
     ]);
   }
 
   final ReactiveValue<User?> _currentBaseUser = ReactiveValue<User?>(null);
-  // final ReactiveValue<Admin?> _currentAdminUser = ReactiveValue<Admin?>(null);
+  final ReactiveValue<List<ProfessionType>?> _professionTypes =
+      ReactiveValue<List<ProfessionType>?>([]);
   // final ReactiveValue<SuperAdmin?> _currentSuperAdminUser =
   //     ReactiveValue<SuperAdmin?>(null);
   User? get currentUser => _currentBaseUser.value;
-  // Admin? get currentAdminUser => _currentAdminUser.value;
+  List<ProfessionType>? get professionTypes => _professionTypes.value;
 
   Future<bool> isAuthenticated() async {
     final preferences = await SharedPreferences.getInstance();
@@ -51,7 +53,7 @@ class AuthenticationService with ReactiveServiceMixin {
     }
     if (isAccessTokenExpired) {
       try {
-        await this.requestAccessTokenFromRefreshToken(refreshToken);
+        await requestAccessTokenFromRefreshToken(refreshToken);
         return true;
       } on DioError catch (error) {
         return false;
@@ -105,6 +107,50 @@ class AuthenticationService with ReactiveServiceMixin {
     User authUser = User.fromJson(response.data);
     _currentBaseUser.value = authUser;
     return authUser;
+  }
+
+  Future<List<ProfessionType>> getProfessionTypes() async {
+    var response = await dioClient.get(
+      '/service',
+    );
+    List<ProfessionType> professionTypes =
+        (response.data["data"] as List<dynamic>)
+            .map((x) => ProfessionType.fromJson(x))
+            .toList();
+
+    _professionTypes.value = professionTypes;
+    return professionTypes;
+  }
+
+  Future<Auth> verifyOTP(String code) async {
+    final preferences = await SharedPreferences.getInstance();
+    var response = await dioClient.get(
+      '/verification/signup/$code',
+    );
+    // print('login detail: ${response.data}');
+    Auth auth = Auth.fromJson(response.data);
+    /**Persist the access token into a shared preference */
+    await preferences.setString(AUTH_TOKEN_KEY, auth.accessToken.toString());
+    await preferences.setString(AUTH_REFRESH_KEY, auth.refreshToken.toString());
+    return auth;
+  }
+
+  Future<bool> requestOTP(Map formData) async {
+    var response = await dioClient.post(
+      '/verification/send-shortcode',
+      data: formData,
+    );
+    print('response data: ${response.data}');
+    return true;
+  }
+
+  Future<bool> requestForgotPassword(Map formData) async {
+    var response = await dioClient.put(
+      '/auth/send-forget-password-email',
+      data: formData,
+    );
+    print('response data: ${response.data}');
+    return true;
   }
 
   // Future<Merchant> getCurrentMerchantUser() async {

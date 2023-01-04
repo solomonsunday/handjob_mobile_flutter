@@ -39,17 +39,19 @@ class SplashViewViewModel extends BaseViewModel {
       _isLoggedIn = false;
       throw Exception(error.response?.data["message"]);
     } finally {
-      if (_isLoggedIn) {
-        _navigationService.replaceWith(Routes.mainView);
-        await _authenticationService.getCurrentBaseUser();
-      } else {
-        bool? isFirstTimeUser = preferences.getBool(IS_FIRST_TIME_USER);
-        if (isFirstTimeUser == null) {
-          navigateToOnboard();
+      Future.delayed(const Duration(seconds: 2), () async {
+        if (_isLoggedIn) {
+          _navigationService.replaceWith(Routes.mainView);
+          await _authenticationService.getCurrentBaseUser();
         } else {
-          navigateToLogin();
+          bool? isFirstTimeUser = preferences.getBool(IS_FIRST_TIME_USER);
+          if (isFirstTimeUser == null) {
+            navigateToOnboard();
+          } else {
+            navigateToLogin();
+          }
         }
-      }
+      });
     }
   }
 

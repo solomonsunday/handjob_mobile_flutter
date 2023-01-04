@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/models/auth.model.dart';
+import 'package:handjob_mobile/models/profession_type.model.dart';
 import 'package:handjob_mobile/services/authentication.service.dart';
 import 'package:handjob_mobile/ui/auth/signup/customer/customer_signup_view.form.dart';
 import 'package:stacked/stacked.dart';
@@ -10,23 +11,33 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../../../app/app.router.dart';
 import '../customer/customer_signup_view_model.dart';
 
+const String PROFESSION_TYPES = "PROFESSION_TYPES";
+
 class ArtisanSignupViewModel extends FormViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
-  bool? _tos;
+  bool _tos = false;
+  List<ProfessionType>? get professionTypes =>
+      _authenticationService.professionTypes;
+  List<String?> get professionTypesName =>
+      professionTypes!.map((e) => e.name).toList();
 
-  var selectedProfession;
-  bool? get tos => _tos;
-  String? _profession;
+  bool get tos => _tos;
+  String? _selectedProfession;
   bool _passwordVisibility = true;
   bool _confirmPasswordVisibility = true;
 
-  String? get profession => _profession;
+  String? get selectedProfession => _selectedProfession;
   bool get passwordVisibility => _passwordVisibility;
   bool get confirmPasswordVisibility => _confirmPasswordVisibility;
 
-  List<String> get professions => ["Hello", "World"];
+  List<String> get professions {
+    if (professionTypes == null) {
+      return [];
+    }
+    return professionTypes!.map((e) => e.name!).toList();
+  }
 
   togglePasswordVisibility() {
     _passwordVisibility = !_passwordVisibility;
@@ -38,13 +49,30 @@ class ArtisanSignupViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  setTos(bool? value) {
+  handleTos(bool value) {
     _tos = value;
     notifyListeners();
   }
 
   void handleSelectedProfession(String? value) {
-    _profession = value;
+    _selectedProfession = value;
+    notifyListeners();
+  }
+
+  fetchProfessionTypes() async {
+    runBusyFuture(fetchProfessionTypesRequest(), busyObject: PROFESSION_TYPES);
+  }
+
+  fetchProfessionTypesRequest() async {
+    try {
+      print('fetch profession');
+      await _authenticationService.getProfessionTypes();
+      print('done fetching pro');
+    } on DioError catch (error) {
+      throw Exception(error.response!.data["message"]);
+    } finally {
+      notifyListeners();
+    }
   }
 
   Future<void> register() async {
@@ -58,12 +86,14 @@ class ArtisanSignupViewModel extends FormViewModel {
         "email": emailValue,
         "password": passwordValue,
         "accountType": "Artisan",
-        "profession": profession,
+        "profession": selectedProfession,
         "firstName": firstnameValue,
         "lastName": lastnameValue,
       };
+      print('form data : $formData');
       await _authenticationService.createUser(formData);
-      _navigationService.navigateTo(Routes.verifyEmailView);
+      _navigationService.navigateTo(Routes.verifyEmailView,
+          arguments: VerifyEmailViewArguments(email: emailValue!));
     } on DioError catch (error) {
       throw Exception(error.response?.data["message"]);
     } finally {
@@ -88,6 +118,7 @@ class ArtisanSignupViewModel extends FormViewModel {
         passwordValue!.isNotEmpty) {
       _formIsValid = true;
     }
+    print('tos: $tos');
 
     print('form is valid: $isFormValid');
   }

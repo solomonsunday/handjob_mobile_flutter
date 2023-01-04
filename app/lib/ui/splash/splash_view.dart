@@ -26,32 +26,9 @@ class SplashView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Image.asset(
-                            'assets/images/jb.png',
+                            'assets/images/logo.jpeg',
                             fit: BoxFit.cover,
                           ),
-                          if (viewModel.hasError)
-                            Text('${viewModel.modelError}',
-                                style: getMediumStyle(
-                                  color: Colors.red,
-                                )),
-                          Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  DefaultButton(
-                                    onPressed: () {},
-                                    title: 'Join Now',
-                                    buttonBgColor: ColorManager.kSecondaryColor,
-                                  ),
-                                  SizedBox(height: AppSize.s20),
-                                  DefaultButton(
-                                    onPressed: viewModel.navigateToLogin,
-                                    title: 'Sign In',
-                                  ),
-                                ],
-                              ))
                         ],
                       ),
                     ),

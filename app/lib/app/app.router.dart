@@ -229,8 +229,10 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i8.VerifyEmailView: (data) {
+      final args = data.getArgs<VerifyEmailViewArguments>(nullOk: false);
       return _i1.buildAdaptivePageRoute<dynamic>(
-        builder: (context) => const _i8.VerifyEmailView(),
+        builder: (context) =>
+            _i8.VerifyEmailView(key: args.key, email: args.email),
         settings: data,
       );
     },
@@ -352,6 +354,17 @@ class AccountCreatedDialogArguments {
   final dynamic Function(_i22.DialogResponse<dynamic>) completer;
 }
 
+class VerifyEmailViewArguments {
+  const VerifyEmailViewArguments({
+    this.key,
+    required this.email,
+  });
+
+  final _i21.Key? key;
+
+  final String email;
+}
+
 class ForgotPasswordViewArguments {
   const ForgotPasswordViewArguments({this.key});
 
@@ -460,14 +473,17 @@ extension NavigatorStateExtension on _i22.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToVerifyEmailView([
+  Future<dynamic> navigateToVerifyEmailView({
+    _i21.Key? key,
+    required String email,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.verifyEmailView,
+        arguments: VerifyEmailViewArguments(key: key, email: email),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
