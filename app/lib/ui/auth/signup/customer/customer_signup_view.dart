@@ -97,35 +97,35 @@ class CustomerSignupView extends StatelessWidget with $CustomerSignupView {
                       ),
                     ),
                     const SizedBox(height: AppSize.s12),
-                    const SizedBox(height: AppSize.s24),
-                    DefaultCheckBox(
-                      value: false,
-                      onChanged: (value) {},
-                      richText: Expanded(
-                        child: RichText(
-                          textAlign: TextAlign.left,
-                          text: TextSpan(
-                            style: getRegularStyle(
-                              color: ColorManager.kDarkCharcoal,
-                              fontSize: FontSize.s9,
-                            ),
-                            text:
-                                "By proceeding to create your account, you are agreeing to our  \n",
-                            children: [
-                              TextSpan(
-                                text: 'Terms & Conditions',
-                                style: getBoldStyle(
-                                  color: ColorManager.kDarkColor,
-                                  fontSize: FontSize.s9,
-                                ),
-                              ),
-                            ],
-                          ),
-                          softWrap: true,
-                          maxLines: 10,
-                        ),
-                      ),
-                    ),
+                    // const SizedBox(height: AppSize.s24),
+                    // DefaultCheckBox(
+                    //   value: false,
+                    //   onChanged: (value) {},
+                    //   richText: Expanded(
+                    //     child: RichText(
+                    //       textAlign: TextAlign.left,
+                    //       text: TextSpan(
+                    //         style: getRegularStyle(
+                    //           color: ColorManager.kDarkCharcoal,
+                    //           fontSize: FontSize.s9,
+                    //         ),
+                    //         text:
+                    //             "By proceeding to create your account, you are agreeing to our  \n",
+                    //         children: [
+                    //           TextSpan(
+                    //             text: 'Terms & Conditions',
+                    //             style: getBoldStyle(
+                    //               color: ColorManager.kDarkColor,
+                    //               fontSize: FontSize.s9,
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //       softWrap: true,
+                    //       maxLines: 10,
+                    //     ),
+                    //   ),
+                    // ),
                     const SizedBox(height: AppSize.s24),
                     DefaultButton(
                       onPressed: model.formIsValid
