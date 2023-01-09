@@ -15,8 +15,8 @@ class Experience {
   bool? isSystemDefined;
   String? accountId;
   String? jobTitle;
-  String? startDate;
-  String? endDate;
+  DateTime? startDate;
+  DateTime? endDate;
   bool? current;
   String? location;
   String? company;

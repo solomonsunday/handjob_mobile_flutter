@@ -21,8 +21,12 @@ Experience _$ExperienceFromJson(Map<String, dynamic> json) => Experience(
       isSystemDefined: json['isSystemDefined'] as bool?,
       accountId: json['accountId'] as String?,
       jobTitle: json['jobTitle'] as String?,
-      startDate: json['startDate'] as String?,
-      endDate: json['endDate'] as String?,
+      startDate: json['startDate'] == null
+          ? null
+          : DateTime.parse(json['startDate'] as String),
+      endDate: json['endDate'] == null
+          ? null
+          : DateTime.parse(json['endDate'] as String),
       current: json['current'] as bool?,
       location: json['location'] as String?,
       company: json['company'] as String?,
@@ -43,8 +47,8 @@ Map<String, dynamic> _$ExperienceToJson(Experience instance) =>
       'isSystemDefined': instance.isSystemDefined,
       'accountId': instance.accountId,
       'jobTitle': instance.jobTitle,
-      'startDate': instance.startDate,
-      'endDate': instance.endDate,
+      'startDate': instance.startDate?.toIso8601String(),
+      'endDate': instance.endDate?.toIso8601String(),
       'current': instance.current,
       'location': instance.location,
       'company': instance.company,
