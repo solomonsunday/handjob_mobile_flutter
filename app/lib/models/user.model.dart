@@ -25,7 +25,7 @@ class User {
   dynamic dateOfBirth;
   List<dynamic>? hobbies;
   List<dynamic>? interests;
-  List<dynamic>? services;
+  List<String>? services;
   dynamic city;
   List<dynamic>? skills;
   List<dynamic>? experiences;
@@ -35,6 +35,7 @@ class User {
   dynamic website;
   dynamic noOfEmployees;
   List<dynamic>? portfolios;
+
   User({
     this.id,
     this.email,

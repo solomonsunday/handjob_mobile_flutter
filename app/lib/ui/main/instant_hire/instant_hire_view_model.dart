@@ -13,9 +13,8 @@ import '../../../models/place.model.dart';
 import '../../../models/suggestion.model.dart';
 import '../../../services/location.service.dart';
 import '../../../services/shared.service.dart';
+import '../../../utils/contants.dart';
 import '../../../utils/http_exception.dart';
-
-const String LOCATION_SUGGESTION_REQUEST = 'LOCATION_SUGGESTION_REQUEST';
 
 class InstantHireViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();

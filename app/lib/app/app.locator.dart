@@ -12,7 +12,9 @@ import 'package:stacked_services/src/dialog/dialog_service.dart';
 import 'package:stacked_services/src/navigation/navigation_service.dart';
 
 import '../client/dio_client.dart';
+import '../services/account.service.dart';
 import '../services/authentication.service.dart';
+import '../services/experience.service.dart';
 import '../services/instant_job.service.dart';
 import '../services/location.service.dart';
 import '../services/shared.service.dart';
@@ -35,4 +37,6 @@ Future<void> setupLocator(
       (param1, param2) => LocationService(param1));
   locator.registerLazySingleton(() => InstantJobService());
   locator.registerLazySingleton(() => SharedService());
+  locator.registerLazySingleton(() => AccountService());
+  locator.registerLazySingleton(() => ExperienceService());
 }

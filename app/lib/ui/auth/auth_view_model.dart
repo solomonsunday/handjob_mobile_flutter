@@ -4,6 +4,7 @@ import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/models/auth.model.dart';
 import 'package:handjob_mobile/services/authentication.service.dart';
+import 'package:handjob_mobile/utils/http_exception.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -64,7 +65,7 @@ class AuthViewModel extends BaseViewModel {
       _navigationService.replaceWith(Routes.mainView);
       return response;
     } on DioError catch (err) {
-      throw Exception("An error occured: please enter a valid credential");
+      throw HttpException("An error occured: please enter a valid credential");
     } finally {
       setBusy(false);
       notifyListeners();

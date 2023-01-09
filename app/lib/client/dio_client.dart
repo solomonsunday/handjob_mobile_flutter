@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:handjob_mobile/utils/pos_contants.dart';
+import 'package:handjob_mobile/utils/contants.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 

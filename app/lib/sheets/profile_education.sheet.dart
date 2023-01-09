@@ -15,6 +15,7 @@ class ProfileEducationSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomSheetContainer(
+      onClose: () => completer!(SheetResponse(confirmed: false)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

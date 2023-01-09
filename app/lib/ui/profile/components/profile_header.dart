@@ -70,7 +70,7 @@ class ProfileHeader extends ViewModelWidget<ProfileViewModel> {
         Padding(
           padding: const EdgeInsets.only(left: AppPadding.p24),
           child: Text(
-            '${model.currentUser!.firstName} ${model.currentUser!.lastName}',
+            '${model.currentUser?.firstName} ${model.currentUser?.lastName}',
             style: getBoldStyle(
               color: ColorManager.kDarkColor,
               fontSize: FontSize.s14,
@@ -80,7 +80,7 @@ class ProfileHeader extends ViewModelWidget<ProfileViewModel> {
         Padding(
           padding: const EdgeInsets.only(left: AppPadding.p24),
           child: Text(
-            '${model.currentUser?.profession ?? model.currentUser!.accountType}',
+            '${model.currentUser?.profession ?? model.currentUser?.accountType}',
             style: getRegularStyle(
               color: ColorManager.kDarkColor,
               fontSize: FontSize.s12,

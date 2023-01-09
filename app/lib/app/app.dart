@@ -1,6 +1,7 @@
 import 'package:handjob_mobile/client/dio_client.dart';
 import 'package:handjob_mobile/dialogs/account_created.dialog.dart';
 import 'package:handjob_mobile/services/authentication.service.dart';
+import 'package:handjob_mobile/services/experience.service.dart';
 import 'package:handjob_mobile/services/instant_job.service.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:handjob_mobile/ui/auth/auth_view.dart';
@@ -23,6 +24,7 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../services/location.service.dart';
+import '../services/account.service.dart';
 import '../ui/main/chat/chat_detail/chat_detail_view.dart';
 import '../ui/settings/change_password/change_password_view.dart';
 
@@ -55,5 +57,7 @@ import '../ui/settings/change_password/change_password_view.dart';
   FactoryWithParam(classType: LocationService),
   LazySingleton(classType: InstantJobService),
   LazySingleton(classType: SharedService),
+  LazySingleton(classType: AccountService),
+  LazySingleton(classType: ExperienceService),
 ], logger: StackedLogger())
 class App {}

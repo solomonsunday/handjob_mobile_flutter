@@ -9,9 +9,8 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../app/app.router.dart';
+import '../../../../utils/contants.dart';
 import '../customer/customer_signup_view_model.dart';
-
-const String PROFESSION_TYPES = "PROFESSION_TYPES";
 
 class ArtisanSignupViewModel extends FormViewModel {
   final _authenticationService = locator<AuthenticationService>();

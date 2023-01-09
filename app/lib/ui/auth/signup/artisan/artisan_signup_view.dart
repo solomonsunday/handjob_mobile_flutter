@@ -7,6 +7,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:ui_package/ui_package.dart';
 
+import '../../../../utils/contants.dart';
 import 'artisan_signup_view_model.dart';
 
 const List<String> accountTypes = ["Job Seeker", "Employer"];

@@ -23,58 +23,23 @@ class ProfileServices extends ViewModelWidget<ProfileViewModel> {
           ),
           const SizedBox(height: AppSize.s8),
           Wrap(
-            spacing: 4,
-            runSpacing: -10,
-            runAlignment: WrapAlignment.start,
-            clipBehavior: Clip.none,
-            children: [
-              Chip(
-                label: Text(
-                  'Appliance repair',
-                  style: getRegularStyle(
-                    color: ColorManager.kDarkColor,
-                    fontSize: FontSize.s12,
-                  ),
-                ),
-              ),
-              Chip(
-                label: Text(
-                  'Electrician',
-                  style: getRegularStyle(
-                    color: ColorManager.kDarkColor,
-                    fontSize: FontSize.s12,
-                  ),
-                ),
-              ),
-              Chip(
-                label: Text(
-                  'Plumbing',
-                  style: getRegularStyle(
-                    color: ColorManager.kDarkColor,
-                    fontSize: FontSize.s12,
-                  ),
-                ),
-              ),
-              Chip(
-                label: Text(
-                  'Baker',
-                  style: getRegularStyle(
-                    color: ColorManager.kDarkColor,
-                    fontSize: FontSize.s12,
-                  ),
-                ),
-              ),
-              Chip(
-                label: Text(
-                  'repair',
-                  style: getRegularStyle(
-                    color: ColorManager.kDarkColor,
-                    fontSize: FontSize.s12,
-                  ),
-                ),
-              ),
-            ],
-          )
+              spacing: 4,
+              runSpacing: -10,
+              runAlignment: WrapAlignment.start,
+              clipBehavior: Clip.none,
+              children: (model.currentUser!.services ?? [])
+                  .map(
+                    (service) => Chip(
+                      label: Text(
+                        service,
+                        style: getRegularStyle(
+                          color: ColorManager.kDarkColor,
+                          fontSize: FontSize.s12,
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList())
         ],
       ),
     );

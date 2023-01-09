@@ -9,7 +9,7 @@ import '../client/dio_client.dart';
 import '../enums/auth_type.dart';
 import '../models/auth.model.dart';
 import '../models/user.model.dart';
-import '../utils/pos_contants.dart';
+import '../utils/contants.dart';
 
 class AuthenticationService with ReactiveServiceMixin {
   Dio dioClient = locator<DioClient>().dio;
@@ -22,12 +22,12 @@ class AuthenticationService with ReactiveServiceMixin {
     ]);
   }
 
-  final ReactiveValue<User?> _currentBaseUser = ReactiveValue<User?>(null);
+  User? _currentUser;
   final ReactiveValue<List<ProfessionType>?> _professionTypes =
       ReactiveValue<List<ProfessionType>?>([]);
   // final ReactiveValue<SuperAdmin?> _currentSuperAdminUser =
   //     ReactiveValue<SuperAdmin?>(null);
-  User? get currentUser => _currentBaseUser.value;
+  User? get currentUser => _currentUser;
   List<ProfessionType>? get professionTypes => _professionTypes.value;
 
   Future<bool> isAuthenticated() async {
@@ -52,6 +52,7 @@ class AuthenticationService with ReactiveServiceMixin {
       return false;
     }
     if (isAccessTokenExpired) {
+      print('isAccess token has expired');
       try {
         await requestAccessTokenFromRefreshToken(refreshToken);
         return true;
@@ -63,11 +64,19 @@ class AuthenticationService with ReactiveServiceMixin {
     return true;
   }
 
-  requestAccessTokenFromRefreshToken(String refreshToken) async {
+  Future<Auth> requestAccessTokenFromRefreshToken(String refreshToken) async {
+    final preferences = await SharedPreferences.getInstance();
     var response = await dioClient.post('/auth/token/refresh', data: {
       "type": "Mobile",
       "refreshToken": refreshToken,
     });
+
+    print('auth response data: ${response.data}');
+    Auth auth = Auth.fromJson(response.data);
+    /**Persist the access token into a shared preference */
+    await preferences.setString(AUTH_TOKEN_KEY, auth.accessToken.toString());
+    await preferences.setString(AUTH_REFRESH_KEY, auth.refreshToken.toString());
+    return auth;
   }
 
   Future<Auth> login(Map<String, dynamic> formData) async {
@@ -105,7 +114,8 @@ class AuthenticationService with ReactiveServiceMixin {
     );
     print('user to json: ${response.data}');
     User authUser = User.fromJson(response.data);
-    _currentBaseUser.value = authUser;
+    _currentUser = authUser;
+    notifyListeners();
     return authUser;
   }
 

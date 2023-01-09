@@ -8,7 +8,7 @@ import '../../app/app.locator.dart';
 import '../../app/app.logger.dart';
 import '../../models/user.model.dart';
 import '../../services/authentication.service.dart';
-import '../../utils/pos_contants.dart';
+import '../../utils/contants.dart';
 
 class SplashViewViewModel extends BaseViewModel {
   final log = getLogger('SplashViewModel');
@@ -41,8 +41,8 @@ class SplashViewViewModel extends BaseViewModel {
     } finally {
       Future.delayed(const Duration(seconds: 2), () async {
         if (_isLoggedIn) {
-          _navigationService.replaceWith(Routes.mainView);
           await _authenticationService.getCurrentBaseUser();
+          _navigationService.replaceWith(Routes.mainView);
         } else {
           bool? isFirstTimeUser = preferences.getBool(IS_FIRST_TIME_USER);
           if (isFirstTimeUser == null) {
