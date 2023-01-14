@@ -1,19 +1,25 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/enums/bottom_sheet_type.dart';
+import 'package:handjob_mobile/models/experience.model.dart';
 import 'package:handjob_mobile/models/user.model.dart';
+import 'package:handjob_mobile/services/experience.service.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
+import 'package:handjob_mobile/utils/http_exception.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app.locator.dart';
 import '../../services/authentication.service.dart';
 
+const String DELETE_EXPERIENCE = "DELETE_EXPERIENCE";
+
 class ProfileViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
   final _authenticationService = locator<AuthenticationService>();
   final _bottomSheetService = locator<BottomSheetService>();
   final _sharedService = locator<SharedService>();
+  final _experienceService = locator<ExperienceService>();
 
   User? get currentUser => _authenticationService.currentUser;
 
@@ -30,8 +36,9 @@ class ProfileViewModel extends ReactiveViewModel {
         enableDrag: true,
       );
 
-  showExperienceSheet() => _bottomSheetService.showCustomSheet(
+  showExperienceSheet(Experience? data) => _bottomSheetService.showCustomSheet(
         variant: BottomSheetType.profile_experience,
+        data: data,
         isScrollControlled: true,
         ignoreSafeArea: true,
         enterBottomSheetDuration: Duration(milliseconds: 400),
@@ -95,6 +102,22 @@ class ProfileViewModel extends ReactiveViewModel {
     } finally {
       notifyListeners();
     }
+  }
+
+  ///Experience
+  deleteExperience(String? id) async {
+    setBusyForObject(DELETE_EXPERIENCE, true);
+    try {
+      await _experienceService.deleteExperience(id!);
+    } on DioError catch (error) {
+      throw HttpException("An error occured");
+    } finally {
+      setBusyForObject(DELETE_EXPERIENCE, false);
+    }
+  }
+
+  editExperience(Experience experience) {
+    showExperienceSheet(experience);
   }
 
   @override

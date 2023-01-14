@@ -20,7 +20,7 @@ class ProfileExperience extends ViewModelWidget<ProfileViewModel> {
           ProfileActionHeader(
             icon: Icons.star_border,
             title: 'Experience',
-            onTap: model.showExperienceSheet,
+            onTap: () => model.showExperienceSheet(null),
           ),
           const SizedBox(height: AppSize.s8),
           Column(
@@ -72,16 +72,29 @@ class ProfileExperience extends ViewModelWidget<ProfileViewModel> {
                         width: AppSize.s56,
                         child: Row(
                           children: [
-                            Icon(
-                              Icons.edit_outlined,
-                              color: ColorManager.kDarkColor,
-                              size: AppSize.s24,
+                            GestureDetector(
+                              onTap: () => model.editExperience(experience),
+                              child: Icon(
+                                Icons.edit_outlined,
+                                color: ColorManager.kDarkColor,
+                                size: AppSize.s24,
+                              ),
                             ),
                             SizedBox(width: AppSize.s4),
-                            Icon(
-                              Icons.close,
-                              color: ColorManager.kDarkColor,
-                              size: AppSize.s24,
+                            GestureDetector(
+                              onTap: () =>
+                                  model.deleteExperience(experience.id),
+                              child: model.busy(DELETE_EXPERIENCE)
+                                  ? const SizedBox(
+                                      width: 10,
+                                      height: 10,
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : const Icon(
+                                      Icons.close,
+                                      color: ColorManager.kDarkColor,
+                                      size: AppSize.s24,
+                                    ),
                             ),
                           ],
                         ),

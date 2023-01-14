@@ -21,4 +21,21 @@ class ExperienceService with ReactiveServiceMixin {
 
     return Experience.fromJson(response.data);
   }
+
+  Future<Experience> updateeExperience(String id, Map formData) async {
+    var response = await dioClient.put(
+      '/job-experience/$id',
+      data: formData,
+    );
+
+    return Experience.fromJson(response.data);
+  }
+
+  Future<Experience> deleteExperience(String id) async {
+    var response = await dioClient.delete(
+      '/job-experience/$id',
+    );
+
+    return Experience.fromJson(response.data);
+  }
 }

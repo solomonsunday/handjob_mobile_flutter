@@ -4,6 +4,7 @@ import 'package:handjob_mobile/services/experience.service.dart';
 import 'package:handjob_mobile/sheets/profile_contact.sheet.dart';
 import 'package:handjob_mobile/sheets/profile_experience/profile_experience.sheet.form.dart';
 import 'package:handjob_mobile/utils/helpers.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -11,6 +12,7 @@ import 'package:ui_package/ui_package.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../app/app.locator.dart';
+import '../../models/experience.model.dart';
 import '../../models/suggestion.model.dart';
 import '../../services/authentication.service.dart';
 import '../../services/location.service.dart';
@@ -46,6 +48,23 @@ class ProfileExperienceSheet extends StatelessWidget
         viewModelBuilder: () => ProfileExperienceSheetViewModel(),
         onModelReady: (model) {
           listenToFormUpdated(model);
+          //
+          print((request?.data as Experience).toJson());
+          if (request?.data != null) {
+            Experience experience = request?.data as Experience;
+
+            jobTitleController.text = experience.jobTitle ?? "";
+            companyController.text = experience.company ?? "";
+            startDateController.text =
+                DateFormat.yMMMd().format(experience.startDate!);
+            endDateController.text = experience.endDate == null
+                ? ""
+                : DateFormat.yMMMd().format(experience.endDate!);
+            jobCategoryNameController.text = experience.jobCategoryName ?? "";
+            locationController.text = experience.location ?? "";
+            descriptionController.text = experience.description ?? "";
+            model.updateCurrent(experience.current ?? false);
+          }
         },
         onDispose: (_) => disposeForm(),
         builder: (context, model, child) {
@@ -152,7 +171,7 @@ class ProfileExperienceSheet extends StatelessWidget
                 ),
                 SizedBox(height: AppSize.s12),
                 DefaultCheckBox(
-                  value: false,
+                  value: model.current,
                   onChanged: (value) => model.updateCurrent(value),
                   richText: RichText(
                     textAlign: TextAlign.center,

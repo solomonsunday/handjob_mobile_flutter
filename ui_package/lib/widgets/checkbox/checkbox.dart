@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../ui_package.dart';
 
 class DefaultCheckBox extends StatefulWidget {
-  const DefaultCheckBox({
+  DefaultCheckBox({
     Key? key,
     required this.value,
     required this.onChanged,
@@ -13,7 +13,7 @@ class DefaultCheckBox extends StatefulWidget {
   }) : super(key: key);
 
   final Function(bool) onChanged;
-  final bool value;
+  bool value;
   final Widget richText;
   final Color checkColor;
   final Color activeColor;
@@ -23,7 +23,6 @@ class DefaultCheckBox extends StatefulWidget {
 }
 
 class _DefaultCheckBoxState extends State<DefaultCheckBox> {
-  bool _value = false;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -34,15 +33,15 @@ class _DefaultCheckBoxState extends State<DefaultCheckBox> {
           width: 20,
           height: 20,
           child: Checkbox(
-            value: _value,
+            value: widget.value,
             checkColor: widget.checkColor,
             activeColor: widget.activeColor,
             onChanged: (value) {
               setState(() {
-                _value = !_value;
+                widget.value = !widget.value;
               });
 
-              widget.onChanged(_value);
+              widget.onChanged(widget.value);
             },
           ),
         ),
@@ -50,10 +49,10 @@ class _DefaultCheckBoxState extends State<DefaultCheckBox> {
         InkWell(
           onTap: () {
             setState(() {
-              _value = !_value;
+              widget.value = !widget.value;
             });
 
-            widget.onChanged(_value);
+            widget.onChanged(widget.value);
           },
           child: widget.richText,
         ),
