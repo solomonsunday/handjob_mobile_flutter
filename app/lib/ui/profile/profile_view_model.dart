@@ -12,14 +12,11 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../app/app.locator.dart';
 import '../../services/authentication.service.dart';
 
-const String DELETE_EXPERIENCE = "DELETE_EXPERIENCE";
-
 class ProfileViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
   final _authenticationService = locator<AuthenticationService>();
   final _bottomSheetService = locator<BottomSheetService>();
   final _sharedService = locator<SharedService>();
-  final _experienceService = locator<ExperienceService>();
 
   User? get currentUser => _authenticationService.currentUser;
 
@@ -102,22 +99,6 @@ class ProfileViewModel extends ReactiveViewModel {
     } finally {
       notifyListeners();
     }
-  }
-
-  ///Experience
-  deleteExperience(String? id) async {
-    setBusyForObject(DELETE_EXPERIENCE, true);
-    try {
-      await _experienceService.deleteExperience(id!);
-    } on DioError catch (error) {
-      throw HttpException("An error occured");
-    } finally {
-      setBusyForObject(DELETE_EXPERIENCE, false);
-    }
-  }
-
-  editExperience(Experience experience) {
-    showExperienceSheet(experience);
   }
 
   @override

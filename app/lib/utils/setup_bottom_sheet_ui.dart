@@ -1,5 +1,5 @@
 import 'package:handjob_mobile/sheets/profile_contact.sheet.dart';
-import 'package:handjob_mobile/sheets/profile_education.sheet.dart';
+import 'package:handjob_mobile/sheets/profile_education/profile_education.sheet.dart';
 import 'package:handjob_mobile/sheets/profile_experience/profile_experience.sheet.dart';
 import 'package:handjob_mobile/sheets/profile_portfolio.sheet.dart';
 import 'package:handjob_mobile/sheets/profile_service.sheet.dart';

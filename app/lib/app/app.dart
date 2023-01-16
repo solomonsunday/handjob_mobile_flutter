@@ -1,6 +1,7 @@
 import 'package:handjob_mobile/client/dio_client.dart';
 import 'package:handjob_mobile/dialogs/account_created.dialog.dart';
 import 'package:handjob_mobile/services/authentication.service.dart';
+import 'package:handjob_mobile/services/education.service.dart';
 import 'package:handjob_mobile/services/experience.service.dart';
 import 'package:handjob_mobile/services/instant_job.service.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
@@ -59,5 +60,6 @@ import '../ui/settings/change_password/change_password_view.dart';
   LazySingleton(classType: SharedService),
   LazySingleton(classType: AccountService),
   LazySingleton(classType: ExperienceService),
+  LazySingleton(classType: EducationService),
 ], logger: StackedLogger())
 class App {}

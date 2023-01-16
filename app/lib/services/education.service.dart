@@ -4,36 +4,37 @@ import 'package:stacked/stacked.dart';
 
 import '../app/app.locator.dart';
 import '../client/dio_client.dart';
+import '../models/education.model.dart';
 import '../models/user.model.dart';
 
-class ExperienceService with ReactiveServiceMixin {
+class EducationService with ReactiveServiceMixin {
   Dio dioClient = locator<DioClient>().dio;
 
-  ExperienceService() {
+  EducationService() {
     listenToReactiveValues([]);
   }
 
-  Future<Experience> createExperience(Map formData) async {
+  Future<Education> createEducation(Map formData) async {
     var response = await dioClient.post(
-      '/job-experience',
+      '/education',
       data: formData,
     );
 
-    return Experience.fromJson(response.data);
+    return Education.fromJson(response.data);
   }
 
-  Future<Experience> updateeExperience(String id, Map formData) async {
+  Future<Education> updateEducation(String id, Map formData) async {
     var response = await dioClient.put(
-      '/job-experience/$id',
+      '/education/$id',
       data: formData,
     );
 
-    return Experience.fromJson(response.data);
+    return Education.fromJson(response.data);
   }
 
-  Future<bool> deleteExperience(String id) async {
+  Future<bool> deleteEducation(String id) async {
     var response = await dioClient.delete(
-      '/job-experience/$id',
+      '/education/$id',
     );
     print('response bool ${response.data}');
     return response.data as bool;

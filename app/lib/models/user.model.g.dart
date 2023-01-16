@@ -36,7 +36,9 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       experiences: (json['experiences'] as List<dynamic>?)
           ?.map((e) => Experience.fromJson(e as Map<String, dynamic>))
           .toList(),
-      educations: json['educations'] as List<dynamic>?,
+      educations: (json['educations'] as List<dynamic>?)
+          ?.map((e) => Education.fromJson(e as Map<String, dynamic>))
+          .toList(),
       reviews: json['reviews'] as List<dynamic>?,
       yearOfEstablishment: json['yearOfEstablishment'],
       website: json['website'],

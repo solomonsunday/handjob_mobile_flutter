@@ -1,3 +1,4 @@
+import 'package:handjob_mobile/models/education.model.dart';
 import 'package:handjob_mobile/models/experience.model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -30,7 +31,7 @@ class User {
   dynamic city;
   List<dynamic>? skills;
   List<Experience>? experiences;
-  List<dynamic>? educations;
+  List<Education>? educations;
   List<dynamic>? reviews;
   dynamic yearOfEstablishment;
   dynamic website;
