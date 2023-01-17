@@ -20,6 +20,9 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileViewModel>.nonReactive(
       viewModelBuilder: () => ProfileViewModel(),
+      onModelReady: (model) async {
+        // await model.fetchStates();
+      },
       builder: (context, model, child) {
         return Scaffold(
           appBar: AppBar(
@@ -28,7 +31,7 @@ class ProfileView extends StatelessWidget {
               onTap: () {
                 model.goBack();
               },
-              child: Icon(
+              child: const Icon(
                 Icons.arrow_back,
                 size: 24,
                 color: ColorManager.kDarkColor,

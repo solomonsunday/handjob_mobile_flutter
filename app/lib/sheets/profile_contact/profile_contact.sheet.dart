@@ -1,10 +1,23 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:handjob_mobile/app/app.locator.dart';
+import 'package:handjob_mobile/models/state.model.dart' as HandjobState;
+import 'package:handjob_mobile/services/shared.service.dart';
+import 'package:handjob_mobile/sheets/profile_contact/profile_contact.sheet.form.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 
-class ProfileContactSheet extends StatelessWidget {
-  const ProfileContactSheet({
+import '../../models/lga.model.dart';
+
+@FormView(fields: [
+  FormTextField(name: 'email'),
+  FormTextField(name: 'phone'),
+  FormTextField(name: 'address')
+])
+class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
+  ProfileContactSheet({
     Key? key,
     this.request,
     this.completer,
@@ -17,7 +30,11 @@ class ProfileContactSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileContactSheetViewModel>.reactive(
         viewModelBuilder: () => ProfileContactSheetViewModel(),
+        onModelReady: (model) => listenToFormUpdated(model),
+        onDispose: (model) => disposeForm(),
         builder: (context, model, child) {
+          print('states fetched: ${model.states}');
+          print('states fetched: ${model.stateList}');
           return BottomSheetContainer(
             onClose: () => completer!(SheetResponse(confirmed: false)),
             child: Column(
@@ -26,7 +43,7 @@ class ProfileContactSheet extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: const [
                     Icon(
                       Icons.phone,
                       color: ColorManager.kSecondaryColor,
@@ -35,25 +52,29 @@ class ProfileContactSheet extends StatelessWidget {
                     Text('Contact Information'),
                   ],
                 ),
-                SizedBox(height: AppSize.s24),
+                const SizedBox(height: AppSize.s24),
                 InputField(
                   label: 'Email address',
                   hintText: 'johndemola@gmail.com',
                   fillColor: ColorManager.kWhiteColor,
+                  controller: emailController,
+                  focusnode: emailFocusNode,
                 ),
-                SizedBox(height: AppSize.s12),
+                const SizedBox(height: AppSize.s12),
                 InputField(
                   label: 'Phone number',
                   hintText: 'Enter phone number',
                   fillColor: ColorManager.kWhiteColor,
+                  controller: phoneController,
+                  focusnode: phoneFocusNode,
                 ),
-                SizedBox(height: AppSize.s12),
+                const SizedBox(height: AppSize.s12),
                 Column(
                   children: [
                     DefaultDropDownField(
                       label: 'State',
                       hint: 'Enter',
-                      dropdownItems: [],
+                      dropdownItems: model.states ?? [],
                       onChanged: model.handleSelectedState,
                       value: model.selectedState,
                       buttonWidth: MediaQuery.of(context).size.width,
@@ -71,7 +92,7 @@ class ProfileContactSheet extends StatelessWidget {
                     DefaultDropDownField(
                       label: 'LGA',
                       hint: 'Enter',
-                      dropdownItems: [],
+                      dropdownItems: model.lgas.map((e) => e!).toList(),
                       onChanged: model.handleSelectedLGA,
                       value: model.selectedLGA,
                       buttonHeight: 50,
@@ -105,16 +126,39 @@ class ProfileContactSheet extends StatelessWidget {
   }
 }
 
-class ProfileContactSheetViewModel extends BaseViewModel {
+class ProfileContactSheetViewModel extends FormViewModel {
+  final _sharedService = locator<SharedService>();
+  String? _state;
+  String? _lga;
   String? _selectedState;
   String? _selectedLGA;
 
   String? get selectedState => _selectedState;
   String? get selectedLGA => _selectedLGA;
 
-  handleSelectedState(String? value) {}
+  List<String>? _states = [];
+  List<String>? get states => _states;
+  List<HandjobState.State>? get stateList => _sharedService.states;
 
-  handleSelectedLGA(String? value) {}
+  List<LGA>? get lgaList => _sharedService.lgas;
+  List<String?> get lgas => lgaList?.map((e) => e.name).toList() ?? [];
+
+  handleSelectedState(String? value) async {
+    _selectedState = value;
+    int id =
+        stateList!.firstWhere((element) => element.name!.contains(value!)).id!;
+    try {
+      await _sharedService.getLGA(id.toString());
+    } on DioError catch (e) {}
+    notifyListeners();
+  }
+
+  handleSelectedLGA(String? value) {
+    _selectedLGA = value;
+
+    notifyListeners();
+  }
+
   updateContact() {
     runBusyFuture(updateContactRequest());
   }
@@ -129,5 +173,10 @@ class ProfileContactSheetViewModel extends BaseViewModel {
       "long": "string",
       "lat": "string"
     };
+  }
+
+  @override
+  void setFormStatus() {
+    // TODO: implement setFormStatus
   }
 }

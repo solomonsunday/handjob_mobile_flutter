@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/services/experience.service.dart';
-import 'package:handjob_mobile/sheets/profile_contact.sheet.dart';
+import 'package:handjob_mobile/sheets/profile_contact/profile_contact.sheet.dart';
 import 'package:handjob_mobile/sheets/profile_experience/profile_experience.sheet.form.dart';
 import 'package:handjob_mobile/utils/helpers.dart';
 import 'package:intl/intl.dart';

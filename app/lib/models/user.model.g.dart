@@ -18,7 +18,9 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       contactPhoneNumber: json['contactPhoneNumber'] as String?,
       postalCode: json['postalCode'] as String?,
       contactEmail: json['contactEmail'] as String?,
-      locations: json['locations'] as List<dynamic>?,
+      locations: (json['locations'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       phoneNumber: json['phoneNumber'] as String?,
       emailVerified: json['emailVerified'] as bool?,
       phoneNumberVerified: json['phoneNumberVerified'] as bool?,
@@ -43,7 +45,11 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       yearOfEstablishment: json['yearOfEstablishment'],
       website: json['website'],
       noOfEmployees: json['noOfEmployees'],
-      portfolios: json['portfolios'] as List<dynamic>?,
+      portfolios: (json['portfolios'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      lga: json['lga'] as String?,
+      state: json['state'] as String?,
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -78,4 +84,6 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'website': instance.website,
       'noOfEmployees': instance.noOfEmployees,
       'portfolios': instance.portfolios,
+      'lga': instance.lga,
+      'state': instance.state,
     };

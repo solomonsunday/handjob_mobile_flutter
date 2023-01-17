@@ -17,10 +17,17 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ProfileActionHeader(
-            icon: Icons.phone,
-            title: 'Contact Us',
-            onTap: model.showContactSheet,
-          ),
+              icon: Icons.phone,
+              title: 'Contact Us',
+              onTap: () => model.showContactSheet({
+                    "email": model.currentUser?.contactEmail ??
+                        model.currentUser?.email ??
+                        "",
+                    "phone": model.currentUser?.phoneNumber ?? "",
+                    "state": model.currentUser?.state ?? "",
+                    "lga": model.currentUser?.lga ?? "",
+                    "address": model.currentUser?.address ?? "",
+                  })),
           const SizedBox(height: AppSize.s24),
           Text(
             'Email address',
@@ -30,7 +37,7 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
             ),
           ),
           Text(
-            'johndemola@gmail.com',
+            model.currentUser?.contactEmail ?? model.currentUser?.email ?? "",
             style: getRegularStyle(
               color: ColorManager.kDarkColor,
               fontSize: FontSize.s12,
@@ -39,7 +46,7 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
           const SizedBox(height: AppSize.s12),
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.star,
                 color: Colors.red,
                 size: 8,
@@ -54,20 +61,53 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
                   ),
                 ),
               ),
-              InkWell(
-                onTap: model.showVerifyPhoneSheet,
-                child: Text(
-                  'Verify',
-                  style: getRegularStyle(
-                    color: Color(0xffFFC107),
-                    fontSize: FontSize.s12,
-                  ),
-                ),
-              )
+              !model.busy(REQUEST_OTP)
+                  ? InkWell(
+                      onTap: () async {
+                        //request otp
+                        await model.requestOTP();
+                        model.showVerifyPhoneSheet();
+                      },
+                      child: Row(
+                        children: [
+                          model.currentUser!.phoneNumberVerified!
+                              ? Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: AppPadding.p8,
+                                    vertical: AppSize.s4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: ColorManager.kPrimary300Color,
+                                    borderRadius:
+                                        BorderRadius.circular(AppSize.s16),
+                                  ),
+                                  child: Text(
+                                    'Verified',
+                                    style: getRegularStyle(
+                                      color: ColorManager.kWhiteColor,
+                                      fontSize: FontSize.s12,
+                                    ),
+                                  ),
+                                )
+                              : Text(
+                                  'Verify',
+                                  style: getRegularStyle(
+                                    color: const Color(0xffFFC107),
+                                    fontSize: FontSize.s12,
+                                  ),
+                                ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 1),
+                    )
             ],
           ),
           Text(
-            'add phone number',
+            model.currentUser?.contactPhoneNumber ?? "",
             style: getRegularStyle(
               color: ColorManager.kGrey,
               fontSize: FontSize.s12,
@@ -94,7 +134,7 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
             ],
           ),
           Text(
-            'add location',
+            model.currentUser?.locations?.join(",") ?? "",
             style: getRegularStyle(
               color: ColorManager.kGrey,
               fontSize: FontSize.s12,

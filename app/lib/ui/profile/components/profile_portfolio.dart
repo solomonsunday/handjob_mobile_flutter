@@ -52,7 +52,9 @@ class ProfilePortfolio extends ViewModelWidget<ProfileViewModel> {
             thickness: 1,
             color: ColorManager.kGrey,
           ),
-          const ProfilePortfolioGallery(),
+          ProfilePortfolioGallery(
+            currentUser: model.currentUser!,
+          ),
           const SizedBox(height: AppSize.s8),
           GestureDetector(
             onTap: () {},

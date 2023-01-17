@@ -17,7 +17,7 @@ class User {
   String? contactPhoneNumber;
   String? postalCode;
   String? contactEmail;
-  List<dynamic>? locations;
+  List<String>? locations;
   String? phoneNumber;
   bool? emailVerified;
   bool? phoneNumberVerified;
@@ -36,7 +36,9 @@ class User {
   dynamic yearOfEstablishment;
   dynamic website;
   dynamic noOfEmployees;
-  List<dynamic>? portfolios;
+  List<String>? portfolios;
+  String? lga;
+  String? state;
 
   User({
     this.id,
@@ -70,6 +72,8 @@ class User {
     this.website,
     this.noOfEmployees,
     this.portfolios,
+    this.lga,
+    this.state,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
