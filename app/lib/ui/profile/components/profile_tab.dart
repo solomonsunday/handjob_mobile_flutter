@@ -18,29 +18,23 @@ class ProfileTab extends ViewModelWidget<ProfileViewModel> {
       ),
       child: TabBarView(
         children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: 3,
-              itemBuilder: (context, index) {
-                return TabItem();
-              },
-            ),
+          ListView.builder(
+            itemCount: 3,
+            itemBuilder: (context, index) {
+              return TabItem();
+            },
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 1,
-              itemBuilder: (context, index) {
-                return TabItem();
-              },
-            ),
+          ListView.builder(
+            itemCount: 1,
+            itemBuilder: (context, index) {
+              return TabItem();
+            },
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 3,
-              itemBuilder: (context, index) {
-                return ReviewItem();
-              },
-            ),
+          ListView.builder(
+            itemCount: 3,
+            itemBuilder: (context, index) {
+              return ReviewItem();
+            },
           ),
         ],
       ),

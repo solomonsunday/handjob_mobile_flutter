@@ -49,31 +49,32 @@ class ProfileView extends StatelessWidget {
           body: DefaultTabController(
             length: 3,
             child: NestedScrollView(
-              scrollBehavior: ScrollBehavior(),
+              scrollBehavior: const ScrollBehavior(),
               headerSliverBuilder: (context, value) {
                 return [
-                  SliverToBoxAdapter(child: ProfileHeader()),
-                  SliverToBoxAdapter(child: SizedBox(height: AppSize.s12)),
-                  SliverToBoxAdapter(child: ProfileServices()),
-                  SliverToBoxAdapter(child: SizedBox(height: AppSize.s12)),
-                  SliverToBoxAdapter(child: ProfileExperience()),
-                  SliverToBoxAdapter(child: ProfileEducationApprenticeship()),
-                  SliverToBoxAdapter(child: ProfileContact()),
-                  SliverToBoxAdapter(
+                  const SliverToBoxAdapter(child: ProfileHeader()),
+                  const SliverToBoxAdapter(
+                      child: SizedBox(height: AppSize.s12)),
+                  const SliverToBoxAdapter(child: ProfileServices()),
+                  const SliverToBoxAdapter(
+                      child: SizedBox(height: AppSize.s12)),
+                  const SliverToBoxAdapter(child: ProfileExperience()),
+                  const SliverToBoxAdapter(
+                      child: ProfileEducationApprenticeship()),
+                  const SliverToBoxAdapter(child: ProfileContact()),
+                  const SliverToBoxAdapter(
                     child: Divider(
                       color: ColorManager.kPrimary100Color,
                       thickness: 1,
                     ),
                   ),
-                  // SliverToBoxAdapter(child: SizedBox(height: AppSize.s12)),
-                  SliverToBoxAdapter(child: ProfilePortfolio()),
-                  SliverToBoxAdapter(
+                  const SliverToBoxAdapter(child: ProfilePortfolio()),
+                  const SliverToBoxAdapter(
                     child: Divider(
                       color: ColorManager.kPrimary100Color,
                       thickness: 1,
                     ),
                   ),
-                  // ProfileTab(),
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(

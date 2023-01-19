@@ -49,7 +49,6 @@ class ProfileExperienceSheet extends StatelessWidget
         onModelReady: (model) {
           listenToFormUpdated(model);
           //
-          print((request?.data as Experience).toJson());
           if (request?.data != null) {
             Experience experience = request?.data as Experience;
 
