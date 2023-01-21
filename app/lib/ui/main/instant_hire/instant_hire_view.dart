@@ -4,6 +4,7 @@ import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
 import '../../../models/suggestion.model.dart';
+import '../../../utils/contants.dart';
 
 class InstantHireView extends StatelessWidget {
   const InstantHireView({Key? key}) : super(key: key);
@@ -12,6 +13,9 @@ class InstantHireView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<InstantHireViewModel>.nonReactive(
       viewModelBuilder: () => InstantHireViewModel(),
+      onModelReady: (model) async {
+        await model.fetchProfessionTypes();
+      },
       builder: (context, model, child) {
         return Scaffold(
           appBar: Navbar(
@@ -66,11 +70,32 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InputField(
+          // InputField(
+          //   label: 'Type of service needed',
+          //   controller: model.serviceNeedController,
+          //   fillColor: ColorManager.kWhiteColor,
+          // ),
+          DefaultDropDownField(
             label: 'Type of service needed',
-            controller: model.serviceNeedController,
-            fillColor: ColorManager.kWhiteColor,
+            hint: 'choose service',
+            value: model.selectedProfession,
+            dropdownItems: model.professions,
+            onChanged: model.handleSelectedProfession,
+            buttonDecoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: ColorManager.kDarkColor,
+              ),
+              borderRadius: BorderRadius.circular(AppSize.s12),
+            ),
+            buttonWidth: MediaQuery.of(context).size.width,
+            dropdownWidth: MediaQuery.of(context).size.width,
+            buttonHeight: AppSize.s48,
           ),
+          if (model.busy(PROFESSION_TYPES))
+            LinearProgressIndicator(
+              color: ColorManager.kPrimaryColor,
+            ),
           const SizedBox(height: AppSize.s12),
           Autocomplete<Suggestion>(
             displayStringForOption: _displayStringForOption,
@@ -150,7 +175,8 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
                   hint: 'Select',
                   label: 'State*',
                   value: model.selectedStateValue,
-                  dropdownItems: model.states,
+                  dropdownItems:
+                      (model.stateNames ?? []).map((e) => e!).toList(),
                   onChanged: (String? value) {
                     model.setSelectedState(value);
                   },
@@ -171,7 +197,7 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
                   hint: 'Select',
                   label: 'LGA*',
                   value: model.selectedLgaValue,
-                  dropdownItems: model.lgas,
+                  dropdownItems: model.lgaNames.map((e) => e!).toList(),
                   onChanged: (String? value) {
                     model.setSelectedLGA(value);
                   },

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
+import 'package:handjob_mobile/models/state.model.dart';
 import 'package:handjob_mobile/services/instant_job.service.dart';
 import 'package:handjob_mobile/ui/main/main_view.dart';
 import 'package:handjob_mobile/utils/helpers.dart';
@@ -9,8 +10,11 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../models/lga.model.dart';
 import '../../../models/place.model.dart';
+import '../../../models/profession_type.model.dart';
 import '../../../models/suggestion.model.dart';
+import '../../../services/authentication.service.dart';
 import '../../../services/location.service.dart';
 import '../../../services/shared.service.dart';
 import '../../../utils/contants.dart';
@@ -22,6 +26,7 @@ class InstantHireViewModel extends BaseViewModel {
   final _instantJobService = locator<InstantJobService>();
   final _dialogService = locator<DialogService>();
   final _sharedService = locator<SharedService>();
+  final _authenticationService = locator<AuthenticationService>();
 
   final TextEditingController serviceNeedController = TextEditingController();
   final TextEditingController serviceLocationController =
@@ -33,6 +38,27 @@ class InstantHireViewModel extends BaseViewModel {
   final TextEditingController describeServiceController =
       TextEditingController();
 
+  List<CustomState>? get states => _sharedService.states;
+  List<LGA>? get lgas => _sharedService.lgas;
+
+  String? _selectedProfession;
+  String? get selectedProfession => _selectedProfession;
+
+  void handleSelectedProfession(String? value) {
+    _selectedProfession = value;
+    serviceNeedController.text = value ?? "";
+    notifyListeners();
+  }
+
+  List<ProfessionType>? get professionTypes =>
+      _authenticationService.professionTypes;
+  List<String> get professions {
+    if (professionTypes == null) {
+      return [];
+    }
+    return professionTypes!.map((e) => e.name!).toList();
+  }
+
   List<Suggestion> _suggestions = [];
 
   List<Suggestion> get suggestions => _suggestions;
@@ -43,10 +69,11 @@ class InstantHireViewModel extends BaseViewModel {
   String? _selectedLgaValue;
   String? get selectedStateValue => _selectedStateValue;
   String? get selectedLgaValue => _selectedLgaValue;
-  List<String> _states = ["Abia", "Anambra"];
-  List<String> get states => _states;
-  List<String> _lgas = ["Ibeju Lekki", "Alimosho"];
-  List<String> get lgas => _lgas;
+  List<String?> get stateNames {
+    return (states ?? []).map((e) => e.name).toList();
+  }
+
+  List<String?> get lgaNames => (lgas ?? []).map((e) => e.name).toList();
 
   double? _lat;
   double? _lon;
@@ -102,6 +129,22 @@ class InstantHireViewModel extends BaseViewModel {
   handleEndDate(String value) {
     endDateController.text = value;
     notifyListeners();
+  }
+
+  fetchProfessionTypes() async {
+    runBusyFuture(fetchProfessionTypesRequest(), busyObject: PROFESSION_TYPES);
+  }
+
+  fetchProfessionTypesRequest() async {
+    try {
+      print('fetch profession');
+      await _authenticationService.getProfessionTypes();
+      print('done fetching pro');
+    } on DioError catch (error) {
+      throw Exception(error.response!.data["message"]);
+    } finally {
+      notifyListeners();
+    }
   }
 
   Future requestInstantService() async {

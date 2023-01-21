@@ -10,6 +10,7 @@ import 'package:ui_package/widgets/button/button.dart';
 const String CUSTOMER = "CUSTOMER";
 const String ARTISAN = "ARTISAN";
 const String CREATE_ACCOUNT = "CREATE_ACCOUNT";
+const String LOG_IN = 'LOG_IN';
 
 class AccountTypeDialog extends StatefulWidget {
   final DialogRequest request;
@@ -133,7 +134,19 @@ class _AccountTypeDialogState extends State<AccountTypeDialog> {
               fontSize: AppSize.s12,
               borderRadius: AppSize.s12,
             ),
-            const SizedBox(height: AppSize.s24),
+            const SizedBox(height: AppSize.s12),
+            DefaultButton(
+              onPressed: () => widget.completer(DialogResponse(
+                confirmed: true,
+                data: LOG_IN,
+              )),
+              title: 'Sign In',
+              fontWeight: FontWeightManager.regular,
+              fontSize: AppSize.s16,
+              borderRadius: AppSize.s12,
+              buttonType: ButtonType.text,
+              buttonTextColor: ColorManager.kDarkCharcoal,
+            ),
           ],
         ),
       ),

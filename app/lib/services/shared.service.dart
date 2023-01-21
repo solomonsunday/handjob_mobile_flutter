@@ -17,9 +17,9 @@ class SharedService with ReactiveServiceMixin {
   }
 
   int get currentIndex => _currentIndex;
-  List<State>? _states = [];
+  List<CustomState>? _states = [];
   List<LGA>? _lgas = [];
-  List<State>? get states => _states;
+  List<CustomState>? get states => _states;
   List<LGA>? get lgas => _lgas;
 
   void setCurrentIndex(int index) {
@@ -27,12 +27,13 @@ class SharedService with ReactiveServiceMixin {
     notifyListeners();
   }
 
-  Future<List<State>> getStates() async {
+  Future<List<CustomState>> getStates() async {
     var response = await dioClient.get('/state');
-
-    List<State> states = (response.data["data"] as List<dynamic>)
-        .map((x) => State.fromJson(x))
-        .toList();
+    print('response.data["data"]: ${response.data["data"]}');
+    List<CustomState> states =
+        (response.data["data"] as List<Map<String, dynamic>>)
+            .map((x) => CustomState.fromJson(x))
+            .toList();
     _states = states;
     notifyListeners();
     return states;
@@ -40,7 +41,7 @@ class SharedService with ReactiveServiceMixin {
 
   Future<List<LGA>> getLGA(String stateId) async {
     var response = await dioClient.get('/lga/getbystate/$stateId');
-    List<LGA> lgas = (response.data["data"] as List<dynamic>)
+    List<LGA> lgas = (response.data["data"] as List<Map<String, dynamic>>)
         .map((x) => LGA.fromJson(x))
         .toList();
     _lgas = lgas;

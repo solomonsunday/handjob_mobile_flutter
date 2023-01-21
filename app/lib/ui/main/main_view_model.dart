@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:stacked/stacked.dart';
@@ -21,6 +22,12 @@ class MainViewModel extends ReactiveViewModel {
   setCurrentIndex(int value) {
     _sharedService.setCurrentIndex(value);
     notifyListeners();
+  }
+
+  Future<void> fetchStates() async {
+    try {
+      await _sharedService.getStates();
+    } on DioError catch (error) {}
   }
 
   @override

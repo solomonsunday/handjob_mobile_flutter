@@ -10,6 +10,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 
 import '../../models/lga.model.dart';
+import '../../models/state.model.dart';
 
 @FormView(fields: [
   FormTextField(name: 'email'),
@@ -138,7 +139,7 @@ class ProfileContactSheetViewModel extends FormViewModel {
 
   List<String>? _states = [];
   List<String>? get states => _states;
-  List<HandjobState.State>? get stateList => _sharedService.states;
+  List<CustomState>? get stateList => _sharedService.states;
 
   List<LGA>? get lgaList => _sharedService.lgas;
   List<String?> get lgas => lgaList?.map((e) => e.name).toList() ?? [];

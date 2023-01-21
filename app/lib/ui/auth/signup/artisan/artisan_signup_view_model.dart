@@ -19,14 +19,14 @@ class ArtisanSignupViewModel extends FormViewModel {
   bool _tos = false;
   List<ProfessionType>? get professionTypes =>
       _authenticationService.professionTypes;
-  List<String?> get professionTypesName =>
-      professionTypes!.map((e) => e.name).toList();
+  // List<String?> get professionTypesName =>
+  //     professionTypes!.map((e) => e.name).toList();
 
   bool get tos => _tos;
-  String? _selectedProfession;
   bool _passwordVisibility = true;
   bool _confirmPasswordVisibility = true;
 
+  String? _selectedProfession;
   String? get selectedProfession => _selectedProfession;
   bool get passwordVisibility => _passwordVisibility;
   bool get confirmPasswordVisibility => _confirmPasswordVisibility;

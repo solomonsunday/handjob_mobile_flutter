@@ -17,6 +17,9 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainViewModel>.reactive(
+      onModelReady: (model) async {
+        await model.fetchStates();
+      },
       viewModelBuilder: () => MainViewModel(),
       builder: (context, model, child) => Scaffold(
         body: getView(model.currentIndex),

@@ -31,6 +31,9 @@ class OnboardingViewModel extends BaseViewModel {
           // do an artisan job
           _navigatorService.navigateTo(Routes.artisanSignupView);
           break;
+        case LOG_IN:
+          _navigatorService.navigateToAuthView();
+          break;
         default:
           {
             // _navigatorService.navigateTo(Routes.customerSignupView);
