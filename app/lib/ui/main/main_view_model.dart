@@ -24,9 +24,27 @@ class MainViewModel extends ReactiveViewModel {
     notifyListeners();
   }
 
+  Future<void> fetchCountries() async {
+    try {
+      await _sharedService.getCountries();
+    } on DioError catch (error) {}
+  }
+
   Future<void> fetchStates() async {
     try {
       await _sharedService.getStates();
+    } on DioError catch (error) {}
+  }
+
+  Future<void> fetchLGA() async {
+    try {
+      await _sharedService.getLGA();
+    } on DioError catch (error) {}
+  }
+
+  Future<void> fetchQualification() async {
+    try {
+      await _sharedService.getQualification();
     } on DioError catch (error) {}
   }
 

@@ -8,9 +8,16 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../models/lga.model.dart';
+import '../../models/place.model.dart';
 import '../../models/state.model.dart';
+import '../../models/suggestion.model.dart';
+import '../../services/account.service.dart';
+import '../../services/location.service.dart';
+import '../../utils/contants.dart';
+import '../../utils/http_exception.dart';
 
 @FormView(fields: [
   FormTextField(name: 'email'),
@@ -27,6 +34,9 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
   final SheetRequest? request;
   final Function(SheetResponse)? completer;
 
+  static String _displayStringForOption(Suggestion option) =>
+      option.description;
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileContactSheetViewModel>.reactive(
@@ -34,8 +44,7 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
         onModelReady: (model) => listenToFormUpdated(model),
         onDispose: (model) => disposeForm(),
         builder: (context, model, child) {
-          print('states fetched: ${model.states}');
-          print('states fetched: ${model.stateList}');
+          // print('states fetched: ${model.stateList}');
           return BottomSheetContainer(
             onClose: () => completer!(SheetResponse(confirmed: false)),
             child: Column(
@@ -75,7 +84,8 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
                     DefaultDropDownField(
                       label: 'State',
                       hint: 'Enter',
-                      dropdownItems: model.states ?? [],
+                      dropdownItems:
+                          (model.stateList ?? []).map((e) => e.name!).toList(),
                       onChanged: model.handleSelectedState,
                       value: model.selectedState,
                       buttonWidth: MediaQuery.of(context).size.width,
@@ -93,7 +103,7 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
                     DefaultDropDownField(
                       label: 'LGA',
                       hint: 'Enter',
-                      dropdownItems: model.lgas.map((e) => e!).toList(),
+                      dropdownItems: model.lgas ?? [],
                       onChanged: model.handleSelectedLGA,
                       value: model.selectedLGA,
                       buttonHeight: 50,
@@ -110,16 +120,56 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
                   ],
                 ),
                 SizedBox(height: AppSize.s12),
-                Textarea(
-                  label: 'Address',
-                  hintText: 'Enter',
-                  fillColor: ColorManager.kWhiteColor,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Autocomplete<Suggestion>(
+                        displayStringForOption: _displayStringForOption,
+                        optionsBuilder:
+                            (TextEditingValue textEditingValue) async {
+                          if (textEditingValue.text == '') {
+                            return const Iterable<Suggestion>.empty();
+                          }
+                          await model.handleSuggestion(textEditingValue.text);
+
+                          return model.suggestions.where((Suggestion option) {
+                            return option.description
+                                .toLowerCase()
+                                .contains(textEditingValue.text.toLowerCase());
+                          });
+                        },
+                        onSelected: (Suggestion selection) async {
+                          debugPrint(
+                              'You just selected ${_displayStringForOption(selection)}');
+
+                          model.updateLocation(
+                              _displayStringForOption(selection));
+                          await model.updateCoordinate(selection.placeId);
+                        },
+                        fieldViewBuilder: (context, textEditingController,
+                                focusNode, onFieldSubmitted) =>
+                            InputField(
+                          label: 'Address',
+                          controller: textEditingController,
+                          focusnode: focusNode,
+                          onTap: onFieldSubmitted,
+                          fillColor: ColorManager.kWhiteColor,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: AppSize.s24),
-                DefaultButton(onPressed: () {}, title: 'Save changes')
+                const SizedBox(height: AppSize.s24),
+                DefaultButton(
+                  onPressed:
+                      model.isBusy || model.busy(LOCATION_SUGGESTION_REQUEST)
+                          ? () {}
+                          : () => model.updateContact(completer),
+                  title: 'Save changes',
+                  busy: model.isBusy,
+                  disabled:
+                      model.busy(LOCATION_SUGGESTION_REQUEST) || model.isBusy,
+                ),
               ],
             ),
           );
@@ -129,6 +179,7 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
 
 class ProfileContactSheetViewModel extends FormViewModel {
   final _sharedService = locator<SharedService>();
+  final _accountService = locator<AccountService>();
   String? _state;
   String? _lga;
   String? _selectedState;
@@ -137,20 +188,24 @@ class ProfileContactSheetViewModel extends FormViewModel {
   String? get selectedState => _selectedState;
   String? get selectedLGA => _selectedLGA;
 
-  List<String>? _states = [];
-  List<String>? get states => _states;
+  // List<String>? _states = [];
+  // List<String>? get states => _states;
   List<CustomState>? get stateList => _sharedService.states;
 
   List<LGA>? get lgaList => _sharedService.lgas;
-  List<String?> get lgas => lgaList?.map((e) => e.name).toList() ?? [];
+  List<String>? _lgas;
+  List<String>? get lgas => _lgas;
 
   handleSelectedState(String? value) async {
     _selectedState = value;
-    int id =
-        stateList!.firstWhere((element) => element.name!.contains(value!)).id!;
-    try {
-      await _sharedService.getLGA(id.toString());
-    } on DioError catch (e) {}
+
+    _lgas = [];
+    CustomState customState = stateList!.firstWhere((element) =>
+        element.name!.toLowerCase().contains(value!.toLowerCase()));
+    List<LGA> foundLGAs = (lgaList ?? []).where((element) {
+      return element.stateId == customState.id;
+    }).toList();
+    _lgas = [...(_lgas ?? []), ...foundLGAs.map((e) => e.name!).toList()];
     notifyListeners();
   }
 
@@ -160,24 +215,101 @@ class ProfileContactSheetViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  updateContact() {
-    runBusyFuture(updateContactRequest());
+  updateContact(Function(SheetResponse<dynamic>)? completer) {
+    runBusyFuture(updateContactRequest(completer));
   }
 
-  updateContactRequest() async {
+  updateContactRequest(completer) async {
     var formData = {
-      "phoneNumber": "string",
-      "stateId": 0,
-      "lgaId": 0,
-      "region": "string",
-      "address": "string",
-      "long": "string",
-      "lat": "string"
+      "phoneNumber": phoneValue,
+      "email": emailValue,
+      "stateId": stateList!
+          .firstWhere((element) => element.name!
+              .toLowerCase()
+              .contains(selectedState!.toLowerCase()))
+          .id!,
+      "lgaId": lgaList!
+          .firstWhere((element) =>
+              element.name!.toLowerCase().contains(selectedLGA!.toLowerCase()))
+          .id!,
+      "region": regionController.text,
+      "address": addressController.text,
+      "long": lon,
+      "lat": lat,
+      "postalCode": int.parse(postalCode ?? '0'),
     };
+    print('form data: $formData');
+
+    setBusy(true);
+    try {
+      await _accountService.updateContactInfo(formData);
+      completer!(SheetResponse(confirmed: true));
+    } on DioError catch (error) {
+      print('eror: ${error.response!.data}');
+      throw HttpException("An error occured");
+    } finally {
+      setBusy(false);
+      notifyListeners();
+    }
   }
 
   @override
   void setFormStatus() {
     // TODO: implement setFormStatus
+  }
+
+  //
+  final _locationService = locator<LocationService>(param1: const Uuid().v4());
+  List<Suggestion> _suggestions = [];
+  List<Suggestion> get suggestions => _suggestions;
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController regionController = TextEditingController();
+
+  double? _lat;
+  double? _lon;
+  String? _postalCode;
+  double? get lat => _lat;
+  double? get lon => _lon;
+  String? get postalCode => _postalCode;
+
+  Future<void> handleSuggestion(String text) async => runBusyFuture(
+        fetchSuggestionRequest(text),
+        busyObject: LOCATION_SUGGESTION_REQUEST,
+      );
+
+  Future<List<Suggestion>> fetchSuggestionRequest(String text) async {
+    notifyListeners();
+    setBusyForObject(LOCATION_SUGGESTION_REQUEST, true);
+
+    try {
+      _suggestions = await _locationService.fetchSuggestions(text, 'en');
+      print(
+          'json suggestions: ${_suggestions.map((e) => e.toJson()).toList()}');
+      return _suggestions;
+    } on DioError catch (e) {
+      throw HttpException(e.response!.data);
+    } finally {
+      notifyListeners();
+      setBusyForObject(LOCATION_SUGGESTION_REQUEST, false);
+    }
+  }
+
+  void updateLocation(String location) {
+    addressController.text = location;
+  }
+
+  Future<void> updateCoordinate(String placeId) async {
+    try {
+      setBusyForObject(LOCATION_SUGGESTION_REQUEST, true);
+      Place place = await _locationService.getPlaceDetailFromId(placeId);
+      _lat = place.lat;
+      _lon = place.lon;
+      _postalCode = place.zipCode;
+      regionController.text = place.street!;
+    } on DioError catch (e) {
+      print(e.response!.data);
+    } finally {
+      setBusyForObject(LOCATION_SUGGESTION_REQUEST, false);
+    }
   }
 }

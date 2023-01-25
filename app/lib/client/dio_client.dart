@@ -39,6 +39,7 @@ class BearerTokenInterceptor extends Interceptor {
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
+    print('err response: ${err.response?.data}');
     print(
         'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
     return super.onError(err, handler);

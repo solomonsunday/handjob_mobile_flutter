@@ -22,6 +22,15 @@ class AccountService with ReactiveServiceMixin {
     return User.fromJson(response.data);
   }
 
+  Future<User> updateContactInfo(Map formData) async {
+    var response = await dioClient.put(
+      '/accounts/contact-info',
+      data: formData,
+    );
+
+    return User.fromJson(response.data);
+  }
+
   int index = 0;
 
   Future<User> uploadPortfolios(List<File> files) async {

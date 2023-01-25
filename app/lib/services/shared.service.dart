@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:handjob_mobile/models/lga.model.dart';
+import 'package:handjob_mobile/models/qualification.model.dart';
 import 'package:handjob_mobile/ui/main/main_view.dart';
 import 'package:stacked/stacked.dart';
 
 import '../app/app.locator.dart';
 import '../client/dio_client.dart';
+import '../models/country.model.dart';
 import '../models/state.model.dart';
 
 class SharedService with ReactiveServiceMixin {
@@ -13,39 +15,123 @@ class SharedService with ReactiveServiceMixin {
   Dio dioClient = locator<DioClient>().dio;
 
   SharedService() {
-    listenToReactiveValues([]);
+    listenToReactiveValues([
+      states,
+      lgas,
+      lgasById,
+      countries,
+    ]);
   }
 
   int get currentIndex => _currentIndex;
   List<CustomState>? _states = [];
   List<LGA>? _lgas = [];
+  List<LGA>? _lgasById = [];
   List<CustomState>? get states => _states;
   List<LGA>? get lgas => _lgas;
+  List<LGA>? get lgasById => _lgasById;
+  List<Country>? _countries = [];
+  List<Country>? get countries => _countries;
+  List<Qualification>? _qualifications = [];
+  List<Qualification>? get qualifications => _qualifications;
 
   void setCurrentIndex(int index) {
     _currentIndex = index;
     notifyListeners();
   }
 
+  Future<List<Country>> getCountries() async {
+    var response = await dioClient.get("/country");
+
+    List<Map> mappedStates =
+        (response.data as List).map((e) => e as Map).toList();
+    List<Map<String, dynamic>> newResponseCountryMap = mappedStates.map((e) {
+      Map<String, dynamic> obj = {};
+      for (var k in e.keys) {
+        obj[k] = e[k];
+      }
+      return obj;
+    }).toList();
+
+    List<Country> countries =
+        newResponseCountryMap.map((x) => Country.fromJson(x)).toList();
+    _countries = countries;
+    notifyListeners();
+    return countries;
+  }
+
   Future<List<CustomState>> getStates() async {
     var response = await dioClient.get('/state');
-    print('response.data["data"]: ${response.data["data"]}');
+    List<Map> mappedStates =
+        (response.data as List).map((e) => e as Map).toList();
+    List<Map<String, dynamic>> newResponseStateMap = mappedStates.map((e) {
+      Map<String, dynamic> obj = {};
+      for (var k in e.keys) {
+        obj[k] = e[k];
+      }
+      return obj;
+    }).toList();
+
     List<CustomState> states =
-        (response.data["data"] as List<Map<String, dynamic>>)
-            .map((x) => CustomState.fromJson(x))
-            .toList();
+        newResponseStateMap.map((x) => CustomState.fromJson(x)).toList();
     _states = states;
     notifyListeners();
     return states;
   }
 
-  Future<List<LGA>> getLGA(String stateId) async {
-    var response = await dioClient.get('/lga/getbystate/$stateId');
-    List<LGA> lgas = (response.data["data"] as List<Map<String, dynamic>>)
-        .map((x) => LGA.fromJson(x))
-        .toList();
+  Future<List<LGA>> getLGA() async {
+    var response = await dioClient.get('/lga');
+    List<Map> mappedStates =
+        (response.data as List).map((e) => e as Map).toList();
+    List<Map<String, dynamic>> newResponseLGAMap = mappedStates.map((e) {
+      Map<String, dynamic> obj = {};
+      for (var k in e.keys) {
+        obj[k] = e[k];
+      }
+      return obj;
+    }).toList();
+    List<LGA> lgas = newResponseLGAMap.map((x) => LGA.fromJson(x)).toList();
+
     _lgas = lgas;
     notifyListeners();
     return lgas;
+  }
+
+  Future<List<LGA>> getLgaById(String id) async {
+    var response = await dioClient.get('/lga/getbystate/$id');
+    List<Map> mappedStates =
+        (response.data as List).map((e) => e as Map).toList();
+    List<Map<String, dynamic>> newResponseLGAMap = mappedStates.map((e) {
+      Map<String, dynamic> obj = {};
+      for (var k in e.keys) {
+        obj[k] = e[k];
+      }
+      return obj;
+    }).toList();
+    List<LGA> lgas = newResponseLGAMap.map((x) => LGA.fromJson(x)).toList();
+    _lgasById = lgas;
+    notifyListeners();
+    return lgas;
+  }
+
+  Future<List<Qualification>> getQualification() async {
+    var response = await dioClient.get('/qualification');
+    print('response. data: ${response.data["data"]}');
+    List<Map> mappedQualifications =
+        (response.data["data"] as List).map((e) => e as Map).toList();
+    List<Map<String, dynamic>> newResponseQualificationMap =
+        mappedQualifications.map((e) {
+      Map<String, dynamic> obj = {};
+      for (var k in e.keys) {
+        obj[k] = e[k];
+      }
+      return obj;
+    }).toList();
+    List<Qualification> qualifications = newResponseQualificationMap
+        .map((x) => Qualification.fromJson(x))
+        .toList();
+    _qualifications = qualifications;
+    notifyListeners();
+    return qualifications;
   }
 }

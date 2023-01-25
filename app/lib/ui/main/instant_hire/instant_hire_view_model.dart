@@ -73,7 +73,8 @@ class InstantHireViewModel extends BaseViewModel {
     return (states ?? []).map((e) => e.name).toList();
   }
 
-  List<String?> get lgaNames => (lgas ?? []).map((e) => e.name).toList();
+  List<String>? _lgaNames;
+  List<String?> get lgaNames => _lgaNames ?? lgas!.map((e) => e.name).toList();
 
   double? _lat;
   double? _lon;
@@ -112,13 +113,23 @@ class InstantHireViewModel extends BaseViewModel {
 
   void setSelectedState(String? value) {
     _selectedStateValue = value;
+
+    _lgaNames = [];
+    CustomState customState = states!.firstWhere((element) =>
+        element.name!.toLowerCase().contains(value!.toLowerCase()));
+    List<LGA> foundLGAs = (lgas ?? []).where((element) {
+      return element.stateId == customState.id;
+    }).toList();
+    _lgaNames = [
+      ...(_lgaNames ?? []),
+      ...foundLGAs.map((e) => e.name!).toList()
+    ];
     notifyListeners();
   }
 
   void setSelectedLGA(String? value) {
     _selectedLgaValue = value;
     notifyListeners();
-    ;
   }
 
   handleStartDate(String value) {

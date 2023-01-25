@@ -5,7 +5,6 @@ import 'package:handjob_mobile/ui/main/home/home_view.dart';
 import 'package:handjob_mobile/ui/main/instant_hire/instant_hire_view.dart';
 import 'package:handjob_mobile/ui/main/jobs/jobs_view.dart';
 import 'package:handjob_mobile/ui/main/post/post_view.dart';
-import 'package:handjob_mobile/ui/profile/profile_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
@@ -19,11 +18,14 @@ class MainView extends StatelessWidget {
     return ViewModelBuilder<MainViewModel>.reactive(
       onModelReady: (model) async {
         await model.fetchStates();
+        await model.fetchLGA();
+        await model.fetchCountries();
+        await model.fetchQualification();
       },
       viewModelBuilder: () => MainViewModel(),
       builder: (context, model, child) => Scaffold(
         body: getView(model.currentIndex),
-        drawer: MainDrawerWidget(),
+        drawer: const MainDrawerWidget(),
         bottomNavigationBar: CustomBottomBar(
           containerHeight: 70,
           backgroundColor: Colors.black,

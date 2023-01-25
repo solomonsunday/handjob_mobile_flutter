@@ -77,7 +77,7 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
                                     vertical: AppSize.s4,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: ColorManager.kPrimary300Color,
+                                    color: ColorManager.kGreen,
                                     borderRadius:
                                         BorderRadius.circular(AppSize.s16),
                                   ),
@@ -116,7 +116,7 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
           const SizedBox(height: AppSize.s8),
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.star,
                 color: Colors.red,
                 size: 8,
@@ -134,7 +134,8 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
             ],
           ),
           Text(
-            model.currentUser?.locations?.join(",") ?? "",
+            model.currentUser?.locations?.join(",") ??
+                '${model.currentUser?.city}, ${model.currentUser?.state}',
             style: getRegularStyle(
               color: ColorManager.kGrey,
               fontSize: FontSize.s12,

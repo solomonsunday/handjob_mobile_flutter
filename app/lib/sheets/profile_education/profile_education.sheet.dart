@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:handjob_mobile/sheets/profile_education/profile_education.sheet.form.dart';
 import 'package:handjob_mobile/utils/helpers.dart';
 import 'package:intl/intl.dart';
@@ -38,7 +39,8 @@ class ProfileEducationSheet extends StatelessWidget
         viewModelBuilder: () => ProfileEducationSheetViewModel(),
         onModelReady: (model) {
           listenToFormUpdated(model);
-
+          print('countires: ${model.countries}');
+          print('qualification: ${model.qualification}');
           if (request?.data != null) {
             Education education = request?.data as Education;
 
@@ -78,6 +80,16 @@ class ProfileEducationSheet extends StatelessWidget
                   dropdownItems: model.qualifications,
                   onChanged: (value) => model.updateQualification(value!),
                   value: model.qualification,
+                  buttonHeight: 50,
+                  buttonWidth: MediaQuery.of(context).size.width,
+                  buttonDecoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: ColorManager.kDarkColor,
+                    ),
+                    borderRadius: BorderRadius.circular(AppSize.s8),
+                  ),
+                  dropdownWidth: MediaQuery.of(context).size.width,
                 ),
                 SizedBox(height: AppSize.s12),
                 InputField(
@@ -117,10 +129,21 @@ class ProfileEducationSheet extends StatelessWidget
                     SizedBox(width: AppSize.s12),
                     Expanded(
                       child: DefaultDropDownField(
+                        label: "Country",
                         dropdownItems: model.countries,
                         value: model.country,
                         hint: 'Country',
                         onChanged: (value) => model.updateCountry(value!),
+                        buttonHeight: 50,
+                        buttonWidth: MediaQuery.of(context).size.width,
+                        buttonDecoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: ColorManager.kDarkColor,
+                          ),
+                          borderRadius: BorderRadius.circular(AppSize.s8),
+                        ),
+                        dropdownWidth: MediaQuery.of(context).size.width,
                       ),
                     ),
                   ],
@@ -155,12 +178,13 @@ class ProfileEducationSheet extends StatelessWidget
 class ProfileEducationSheetViewModel extends FormViewModel {
   final _educationService = locator<EducationService>();
   final _authenticationService = locator<AuthenticationService>();
+  final _sharedService = locator<SharedService>();
 
-  List<String> _countries = [];
-  List<String> get countries => _countries;
+  List<String> get countries =>
+      _sharedService.countries?.map((e) => e.name!).toList() ?? [];
 
-  List<String> _qualifications = ["OND", "HND", "B.Sc", "M.BA", "M.Sc", "PhD"];
-  List<String> get qualifications => _qualifications;
+  List<String> get qualifications =>
+      _sharedService.qualifications?.map((e) => e.name!).toList() ?? [];
 
   createEducation(completer) async {
     runBusyFuture(createEducationRequest(completer));

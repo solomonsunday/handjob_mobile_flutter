@@ -96,16 +96,16 @@ class ProfileViewModel extends ReactiveViewModel {
     }
   }
 
-  fetchLGA(String stateId) async {
-    try {
-      print('fetch lga');
-      await _sharedService.getLGA(stateId);
-    } on DioError catch (error) {
-      throw Exception(error.response!.data["message"]);
-    } finally {
-      notifyListeners();
-    }
-  }
+  // fetchLGA(String stateId) async {
+  //   try {
+  //     print('fetch lga');
+  //     await _sharedService.getLGA(stateId);
+  //   } on DioError catch (error) {
+  //     throw Exception(error.response!.data["message"]);
+  //   } finally {
+  //     notifyListeners();
+  //   }
+  // }
 
   @override
   List<ReactiveServiceMixin> get reactiveServices => [_authenticationService];
