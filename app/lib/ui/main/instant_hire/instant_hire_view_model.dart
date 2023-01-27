@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/models/state.model.dart';
 import 'package:handjob_mobile/services/instant_job.service.dart';
@@ -8,6 +9,7 @@ import 'package:handjob_mobile/utils/helpers.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:ui_package/utils/font_styles.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../models/lga.model.dart';
@@ -74,7 +76,7 @@ class InstantHireViewModel extends BaseViewModel {
   }
 
   List<String>? _lgaNames;
-  List<String?> get lgaNames => _lgaNames ?? lgas!.map((e) => e.name).toList();
+  List<String>? get lgaNames => _lgaNames ?? lgas!.map((e) => e.name!).toList();
 
   double? _lat;
   double? _lon;
@@ -92,8 +94,6 @@ class InstantHireViewModel extends BaseViewModel {
 
     try {
       _suggestions = await _locationService.fetchSuggestions(text, 'en');
-      print(
-          'json suggestions: ${_suggestions.map((e) => e.toJson()).toList()}');
       return _suggestions;
     } on DioError catch (e) {
       throw HttpException(e.response!.data);
@@ -115,6 +115,8 @@ class InstantHireViewModel extends BaseViewModel {
     _selectedStateValue = value;
 
     _lgaNames = [];
+    _selectedLgaValue = null;
+    notifyListeners();
     CustomState customState = states!.firstWhere((element) =>
         element.name!.toLowerCase().contains(value!.toLowerCase()));
     List<LGA> foundLGAs = (lgas ?? []).where((element) {
@@ -148,9 +150,7 @@ class InstantHireViewModel extends BaseViewModel {
 
   fetchProfessionTypesRequest() async {
     try {
-      print('fetch profession');
       await _authenticationService.getProfessionTypes();
-      print('done fetching pro');
     } on DioError catch (error) {
       throw Exception(error.response!.data["message"]);
     } finally {
@@ -167,7 +167,6 @@ class InstantHireViewModel extends BaseViewModel {
     String input = df.parse(startDateController.text).toIso8601String();
     // String newDate = DateFormat.yMMMEd().format(input);
 
-    print('new date: $input');
     var formData = {
       "service": serviceNeedController.text,
       "meetupLocation": serviceLocationController.text,
@@ -192,13 +191,12 @@ class InstantHireViewModel extends BaseViewModel {
       description: "Are you sure you want post this job?",
     );
     if (!response!.confirmed) return;
-    print('proceed');
+
     setBusy(true);
     try {
-      var response = await _instantJobService.createInstantJob(formData);
+      await _instantJobService.createInstantJob(formData);
       _sharedService.setCurrentIndex(MainView.JOB_VIEW);
     } on DioError catch (error) {
-      print(error.response!.data["message"]);
       throw HttpException(error.response!.data["message"]);
     } finally {
       setBusy(false);
@@ -212,7 +210,7 @@ class InstantHireViewModel extends BaseViewModel {
       _lat = place.lat;
       _lon = place.lon;
     } on DioError catch (e) {
-      print(e.response!.data);
+      // print(e.response!.data);
     }
   }
 }

@@ -16,7 +16,7 @@ class DefaultButton extends StatelessWidget {
   final Color? busyColor;
   final Border? border;
   // final bool fullwidth;
-  Function() onPressed;
+  Function()? onPressed;
   final Color buttonBgColor;
   final Color? buttonTextColor;
   final Color? leadingIconColor;

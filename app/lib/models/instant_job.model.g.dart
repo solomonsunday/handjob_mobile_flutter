@@ -7,6 +7,9 @@ part of 'instant_job.model.dart';
 // **************************************************************************
 
 InstantJob _$InstantJobFromJson(Map<String, dynamic> json) => InstantJob(
+      id: json['id'] as String?,
+      location: json['location'] as String?,
+      createdAt: json['createdAt'] as String?,
       service: json['service'] as String?,
       region: json['region'] as String?,
       meetupLocation: json['meetupLocation'] as String?,
@@ -25,16 +28,19 @@ InstantJob _$InstantJobFromJson(Map<String, dynamic> json) => InstantJob(
 
 Map<String, dynamic> _$InstantJobToJson(InstantJob instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'service': instance.service,
       'region': instance.region,
       'meetupLocation': instance.meetupLocation,
       'lat': instance.lat,
       'lon': instance.lon,
       'address': instance.address,
+      'location': instance.location,
       'phoneNumber': instance.phoneNumber,
       'startDate': instance.startDate,
       'now': instance.now,
       'endDate': instance.endDate,
+      'createdAt': instance.createdAt,
       'description': instance.description,
       'company': instance.company,
     };

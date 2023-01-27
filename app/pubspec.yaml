@@ -51,6 +51,7 @@ dependencies:
   flutter_countdown_timer: ^4.1.0
   fluttertoast: ^8.1.2
   image_picker: ^0.8.6
+  timeago: ^3.2.2
 
 dev_dependencies:
   flutter_test:

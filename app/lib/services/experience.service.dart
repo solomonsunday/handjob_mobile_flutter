@@ -35,7 +35,6 @@ class ExperienceService with ReactiveServiceMixin {
     var response = await dioClient.delete(
       '/job-experience/$id',
     );
-    print('response bool ${response.data}');
     return response.data as bool;
   }
 }

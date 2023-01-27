@@ -112,7 +112,6 @@ class AuthenticationService with ReactiveServiceMixin {
     var response = await dioClient.get(
       '/accounts/profile/active',
     );
-    print('user to json: ${response.data}');
     User authUser = User.fromJson(response.data);
     _currentUser = authUser;
     notifyListeners();
@@ -150,7 +149,6 @@ class AuthenticationService with ReactiveServiceMixin {
       '/verification/send-shortcode',
       data: formData,
     );
-    print('response data: ${response.data}');
     return true;
   }
 
@@ -159,7 +157,6 @@ class AuthenticationService with ReactiveServiceMixin {
       '/auth/send-forget-password-email',
       data: formData,
     );
-    print('response data: ${response.data}');
     return true;
   }
 

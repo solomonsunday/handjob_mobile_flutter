@@ -93,7 +93,7 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
             buttonHeight: AppSize.s48,
           ),
           if (model.busy(PROFESSION_TYPES))
-            LinearProgressIndicator(
+            const LinearProgressIndicator(
               color: ColorManager.kPrimaryColor,
             ),
           const SizedBox(height: AppSize.s12),
@@ -197,7 +197,7 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
                   hint: 'Select',
                   label: 'LGA*',
                   value: model.selectedLgaValue,
-                  dropdownItems: model.lgaNames.map((e) => e!).toList(),
+                  dropdownItems: model.lgaNames?.map((e) => e).toList() ?? [],
                   onChanged: (String? value) {
                     model.setSelectedLGA(value);
                   },

@@ -1,10 +1,19 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/ui/main/jobs/jobs_view_model.dart';
+import 'package:handjob_mobile/utils/helpers.dart';
+import 'package:handjob_mobile/utils/humanize_date.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/components/home_card.dart';
 import 'package:ui_package/ui_package.dart';
 
+import '../../../app/app.locator.dart';
 import '../../../models/instant_job.model.dart';
+import '../../../models/user.model.dart';
+import '../../../services/instant_job.service.dart';
+import '../../../utils/http_exception.dart';
 
 class JobsView extends StatelessWidget {
   const JobsView({Key? key}) : super(key: key);
@@ -71,7 +80,10 @@ class JobsView extends StatelessWidget {
                       itemCount: model.jobs.length,
                       itemBuilder: (BuildContext context, int index) {
                         InstantJob instantJob = model.jobs[index];
-                        return JobItem(instantJob: instantJob);
+                        return JobItem(
+                          instantJob: instantJob,
+                          user: model.currentUser!,
+                        );
                       },
                     ),
                   )
@@ -84,142 +96,227 @@ class JobsView extends StatelessWidget {
 }
 
 class JobItem extends StatelessWidget {
-  const JobItem({Key? key, required this.instantJob}) : super(key: key);
+  const JobItem({
+    Key? key,
+    required this.instantJob,
+    required this.user,
+  }) : super(key: key);
 
   final InstantJob instantJob;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: AppPadding.p16,
-        horizontal: AppPadding.p24,
-      ),
-      margin: EdgeInsets.only(bottom: AppPadding.p2),
-      decoration: BoxDecoration(
-        color: ColorManager.kWhiteColor,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: AppSize.s40,
-                height: AppSize.s40,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24),
-                  color: Color(0xffd9d9d9),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                        'https://xsgames.co/randomusers/avatar.php?g=male'),
+    return ViewModelBuilder<JobItemViewModel>.reactive(
+        viewModelBuilder: () => JobItemViewModel(),
+        builder: (context, model, child) {
+          return Container(
+            padding: const EdgeInsets.symmetric(
+              vertical: AppPadding.p16,
+              horizontal: AppPadding.p24,
+            ),
+            margin: EdgeInsets.only(bottom: AppPadding.p2),
+            decoration: BoxDecoration(
+              color: ColorManager.kWhiteColor,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: AppSize.s40,
+                      height: AppSize.s40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        color: Color(0xffd9d9d9),
+                      ),
+                      child: instantJob.company?.imageUrl == null
+                          ? Image.asset('assets/images/logo.jpeg')
+                          : Image.network(
+                              'https://xsgames.co/randomusers/avatar.php?g=male'),
+                    ),
+                    const SizedBox(width: AppSize.s8),
+                    Text(
+                      '${instantJob.company?.firstName} ${instantJob.company?.lastName}',
+                      style: getBoldStyle(
+                        color: ColorManager.kDarkColor,
+                        fontSize: FontSize.s12,
+                      ),
+                    ),
+                    Expanded(child: Container()),
+                    Row(
+                      children: [
+                        Container(
+                          width: 4,
+                          height: 4,
+                          decoration: const BoxDecoration(
+                            color: ColorManager.kSecondaryColor,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: AppSize.s4),
+                        Text(
+                          humanizeDate(
+                              fromIsoToDateTime(instantJob.createdAt!)),
+                          style: getRegularStyle(
+                            fontSize: FontSize.s10,
+                            color: ColorManager.kPrimary400Color,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: AppSize.s12),
+                Text(
+                  '${instantJob.description}',
+                  style: getBoldStyle(
+                    color: ColorManager.kDarkColor,
+                    fontSize: FontSize.s14,
                   ),
                 ),
-              ),
-              SizedBox(width: AppSize.s8),
-              Text(
-                '${instantJob.company?.firstName} ${instantJob.company?.lastName}',
-                style: getBoldStyle(
-                  color: ColorManager.kDarkColor,
-                  fontSize: FontSize.s12,
+                Text(
+                  '${instantJob.service}',
+                  style: getRegularStyle(
+                    color: ColorManager.kDarkColor,
+                    fontSize: FontSize.s12,
+                  ),
                 ),
-              ),
-              Expanded(child: Container()),
-              Row(
-                children: [
-                  Container(
-                    width: 4,
-                    height: 4,
-                    decoration: const BoxDecoration(
-                      color: ColorManager.kSecondaryColor,
-                      shape: BoxShape.circle,
-                    ),
+                SizedBox(height: AppSize.s20),
+                Text(
+                  'MEET UP LOCATION: ${instantJob.meetupLocation ?? "NA"}',
+                  style: getBoldStyle(
+                    color: ColorManager.kDarkColor,
+                    fontSize: FontSize.s12,
                   ),
-                  SizedBox(width: AppSize.s4),
-                  Text(
-                    '5 mins ago',
-                    style: getRegularStyle(
-                      fontSize: FontSize.s10,
-                      color: ColorManager.kPrimary400Color,
+                ),
+                const SizedBox(height: AppSize.s12),
+                Row(
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.calendar_month_rounded),
+                        Text(
+                          DateFormat.yMEd()
+                              .format(DateTime.parse(instantJob.startDate!)),
+                          style:
+                              getMediumStyle(color: ColorManager.kDarkCharcoal),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: AppSize.s12),
-          Text(
-            '${instantJob.description}',
-            style: getBoldStyle(
-              color: ColorManager.kDarkColor,
-              fontSize: FontSize.s14,
+                    const SizedBox(width: AppSize.s4),
+                    Row(
+                      children: [
+                        Icon(Icons.pin_drop_outlined),
+                        Text(
+                          instantJob.location ?? "",
+                          softWrap: true,
+                          maxLines: 2,
+                          style:
+                              getMediumStyle(color: ColorManager.kDarkCharcoal),
+                        ),
+                      ],
+                    ),
+                    // DefaultButton(
+                    //   onPressed: () {},
+                    //   title: DateFormat.yMEd()
+                    //       .format(DateTime.parse(instantJob.startDate!)),
+                    //   leadingIcon: Icon(Icons.calendar_month_rounded),
+                    //   leadingIconColor: ColorManager.kSecondaryColor,
+                    //   buttonType: ButtonType.outline,
+                    //   paddingHeight: 12,
+                    //   paddingWidth: 4,
+                    //   borderRadius: 4,
+                    // ),
+                    // const SizedBox(width: AppSize.s4),
+                    // DefaultButton(
+                    //   onPressed: () {},
+                    //   title: instantJob.location ?? "",
+                    //   leadingIcon: Icon(Icons.pin_drop_outlined),
+                    //   leadingIconColor: ColorManager.kSecondaryColor,
+                    //   buttonType: ButtonType.outline,
+                    //   paddingHeight: 12,
+                    //   paddingWidth: 4,
+                    //   borderRadius: 4,
+                    // ),
+                  ],
+                ),
+                const SizedBox(height: AppSize.s8),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    if (instantJob.company?.id != user.id &&
+                        !model.isJobApplied(instantJob.id!))
+                      DefaultButton(
+                        onPressed: model.busy(APPLY_JOB)
+                            ? null
+                            : () => model.applyInstantJob(instantJob.id!),
+                        disabled: model.busy(APPLY_JOB),
+                        busy: model.busy(APPLY_JOB),
+                        title: 'Apply',
+                        buttonType: ButtonType.fill,
+                        paddingHeight: 20,
+                        paddingWidth: 40,
+                        borderRadius: 4,
+                      ),
+                    if (model.isJobApplied(instantJob.id!))
+                      DefaultButton(
+                        onPressed: null,
+                        title: 'Applied',
+                        trailingIcon: Icons.check,
+                        trailingIconColor: ColorManager.kWhiteColor,
+                        trailingIconSpace: 8,
+                        buttonType: ButtonType.fill,
+                        buttonBgColor: ColorManager.kGreen,
+                        buttonTextColor: ColorManager.kWhiteColor,
+                        paddingHeight: 20,
+                        paddingWidth: 40,
+                        borderRadius: 4,
+                      ),
+
+                    const SizedBox(width: AppSize.s8),
+                    // Text(
+                    //   'Awaiting response...',
+                    //   style: getRegularStyle(
+                    //     color: ColorManager.kPrimary200Color,
+                    //   ),
+                    // )
+                  ],
+                ),
+              ],
             ),
-          ),
-          Text(
-            '${instantJob.service}',
-            style: getRegularStyle(
-              color: ColorManager.kDarkColor,
-              fontSize: FontSize.s12,
-            ),
-          ),
-          SizedBox(height: AppSize.s20),
-          Text(
-            'MEET UP LOCATION: ${instantJob.meetupLocation}',
-            style: getBoldStyle(
-              color: ColorManager.kDarkColor,
-              fontSize: FontSize.s12,
-            ),
-          ),
-          SizedBox(height: AppSize.s12),
-          Row(
-            children: [
-              DefaultButton(
-                onPressed: () {},
-                title: 'Today',
-                leadingIcon: Icon(Icons.calendar_month_rounded),
-                leadingIconColor: ColorManager.kSecondaryColor,
-                buttonType: ButtonType.outline,
-                paddingHeight: 12,
-                paddingWidth: 4,
-                borderRadius: 4,
-              ),
-              SizedBox(width: AppSize.s4),
-              DefaultButton(
-                onPressed: () {},
-                title: 'Alimosho',
-                leadingIcon: Icon(Icons.pin_drop_outlined),
-                leadingIconColor: ColorManager.kSecondaryColor,
-                buttonType: ButtonType.outline,
-                paddingHeight: 12,
-                paddingWidth: 4,
-                borderRadius: 4,
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSize.s8),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              DefaultButton(
-                onPressed: () {},
-                title: 'Apply',
-                buttonType: ButtonType.fill,
-                paddingHeight: 20,
-                paddingWidth: 40,
-                borderRadius: 4,
-              ),
-              const SizedBox(width: AppSize.s8),
-              // Text(
-              //   'Awaiting response...',
-              //   style: getRegularStyle(
-              //     color: ColorManager.kPrimary200Color,
-              //   ),
-              // )
-            ],
-          ),
-        ],
-      ),
-    );
+          );
+        });
+  }
+}
+
+const String APPLY_JOB = "APPLY_JOB";
+
+class JobItemViewModel extends BaseViewModel {
+  final _instantJobService = locator<InstantJobService>();
+
+  List<InstantJob>? get appliedJobs => _instantJobService.appliedJobs;
+
+  Future applyInstantJob(String jobId) async {
+    try {
+      setBusyForObject(APPLY_JOB, true);
+      await _instantJobService.applyInstantJob({"jobId": jobId});
+      Fluttertoast.showToast(
+        msg: 'Job applied successfully!',
+        toastLength: Toast.LENGTH_LONG,
+        fontSize: FontSize.s16,
+      );
+    } on DioError catch (error) {
+      throw HttpException(error.response?.data['message'] ?? "");
+    } finally {
+      setBusyForObject(APPLY_JOB, true);
+      notifyListeners();
+    }
+  }
+
+  bool isJobApplied(String id) {
+    print('applied jobs: ${appliedJobs}');
+    return false;
   }
 }

@@ -11,20 +11,23 @@ class InstantJobService with ReactiveServiceMixin {
   InstantJobService() {
     listenToReactiveValues([
       instantJobs,
+      appliedJobs,
     ]);
   }
 
   final ReactiveValue<List<InstantJob>> _instantJobs =
       ReactiveValue<List<InstantJob>>([]);
+  final ReactiveValue<List<InstantJob>> _appliedJobs =
+      ReactiveValue<List<InstantJob>>([]);
 
   List<InstantJob> get instantJobs => _instantJobs.value;
+  List<InstantJob> get appliedJobs => _appliedJobs.value;
 
   Future<InstantJob> createInstantJob(Map formData) async {
     var response = await dioClient.post(
       '/instant-job',
       data: formData,
     );
-    print('response instant job: ${response.data}');
     return InstantJob.fromJson(response.data);
   }
 
@@ -38,7 +41,38 @@ class InstantJobService with ReactiveServiceMixin {
         .map((x) => InstantJob.fromJson(x))
         .toList();
     _instantJobs.value = instantJobs;
-    print('instant jbos: ${response.data["data"]}');
+    return instantJobs;
+  }
+
+  Future<List<InstantJob>> getCurrentInstantJobs({String? search}) async {
+    String url = '/instant-job/current';
+    if (search != null) {
+      url += '?search=$search';
+    }
+    var response = await dioClient.get(url);
+    List<InstantJob> instantJobs = (response.data["data"] as List<dynamic>)
+        .map((x) => InstantJob.fromJson(x))
+        .toList();
+    _instantJobs.value = instantJobs;
+    return instantJobs;
+  }
+
+  Future<bool> applyInstantJob(Map formData) async {
+    await dioClient.post(
+      '/instant-job/apply',
+      data: formData,
+    );
+    return true;
+  }
+
+  Future<List<InstantJob>> getAppliedJobs() async {
+    String url = '/instant-job/applications/me';
+
+    var response = await dioClient.get(url);
+    List<InstantJob> instantJobs = (response.data["data"] as List<dynamic>)
+        .map((x) => InstantJob.fromJson(x))
+        .toList();
+    _appliedJobs.value = instantJobs;
     return instantJobs;
   }
 }

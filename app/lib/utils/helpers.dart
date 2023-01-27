@@ -5,3 +5,7 @@ dateToIso8601String(String str) {
   DateTime input = df.parse(str);
   return input.toIso8601String();
 }
+
+fromIsoToDateTime(String str) {
+  return DateTime.parse(str);
+}

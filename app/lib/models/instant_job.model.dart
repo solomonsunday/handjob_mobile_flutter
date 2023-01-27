@@ -5,20 +5,26 @@ part 'instant_job.model.g.dart';
 
 @JsonSerializable()
 class InstantJob {
+  String? id;
   String? service;
   String? region;
   String? meetupLocation;
   double? lat;
   double? lon;
   String? address;
+  String? location;
   String? phoneNumber;
   String? startDate;
   bool? now;
   String? endDate;
+  String? createdAt;
   String? description;
   Company? company;
 
   InstantJob({
+    this.id,
+    this.location,
+    this.createdAt,
     this.service,
     this.region,
     this.meetupLocation,
