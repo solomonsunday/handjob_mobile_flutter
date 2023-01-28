@@ -174,33 +174,48 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: AppSize.s12),
-                  CircleAvatar(
-                    backgroundColor: ColorManager.kDarkColor,
-                    radius: AppSize.s40,
-                    child: model.currentUser == null
-                        ? Container()
-                        : CachedNetworkImage(
-                            imageUrl: model.currentUser?.imageUrl ??
-                                "https://i.picsum.photos/id/866/200/200.jpg?hmac=i0ngmQOk9dRZEzhEosP31m_vQnKBQ9C19TBP1CGoIUA",
-                            imageBuilder: (context, imageProvider) => Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                  colorFilter: const ColorFilter.mode(
-                                    Colors.red,
-                                    BlendMode.colorBurn,
-                                  ),
+                  // model.currentUser?.imageUrl == null
+                  //     ? const CircleAvatar(
+                  //         backgroundColor: ColorManager.kDarkColor,
+                  //         radius: AppSize.s40,
+                  //         backgroundImage:
+                  //             AssetImage('assets/images/logo.jpeg'),
+                  //       )
+                  //     : const CircleAvatar(
+                  //         backgroundColor: ColorManager.kDarkColor,
+                  //         radius: AppSize.s40,
+                  //         backgroundImage: CachedNetworkImage(
+                  //           imageUrl: portfolio,
+                  //           fit: BoxFit.cover,
+                  //         ),
+                  //       ),
+                  model.currentUser?.imageUrl == null
+                      ? Image.asset(
+                          'assets/images/logo.jpeg',
+                          fit: BoxFit.cover,
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: model.currentUser?.imageUrl ??
+                              "https://i.picsum.photos/id/866/200/200.jpg?hmac=i0ngmQOk9dRZEzhEosP31m_vQnKBQ9C19TBP1CGoIUA",
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                                colorFilter: const ColorFilter.mode(
+                                  Colors.red,
+                                  BlendMode.colorBurn,
                                 ),
                               ),
                             ),
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
                           ),
-                  ),
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+
                   const SizedBox(height: AppSize.s8),
                   Text(
                     '${model.currentUser?.firstName} ${model.currentUser?.lastName}',

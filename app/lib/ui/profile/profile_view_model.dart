@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/enums/bottom_sheet_type.dart';
@@ -10,7 +12,9 @@ import 'package:handjob_mobile/utils/http_exception.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-
+import '../../models/applied_job.model.dart';
+import '../../models/instant_job.model.dart';
+import '../../services/instant_job.service.dart';
 import '../../app/app.locator.dart';
 import '../../services/authentication.service.dart';
 
@@ -22,8 +26,12 @@ class ProfileViewModel extends ReactiveViewModel {
   final _bottomSheetService = locator<BottomSheetService>();
   final _sharedService = locator<SharedService>();
   final _accountService = locator<AccountService>();
+  final _instantJobService = locator<InstantJobService>();
+  final _dialogService = locator<DialogService>();
 
   User? get currentUser => _authenticationService.currentUser;
+  List<InstantJob> get instantHires => _instantJobService.instantHires;
+  List<AppliedJob> get appliedJobs => _instantJobService.appliedJobs;
 
   TabController? tabController;
 
@@ -96,16 +104,25 @@ class ProfileViewModel extends ReactiveViewModel {
     }
   }
 
-  // fetchLGA(String stateId) async {
-  //   try {
-  //     print('fetch lga');
-  //     await _sharedService.getLGA(stateId);
-  //   } on DioError catch (error) {
-  //     throw Exception(error.response!.data["message"]);
-  //   } finally {
-  //     notifyListeners();
-  //   }
-  // }
+  fetchAppliedJobs() async {
+    try {
+      await _instantJobService.getAppliedJobs();
+    } on DioError catch (error) {
+      throw Exception(error.response!.data["message"]);
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  fetchInstantHires() async {
+    try {
+      await _instantJobService.getInstantJobs();
+    } on DioError catch (error) {
+      throw Exception(error.response!.data["message"]);
+    } finally {
+      notifyListeners();
+    }
+  }
 
   @override
   List<ReactiveServiceMixin> get reactiveServices => [_authenticationService];
@@ -125,5 +142,24 @@ class ProfileViewModel extends ReactiveViewModel {
     } finally {
       notifyListeners();
     }
+  }
+
+  final ImagePicker _picker = ImagePicker();
+
+  void uploadProfileAvatar() async {
+    XFile? xfile = await _picker.pickImage(source: ImageSource.gallery);
+    if (xfile == null) return;
+
+    var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Do you really want to use this photo as your avatar?",
+    );
+    if (!response!.confirmed) return;
+
+    try {
+      File file = File(xfile.path);
+      await _accountService.uploadProfilePicture(file);
+      await _authenticationService.getCurrentBaseUser();
+    } on DioError catch (error) {}
   }
 }

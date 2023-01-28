@@ -26,10 +26,10 @@ class ProfileHeader extends ViewModelWidget<ProfileViewModel> {
                     width: MediaQuery.of(context).size.width,
                     height: 200,
                     decoration: const BoxDecoration(
-                      color: ColorManager.kPrimaryColor,
+                      color: ColorManager.kSecondaryColor,
                     ),
                   ),
-                  Positioned(
+                  const Positioned(
                     top: AppSize.s12,
                     right: AppSize.s20,
                     child: ProfileEditIcon(),
@@ -42,7 +42,11 @@ class ProfileHeader extends ViewModelWidget<ProfileViewModel> {
               left: 10,
               child: Row(
                 children: [
-                  ProfileAvatar(),
+                  ProfileAvatar(
+                      imgUrl: model.currentUser?.imageUrl,
+                      onSelectFile: () {
+                        model.uploadProfileAvatar();
+                      }),
                 ],
               ),
             ),

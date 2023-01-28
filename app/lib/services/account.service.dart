@@ -83,4 +83,16 @@ class AccountService with ReactiveServiceMixin {
     print('respones data ${response.data}');
     return response.data;
   }
+
+  Future<User> uploadProfilePicture(File file) async {
+    var formData = FormData.fromMap({
+      'image': await MultipartFile.fromFile(file.path, filename: file.path),
+    });
+
+    var response = await dioClient.put(
+      '/accounts/upload-avatar',
+      data: formData,
+    );
+    return User.fromJson(response.data);
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:handjob_mobile/models/applied_job.model.dart';
 import 'package:handjob_mobile/models/instant_job.model.dart';
 import 'package:stacked/stacked.dart';
 
@@ -12,16 +13,20 @@ class InstantJobService with ReactiveServiceMixin {
     listenToReactiveValues([
       instantJobs,
       appliedJobs,
+      instantHires,
     ]);
   }
 
+  final ReactiveValue<List<InstantJob>> _instantHires =
+      ReactiveValue<List<InstantJob>>([]);
   final ReactiveValue<List<InstantJob>> _instantJobs =
       ReactiveValue<List<InstantJob>>([]);
-  final ReactiveValue<List<InstantJob>> _appliedJobs =
-      ReactiveValue<List<InstantJob>>([]);
+  final ReactiveValue<List<AppliedJob>> _appliedJobs =
+      ReactiveValue<List<AppliedJob>>([]);
 
   List<InstantJob> get instantJobs => _instantJobs.value;
-  List<InstantJob> get appliedJobs => _appliedJobs.value;
+  List<InstantJob> get instantHires => _instantHires.value;
+  List<AppliedJob> get appliedJobs => _appliedJobs.value;
 
   Future<InstantJob> createInstantJob(Map formData) async {
     var response = await dioClient.post(
@@ -37,10 +42,10 @@ class InstantJobService with ReactiveServiceMixin {
       url += '?search=$search';
     }
     var response = await dioClient.get(url);
-    List<InstantJob> instantJobs = (response.data["data"] as List<dynamic>)
+    List<InstantJob> instantHires = (response.data["data"] as List<dynamic>)
         .map((x) => InstantJob.fromJson(x))
         .toList();
-    _instantJobs.value = instantJobs;
+    _instantHires.value = instantHires;
     return instantJobs;
   }
 
@@ -65,14 +70,14 @@ class InstantJobService with ReactiveServiceMixin {
     return true;
   }
 
-  Future<List<InstantJob>> getAppliedJobs() async {
+  Future<List<AppliedJob>> getAppliedJobs() async {
     String url = '/instant-job/applications/me';
 
     var response = await dioClient.get(url);
-    List<InstantJob> instantJobs = (response.data["data"] as List<dynamic>)
-        .map((x) => InstantJob.fromJson(x))
+    List<AppliedJob> appliedJobs = (response.data["data"] as List<dynamic>)
+        .map((x) => AppliedJob.fromJson(x))
         .toList();
-    _appliedJobs.value = instantJobs;
-    return instantJobs;
+    _appliedJobs.value = appliedJobs;
+    return appliedJobs;
   }
 }

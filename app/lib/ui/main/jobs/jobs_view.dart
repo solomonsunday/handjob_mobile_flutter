@@ -6,10 +6,12 @@ import 'package:handjob_mobile/utils/helpers.dart';
 import 'package:handjob_mobile/utils/humanize_date.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/components/home_card.dart';
 import 'package:ui_package/ui_package.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../models/applied_job.model.dart';
 import '../../../models/instant_job.model.dart';
 import '../../../models/user.model.dart';
 import '../../../services/instant_job.service.dart';
@@ -28,7 +30,7 @@ class JobsView extends StatelessWidget {
         builder: (context, model, child) {
           return Scaffold(
             appBar: Navbar(
-              leadingIcon: Icon(
+              leadingIcon: const Icon(
                 Icons.arrow_back,
                 color: ColorManager.kDarkColor,
               ),
@@ -218,34 +220,19 @@ class JobItem extends StatelessWidget {
                         ),
                       ],
                     ),
-                    // DefaultButton(
-                    //   onPressed: () {},
-                    //   title: DateFormat.yMEd()
-                    //       .format(DateTime.parse(instantJob.startDate!)),
-                    //   leadingIcon: Icon(Icons.calendar_month_rounded),
-                    //   leadingIconColor: ColorManager.kSecondaryColor,
-                    //   buttonType: ButtonType.outline,
-                    //   paddingHeight: 12,
-                    //   paddingWidth: 4,
-                    //   borderRadius: 4,
-                    // ),
-                    // const SizedBox(width: AppSize.s4),
-                    // DefaultButton(
-                    //   onPressed: () {},
-                    //   title: instantJob.location ?? "",
-                    //   leadingIcon: Icon(Icons.pin_drop_outlined),
-                    //   leadingIconColor: ColorManager.kSecondaryColor,
-                    //   buttonType: ButtonType.outline,
-                    //   paddingHeight: 12,
-                    //   paddingWidth: 4,
-                    //   borderRadius: 4,
-                    // ),
                   ],
                 ),
                 const SizedBox(height: AppSize.s8),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    if (instantJob.company?.id == user.id)
+                      Text(
+                        'You created this job',
+                        style: getRegularStyle(
+                          color: ColorManager.kDarkCharcoal,
+                        ),
+                      ),
                     if (instantJob.company?.id != user.id &&
                         !model.isJobApplied(instantJob.id!))
                       DefaultButton(
@@ -295,13 +282,21 @@ const String APPLY_JOB = "APPLY_JOB";
 
 class JobItemViewModel extends BaseViewModel {
   final _instantJobService = locator<InstantJobService>();
+  final _dialogService = locator<DialogService>();
 
-  List<InstantJob>? get appliedJobs => _instantJobService.appliedJobs;
+  List<AppliedJob>? get appliedJobs => _instantJobService.appliedJobs;
 
   Future applyInstantJob(String jobId) async {
+    var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Are you sure you want to apply for this job?",
+    );
+    if (!response!.confirmed) return;
+
     try {
       setBusyForObject(APPLY_JOB, true);
       await _instantJobService.applyInstantJob({"jobId": jobId});
+      await _instantJobService.getCurrentInstantJobs();
       Fluttertoast.showToast(
         msg: 'Job applied successfully!',
         toastLength: Toast.LENGTH_LONG,
@@ -310,13 +305,15 @@ class JobItemViewModel extends BaseViewModel {
     } on DioError catch (error) {
       throw HttpException(error.response?.data['message'] ?? "");
     } finally {
-      setBusyForObject(APPLY_JOB, true);
+      setBusyForObject(APPLY_JOB, false);
       notifyListeners();
     }
   }
 
   bool isJobApplied(String id) {
-    print('applied jobs: ${appliedJobs}');
-    return false;
+    return (appliedJobs ?? [])
+        .where((element) => element.jobId == id)
+        .toList()
+        .isNotEmpty;
   }
 }

@@ -21,7 +21,8 @@ class ProfileView extends StatelessWidget {
     return ViewModelBuilder<ProfileViewModel>.nonReactive(
       viewModelBuilder: () => ProfileViewModel(),
       onModelReady: (model) async {
-        // await model.fetchStates();
+        await model.fetchAppliedJobs();
+        await model.fetchInstantHires();
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -101,7 +102,7 @@ class ProfileView extends StatelessWidget {
                             ),
                             Tab(
                               child: Text(
-                                'Reviews',
+                                'Reviews (${model.currentUser?.reviews?.length})',
                                 style: getRegularStyle(
                                   color: ColorManager.kDarkColor,
                                 ),
