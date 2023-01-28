@@ -5,6 +5,7 @@ import 'package:handjob_mobile/services/education.service.dart';
 import 'package:handjob_mobile/services/experience.service.dart';
 import 'package:handjob_mobile/services/instant_job.service.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
+import 'package:handjob_mobile/ui/application/rate_review/rate_review_view.dart';
 import 'package:handjob_mobile/ui/auth/auth_view.dart';
 import 'package:handjob_mobile/ui/auth/forgot_password/forgot_password_view.dart';
 import 'package:handjob_mobile/ui/auth/reset_password/reset_password_view.dart';
@@ -26,6 +27,7 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../services/location.service.dart';
 import '../services/account.service.dart';
+import '../ui/application/application_view.dart';
 import '../ui/main/chat/chat_detail/chat_detail_view.dart';
 import '../ui/settings/change_password/change_password_view.dart';
 
@@ -49,6 +51,8 @@ import '../ui/settings/change_password/change_password_view.dart';
   AdaptiveRoute(page: ContactView),
   AdaptiveRoute(page: SettingView),
   AdaptiveRoute(page: ChangePasswordView),
+  AdaptiveRoute(page: ApplicationView),
+  AdaptiveRoute(page: RateReviewView),
 ], dependencies: [
   LazySingleton(classType: NavigationService),
   LazySingleton(classType: DialogService),

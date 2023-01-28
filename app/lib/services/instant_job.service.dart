@@ -5,6 +5,7 @@ import 'package:stacked/stacked.dart';
 
 import '../app/app.locator.dart';
 import '../client/dio_client.dart';
+import '../models/applicant.model.dart';
 
 class InstantJobService with ReactiveServiceMixin {
   Dio dioClient = locator<DioClient>().dio;
@@ -14,6 +15,7 @@ class InstantJobService with ReactiveServiceMixin {
       instantJobs,
       appliedJobs,
       instantHires,
+      applicants,
     ]);
   }
 
@@ -23,10 +25,13 @@ class InstantJobService with ReactiveServiceMixin {
       ReactiveValue<List<InstantJob>>([]);
   final ReactiveValue<List<AppliedJob>> _appliedJobs =
       ReactiveValue<List<AppliedJob>>([]);
+  final ReactiveValue<List<Applicant>> _applicants =
+      ReactiveValue<List<Applicant>>([]);
 
   List<InstantJob> get instantJobs => _instantJobs.value;
   List<InstantJob> get instantHires => _instantHires.value;
   List<AppliedJob> get appliedJobs => _appliedJobs.value;
+  List<Applicant> get applicants => _applicants.value;
 
   Future<InstantJob> createInstantJob(Map formData) async {
     var response = await dioClient.post(
@@ -46,7 +51,7 @@ class InstantJobService with ReactiveServiceMixin {
         .map((x) => InstantJob.fromJson(x))
         .toList();
     _instantHires.value = instantHires;
-    return instantJobs;
+    return instantHires;
   }
 
   Future<List<InstantJob>> getCurrentInstantJobs({String? search}) async {
@@ -79,5 +84,34 @@ class InstantJobService with ReactiveServiceMixin {
         .toList();
     _appliedJobs.value = appliedJobs;
     return appliedJobs;
+  }
+
+  Future<List<AppliedJob>> getApplicants(String jobId) async {
+    String url = '/instant-job/$jobId/applicants';
+
+    var response = await dioClient.get(url);
+    List<Applicant> applicants = (response.data["data"] as List<dynamic>)
+        .map((x) => Applicant.fromJson(x))
+        .toList();
+    _applicants.value = applicants;
+    return appliedJobs;
+  }
+
+  Future<bool> acceptApplication(
+      String applicationId, Map<String, String> formData) async {
+    await dioClient.put(
+      '/instant-job/$applicationId/application/accept',
+      data: formData,
+    );
+    return true;
+  }
+
+  Future<bool> rejectApplication(
+      String applicationId, Map<String, String> formData) async {
+    await dioClient.put(
+      '/instant-job/$applicationId/application/reject',
+      data: formData,
+    );
+    return true;
   }
 }

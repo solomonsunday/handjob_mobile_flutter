@@ -16,7 +16,7 @@ class JobsViewModel extends BaseViewModel {
   final _instantJobService = locator<InstantJobService>();
   final _authenticationService = locator<AuthenticationService>();
 
-  List<InstantJob> get jobs => _instantJobService.instantJobs;
+  List<InstantJob> get jobs => _instantJobService.instantJobs ?? [];
 
   User? get currentUser => _authenticationService.currentUser;
 

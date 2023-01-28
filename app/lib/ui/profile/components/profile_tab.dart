@@ -34,7 +34,11 @@ class ProfileTab extends ViewModelWidget<ProfileViewModel> {
           ListView.builder(
             itemCount: model.instantHires.length,
             itemBuilder: (context, index) {
-              return TabItem(instantHire: model.instantHires[index]);
+              return TabItem(
+                instantHire: model.instantHires[index],
+                onClick: (instantJob) =>
+                    model.handleOnSelectedInstantHire(instantJob),
+              );
             },
           ),
           ListView.builder(
@@ -55,118 +59,101 @@ class TabItem extends StatelessWidget {
   const TabItem({
     Key? key,
     required this.instantHire,
+    required this.onClick,
   }) : super(key: key);
   final InstantJob instantHire;
+  final Function(InstantJob) onClick;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(bottom: AppPadding.p16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/logo.jpeg'),
-                  radius: 16,
-                ),
-              ),
-              SizedBox(width: AppSize.s8),
-              Text(
-                instantHire.company?.companyName ?? "",
-                style: getBoldStyle(
-                  color: ColorManager.kDarkColor,
-                  fontSize: FontSize.s12,
-                ),
-              ),
-              Expanded(child: Container()),
-              Row(
-                children: [
-                  Container(
-                    width: 4,
-                    height: 4,
-                    decoration: const BoxDecoration(
-                      color: ColorManager.kSecondaryColor,
-                      shape: BoxShape.circle,
-                    ),
+    return GestureDetector(
+      onTap: () => onClick(instantHire),
+      child: Container(
+        padding: const EdgeInsets.only(bottom: AppPadding.p16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  child: CircleAvatar(
+                    backgroundImage: AssetImage('assets/images/logo.jpeg'),
+                    radius: 16,
                   ),
-                  SizedBox(width: AppSize.s4),
-                  Text(
-                    '5 mins ago',
-                    style: getRegularStyle(
-                      fontSize: FontSize.s10,
-                      color: ColorManager.kPrimary400Color,
-                    ),
+                ),
+                SizedBox(width: AppSize.s8),
+                Text(
+                  instantHire.company?.companyName ?? "",
+                  style: getBoldStyle(
+                    color: ColorManager.kDarkColor,
+                    fontSize: FontSize.s12,
                   ),
-                ],
+                ),
+                Expanded(child: Container()),
+                Row(
+                  children: [
+                    Container(
+                      width: 4,
+                      height: 4,
+                      decoration: const BoxDecoration(
+                        color: ColorManager.kSecondaryColor,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    SizedBox(width: AppSize.s4),
+                    Text(
+                      '5 mins ago',
+                      style: getRegularStyle(
+                        fontSize: FontSize.s10,
+                        color: ColorManager.kPrimary400Color,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: AppSize.s12),
+            Text(
+              instantHire.description ?? "",
+              style: getBoldStyle(
+                color: ColorManager.kDarkColor,
+                fontSize: FontSize.s14,
               ),
-            ],
-          ),
-          SizedBox(height: AppSize.s12),
-          Text(
-            instantHire.description ?? "",
-            style: getBoldStyle(
-              color: ColorManager.kDarkColor,
-              fontSize: FontSize.s14,
             ),
-          ),
-          Text(
-            instantHire.service ?? "",
-            style: getRegularStyle(
-              color: ColorManager.kDarkColor,
-              fontSize: FontSize.s12,
-            ),
-          ),
-          SizedBox(height: AppSize.s20),
-          Text(
-            'MEET UP LOCATION: ${instantHire.meetupLocation}',
-            style: getBoldStyle(
-              color: ColorManager.kDarkColor,
-              fontSize: FontSize.s12,
-            ),
-          ),
-          const SizedBox(height: AppSize.s12),
-          Row(
-            children: [
-              DefaultButton(
-                onPressed: () {},
-                title:
-                    '${DateFormat.yMEd().format(DateTime.parse(instantHire.startDate!))}  - ${DateFormat.yMEd().format(DateTime.parse(instantHire.endDate!))}',
-                leadingIcon: const Icon(Icons.calendar_month_rounded),
-                leadingIconColor: ColorManager.kSecondaryColor,
-                buttonType: ButtonType.outline,
-                paddingHeight: 12,
-                paddingWidth: 4,
-                borderRadius: 4,
+            Text(
+              instantHire.service ?? "",
+              style: getRegularStyle(
+                color: ColorManager.kDarkColor,
+                fontSize: FontSize.s12,
               ),
-              const SizedBox(width: AppSize.s4),
-            ],
-          ),
-          const SizedBox(height: AppSize.s8),
-          // Row(
-          //   crossAxisAlignment: CrossAxisAlignment.end,
-          //   children: [
-          //     // DefaultButton(
-          //     //   onPressed: () {},
-          //     //   title: 'Applied',
-          //     //   trailingIcon: Icons.check,
-          //     //   trailingIconColor: ColorManager.kSecondaryColor,
-          //     //   buttonType: ButtonType.outline,
-          //     //   paddingHeight: 12,
-          //     //   paddingWidth: 4,
-          //     //   borderRadius: 4,
-          //     // ),
-          //     // const SizedBox(width: AppSize.s8),
-          //     // Text(
-          //     //   'Awaiting response...',
-          //     //   style: getRegularStyle(
-          //     //     color: ColorManager.kPrimary200Color,
-          //     //   ),
-          //     // )
-          //   ],
-          // ),
-        ],
+            ),
+            SizedBox(height: AppSize.s20),
+            Text(
+              'MEET UP LOCATION: ${instantHire.meetupLocation}',
+              style: getBoldStyle(
+                color: ColorManager.kDarkColor,
+                fontSize: FontSize.s12,
+              ),
+            ),
+            const SizedBox(height: AppSize.s12),
+            Row(
+              children: [
+                DefaultButton(
+                  onPressed: () {},
+                  title:
+                      '${DateFormat.yMEd().format(DateTime.parse(instantHire.startDate!))}  - ${DateFormat.yMEd().format(DateTime.parse(instantHire.endDate!))}',
+                  leadingIcon: const Icon(Icons.calendar_month_rounded),
+                  leadingIconColor: ColorManager.kSecondaryColor,
+                  buttonType: ButtonType.outline,
+                  paddingHeight: 12,
+                  paddingWidth: 4,
+                  borderRadius: 4,
+                ),
+                const SizedBox(width: AppSize.s4),
+              ],
+            ),
+            const SizedBox(height: AppSize.s8),
+          ],
+        ),
       ),
     );
   }

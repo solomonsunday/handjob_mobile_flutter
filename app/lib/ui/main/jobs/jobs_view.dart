@@ -172,14 +172,14 @@ class JobItem extends StatelessWidget {
                 ),
                 SizedBox(height: AppSize.s12),
                 Text(
-                  '${instantJob.description}',
+                  '${instantJob.service}',
                   style: getBoldStyle(
                     color: ColorManager.kDarkColor,
                     fontSize: FontSize.s14,
                   ),
                 ),
                 Text(
-                  '${instantJob.service}',
+                  '${instantJob.description}',
                   style: getRegularStyle(
                     color: ColorManager.kDarkColor,
                     fontSize: FontSize.s12,

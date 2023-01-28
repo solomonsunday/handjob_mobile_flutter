@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/enums/bottom_sheet_type.dart';
 import 'package:handjob_mobile/models/experience.model.dart';
 import 'package:handjob_mobile/models/user.model.dart';
@@ -108,7 +109,7 @@ class ProfileViewModel extends ReactiveViewModel {
     try {
       await _instantJobService.getAppliedJobs();
     } on DioError catch (error) {
-      throw Exception(error.response!.data["message"]);
+      throw Exception(error.response?.data["message"] ?? "");
     } finally {
       notifyListeners();
     }
@@ -162,4 +163,12 @@ class ProfileViewModel extends ReactiveViewModel {
       await _authenticationService.getCurrentBaseUser();
     } on DioError catch (error) {}
   }
+
+  handleOnSelectedInstantHire(InstantJob instantJob) =>
+      _navigationService.navigateTo(
+        Routes.applicationView,
+        arguments: ApplicationViewArguments(
+          instantHire: instantJob,
+        ),
+      );
 }
