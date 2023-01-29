@@ -121,6 +121,19 @@ class ApplicationView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: AppSize.s24),
+                    if (model.isBusy)
+                      const SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: CircularProgressIndicator(),
+                      ),
+                    if ((model.applicants ?? []).isEmpty && !model.isBusy)
+                      Text(
+                        'No applicant available yet!',
+                        style: getSemiBoldStyle(
+                          color: ColorManager.kDarkCharcoal,
+                        ),
+                      ),
                     Expanded(
                         child: ListView.builder(
                       itemCount: (model.applicants ?? []).length,
@@ -245,15 +258,18 @@ class ApplicantItem extends StatelessWidget {
                             title: 'Accepted',
                             trailingIcon: Icons.check,
                             trailingIconColor: Colors.white,
+                            paddingHeight: 12,
                             buttonType: ButtonType.fill,
-                            buttonBgColor: ColorManager.kGreen,
+                            buttonBgColor: ColorManager.kSecondaryColor,
                           ),
                           DefaultButton(
                             onPressed: () => model.navigatoToRateReview(
                                 instantHire, applicant),
                             title: 'Leave a review',
                             buttonType: ButtonType.outline,
+                            paddingHeight: 12,
                             buttonTextColor: ColorManager.kDarkCharcoal,
+                            buttonBgColor: ColorManager.kWhiteColor,
                           ),
                         ],
                       )

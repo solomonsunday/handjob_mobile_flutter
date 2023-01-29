@@ -114,4 +114,12 @@ class InstantJobService with ReactiveServiceMixin {
     );
     return true;
   }
+
+  submitReview(Map<String, dynamic> formData) async {
+    var response = await dioClient.post(
+      '/review',
+      data: formData,
+    );
+    print('response data: ${response.data}');
+  }
 }

@@ -12,6 +12,15 @@ import 'package:stacked/stacked.dart';
 const String NameValueKey = 'name';
 const String TitleValueKey = 'title';
 const String DescriptionValueKey = 'description';
+const String RatingValueKey = 'rating';
+
+final Map<String, String> RatingValueToTitleMap = {
+  '1.0': '1.0',
+  '2.0': '2.0',
+  '3.0': '3.0',
+  '4.0': '4.0',
+  '5.0': '5.0',
+};
 
 final Map<String, TextEditingController> _RateReviewViewTextEditingControllers =
     {};
@@ -122,6 +131,7 @@ extension ValueProperties on FormViewModel {
   String? get titleValue => this.formValueMap[TitleValueKey] as String?;
   String? get descriptionValue =>
       this.formValueMap[DescriptionValueKey] as String?;
+  String? get ratingValue => this.formValueMap[RatingValueKey] as String?;
 
   bool get hasName =>
       this.formValueMap.containsKey(NameValueKey) &&
@@ -132,6 +142,7 @@ extension ValueProperties on FormViewModel {
   bool get hasDescription =>
       this.formValueMap.containsKey(DescriptionValueKey) &&
       (descriptionValue?.isNotEmpty ?? false);
+  bool get hasRating => this.formValueMap.containsKey(RatingValueKey);
 
   bool get hasNameValidationMessage =>
       this.fieldsValidationMessages[NameValueKey]?.isNotEmpty ?? false;
@@ -139,6 +150,8 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[TitleValueKey]?.isNotEmpty ?? false;
   bool get hasDescriptionValidationMessage =>
       this.fieldsValidationMessages[DescriptionValueKey]?.isNotEmpty ?? false;
+  bool get hasRatingValidationMessage =>
+      this.fieldsValidationMessages[RatingValueKey]?.isNotEmpty ?? false;
 
   String? get nameValidationMessage =>
       this.fieldsValidationMessages[NameValueKey];
@@ -146,13 +159,21 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[TitleValueKey];
   String? get descriptionValidationMessage =>
       this.fieldsValidationMessages[DescriptionValueKey];
+  String? get ratingValidationMessage =>
+      this.fieldsValidationMessages[RatingValueKey];
 }
 
 extension Methods on FormViewModel {
+  void setRating(String rating) {
+    this.setData(this.formValueMap..addAll({RatingValueKey: rating}));
+  }
+
   setNameValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[NameValueKey] = validationMessage;
   setTitleValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[TitleValueKey] = validationMessage;
   setDescriptionValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[DescriptionValueKey] = validationMessage;
+  setRatingValidationMessage(String? validationMessage) =>
+      this.fieldsValidationMessages[RatingValueKey] = validationMessage;
 }

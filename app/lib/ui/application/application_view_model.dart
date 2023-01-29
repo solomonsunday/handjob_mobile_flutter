@@ -22,8 +22,12 @@ class ApplicationViewModel extends BaseViewModel {
   }
 
   getApplicantsRequest(String jobId) async {
+    setBusy(true);
     try {
       await _instantJobService.getApplicants(jobId);
-    } on DioError catch (error) {}
+    } on DioError catch (error) {
+    } finally {
+      setBusy(false);
+    }
   }
 }

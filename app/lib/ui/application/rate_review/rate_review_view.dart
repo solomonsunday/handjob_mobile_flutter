@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/ui/application/application_view_model.dart';
+import 'package:handjob_mobile/ui/application/rate_review/rate_review_view.form.dart';
+import 'package:handjob_mobile/ui/application/rate_review/rate_review_view_model.dart';
 import 'package:handjob_mobile/ui/rating/rating.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
@@ -13,9 +15,19 @@ import '../../../models/instant_job.model.dart';
   FormTextField(name: 'name'),
   FormTextField(name: 'title'),
   FormTextField(name: 'description'),
+  FormDropdownField(
+    name: 'rating',
+    items: [
+      StaticDropdownItem(title: '1.0', value: '1.0'),
+      StaticDropdownItem(title: '2.0', value: '2.0'),
+      StaticDropdownItem(title: '3.0', value: '3.0'),
+      StaticDropdownItem(title: '4.0', value: '4.0'),
+      StaticDropdownItem(title: '5.0', value: '5.0'),
+    ],
+  ),
 ])
-class RateReviewView extends StatelessWidget {
-  const RateReviewView({
+class RateReviewView extends StatelessWidget with $RateReviewView {
+  RateReviewView({
     super.key,
     required this.instantHire,
     required this.applicant,
@@ -26,8 +38,12 @@ class RateReviewView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ApplicationViewModel>.nonReactive(
-        viewModelBuilder: () => ApplicationViewModel(),
+    return ViewModelBuilder<RateReviewViewModel>.nonReactive(
+        viewModelBuilder: () => RateReviewViewModel(),
+        onModelReady: (model) {
+          listenToFormUpdated(model);
+        },
+        onDispose: (model) => disposeForm(),
         builder: (context, model, _) {
           return Scaffold(
             appBar: AppBar(
@@ -133,34 +149,25 @@ class RateReviewView extends StatelessWidget {
                               fontSize: FontSize.s14,
                             ),
                           ),
+                          const SizedBox(width: AppSize.s12),
                           Rating(),
                         ],
                       ),
-                      Divider(),
-                      InputField(
-                        label: 'Your name',
-                        hintText: 'e.g example@gmail.com',
-                        keyBoardType: TextInputType.emailAddress,
-                      ),
-                      SizedBox(height: AppSize.s40),
-                      InputField(
-                        label: 'Review title',
-                        hintText: 'e.g example@gmail.com',
-                        keyBoardType: TextInputType.emailAddress,
-                      ),
-                      SizedBox(height: AppSize.s40),
-                      Textarea(
-                        label: 'Detail review',
-                        hintText:
-                            'Describe your experience with this applicant',
-                        keyBoardType: TextInputType.emailAddress,
-                      ),
-                      SizedBox(height: AppSize.s40),
-                      DefaultButton(
-                        onPressed: () {},
-                        title: 'Submit',
-                        disabled: true,
-                        busy: false,
+                      const Divider(),
+                      if (model.hasError)
+                        Text(
+                          '${model.modelError}',
+                          style: getRegularStyle(
+                            color: ColorManager.kRed,
+                            fontSize: FontSize.s12,
+                          ),
+                        ),
+                      RateReviewFormView(
+                        applicantId: applicant.applicantId!,
+                        jobId: instantHire.id!,
+                        nameController: nameController,
+                        titleController: titleController,
+                        descriptionController: descriptionController,
                       ),
                       const SizedBox(height: AppSize.s8),
                     ],
@@ -171,5 +178,66 @@ class RateReviewView extends StatelessWidget {
             ),
           );
         });
+  }
+}
+
+class RateReviewFormView extends ViewModelWidget<RateReviewViewModel> {
+  const RateReviewFormView({
+    super.key,
+    required this.nameController,
+    required this.titleController,
+    required this.descriptionController,
+    required this.jobId,
+    required this.applicantId,
+  });
+  final String applicantId;
+  final String jobId;
+  final TextEditingController nameController;
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
+
+  @override
+  Widget build(BuildContext context, RateReviewViewModel model) {
+    return Column(
+      children: [
+        InputField(
+          label: 'Your name',
+          hintText: 'e.g John Doe',
+          keyBoardType: TextInputType.emailAddress,
+          controller: nameController,
+        ),
+        const SizedBox(height: AppSize.s40),
+        InputField(
+          label: 'Review title',
+          hintText: 'e.g example@gmail.com',
+          keyBoardType: TextInputType.emailAddress,
+          controller: titleController,
+        ),
+        const SizedBox(height: AppSize.s40),
+        Textarea(
+          label: 'Detail review',
+          hintText: 'Describe your experience with this applicant',
+          keyBoardType: TextInputType.emailAddress,
+          controller: descriptionController,
+        ),
+        const SizedBox(height: AppSize.s40),
+        DefaultDropDownField(
+          hint: 'Rating',
+          value: model.ratingValue,
+          dropdownItems: RatingValueToTitleMap.values.toList(),
+          onChanged: (value) => model.setRating(value!),
+          buttonWidth: MediaQuery.of(context).size.width,
+        ),
+        const SizedBox(height: AppSize.s40),
+        DefaultButton(
+          onPressed: model.isBusy || !model.isFormValid
+              ? null
+              : () => model.submitReview(applicantId, jobId),
+          title: 'Submit',
+          // disabled: model.isBusy || model.isFormValid,
+          busy: model.isBusy,
+        ),
+      ],
+    );
   }
 }
