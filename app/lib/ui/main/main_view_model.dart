@@ -7,11 +7,13 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../app/app.locator.dart';
 import '../../models/user.model.dart';
 import '../../services/authentication.service.dart';
+import '../../services/post.service.dart';
 
 class MainViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
   final _authenticationService = locator<AuthenticationService>();
   final _sharedService = locator<SharedService>();
+  final _postService = locator<PostService>();
 
   int get currentIndex => _sharedService.currentIndex;
 
@@ -22,6 +24,16 @@ class MainViewModel extends ReactiveViewModel {
   setCurrentIndex(int value) {
     _sharedService.setCurrentIndex(value);
     notifyListeners();
+  }
+
+  fetchPost() async {
+    setBusy(true);
+    try {
+      await _postService.getPosts();
+    } on DioError catch (error) {
+    } finally {
+      setBusy(false);
+    }
   }
 
   Future<void> fetchCountries() async {

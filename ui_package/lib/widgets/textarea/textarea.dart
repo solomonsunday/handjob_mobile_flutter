@@ -133,7 +133,7 @@ class Textarea extends StatelessWidget {
           ),
           textAlign: textAlign ?? TextAlign.start,
           style: getRegularStyle(
-            color: ColorManager.kGrey2,
+            color: ColorManager.kDarkColor,
             fontSize: FontSize.s16,
           ),
           inputFormatters: inputFormatters,

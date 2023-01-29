@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:handjob_mobile/models/post.model.dart';
 import 'package:handjob_mobile/ui/main/home/post_detail/post_detail_view_model.dart';
 import 'package:stacked/stacked.dart';
-import 'package:ui_package/components/home_card.dart';
 import 'package:ui_package/ui_package.dart';
 
+import '../../home_card.dart';
+
 class PostDetailView extends StatelessWidget {
-  const PostDetailView({Key? key}) : super(key: key);
+  const PostDetailView({
+    Key? key,
+    required this.post,
+  }) : super(key: key);
+  final Post post;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +33,7 @@ class PostDetailView extends StatelessWidget {
               // ListView(
               //   children: [HomeCard(), CommentView()],
               // ),
-              CommentView(),
+              CommentView(post: post),
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -67,34 +73,49 @@ class PostDetailView extends StatelessWidget {
 }
 
 class CommentView extends StatelessWidget {
-  const CommentView({Key? key}) : super(key: key);
+  const CommentView({
+    Key? key,
+    required this.post,
+  }) : super(key: key);
+  final Post post;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        scrollDirection: Axis.vertical,
-        physics: BouncingScrollPhysics(),
-        itemCount: 20,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          if (index == 0)
-            return Column(children: [
-              HomeCard(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppPadding.p30),
-                child: Divider(
-                  thickness: 1,
-                  color: ColorManager.kGrey1,
-                ),
-              ),
-            ]);
-          return CommentItemView();
-        });
+    return ListView(
+      children: [
+        Column(children: [
+          HomeCard(
+            post: post,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppPadding.p30),
+            child: Divider(
+              thickness: 1,
+              color: ColorManager.kGrey1,
+            ),
+          ),
+        ]),
+        ListView.builder(
+            scrollDirection: Axis.vertical,
+            physics: BouncingScrollPhysics(),
+            itemCount: (post.comments ?? []).length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return CommentItemView(
+                  comment:
+                      post.comments!.isEmpty ? null : post.comments?[index]);
+            }),
+      ],
+    );
   }
 }
 
 class CommentItemView extends StatefulWidget {
-  CommentItemView({Key? key}) : super(key: key);
+  CommentItemView({
+    Key? key,
+    required this.comment,
+  }) : super(key: key);
+  final Comments? comment;
 
   @override
   State<CommentItemView> createState() => _CommentItemViewState();
@@ -121,9 +142,10 @@ class _CommentItemViewState extends State<CommentItemView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Rachel Mobolaji'),
+                    Text(
+                        '${widget.comment?.author?.firstName} ${widget.comment?.author?.lastName}'),
                     SizedBox(height: AppSize.s2),
-                    Text('Wow these are so nice'),
+                    Text('${widget.comment?.message}'),
                     SizedBox(height: AppSize.s2),
                     Row(children: [
                       Text(

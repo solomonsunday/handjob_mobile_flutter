@@ -9,10 +9,10 @@ class ProfileAvatar extends StatelessWidget {
   const ProfileAvatar({
     Key? key,
     this.imgUrl,
-    required this.onSelectFile,
+    this.busy,
   }) : super(key: key);
   final String? imgUrl;
-  final VoidCallback onSelectFile;
+  final bool? busy;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +36,11 @@ class ProfileAvatar extends StatelessWidget {
                   ),
                 )
               : CachedNetworkImage(
+                  placeholder: (context, url) => const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(),
+                  ),
                   imageUrl: imgUrl ??
                       "https://i.picsum.photos/id/866/200/200.jpg?hmac=i0ngmQOk9dRZEzhEosP31m_vQnKBQ9C19TBP1CGoIUA",
                   imageBuilder: (context, imageProvider) => Container(
@@ -54,10 +59,13 @@ class ProfileAvatar extends StatelessWidget {
                 ),
         ),
         Positioned(
-          child: GestureDetector(
-            onTap: () => onSelectFile(),
-            child: const ProfileEditIcon(),
-          ),
+          child: (busy ?? false)
+              ? const SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(),
+                )
+              : const ProfileEditIcon(),
           right: -4,
           bottom: 8,
         )

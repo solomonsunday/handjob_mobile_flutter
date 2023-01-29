@@ -20,6 +20,7 @@ import '../../app/app.locator.dart';
 import '../../services/authentication.service.dart';
 
 String REQUEST_OTP = "REQUEST_OTP";
+String PROFILE_AVATAR_UPLOAD = "PROFILE_AVATAR_UPLOAD";
 
 class ProfileViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
@@ -147,7 +148,13 @@ class ProfileViewModel extends ReactiveViewModel {
 
   final ImagePicker _picker = ImagePicker();
 
-  void uploadProfileAvatar() async {
+  void uploadProfileAvatar() {
+    runBusyFuture(
+      uploadProfileAvatarRequest(),
+    );
+  }
+
+  Future<void> uploadProfileAvatarRequest() async {
     XFile? xfile = await _picker.pickImage(source: ImageSource.gallery);
     if (xfile == null) return;
 
@@ -157,11 +164,16 @@ class ProfileViewModel extends ReactiveViewModel {
     );
     if (!response!.confirmed) return;
 
+    setBusyForObject(PROFILE_AVATAR_UPLOAD, true);
     try {
       File file = File(xfile.path);
       await _accountService.uploadProfilePicture(file);
       await _authenticationService.getCurrentBaseUser();
-    } on DioError catch (error) {}
+    } on DioError catch (error) {
+    } finally {
+      setBusyForObject(PROFILE_AVATAR_UPLOAD, false);
+      notifyListeners();
+    }
   }
 
   handleOnSelectedInstantHire(InstantJob instantJob) =>

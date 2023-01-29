@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:ui_package/components/home_card.dart';
 import 'package:ui_package/ui_package.dart';
 import 'package:ui_package/utils/colors.dart';
 import 'package:ui_package/utils/text_styles.dart';
 
+import '../home_card.dart';
 import 'home_view_model.dart';
 
 class HomeView extends StatelessWidget {
@@ -21,7 +21,7 @@ class HomeView extends StatelessWidget {
             onTap: () {
               Scaffold.of(context).openDrawer();
             },
-            child: Icon(
+            child: const Icon(
               Icons.menu,
               size: AppSize.s24,
               color: ColorManager.kWhiteColor,
@@ -110,7 +110,7 @@ class HomeSearchWidget extends ViewModelWidget<HomeViewModel> {
               color: Color(0xffd9d9d9),
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: NetworkImage(
+                image: NetworkImage(model.currentUser?.imageUrl ??
                     'https://xsgames.co/randomusers/avatar.php?g=male'),
               ),
             ),
@@ -139,12 +139,14 @@ class HomePostWidget extends ViewModelWidget<HomeViewModel> {
 
   @override
   Widget build(BuildContext context, HomeViewModel model) {
+    print('post widget: ${model.posts}');
     return ListView.builder(
-      itemCount: 10,
+      itemCount: model.posts.length,
       itemBuilder: (BuildContext context, int index) {
         return HomeCard(
+          post: model.posts[index],
           onImageClick: () {
-            model.onPostImageClick();
+            model.onPostImageClick(model.posts[index]);
           },
         );
       },

@@ -18,6 +18,7 @@ import '../services/education.service.dart';
 import '../services/experience.service.dart';
 import '../services/instant_job.service.dart';
 import '../services/location.service.dart';
+import '../services/post.service.dart';
 import '../services/shared.service.dart';
 
 final locator = StackedLocator.instance;
@@ -41,4 +42,5 @@ Future<void> setupLocator(
   locator.registerLazySingleton(() => AccountService());
   locator.registerLazySingleton(() => ExperienceService());
   locator.registerLazySingleton(() => EducationService());
+  locator.registerLazySingleton(() => PostService());
 }

@@ -4,6 +4,7 @@ import 'package:handjob_mobile/services/authentication.service.dart';
 import 'package:handjob_mobile/services/education.service.dart';
 import 'package:handjob_mobile/services/experience.service.dart';
 import 'package:handjob_mobile/services/instant_job.service.dart';
+import 'package:handjob_mobile/services/post.service.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:handjob_mobile/ui/application/rate_review/rate_review_view.dart';
 import 'package:handjob_mobile/ui/auth/auth_view.dart';
@@ -31,39 +32,44 @@ import '../ui/application/application_view.dart';
 import '../ui/main/chat/chat_detail/chat_detail_view.dart';
 import '../ui/settings/change_password/change_password_view.dart';
 
-@StackedApp(routes: [
-  AdaptiveRoute(page: SplashView, initial: true),
-  AdaptiveRoute(page: OnboardView),
-  AdaptiveRoute(page: AuthView),
-  AdaptiveRoute(page: ArtisanSignupView),
-  AdaptiveRoute(page: CustomerSignupView),
-  AdaptiveRoute(page: AccountCreatedDialog),
-  AdaptiveRoute(page: VerifyEmailView),
-  AdaptiveRoute(page: ForgotPasswordView),
-  AdaptiveRoute(page: ResetPasswordView),
-  AdaptiveRoute(page: MainView),
-  AdaptiveRoute(page: ProfileView),
-  AdaptiveRoute(page: PostDetailView),
-  AdaptiveRoute(page: NotificationView),
-  AdaptiveRoute(page: ChatDetailView),
-  AdaptiveRoute(page: HelpAndSupportView),
-  AdaptiveRoute(page: FAQsView),
-  AdaptiveRoute(page: ContactView),
-  AdaptiveRoute(page: SettingView),
-  AdaptiveRoute(page: ChangePasswordView),
-  AdaptiveRoute(page: ApplicationView),
-  AdaptiveRoute(page: RateReviewView),
-], dependencies: [
-  LazySingleton(classType: NavigationService),
-  LazySingleton(classType: DialogService),
-  LazySingleton(classType: BottomSheetService),
-  LazySingleton(classType: DioClient),
-  LazySingleton(classType: AuthenticationService),
-  FactoryWithParam(classType: LocationService),
-  LazySingleton(classType: InstantJobService),
-  LazySingleton(classType: SharedService),
-  LazySingleton(classType: AccountService),
-  LazySingleton(classType: ExperienceService),
-  LazySingleton(classType: EducationService),
-], logger: StackedLogger())
+@StackedApp(
+  routes: [
+    AdaptiveRoute(page: SplashView, initial: true),
+    AdaptiveRoute(page: OnboardView),
+    AdaptiveRoute(page: AuthView),
+    AdaptiveRoute(page: ArtisanSignupView),
+    AdaptiveRoute(page: CustomerSignupView),
+    AdaptiveRoute(page: AccountCreatedDialog),
+    AdaptiveRoute(page: VerifyEmailView),
+    AdaptiveRoute(page: ForgotPasswordView),
+    AdaptiveRoute(page: ResetPasswordView),
+    AdaptiveRoute(page: MainView),
+    AdaptiveRoute(page: ProfileView),
+    AdaptiveRoute(page: PostDetailView),
+    AdaptiveRoute(page: NotificationView),
+    AdaptiveRoute(page: ChatDetailView),
+    AdaptiveRoute(page: HelpAndSupportView),
+    AdaptiveRoute(page: FAQsView),
+    AdaptiveRoute(page: ContactView),
+    AdaptiveRoute(page: SettingView),
+    AdaptiveRoute(page: ChangePasswordView),
+    AdaptiveRoute(page: ApplicationView),
+    AdaptiveRoute(page: RateReviewView),
+  ],
+  dependencies: [
+    LazySingleton(classType: NavigationService),
+    LazySingleton(classType: DialogService),
+    LazySingleton(classType: BottomSheetService),
+    LazySingleton(classType: DioClient),
+    LazySingleton(classType: AuthenticationService),
+    FactoryWithParam(classType: LocationService),
+    LazySingleton(classType: InstantJobService),
+    LazySingleton(classType: SharedService),
+    LazySingleton(classType: AccountService),
+    LazySingleton(classType: ExperienceService),
+    LazySingleton(classType: EducationService),
+    LazySingleton(classType: PostService),
+  ],
+  logger: StackedLogger(),
+)
 class App {}

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/ui/profile/profile_view_model.dart';
 import 'package:stacked/stacked.dart';
@@ -28,6 +29,11 @@ class ProfileHeader extends ViewModelWidget<ProfileViewModel> {
                     decoration: const BoxDecoration(
                       color: ColorManager.kSecondaryColor,
                     ),
+                    child: Image.network(
+                      model.currentUser?.imageUrl ??
+                          "https://i.picsum.photos/id/866/200/200.jpg?hmac=i0ngmQOk9dRZEzhEosP31m_vQnKBQ9C19TBP1CGoIUA",
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   const Positioned(
                     top: AppSize.s12,
@@ -42,11 +48,13 @@ class ProfileHeader extends ViewModelWidget<ProfileViewModel> {
               left: 10,
               child: Row(
                 children: [
-                  ProfileAvatar(
+                  GestureDetector(
+                    onTap: () => model.uploadProfileAvatar(),
+                    child: ProfileAvatar(
                       imgUrl: model.currentUser?.imageUrl,
-                      onSelectFile: () {
-                        model.uploadProfileAvatar();
-                      }),
+                      busy: model.busy(PROFILE_AVATAR_UPLOAD),
+                    ),
+                  ),
                 ],
               ),
             ),

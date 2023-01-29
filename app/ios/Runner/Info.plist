@@ -44,10 +44,10 @@
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<true />
+	<string>Upload images for avatar background</string>
 	<key>NSCameraUsageDescription</key>
-	<true />
+	<string>Upload image from camera for avatar background</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<true />
+	<string>Post videos to profile</string>
 </dict>
 </plist>

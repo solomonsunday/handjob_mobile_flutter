@@ -21,6 +21,7 @@ class MainView extends StatelessWidget {
         await model.fetchLGA();
         await model.fetchCountries();
         await model.fetchQualification();
+        await model.fetchPost();
       },
       viewModelBuilder: () => MainViewModel(),
       builder: (context, model, child) => Scaffold(
@@ -195,8 +196,7 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                           fit: BoxFit.cover,
                         )
                       : CachedNetworkImage(
-                          imageUrl: model.currentUser?.imageUrl ??
-                              "https://i.picsum.photos/id/866/200/200.jpg?hmac=i0ngmQOk9dRZEzhEosP31m_vQnKBQ9C19TBP1CGoIUA",
+                          imageUrl: model.currentUser!.imageUrl!,
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,

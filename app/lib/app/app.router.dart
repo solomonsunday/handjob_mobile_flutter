@@ -8,8 +8,9 @@
 import 'package:flutter/material.dart' as _i23;
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/dialogs/account_created.dialog.dart' as _i7;
-import 'package:handjob_mobile/models/applicant.model.dart' as _i26;
-import 'package:handjob_mobile/models/instant_job.model.dart' as _i25;
+import 'package:handjob_mobile/models/applicant.model.dart' as _i27;
+import 'package:handjob_mobile/models/instant_job.model.dart' as _i26;
+import 'package:handjob_mobile/models/post.model.dart' as _i25;
 import 'package:handjob_mobile/ui/application/application_view.dart' as _i21;
 import 'package:handjob_mobile/ui/application/rate_review/rate_review_view.dart'
     as _i22;
@@ -286,8 +287,10 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i13.PostDetailView: (data) {
+      final args = data.getArgs<PostDetailViewArguments>(nullOk: false);
       return _i1.buildAdaptivePageRoute<dynamic>(
-        builder: (context) => const _i13.PostDetailView(),
+        builder: (context) =>
+            _i13.PostDetailView(key: args.key, post: args.post),
         settings: data,
       );
     },
@@ -414,6 +417,17 @@ class ResetPasswordViewArguments {
   final _i23.Key? key;
 }
 
+class PostDetailViewArguments {
+  const PostDetailViewArguments({
+    this.key,
+    required this.post,
+  });
+
+  final _i23.Key? key;
+
+  final _i25.Post post;
+}
+
 class ApplicationViewArguments {
   const ApplicationViewArguments({
     this.key,
@@ -422,7 +436,7 @@ class ApplicationViewArguments {
 
   final _i23.Key? key;
 
-  final _i25.InstantJob instantHire;
+  final _i26.InstantJob instantHire;
 }
 
 class RateReviewViewArguments {
@@ -434,9 +448,9 @@ class RateReviewViewArguments {
 
   final _i23.Key? key;
 
-  final _i25.InstantJob instantHire;
+  final _i26.InstantJob instantHire;
 
-  final _i26.Applicant applicant;
+  final _i27.Applicant applicant;
 }
 
 extension NavigatorStateExtension on _i24.NavigationService {
@@ -612,14 +626,17 @@ extension NavigatorStateExtension on _i24.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToPostDetailView([
+  Future<dynamic> navigateToPostDetailView({
+    _i23.Key? key,
+    required _i25.Post post,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.postDetailView,
+        arguments: PostDetailViewArguments(key: key, post: post),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -726,7 +743,7 @@ extension NavigatorStateExtension on _i24.NavigationService {
 
   Future<dynamic> navigateToApplicationView({
     _i23.Key? key,
-    required _i25.InstantJob instantHire,
+    required _i26.InstantJob instantHire,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -743,8 +760,8 @@ extension NavigatorStateExtension on _i24.NavigationService {
 
   Future<dynamic> navigateToRateReviewView({
     _i23.Key? key,
-    required _i25.InstantJob instantHire,
-    required _i26.Applicant applicant,
+    required _i26.InstantJob instantHire,
+    required _i27.Applicant applicant,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
