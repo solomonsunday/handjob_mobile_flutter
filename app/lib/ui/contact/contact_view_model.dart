@@ -1,4 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:handjob_mobile/app/app.router.dart';
+import 'package:handjob_mobile/enums/bottom_sheet_type.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -20,6 +23,7 @@ const String DELETE = "DELETE";
 class ContactViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
   final _contactService = locator<ContactService>();
+  final _bottomSheetService = locator<BottomSheetService>();
 
   int? get contactListCount => _contactService.contactListCount;
   List<Contact>? get contactList => _contactService.contactList;
@@ -77,6 +81,9 @@ class ContactViewModel extends ReactiveViewModel {
 
     try {
       await _contactService.acceptContact(formData);
+      await _contactService.getConnectionRequests();
+      await _contactService.getContacts();
+      await _contactService.getContactsCount();
     } on DioError catch (e) {
     } finally {
       setBusyForObject(CONNECTION_REQUEST, false);
@@ -86,6 +93,9 @@ class ContactViewModel extends ReactiveViewModel {
   Future<void> rejectContact(String accountId) async {
     try {
       await _contactService.rejectContact(accountId);
+      await _contactService.getConnectionRequests();
+      await _contactService.getContacts();
+      await _contactService.getContactsCount();
     } on DioError catch (e) {
     } finally {
       setBusyForObject(CONNECTION_REQUEST, false);
@@ -102,5 +112,26 @@ class ContactViewModel extends ReactiveViewModel {
     } finally {
       setBusyForObject(CONNECTION_REQUEST, false);
     }
+  }
+
+  navigateToAddNewContact() {
+    _navigationService.navigateTo(Routes.addNewContactView);
+    print('navigate ');
+  }
+
+  handleChat(Contact p1) {}
+
+  handleAudioCall(Contact p1) {
+    _bottomSheetService.showCustomSheet(
+      variant: BottomSheetType.outgoing_call,
+      title: "Outgoing Voice Call",
+    );
+  }
+
+  handleVideoCall(Contact p1) {
+    _bottomSheetService.showCustomSheet(
+      variant: BottomSheetType.outgoing_call,
+      title: "Outgoing Video Call",
+    );
   }
 }

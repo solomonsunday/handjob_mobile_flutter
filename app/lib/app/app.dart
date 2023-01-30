@@ -14,6 +14,7 @@ import 'package:handjob_mobile/ui/auth/reset_password/reset_password_view.dart';
 import 'package:handjob_mobile/ui/auth/signup/artisan/artisan_signup_view.dart';
 import 'package:handjob_mobile/ui/auth/signup/customer/customer_signup_view.dart';
 import 'package:handjob_mobile/ui/auth/verify_email/verify_email_view.dart';
+import 'package:handjob_mobile/ui/contact/add_new_contact/add_new_contact_view.dart';
 import 'package:handjob_mobile/ui/contact/contact_view.dart';
 import 'package:handjob_mobile/ui/faq/faq_view.dart';
 import 'package:handjob_mobile/ui/help_and_support/help_and_support_view.dart';
@@ -56,6 +57,7 @@ import '../ui/settings/change_password/change_password_view.dart';
     AdaptiveRoute(page: ChangePasswordView),
     AdaptiveRoute(page: ApplicationView),
     AdaptiveRoute(page: RateReviewView),
+    AdaptiveRoute(page: AddNewContactView),
   ],
   dependencies: [
     LazySingleton(classType: NavigationService),

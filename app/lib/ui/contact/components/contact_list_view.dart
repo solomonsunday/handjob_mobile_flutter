@@ -53,7 +53,7 @@ class ContactListView extends StatelessWidget {
                         ),
                       ),
                       DefaultButton(
-                        onPressed: () {},
+                        onPressed: model.navigateToAddNewContact,
                         title: 'Add New Contact',
                         fontSize: FontSize.s11,
                         paddingHeight: 10,
@@ -71,6 +71,9 @@ class ContactListView extends StatelessWidget {
                         Contact contact = model.contactList![index];
                         return ContactListItem(
                           contact: contact,
+                          onAudioCall: model.handleAudioCall,
+                          onVideoCall: model.handleVideoCall,
+                          onChat: model.handleChat,
                           onDeleteContact: model.handleDeleteContact,
                         );
                       },
@@ -87,9 +90,15 @@ class ContactListItem extends StatelessWidget {
     super.key,
     required this.contact,
     required this.onDeleteContact,
+    required this.onAudioCall,
+    required this.onVideoCall,
+    required this.onChat,
   });
 
   final Contact contact;
+  final Function(Contact) onAudioCall;
+  final Function(Contact) onVideoCall;
+  final Function(Contact) onChat;
   final Function(String) onDeleteContact;
 
   @override
@@ -105,7 +114,7 @@ class ContactListItem extends StatelessWidget {
       },
       leading: contact.imageUrl == null
           ? CircleAvatar(
-              backgroundColor: ColorManager.kPrimaryColor,
+              backgroundImage: AssetImage("assets/images/default-avatar.jpeg"),
             )
           : CircleAvatar(
               backgroundImage: NetworkImage(contact.imageUrl!),
@@ -150,8 +159,21 @@ class ContactListItem extends StatelessWidget {
       trailing: PopupMenuButton<String>(
         onSelected: (value) {
           print('value selected: $value');
-          if (value == DELETE) {
-            onDeleteContact(contact.id!);
+          switch (value) {
+            case AUDIO_CALL:
+              onAudioCall(contact);
+              break;
+            case VIDEO_CALL:
+              onVideoCall(contact);
+              break;
+            case CHAT:
+              onChat(contact);
+              break;
+            case DELETE:
+              onDeleteContact(contact.id!);
+              break;
+            default:
+              break;
           }
         },
         itemBuilder: (BuildContext bc) {

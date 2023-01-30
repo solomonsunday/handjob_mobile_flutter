@@ -1,3 +1,5 @@
+import 'package:handjob_mobile/sheets/incoming_call/incoming_call_view.dart';
+import 'package:handjob_mobile/sheets/outgoing_call/outgoing_call_view.dart';
 import 'package:handjob_mobile/sheets/profile_contact/profile_contact.sheet.dart';
 import 'package:handjob_mobile/sheets/profile_education/profile_education.sheet.dart';
 import 'package:handjob_mobile/sheets/profile_experience/profile_experience.sheet.dart';
@@ -26,6 +28,10 @@ void setupBottomSheetUi() {
         VerifyPhoneSheet(request: sheetRequest, completer: completer),
     BottomSheetType.profile_portfolio: (context, sheetRequest, completer) =>
         ProfilePortfolioSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.incoming_call: (context, sheetRequest, completer) =>
+        IncomingCallView(request: sheetRequest, completer: completer),
+    BottomSheetType.outgoing_call: (context, sheetRequest, completer) =>
+        OutgoingCallView(request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);

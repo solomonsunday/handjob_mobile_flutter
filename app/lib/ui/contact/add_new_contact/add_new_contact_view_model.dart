@@ -1,9 +1,34 @@
+import 'package:dio/dio.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../models/contact.model.dart';
+import '../../../services/contact.service.dart';
 
-class AddNewContactViewModel extends BaseViewModel {
+const String ALL_CONTACT_LIST_REQUEST = "ALL_CONTACT_LIST_REQUEST";
+const String SEND_CONNECTION_REQUEST = "SEND_CONNECTION_REQUEST";
+
+class AddNewContactViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
+  final _contactService = locator<ContactService>();
+
+  List<Contact>? get contactList => _contactService.allContactList;
+
   void goBack() => _navigationService.back();
+
+  Future<void> fetchAllContacts() async {
+    setBusyForObject(ALL_CONTACT_LIST_REQUEST, true);
+    try {
+      await _contactService.getAllContacts();
+    } on DioError catch (e) {
+    } finally {
+      setBusyForObject(ALL_CONTACT_LIST_REQUEST, false);
+    }
+  }
+
+  handleSearch(String p1) {}
+
+  @override
+  List<ReactiveServiceMixin> get reactiveServices => [_contactService];
 }

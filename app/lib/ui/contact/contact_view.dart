@@ -51,25 +51,6 @@ class ContactView extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 SizedBox(height: AppSize.s8),
-                // Container(
-                //   padding: const EdgeInsets.symmetric(
-                //     horizontal: AppSize.s24,
-                //     vertical: AppSize.s12,
-                //   ),
-                //   decoration: BoxDecoration(
-                //     color: ColorManager.kWhiteColor,
-                //   ),
-                //   child: InputField(
-                //     hintText: 'Search',
-                //     paddingBottom: AppPadding.p8,
-                //     paddingTop: AppPadding.p8,
-                //     prefixIcon: Icon(
-                //       Icons.search,
-                //       color: ColorManager.kGrey3,
-                //     ),
-                //     onChanged: model.handleSearch,
-                //   ),
-                // ),
                 SizedBox(height: AppSize.s8),
                 Expanded(
                   child: TabHeader(),
@@ -125,10 +106,10 @@ class TabHeader extends ViewModelWidget<ContactViewModel> {
                   fontSize: FontSize.s12,
                 ),
               ),
-              SizedBox(width: AppSize.s8),
+              const SizedBox(width: AppSize.s8),
               Container(
                 padding: EdgeInsets.all(AppSize.s8),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: ColorManager.kGreen,
                   shape: BoxShape.circle,
                 ),

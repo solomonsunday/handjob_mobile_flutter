@@ -5,12 +5,12 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i23;
+import 'package:flutter/material.dart' as _i24;
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/dialogs/account_created.dialog.dart' as _i7;
-import 'package:handjob_mobile/models/applicant.model.dart' as _i27;
-import 'package:handjob_mobile/models/instant_job.model.dart' as _i26;
-import 'package:handjob_mobile/models/post.model.dart' as _i25;
+import 'package:handjob_mobile/models/applicant.model.dart' as _i28;
+import 'package:handjob_mobile/models/instant_job.model.dart' as _i27;
+import 'package:handjob_mobile/models/post.model.dart' as _i26;
 import 'package:handjob_mobile/ui/application/application_view.dart' as _i21;
 import 'package:handjob_mobile/ui/application/rate_review/rate_review_view.dart'
     as _i22;
@@ -25,6 +25,8 @@ import 'package:handjob_mobile/ui/auth/signup/customer/customer_signup_view.dart
     as _i6;
 import 'package:handjob_mobile/ui/auth/verify_email/verify_email_view.dart'
     as _i8;
+import 'package:handjob_mobile/ui/contact/add_new_contact/add_new_contact_view.dart'
+    as _i23;
 import 'package:handjob_mobile/ui/contact/contact_view.dart' as _i18;
 import 'package:handjob_mobile/ui/faq/faq_view.dart' as _i17;
 import 'package:handjob_mobile/ui/help_and_support/help_and_support_view.dart'
@@ -42,7 +44,7 @@ import 'package:handjob_mobile/ui/settings/change_password/change_password_view.
 import 'package:handjob_mobile/ui/settings/setting_view.dart' as _i19;
 import 'package:handjob_mobile/ui/splash/splash_view.dart' as _i2;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i24;
+import 'package:stacked_services/stacked_services.dart' as _i25;
 
 class Routes {
   static const splashView = '/';
@@ -87,6 +89,8 @@ class Routes {
 
   static const rateReviewView = '/rate-review-view';
 
+  static const addNewContactView = '/add-new-contact-view';
+
   static const all = <String>{
     splashView,
     onboardView,
@@ -109,6 +113,7 @@ class Routes {
     changePasswordView,
     applicationView,
     rateReviewView,
+    addNewContactView,
   };
 }
 
@@ -197,6 +202,10 @@ class StackedRouter extends _i1.RouterBase {
     _i1.RouteDef(
       Routes.rateReviewView,
       page: _i22.RateReviewView,
+    ),
+    _i1.RouteDef(
+      Routes.addNewContactView,
+      page: _i23.AddNewContactView,
     ),
   ];
 
@@ -354,6 +363,12 @@ class StackedRouter extends _i1.RouterBase {
         settings: data,
       );
     },
+    _i23.AddNewContactView: (data) {
+      return _i1.buildAdaptivePageRoute<dynamic>(
+        builder: (context) => const _i23.AddNewContactView(),
+        settings: data,
+      );
+    },
   };
 
   @override
@@ -365,19 +380,19 @@ class StackedRouter extends _i1.RouterBase {
 class OnboardViewArguments {
   const OnboardViewArguments({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 }
 
 class ArtisanSignupViewArguments {
   const ArtisanSignupViewArguments({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 }
 
 class CustomerSignupViewArguments {
   const CustomerSignupViewArguments({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 }
 
 class AccountCreatedDialogArguments {
@@ -387,11 +402,11 @@ class AccountCreatedDialogArguments {
     required this.completer,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
-  final _i24.DialogRequest<dynamic> request;
+  final _i25.DialogRequest<dynamic> request;
 
-  final dynamic Function(_i24.DialogResponse<dynamic>) completer;
+  final dynamic Function(_i25.DialogResponse<dynamic>) completer;
 }
 
 class VerifyEmailViewArguments {
@@ -400,7 +415,7 @@ class VerifyEmailViewArguments {
     required this.email,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
   final String email;
 }
@@ -408,13 +423,13 @@ class VerifyEmailViewArguments {
 class ForgotPasswordViewArguments {
   const ForgotPasswordViewArguments({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 }
 
 class ResetPasswordViewArguments {
   const ResetPasswordViewArguments({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 }
 
 class PostDetailViewArguments {
@@ -423,9 +438,9 @@ class PostDetailViewArguments {
     required this.post,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
-  final _i25.Post post;
+  final _i26.Post post;
 }
 
 class ApplicationViewArguments {
@@ -434,9 +449,9 @@ class ApplicationViewArguments {
     required this.instantHire,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
-  final _i26.InstantJob instantHire;
+  final _i27.InstantJob instantHire;
 }
 
 class RateReviewViewArguments {
@@ -446,14 +461,14 @@ class RateReviewViewArguments {
     required this.applicant,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
-  final _i26.InstantJob instantHire;
+  final _i27.InstantJob instantHire;
 
-  final _i27.Applicant applicant;
+  final _i28.Applicant applicant;
 }
 
-extension NavigatorStateExtension on _i24.NavigationService {
+extension NavigatorStateExtension on _i25.NavigationService {
   Future<dynamic> navigateToSplashView([
     int? routerId,
     bool preventDuplicates = true,
@@ -469,7 +484,7 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> navigateToOnboardView({
-    _i23.Key? key,
+    _i24.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -499,7 +514,7 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> navigateToArtisanSignupView({
-    _i23.Key? key,
+    _i24.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -515,7 +530,7 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> navigateToCustomerSignupView({
-    _i23.Key? key,
+    _i24.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -531,9 +546,9 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> navigateToAccountCreatedDialog({
-    _i23.Key? key,
-    required _i24.DialogRequest<dynamic> request,
-    required dynamic Function(_i24.DialogResponse<dynamic>) completer,
+    _i24.Key? key,
+    required _i25.DialogRequest<dynamic> request,
+    required dynamic Function(_i25.DialogResponse<dynamic>) completer,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -550,7 +565,7 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> navigateToVerifyEmailView({
-    _i23.Key? key,
+    _i24.Key? key,
     required String email,
     int? routerId,
     bool preventDuplicates = true,
@@ -567,7 +582,7 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> navigateToForgotPasswordView({
-    _i23.Key? key,
+    _i24.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -583,7 +598,7 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> navigateToResetPasswordView({
-    _i23.Key? key,
+    _i24.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -627,8 +642,8 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> navigateToPostDetailView({
-    _i23.Key? key,
-    required _i25.Post post,
+    _i24.Key? key,
+    required _i26.Post post,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -742,8 +757,8 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> navigateToApplicationView({
-    _i23.Key? key,
-    required _i26.InstantJob instantHire,
+    _i24.Key? key,
+    required _i27.InstantJob instantHire,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -759,9 +774,9 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> navigateToRateReviewView({
-    _i23.Key? key,
-    required _i26.InstantJob instantHire,
-    required _i27.Applicant applicant,
+    _i24.Key? key,
+    required _i27.InstantJob instantHire,
+    required _i28.Applicant applicant,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -771,6 +786,20 @@ extension NavigatorStateExtension on _i24.NavigationService {
     return navigateTo<dynamic>(Routes.rateReviewView,
         arguments: RateReviewViewArguments(
             key: key, instantHire: instantHire, applicant: applicant),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToAddNewContactView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.addNewContactView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

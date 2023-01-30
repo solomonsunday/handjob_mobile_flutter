@@ -87,7 +87,7 @@ class ContactService with ReactiveServiceMixin {
   }
 
   Future<List<Contact>> getConnectionRequests(
-      {int page = 1, int limit = 10, String? search, String? sort}) async {
+      {int page = 1, int limit = 20, String? search, String? sort}) async {
     var response = await dioClient.get(
       '/contact/request/pending?page=$page&limit=$limit',
     );
@@ -100,6 +100,15 @@ class ContactService with ReactiveServiceMixin {
     print('contact list $list');
     notifyListeners();
     return list;
+  }
+
+  Future<bool> sendConnectionRequest(Map formData) async {
+    var response = await dioClient.post(
+      '/contact',
+      data: formData,
+    );
+
+    return true;
   }
 
   Future<Contact> acceptContact(Map formData) async {

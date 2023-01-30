@@ -62,7 +62,10 @@ class ConnnectionRequestView extends StatelessWidget {
                       rating:
                           '${model.topSuggestionContactList?[index].rating}',
                       buttonTitle: 'Accept',
-                      onClick: () {},
+                      onClick: () => model.acceptContact(
+                          model.topSuggestionContactList![index].id!),
+                      onCancelClick: () => model.rejectContact(
+                          model.topSuggestionContactList![index].id!),
                     );
                   },
                 ),
@@ -71,47 +74,48 @@ class ConnnectionRequestView extends StatelessWidget {
             SliverToBoxAdapter(
               child: SizedBox(height: AppSize.s40),
             ),
-            SliverToBoxAdapter(
-                child: Text(
-              'Top suggestions',
-              style: getBoldStyle(
-                color: ColorManager.kDarkColor,
-                fontSize: FontSize.s12,
-              ),
-            )),
-            SliverToBoxAdapter(
-              child: SizedBox(height: AppSize.s24),
-            ),
-            SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 14,
-                crossAxisSpacing: 8,
-              ),
-              delegate: SliverChildListDelegate(
-                List.generate(
-                  (model.topSuggestionContactList ?? []).length,
-                  (index) {
-                    List<Experience>? experiences =
-                        (model.topSuggestionContactList?[index].experiences ??
-                                [])
-                            .where((element) => element.current!)
-                            .toList();
-                    return ConnectionRequestItem(
-                      name:
-                          "${model.topSuggestionContactList?[index].firstName} ${model.topSuggestionContactList?[index].lastName}",
-                      profession: experiences.isNotEmpty
-                          ? "${experiences[0].jobTitle} at ${experiences[0].company}"
-                          : "",
-                      rating:
-                          '${model.topSuggestionContactList?[index].rating}',
-                      buttonTitle: 'Connect',
-                      onClick: () {},
-                    );
-                  },
-                ),
-              ),
-            ),
+            // SliverToBoxAdapter(
+            //     child: Text(
+            //   'Top suggestions',
+            //   style: getBoldStyle(
+            //     color: ColorManager.kDarkColor,
+            //     fontSize: FontSize.s12,
+            //   ),
+            // )),
+            // SliverToBoxAdapter(
+            //   child: SizedBox(height: AppSize.s24),
+            // ),
+            // SliverGrid(
+            //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //     crossAxisCount: 2,
+            //     mainAxisSpacing: 14,
+            //     crossAxisSpacing: 8,
+            //   ),
+            //   delegate: SliverChildListDelegate(
+            //     List.generate(
+            //       (model.topSuggestionContactList ?? []).length,
+            //       (index) {
+            //         List<Experience>? experiences =
+            //             (model.topSuggestionContactList?[index].experiences ??
+            //                     [])
+            //                 .where((element) => element.current!)
+            //                 .toList();
+            //         return ConnectionRequestItem(
+            //           name:
+            //               "${model.topSuggestionContactList?[index].firstName} ${model.topSuggestionContactList?[index].lastName}",
+            //           profession: experiences.isNotEmpty
+            //               ? "${experiences[0].jobTitle} at ${experiences[0].company}"
+            //               : "",
+            //           rating:
+            //               '${model.topSuggestionContactList?[index].rating}',
+            //           buttonTitle: 'Connect',
+            //           onClick: (){},
+            //           onCancelClick: (){},
+            //         );
+            //       },
+            //     ),
+            //   ),
+            // ),
           ],
         );
       },
@@ -127,6 +131,7 @@ class ConnectionRequestItem extends StatelessWidget {
     required this.rating,
     required this.buttonTitle,
     required this.onClick,
+    required this.onCancelClick,
   }) : super(key: key);
 
   final String buttonTitle;
@@ -134,6 +139,7 @@ class ConnectionRequestItem extends StatelessWidget {
   final String name;
   final String profession;
   final String rating;
+  final Function() onCancelClick;
 
   @override
   Widget build(BuildContext context) {
@@ -158,8 +164,7 @@ class ConnectionRequestItem extends StatelessWidget {
                     color: Color(0xffd9d9d9),
                     image: const DecorationImage(
                       fit: BoxFit.cover,
-                      image: NetworkImage(
-                          'https://xsgames.co/randomusers/avatar.php?g=male'),
+                      image: AssetImage("assets/images/default-avatar.jpeg"),
                     ),
                   ),
                 ),
@@ -181,17 +186,18 @@ class ConnectionRequestItem extends StatelessWidget {
                   child: Rating(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    value: double.parse(rating),
                   ),
                 ),
                 SizedBox(height: AppSize.s12),
-                ContactButton(onPressed: () {}, title: buttonTitle)
+                ContactButton(onPressed: onClick, title: buttonTitle)
               ],
             ),
             Positioned(
               top: AppSize.s4,
               right: AppSize.s8,
               child: GestureDetector(
-                onTap: () {},
+                onTap: onCancelClick,
                 child: const Icon(Icons.close, size: AppSize.s24),
               ),
             ),
