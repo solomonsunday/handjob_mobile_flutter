@@ -23,14 +23,16 @@ class OutgoingCallView extends StatelessWidget {
         viewModelBuilder: () => OutgoingCallViewModel(),
         builder: (context, model, _) {
           return DraggableScrollableSheet(
-            initialChildSize: 5.0,
+            maxChildSize: 1,
+            initialChildSize: 1,
             builder: (context, scrollController) {
               return Container(
+                color: ColorManager.kWhiteColor,
                 padding: const EdgeInsets.only(
-                  top: AppSize.s160,
+                  top: AppSize.s8,
                   left: AppSize.s28,
                   right: AppSize.s28,
-                  bottom: AppSize.s100,
+                  bottom: AppSize.s8,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -45,16 +47,16 @@ class OutgoingCallView extends StatelessWidget {
                         Text(
                           '${request?.title}',
                           style: getRegularStyle(
-                            color: ColorManager.kGrey1,
+                            color: ColorManager.kDarkColor,
                             fontSize: FontSize.s16,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: AppSize.s80),
+                    // const SizedBox(height: AppSize.s80),
                     Container(
-                      width: AppSize.s120,
-                      height: AppSize.s120,
+                      width: AppSize.s40,
+                      height: AppSize.s40,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                       ),
@@ -63,7 +65,7 @@ class OutgoingCallView extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    const SizedBox(height: AppSize.s120),
+                    // const SizedBox(height: AppSize.s120),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
