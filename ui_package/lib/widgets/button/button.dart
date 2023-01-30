@@ -157,7 +157,9 @@ class DefaultButton extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                  color: _color, fontSize: fontSize, fontWeight: fontWeight),
+                  color: getColor(),
+                  fontSize: fontSize,
+                  fontWeight: fontWeight),
             ),
             if (trailingIcon != null) SizedBox(width: trailingIconSpace),
             if (trailingIcon != null)

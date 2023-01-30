@@ -1,0 +1,196 @@
+import 'package:flutter/material.dart';
+import 'package:handjob_mobile/models/experience.model.dart';
+import 'package:handjob_mobile/ui/contact/contact_view_model.dart';
+import 'package:stacked/stacked.dart';
+import 'package:ui_package/ui_package.dart';
+
+import '../../../models/contact.model.dart';
+import '../../rating/rating.dart';
+
+class ContactListView extends StatelessWidget {
+  const ContactListView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ViewModelBuilder<ContactViewModel>.reactive(
+        viewModelBuilder: () => ContactViewModel(),
+        builder: (context, model, _) {
+          print(
+              'data contacts: ${model.contactList} loading ${model.busy(CONTACT_LIST_REQUEST)}');
+          return Container(
+            child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      // horizontal: AppSize.s24,
+                      vertical: AppSize.s8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: ColorManager.kWhiteColor,
+                    ),
+                    child: InputField(
+                      hintText: 'Search',
+                      paddingBottom: AppPadding.p8,
+                      paddingTop: AppPadding.p8,
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: ColorManager.kGrey,
+                      ),
+                      onChanged: model.handleSearch,
+                    ),
+                  ),
+                  // const SizedBox(height: AppSize.s16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${model.contactList?.length ?? 0} results',
+                        style: getRegularStyle(
+                          color: ColorManager.kGrey5,
+                          fontSize: FontSize.s11,
+                        ),
+                      ),
+                      DefaultButton(
+                        onPressed: () {},
+                        title: 'Add New Contact',
+                        fontSize: FontSize.s11,
+                        paddingHeight: 10,
+                        buttonType: ButtonType.text,
+                        buttonTextColor: ColorManager.kSecondaryColor,
+                        fontWeight: FontWeight.bold,
+                      )
+                    ],
+                  ),
+                  // const SizedBox(height: AppSize.s16),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: (model.contactList ?? []).length,
+                      itemBuilder: (BuildContext context, int index) {
+                        Contact contact = model.contactList![index];
+                        return ContactListItem(
+                          contact: contact,
+                          onDeleteContact: model.handleDeleteContact,
+                        );
+                      },
+                    ),
+                  )
+                ]),
+          );
+        });
+  }
+}
+
+class ContactListItem extends StatelessWidget {
+  const ContactListItem({
+    super.key,
+    required this.contact,
+    required this.onDeleteContact,
+  });
+
+  final Contact contact;
+  final Function(String) onDeleteContact;
+
+  @override
+  Widget build(BuildContext context) {
+    List<Experience>? experiences = (contact.experiences ?? [])
+        .where((element) => element.current!)
+        .toList();
+
+    // print('expereince : $currentExperience');
+    return ListTile(
+      onTap: () {
+        print('tapping');
+      },
+      leading: contact.imageUrl == null
+          ? CircleAvatar(
+              backgroundColor: ColorManager.kPrimaryColor,
+            )
+          : CircleAvatar(
+              backgroundImage: NetworkImage(contact.imageUrl!),
+            ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${contact.firstName} ${contact.lastName}',
+            style: getBoldStyle(
+              color: ColorManager.kDarkColor,
+              fontSize: FontSize.s12,
+            ),
+          ),
+          if (experiences.isNotEmpty)
+            Text(
+              '${experiences[0].jobTitle} at ${experiences[0].company}',
+              style: getRegularStyle(
+                color: ColorManager.kDarkColor,
+                fontSize: FontSize.s11,
+              ),
+            ),
+          if (experiences.isEmpty)
+            Text(
+              'N/A',
+              style: getRegularStyle(
+                color: ColorManager.kDarkColor,
+                fontSize: FontSize.s11,
+              ),
+            ),
+          Rating(),
+          Text(
+            'Email: ${contact.email}',
+            style: getRegularStyle(
+              color: ColorManager.kDarkColor,
+              fontSize: FontSize.s10,
+            ),
+          )
+        ],
+      ),
+      minVerticalPadding: AppPadding.p20,
+      trailing: PopupMenuButton<String>(
+        onSelected: (value) {
+          print('value selected: $value');
+          if (value == DELETE) {
+            onDeleteContact(contact.id!);
+          }
+        },
+        itemBuilder: (BuildContext bc) {
+          return const [
+            PopupMenuItem(
+              child: Icon(
+                Icons.phone,
+                color: ColorManager.kDarkColor,
+              ),
+              value: AUDIO_CALL,
+            ),
+            PopupMenuItem(
+              child: Icon(
+                Icons.video_call,
+                color: ColorManager.kDarkColor,
+              ),
+              value: VIDEO_CALL,
+            ),
+            PopupMenuItem(
+              child: Icon(
+                Icons.chat,
+                color: ColorManager.kDarkColor,
+              ),
+              value: CHAT,
+            ),
+            PopupMenuItem(
+              child: Icon(
+                Icons.delete,
+                color: ColorManager.kDarkColor,
+              ),
+              value: DELETE,
+            )
+          ];
+        },
+        child: Icon(
+          Icons.more_vert,
+          size: AppSize.s24,
+        ),
+      ),
+    );
+  }
+}

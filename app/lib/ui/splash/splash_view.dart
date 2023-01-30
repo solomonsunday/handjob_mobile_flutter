@@ -18,6 +18,7 @@ class SplashView extends StatelessWidget {
               : viewModel.isLoggedIn
                   ? Container()
                   : Container(
+                      width: MediaQuery.of(context).size.width,
                       decoration: const BoxDecoration(
                         color: Colors.white,
                       ),

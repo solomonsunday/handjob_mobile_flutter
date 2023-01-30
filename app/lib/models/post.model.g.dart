@@ -187,17 +187,3 @@ Map<String, dynamic> _$CommentsToJson(Comments instance) => <String, dynamic>{
       'author': instance.author,
       'liked': instance.liked,
     };
-
-PostMeta _$PostMetaFromJson(Map<String, dynamic> json) => PostMeta(
-      page: json['page'] as int?,
-      take: json['take'] as int?,
-      itemCount: json['itemCount'] as int?,
-      total: json['total'] as int?,
-    );
-
-Map<String, dynamic> _$PostMetaToJson(PostMeta instance) => <String, dynamic>{
-      'page': instance.page,
-      'take': instance.take,
-      'itemCount': instance.itemCount,
-      'total': instance.total,
-    };

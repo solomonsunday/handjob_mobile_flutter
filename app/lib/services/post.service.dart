@@ -5,6 +5,7 @@ import 'package:stacked/stacked.dart';
 
 import '../app/app.locator.dart';
 import '../client/dio_client.dart';
+import '../models/meta.model.dart';
 import '../models/post.model.dart';
 
 class PostService with ReactiveServiceMixin {
@@ -20,14 +21,14 @@ class PostService with ReactiveServiceMixin {
   List<Post> _posts = [];
   List<Post> get posts => _posts;
 
-  PostMeta? _postMeta;
-  PostMeta? get postMeta => _postMeta;
+  Meta? _postMeta;
+  Meta? get postMeta => _postMeta;
 
   Future<List<Post>> getPosts({int page = 1, int limit = 10}) async {
     var response = await dioClient.get(
       '/post?page=$page&take=$limit',
     );
-    _postMeta = PostMeta.fromJson(response.data["meta"]);
+    _postMeta = Meta.fromJson(response.data["meta"]);
     List<Map> mappedPosts =
         (response.data["data"] as List).map((e) => e as Map).toList();
     List<Map<String, dynamic>> newResponsePostMap = mappedPosts.map((e) {

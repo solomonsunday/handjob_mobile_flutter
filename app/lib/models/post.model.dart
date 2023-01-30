@@ -190,22 +190,3 @@ class Comments {
       _$CommentsFromJson(json);
   Map<String, dynamic> toJson() => _$CommentsToJson(this);
 }
-
-@JsonSerializable()
-class PostMeta {
-  int? page;
-  int? take;
-  int? itemCount;
-  int? total;
-
-  PostMeta({
-    this.page,
-    this.take,
-    this.itemCount,
-    this.total,
-  });
-
-  factory PostMeta.fromJson(Map<String, dynamic> json) =>
-      _$PostMetaFromJson(json);
-  Map<String, dynamic> toJson() => _$PostMetaToJson(this);
-}
