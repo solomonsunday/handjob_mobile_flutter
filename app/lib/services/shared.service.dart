@@ -20,6 +20,7 @@ class SharedService with ReactiveServiceMixin {
       lgas,
       lgasById,
       countries,
+      currentIndex,
     ]);
   }
 

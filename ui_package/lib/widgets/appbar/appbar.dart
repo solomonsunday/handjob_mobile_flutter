@@ -59,7 +59,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: leadingIcon,
+      leading: GestureDetector(onTap: onTap, child: leadingIcon),
       titleSpacing: 0,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,

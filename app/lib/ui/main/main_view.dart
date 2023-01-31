@@ -198,6 +198,8 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                       : CachedNetworkImage(
                           imageUrl: model.currentUser!.imageUrl!,
                           imageBuilder: (context, imageProvider) => Container(
+                            width: 70,
+                            height: 70,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
@@ -211,9 +213,15 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                             ),
                           ),
                           placeholder: (context, url) =>
-                              CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                              const CircularProgressIndicator(
+                                  backgroundColor: ColorManager.kDarkCharcoal,
+                                  valueColor: AlwaysStoppedAnimation(
+                                    ColorManager.kPrimaryColor,
+                                  )),
+                          errorWidget: (context, url, error) => const Icon(
+                            Icons.error,
+                            color: ColorManager.kRed,
+                          ),
                         ),
 
                   const SizedBox(height: AppSize.s8),

@@ -45,6 +45,7 @@ class InstantHireViewModel extends BaseViewModel {
 
   String? _selectedProfession;
   String? get selectedProfession => _selectedProfession;
+  int get currentIndex => _sharedService.currentIndex;
 
   void handleSelectedProfession(String? value) {
     _selectedProfession = value;
@@ -65,7 +66,10 @@ class InstantHireViewModel extends BaseViewModel {
 
   List<Suggestion> get suggestions => _suggestions;
 
-  void navigateBack() => _navigationService.back();
+  void navigateBack() {
+    _sharedService.setCurrentIndex(MainView.HOME_VIEW);
+    print('balck is clicked');
+  }
 
   String? _selectedStateValue;
   String? _selectedLgaValue;
@@ -212,5 +216,11 @@ class InstantHireViewModel extends BaseViewModel {
     } on DioError catch (e) {
       // print(e.response!.data);
     }
+  }
+
+  void fetchState() async {
+    try {
+      await _sharedService.getStates();
+    } on DioError catch (error) {}
   }
 }

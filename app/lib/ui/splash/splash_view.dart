@@ -14,7 +14,12 @@ class SplashView extends StatelessWidget {
       builder: (context, viewModel, child) {
         return Scaffold(
           body: viewModel.isBusy
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(
+                  child: CircularProgressIndicator(
+                  backgroundColor: ColorManager.kPrimary100Color,
+                  valueColor:
+                      AlwaysStoppedAnimation(ColorManager.kPrimaryColor),
+                ))
               : viewModel.isLoggedIn
                   ? Container()
                   : Container(

@@ -12,6 +12,7 @@ export 'widgets/custom_avatar/custom_avatar.dart';
 export 'widgets/profile_action_header/profile_action_header.dart';
 export 'widgets/bottom_sheet_container/bottom_sheet_container.dart';
 export 'widgets/custom_bottom_bar/custom_bottom_bar.dart';
+export 'widgets/progress_indicator/progress_indicator.dart';
 //export the utils
 export './utils/colors.dart';
 export './utils/text_styles.dart';
