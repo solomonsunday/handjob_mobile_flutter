@@ -46,6 +46,10 @@ class RateReviewViewModel extends FormViewModel {
 
   submitReviewRequest(String applicantId, String jobId) async {
     if (!isFormValid) {
+      Fluttertoast.showToast(
+        msg: "Some fields are required",
+        toastLength: Toast.LENGTH_LONG,
+      );
       return;
     }
     var formData = {
@@ -54,9 +58,9 @@ class RateReviewViewModel extends FormViewModel {
       'detail': descriptionValue,
       "applicantId": applicantId,
       "jobId": jobId,
-      "rating": int.tryParse(ratingValue!.toString()) ?? 0
+      "rating": int.tryParse((ratingValue ?? "0").toString())
     };
-
+    print('form: $formData');
     setBusy(true);
     try {
       await _instantJobService.submitReview(formData);

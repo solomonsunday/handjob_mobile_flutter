@@ -10,6 +10,7 @@ import 'package:ui_package/ui_package.dart';
 import '../../../app/app.locator.dart';
 import '../../../enums/bottom_sheet_type.dart';
 import '../../../models/education.model.dart';
+import '../../../services/authentication.service.dart';
 import '../../../utils/http_exception.dart';
 
 class ProfileEducationApprenticeship extends ViewModelWidget<ProfileViewModel> {
@@ -163,6 +164,8 @@ const String DELETE_EDUCATION = "DELETE_EDUCATION";
 class ProfileEducationItemViewModel extends BaseViewModel {
   final _educationService = locator<EducationService>();
   final _bottomSheetService = locator<BottomSheetService>();
+  final _dialogService = locator<DialogService>();
+  final _authenticationService = locator<AuthenticationService>();
 
   showEducationApprenticeSheet(Education? data) =>
       _bottomSheetService.showCustomSheet(
@@ -181,9 +184,16 @@ class ProfileEducationItemViewModel extends BaseViewModel {
 
   ///Experience
   Future<void> deleteEducation(String? id) async {
+    var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Are you sure you want delete this education?",
+    );
+    if (!response!.confirmed) return;
+
     setBusyForObject(DELETE_EDUCATION, true);
     try {
       await _educationService.deleteEducation(id!);
+      await _authenticationService.getCurrentBaseUser();
     } on DioError catch (error) {
       throw HttpException("An error occured");
     } finally {

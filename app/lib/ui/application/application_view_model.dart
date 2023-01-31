@@ -28,6 +28,7 @@ class ApplicationViewModel extends BaseViewModel {
     } on DioError catch (error) {
     } finally {
       setBusy(false);
+      notifyListeners();
     }
   }
 }

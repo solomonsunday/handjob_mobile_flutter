@@ -41,17 +41,20 @@ class ProfileEducationSheet extends StatelessWidget
           listenToFormUpdated(model);
           print('countires: ${model.countries}');
           print('qualification: ${model.qualification}');
+
           if (request?.data != null) {
             Education education = request?.data as Education;
-
+            print('education params: ${education.toJson()}');
             courseController.text = education.course ?? "";
             yearOfGraduationController.text =
-                DateFormat.yMMMd().format(education.yearOfGraduation!);
+                fromIsoToDateTimeToDefaultFormat(education.yearOfGraduation!);
             institutionController.text = education.institution ?? "";
             cityController.text = education.city ?? "";
             addressController.text = education.address ?? "";
-            model.updateCountry(education.country ?? "");
-            model.updateQualification(education.qualification ?? "");
+            model.updateCountry(education.country);
+            model.updateQualification(education.qualification);
+            model.updateId(education.id);
+            model.updateEditMode(true);
           }
         },
         onDispose: (model) => disposeForm(),
@@ -162,7 +165,11 @@ class ProfileEducationSheet extends StatelessWidget
                 const SizedBox(height: AppSize.s24),
                 DefaultButton(
                   onPressed: () {
-                    model.createEducation(completer);
+                    if (model.editMode) {
+                      model.updateEducation(completer);
+                    } else {
+                      model.createEducation(completer);
+                    }
                   },
                   title: 'Save changes',
                   busy: model.isBusy,
@@ -180,17 +187,25 @@ class ProfileEducationSheetViewModel extends FormViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _sharedService = locator<SharedService>();
 
+  bool _editMode = false;
+  bool get editMode => _editMode;
+
   List<String> get countries =>
-      _sharedService.countries?.map((e) => e.name!).toList() ?? [];
+      (_sharedService.countries ?? []).map((e) => e.name!).toList();
 
   List<String> get qualifications =>
-      _sharedService.qualifications?.map((e) => e.name!).toList() ?? [];
+      (_sharedService.qualifications ?? []).map((e) => e.name!).toList();
 
   createEducation(completer) async {
     runBusyFuture(createEducationRequest(completer));
   }
 
+  updateEducation(completer) async {
+    runBusyFuture(updateEducationRequest(completer));
+  }
+
   createEducationRequest(completer) async {
+    print('CREATE MODE');
     var formData = {
       "institution": institutionValue,
       "qualification": qualification,
@@ -216,6 +231,33 @@ class ProfileEducationSheetViewModel extends FormViewModel {
     }
   }
 
+  updateEducationRequest(completer) async {
+    print('update MODE');
+    var formData = {
+      "institution": institutionValue,
+      "qualification": qualification,
+      "course": courseValue,
+      "yearOfGraduation": dateToIso8601String(yearOfGraduationValue!),
+      "address": addressValue,
+      "city": cityValue,
+      "country": country
+    };
+    print('form Data: $formData');
+
+    setBusy(true);
+    try {
+      await _educationService.updateEducation(id!, formData);
+      await _authenticationService.getCurrentBaseUser();
+      completer!(SheetResponse(confirmed: true));
+    } on DioError catch (error) {
+      print('eror: ${error.response!.data}');
+      throw HttpException("An error occured");
+    } finally {
+      setBusy(false);
+      notifyListeners();
+    }
+  }
+
   void updateLocation(String location) {
     // locationController.text = location;
   }
@@ -225,18 +267,41 @@ class ProfileEducationSheetViewModel extends FormViewModel {
     // TODO: implement setFormStatus
   }
 
+  String? _id;
+  String? get id => _id;
   String? _country;
   String? get country => _country;
   String? _qualification;
   String? get qualification => _qualification;
 
-  updateCountry(String value) {
-    _country = value;
+  updateCountry(String? value) {
+    if ((_sharedService.countries ?? [])
+        .where((element) => element.name == value)
+        .isNotEmpty) {
+      _country = value;
+    } else {
+      _country = null;
+    }
     notifyListeners();
   }
 
-  updateQualification(String value) {
-    _qualification = value;
+  updateQualification(String? value) {
+    if ((_sharedService.qualifications ?? [])
+        .where((element) => element.name == value)
+        .isNotEmpty) {
+      _qualification = value;
+    } else {
+      _qualification = null;
+    }
     notifyListeners();
+  }
+
+  void updateEditMode(bool value) {
+    _editMode = value;
+    notifyListeners();
+  }
+
+  void updateId(String? id) {
+    _id = id;
   }
 }

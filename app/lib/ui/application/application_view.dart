@@ -20,7 +20,7 @@ class ApplicationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ApplicationViewModel>.nonReactive(
+    return ViewModelBuilder<ApplicationViewModel>.reactive(
         viewModelBuilder: () => ApplicationViewModel(),
         onModelReady: (model) => model.getApplicants(instantHire.id!),
         builder: (context, model, _) {
@@ -125,7 +125,11 @@ class ApplicationView extends StatelessWidget {
                       const SizedBox(
                         width: 30,
                         height: 30,
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          backgroundColor: ColorManager.kPrimary100Color,
+                          valueColor: AlwaysStoppedAnimation(
+                              ColorManager.kPrimaryColor),
+                        ),
                       ),
                     if ((model.applicants ?? []).isEmpty && !model.isBusy)
                       Text(
@@ -267,7 +271,7 @@ class ApplicantItem extends StatelessWidget {
                                 instantHire, applicant),
                             title: 'Leave a review',
                             buttonType: ButtonType.outline,
-                            paddingHeight: 12,
+                            paddingHeight: 16,
                             buttonTextColor: ColorManager.kDarkCharcoal,
                             buttonBgColor: ColorManager.kWhiteColor,
                           ),

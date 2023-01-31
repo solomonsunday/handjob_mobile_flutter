@@ -36,6 +36,6 @@ class EducationService with ReactiveServiceMixin {
     var response = await dioClient.delete(
       '/education/$id',
     );
-    return response.data as bool;
+    return true;
   }
 }

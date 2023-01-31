@@ -17,7 +17,6 @@ class InstantHireView extends StatelessWidget {
         await model.fetchProfessionTypes();
       },
       builder: (context, model, child) {
-        print('back is clicked: ${model.currentIndex}');
         return Scaffold(
           appBar: Navbar(
             leadingIcon: Icon(

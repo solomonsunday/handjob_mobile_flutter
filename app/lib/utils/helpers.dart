@@ -9,3 +9,9 @@ dateToIso8601String(String str) {
 fromIsoToDateTime(String str) {
   return DateTime.parse(str);
 }
+
+fromIsoToDateTimeToDefaultFormat(DateTime dt) {
+  DateFormat df = DateFormat("dd-MMM-yyyy");
+
+  return df.format(dt);
+}
