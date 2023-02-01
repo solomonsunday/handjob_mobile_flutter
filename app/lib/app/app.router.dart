@@ -340,8 +340,11 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i20.ChangePasswordView: (data) {
+      final args = data.getArgs<ChangePasswordViewArguments>(
+        orElse: () => const ChangePasswordViewArguments(),
+      );
       return _i1.buildAdaptivePageRoute<dynamic>(
-        builder: (context) => const _i20.ChangePasswordView(),
+        builder: (context) => _i20.ChangePasswordView(key: args.key),
         settings: data,
       );
     },
@@ -441,6 +444,12 @@ class PostDetailViewArguments {
   final _i24.Key? key;
 
   final _i26.Post post;
+}
+
+class ChangePasswordViewArguments {
+  const ChangePasswordViewArguments({this.key});
+
+  final _i24.Key? key;
 }
 
 class ApplicationViewArguments {
@@ -742,14 +751,16 @@ extension NavigatorStateExtension on _i25.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToChangePasswordView([
+  Future<dynamic> navigateToChangePasswordView({
+    _i24.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.changePasswordView,
+        arguments: ChangePasswordViewArguments(key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

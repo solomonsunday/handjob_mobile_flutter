@@ -160,34 +160,12 @@ class AuthenticationService with ReactiveServiceMixin {
     return true;
   }
 
-  // Future<Merchant> getCurrentMerchantUser() async {
-  //   var response = await dioClient.get(
-  //     '/merchant/profile',
-  //   );
-  //   Merchant merchant = Merchant.fromJson(response.data);
-  //   _currentMerchantUser.value = merchant;
-  //   return merchant;
-  // }
-
-  // Future<Admin> getCurrentAdminUser() async {
-  //   var response = await dioClient.get(
-  //     '/admin/profile',
-  //   );
-  //   Admin authUser = Admin.fromJson(response.data);
-  //   _currentAdminUser.value = authUser;
-  //   return authUser;
-  // }
-
-  // Future<SuperAdmin> getCurrentUser() async {
-  //   try {
-  //     var response = await dioClient.dio.get(
-  //       '/user/me',
-  //     );
-  //     AuthUser authUser = AuthUser.fromJson(response.data);
-  //     setCurrentUser(authUser);
-  //     return authUser;
-  //   } on DioError catch (err) {
-  //     throw err;
-  //   }
-  // }
+  Future changePassword(Map formData) async {
+    var response = await dioClient.put(
+      '/auth/change-password',
+      data: formData,
+    );
+    print('change password resp: ${response.data}');
+    return true;
+  }
 }

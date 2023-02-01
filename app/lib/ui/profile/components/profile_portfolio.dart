@@ -55,17 +55,17 @@ class ProfilePortfolio extends ViewModelWidget<ProfileViewModel> {
           ProfilePortfolioGallery(
             currentUser: model.currentUser!,
           ),
-          const SizedBox(height: AppSize.s8),
-          GestureDetector(
-            onTap: () {},
-            child: Text(
-              'View more...',
-              style: getRegularStyle(
-                color: ColorManager.kDarkColor,
-                fontSize: FontSize.s12,
-              ),
-            ),
-          )
+          // const SizedBox(height: AppSize.s8),
+          // GestureDetector(
+          //   onTap: () {},
+          //   child: Text(
+          //     'View more...',
+          //     style: getRegularStyle(
+          //       color: ColorManager.kDarkColor,
+          //       fontSize: FontSize.s12,
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );

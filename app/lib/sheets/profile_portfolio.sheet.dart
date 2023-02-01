@@ -31,79 +31,81 @@ class ProfilePortfolioSheet extends StatelessWidget {
         builder: (context, model, child) {
           return BottomSheetContainer(
             onClose: () => completer!(SheetResponse(confirmed: false)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      Icons.photo_library_outlined,
-                      color: ColorManager.kSecondaryColor,
-                    ),
-                    SizedBox(width: AppSize.s12),
-                    Text('Portfolio'),
-                  ],
-                ),
-                const SizedBox(height: AppSize.s24),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Selected files'),
-                    const SizedBox(height: AppSize.s12),
-                    Column(
-                      children: (model.images ?? [])
-                          .map((e) => SelectedFileWidget(
-                                file: File(e.path),
-                                onDelete: (file) {
-                                  model.deleteFile(file);
-                                },
-                              ))
-                          .toList(),
-                    ),
-                    // SelectedFileWidget(),
-                    // SelectedFileWidget(),
-                    // SelectedFileWidget(),
-                  ],
-                ),
-                const SizedBox(height: AppSize.s20),
-                GestureDetector(
-                  onTap: model.openFileDialog,
-                  child: const Icon(
-                    Icons.add_circle_outline,
-                    color: ColorManager.kGrey,
-                    size: AppSize.s32,
-                  ),
-                ),
-                const SizedBox(height: AppSize.s20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    ProfilePortfolioGallery(
-                      currentUser: model.currentUser!,
-                    ),
-                    const SizedBox(height: AppSize.s8),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Text(
-                        'View more...',
-                        style: getRegularStyle(
-                          color: ColorManager.kDarkColor,
-                          fontSize: FontSize.s12,
-                        ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.photo_library_outlined,
+                        color: ColorManager.kSecondaryColor,
                       ),
+                      SizedBox(width: AppSize.s12),
+                      Text('Portfolio'),
+                    ],
+                  ),
+                  const SizedBox(height: AppSize.s24),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Selected files'),
+                      const SizedBox(height: AppSize.s12),
+                      Column(
+                        children: (model.images ?? [])
+                            .map((e) => SelectedFileWidget(
+                                  file: File(e.path),
+                                  onDelete: (file) {
+                                    model.deleteFile(file);
+                                  },
+                                ))
+                            .toList(),
+                      ),
+                      // SelectedFileWidget(),
+                      // SelectedFileWidget(),
+                      // SelectedFileWidget(),
+                    ],
+                  ),
+                  const SizedBox(height: AppSize.s20),
+                  GestureDetector(
+                    onTap: model.openFileDialog,
+                    child: const Icon(
+                      Icons.add_circle_outline,
+                      color: ColorManager.kGrey,
+                      size: AppSize.s32,
                     ),
-                  ],
-                ),
-                const SizedBox(height: AppSize.s24),
-                DefaultButton(
-                  onPressed: model.isBusy ? () {} : model.uploadPortfolios,
-                  title: 'Save changes',
-                  busy: model.isBusy,
-                  disabled: model.isBusy,
-                )
-              ],
+                  ),
+                  const SizedBox(height: AppSize.s20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      ProfilePortfolioGallery(
+                        currentUser: model.currentUser!,
+                      ),
+                      const SizedBox(height: AppSize.s8),
+                      // GestureDetector(
+                      //   onTap: () {},
+                      //   child: Text(
+                      //     'View more...',
+                      //     style: getRegularStyle(
+                      //       color: ColorManager.kDarkColor,
+                      //       fontSize: FontSize.s12,
+                      //     ),
+                      //   ),
+                      // ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSize.s24),
+                  DefaultButton(
+                    onPressed: model.isBusy ? () {} : model.uploadPortfolios,
+                    title: 'Save changes',
+                    busy: model.isBusy,
+                    disabled: model.isBusy,
+                  )
+                ],
+              ),
             ),
           );
         });

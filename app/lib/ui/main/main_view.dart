@@ -191,30 +191,31 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                   //         ),
                   //       ),
                   model.currentUser?.imageUrl == null
-                      ? Image.asset(
-                          'assets/images/logo.jpeg',
-                          fit: BoxFit.cover,
+                      ? SizedBox(
+                          width: AppSize.s56,
+                          height: AppSize.s56,
+                          child: Image.asset(
+                            'assets/images/logo.jpeg',
+                            fit: BoxFit.cover,
+                          ),
                         )
                       : CachedNetworkImage(
                           imageUrl: model.currentUser!.imageUrl!,
                           imageBuilder: (context, imageProvider) => Container(
-                            width: 70,
-                            height: 70,
+                            width: AppSize.s56,
+                            height: AppSize.s56,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
                                 image: imageProvider,
                                 fit: BoxFit.cover,
-                                colorFilter: const ColorFilter.mode(
-                                  Colors.red,
-                                  BlendMode.colorBurn,
-                                ),
                               ),
                             ),
                           ),
                           placeholder: (context, url) =>
                               const CircularProgressIndicator(
-                                  backgroundColor: ColorManager.kDarkCharcoal,
+                                  backgroundColor:
+                                      ColorManager.kPrimary100Color,
                                   valueColor: AlwaysStoppedAnimation(
                                     ColorManager.kPrimaryColor,
                                   )),
