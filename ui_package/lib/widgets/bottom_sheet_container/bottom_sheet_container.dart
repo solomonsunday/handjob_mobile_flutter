@@ -8,7 +8,8 @@ class BottomSheetContainer extends StatelessWidget {
   final EdgeInsets? padding;
   final Color? color;
   final BorderRadius? borderRadius;
-  final VoidCallback onClose;
+  final VoidCallback? onClose;
+  final bool showClose;
   const BottomSheetContainer({
     Key? key,
     required this.child,
@@ -16,7 +17,8 @@ class BottomSheetContainer extends StatelessWidget {
     this.margin,
     this.padding,
     this.borderRadius,
-    required this.onClose,
+    this.onClose,
+    this.showClose = true,
   }) : super(key: key);
 
   @override
@@ -31,17 +33,19 @@ class BottomSheetContainer extends StatelessWidget {
       child: Stack(
         children: [
           child,
-          Positioned(
-            top: AppSize.s8,
-            right: AppSize.s8,
-            child: GestureDetector(
-              onTap: () => onClose(),
-              child: const Icon(
-                Icons.close,
-                size: AppSize.s24,
-              ),
-            ),
-          )
+          showClose
+              ? Positioned(
+                  top: AppSize.s8,
+                  right: AppSize.s8,
+                  child: GestureDetector(
+                    onTap: () => onClose!(),
+                    child: const Icon(
+                      Icons.close,
+                      size: AppSize.s24,
+                    ),
+                  ),
+                )
+              : Container(),
         ],
       ),
     );

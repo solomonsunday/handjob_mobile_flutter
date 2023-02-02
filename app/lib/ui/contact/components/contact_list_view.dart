@@ -187,7 +187,7 @@ class ContactListItem extends StatelessWidget {
             ),
             PopupMenuItem(
               child: Icon(
-                Icons.video_call,
+                Icons.videocam,
                 color: ColorManager.kDarkColor,
               ),
               value: VIDEO_CALL,

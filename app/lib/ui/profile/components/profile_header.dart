@@ -29,10 +29,33 @@ class ProfileHeader extends ViewModelWidget<ProfileViewModel> {
                     decoration: const BoxDecoration(
                       color: ColorManager.kSecondaryColor,
                     ),
-                    child: Image.network(
-                      model.currentUser?.imageUrl ??
+                    child: CachedNetworkImage(
+                      placeholder: (context, url) => const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (context, url, error) {
+                        return Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: AssetImage("assets/images/logo.jpeg"),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                      imageUrl: model.currentUser?.imageUrl ??
                           "https://i.picsum.photos/id/866/200/200.jpg?hmac=i0ngmQOk9dRZEzhEosP31m_vQnKBQ9C19TBP1CGoIUA",
-                      fit: BoxFit.cover,
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   const Positioned(

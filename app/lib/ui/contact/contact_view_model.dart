@@ -125,6 +125,8 @@ class ContactViewModel extends ReactiveViewModel {
     _bottomSheetService.showCustomSheet(
       variant: BottomSheetType.outgoing_call,
       title: "Outgoing Voice Call",
+      data: {"type": "audio"},
+      isScrollControlled: true,
     );
   }
 
@@ -132,6 +134,8 @@ class ContactViewModel extends ReactiveViewModel {
     _bottomSheetService.showCustomSheet(
       variant: BottomSheetType.outgoing_call,
       title: "Outgoing Video Call",
+      data: {"type": "video"},
+      isScrollControlled: true,
     );
   }
 }

@@ -41,6 +41,17 @@ class ProfileAvatar extends StatelessWidget {
                     height: 24,
                     child: CircularProgressIndicator(),
                   ),
+                  errorWidget: (context, url, error) {
+                    return Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/logo.jpeg"),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
                   imageUrl: imgUrl ??
                       "https://i.picsum.photos/id/866/200/200.jpg?hmac=i0ngmQOk9dRZEzhEosP31m_vQnKBQ9C19TBP1CGoIUA",
                   imageBuilder: (context, imageProvider) => Container(

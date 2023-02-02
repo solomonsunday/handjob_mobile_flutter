@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handjob_mobile/sheets/outgoing_call/outgoing_call_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:ui_package/ui_package.dart';
 import 'package:ui_package/utils/colors.dart';
 import 'package:ui_package/utils/font_styles.dart';
 import 'package:ui_package/utils/text_styles.dart';
@@ -22,77 +23,91 @@ class OutgoingCallView extends StatelessWidget {
     return ViewModelBuilder<OutgoingCallViewModel>.reactive(
         viewModelBuilder: () => OutgoingCallViewModel(),
         builder: (context, model, _) {
-          return DraggableScrollableSheet(
-            maxChildSize: 1,
-            initialChildSize: 1,
-            builder: (context, scrollController) {
-              return Container(
-                color: ColorManager.kWhiteColor,
-                padding: const EdgeInsets.only(
-                  top: AppSize.s8,
-                  left: AppSize.s28,
-                  right: AppSize.s28,
-                  bottom: AppSize.s8,
-                ),
-                child: Column(
+          return BottomSheetContainer(
+            showClose: false,
+            onClose: () => completer!(SheetResponse(confirmed: false)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: AppSize.s120),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.phone,
-                          size: AppSize.s24,
-                        ),
-                        Text(
-                          '${request?.title}',
-                          style: getRegularStyle(
-                            color: ColorManager.kDarkColor,
-                            fontSize: FontSize.s16,
-                          ),
-                        ),
-                      ],
-                    ),
-                    // const SizedBox(height: AppSize.s80),
-                    Container(
-                      width: AppSize.s40,
-                      height: AppSize.s40,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: Image.asset(
-                        'assets/images/call_avatar.png',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    // const SizedBox(height: AppSize.s120),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        FloatingActionButton(
-                          onPressed: () {},
-                          child: const Icon(
-                            Icons.phone_missed,
+                    request?.data['type'] == "video"
+                        ? const Icon(
+                            Icons.videocam,
                             size: AppSize.s24,
-                            color: ColorManager.kWhiteColor,
-                          ),
-                          backgroundColor: ColorManager.kRed,
-                        ),
-                        GestureDetector(
-                          onTap: model.toggleMic,
-                          child: Icon(
-                            model.micOn ? Icons.mic_off : Icons.mic_rounded,
+                          )
+                        : const Icon(
+                            Icons.phone,
                             size: AppSize.s24,
-                            color: ColorManager.kWhiteColor,
                           ),
-                        ),
-                      ],
+                    const SizedBox(width: AppSize.s12),
+                    Text(
+                      '${request?.title}',
+                      style: getRegularStyle(
+                        color: ColorManager.kDarkColor,
+                        fontSize: FontSize.s16,
+                      ),
                     ),
                   ],
                 ),
-              );
-            },
+                const SizedBox(height: AppSize.s120),
+                Container(
+                  width: 140,
+                  height: 140,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.asset(
+                    'assets/images/call_avatar.png',
+                    fit: BoxFit.cover,
+                    // width: AppSize.s120,
+                    // height: AppSize.s120,
+                  ),
+                ),
+                const SizedBox(height: AppSize.s12),
+                Text(
+                  'Steve Okoro',
+                  style: getBoldStyle(
+                    color: ColorManager.kDarkColor,
+                    fontSize: FontSize.s16,
+                  ),
+                ),
+                const SizedBox(height: AppSize.s120),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    FloatingActionButton(
+                      onPressed: () {},
+                      child: const Icon(
+                        Icons.call_end,
+                        size: AppSize.s24,
+                        color: ColorManager.kWhiteColor,
+                      ),
+                      backgroundColor: ColorManager.kRed,
+                    ),
+                    GestureDetector(
+                      onTap: model.toggleMic,
+                      child: Container(
+                        padding: EdgeInsets.all(AppPadding.p16),
+                        decoration: BoxDecoration(
+                          color: ColorManager.kBackgroundolor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          model.micOn ? Icons.campaign : Icons.mic_rounded,
+                          size: AppSize.s32,
+                          color: ColorManager.kDarkCharcoal,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: AppSize.s80)
+              ],
+            ),
           );
         });
   }

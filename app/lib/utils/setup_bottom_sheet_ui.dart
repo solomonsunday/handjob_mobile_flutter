@@ -1,4 +1,6 @@
 import 'package:handjob_mobile/sheets/incoming_call/incoming_call_view.dart';
+import 'package:handjob_mobile/sheets/ongoing_video_call/ongoing_video_call_view.dart';
+import 'package:handjob_mobile/sheets/ongoing_voice_call/ongoing_voice_call_view.dart';
 import 'package:handjob_mobile/sheets/outgoing_call/outgoing_call_view.dart';
 import 'package:handjob_mobile/sheets/profile_contact/profile_contact.sheet.dart';
 import 'package:handjob_mobile/sheets/profile_education/profile_education.sheet.dart';
@@ -32,6 +34,10 @@ void setupBottomSheetUi() {
         IncomingCallView(request: sheetRequest, completer: completer),
     BottomSheetType.outgoing_call: (context, sheetRequest, completer) =>
         OutgoingCallView(request: sheetRequest, completer: completer),
+    BottomSheetType.ongoing_voice_call: (context, sheetRequest, completer) =>
+        OngoingVoiceCallView(request: sheetRequest, completer: completer),
+    BottomSheetType.ongoing_video_call: (context, sheetRequest, completer) =>
+        OngoingVideoCallView(request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);
