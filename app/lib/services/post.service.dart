@@ -45,4 +45,40 @@ class PostService with ReactiveServiceMixin {
     print('pststs: $_posts');
     return posts;
   }
+
+  Future<void> createPost(Map map) async {
+    var formData = FormData.fromMap({
+      ...map,
+    });
+    if (map.containsKey('files')) {
+      File file = map['files'];
+      formData.files
+          .add(MapEntry('files', MultipartFile.fromFileSync(file.path)));
+    }
+    var response = await dioClient.post(
+      '/post',
+      data: formData,
+    );
+    print('response data: ${response.data}');
+  }
+
+  // edit: (id, data) => requests.put(`/post/${id}`, data),
+  // load: (page, take) =>
+  //   requests.get(
+  //     `/post?${new URLSearchParams({ page: page, take: take }).toString()}`
+  //   ),
+  // loadByUserId: (id, page, take) =>
+  //   requests.get(
+  //     `/post/user/${id}?${new URLSearchParams({
+  //       page: page,
+  //       take: take,
+  //     }).toString()}`
+  //   ),
+  // view: (id) => requests.get(`/post/${id}`),
+  // search: (page, search) => requests.get("/post/search", page, search),
+  // like: (id) => requests.put(`/post/like/${id}`),
+  // dislike: (id) => requests.put(`/post/dislike/${id}`),
+  // postCount: () => requests.get("/post/count"),
+  // postCountByUser: (userId) => requests.get(`/post/user/${userId}/count`),
+  // delete: (id) => requests.del(`/post/${id}`),
 }

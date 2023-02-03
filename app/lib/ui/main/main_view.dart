@@ -5,6 +5,7 @@ import 'package:handjob_mobile/ui/main/home/home_view.dart';
 import 'package:handjob_mobile/ui/main/instant_hire/instant_hire_view.dart';
 import 'package:handjob_mobile/ui/main/jobs/jobs_view.dart';
 import 'package:handjob_mobile/ui/main/post/post_view.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
@@ -50,7 +51,7 @@ class MainView extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             BottomNavBarItem(
-              icon: Icons.add_box_outlined,
+              icon: MdiIcons.chat,
               title: Text(
                 'Post',
                 style: getBoldStyle(

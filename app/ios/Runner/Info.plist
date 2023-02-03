@@ -49,5 +49,11 @@
 	<string>Upload image from camera for avatar background</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Post videos to profile</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+
 </dict>
 </plist>

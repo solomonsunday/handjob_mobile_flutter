@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:intl/intl.dart';
 
 dateToIso8601String(String str) {
@@ -14,4 +16,11 @@ fromIsoToDateTimeToDefaultFormat(DateTime dt) {
   DateFormat df = DateFormat("dd-MMM-yyyy");
 
   return df.format(dt);
+}
+
+//file size
+double getFileSizeInMB(File file) {
+  int sizeInBytes = file.lengthSync();
+  double sizeInMb = sizeInBytes / (1024 * 1024);
+  return sizeInMb;
 }

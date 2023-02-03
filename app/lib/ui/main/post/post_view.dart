@@ -1,18 +1,27 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:handjob_mobile/ui/main/post/post_view.form.dart';
 import 'package:handjob_mobile/ui/main/post/post_view_model.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked/stacked_annotations.dart';
 import 'package:ui_package/ui_package.dart';
 
-class PostView extends StatelessWidget {
-  const PostView({Key? key}) : super(key: key);
+@FormView(fields: [
+  FormTextField(name: 'title'),
+  FormTextField(name: 'body'),
+])
+class PostView extends StatelessWidget with $PostView {
+  PostView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<PostViewModel>.nonReactive(
       viewModelBuilder: () => PostViewModel(),
+      onModelReady: (model) => listenToFormUpdated(model),
+      onDispose: (model) => disposeForm(),
       builder: (_, model, child) => Scaffold(
         appBar: Navbar(
-          leadingIcon: Icon(
+          leadingIcon: const Icon(
             Icons.arrow_back,
             color: ColorManager.kDarkColor,
           ),
@@ -26,10 +35,15 @@ class PostView extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                SizedBox(height: AppSize.s8),
-                PostFormView(),
-                SizedBox(height: AppSize.s40),
+              children: [
+                const SizedBox(height: AppSize.s8),
+                PostFormView(
+                  titleController: titleController,
+                  bodyController: bodyController,
+                  titleFocusnode: titleFocusNode,
+                  bodyFocusnode: bodyFocusNode,
+                ),
+                const SizedBox(height: AppSize.s40),
               ],
             ),
           ),
@@ -40,7 +54,18 @@ class PostView extends StatelessWidget {
 }
 
 class PostFormView extends ViewModelWidget<PostViewModel> {
-  const PostFormView({Key? key}) : super(key: key);
+  const PostFormView({
+    Key? key,
+    required this.titleController,
+    required this.bodyController,
+    required this.titleFocusnode,
+    required this.bodyFocusnode,
+  }) : super(key: key);
+
+  final TextEditingController titleController;
+  final TextEditingController bodyController;
+  final FocusNode titleFocusnode;
+  final FocusNode bodyFocusnode;
 
   @override
   Widget build(BuildContext context, PostViewModel model) {
@@ -51,27 +76,56 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
           Container(
             child: Row(
               children: [
-                CircleAvatar(
-                  radius: AppSize.s24,
-                  backgroundColor: ColorManager.kDarkColor,
-                ),
+                model.currentUser?.imageUrl == null
+                    ? const CircleAvatar(
+                        radius: AppSize.s24,
+                        backgroundImage: AssetImage('assets/images/logo.jpeg'))
+                    : CachedNetworkImage(
+                        placeholder: (context, url) => const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(),
+                        ),
+                        errorWidget: (context, url, error) {
+                          return Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: AssetImage("assets/images/logo.jpeg"),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          );
+                        },
+                        imageUrl: model.currentUser?.imageUrl ??
+                            "https://i.picsum.photos/id/866/200/200.jpg?hmac=i0ngmQOk9dRZEzhEosP31m_vQnKBQ9C19TBP1CGoIUA",
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
                 SizedBox(width: AppSize.s12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'John Demola',
+                      '${model.currentUser?.firstName} ${model.currentUser?.lastName}',
                       style: getBoldStyle(
                         color: ColorManager.kDarkColor,
                         fontSize: FontSize.s14,
                       ),
                     ),
-                    SizedBox(height: AppSize.s4),
+                    const SizedBox(height: AppSize.s4),
                     DefaultDropDownField(
-                      hint: 'Anyone',
-                      value: 'Anyone',
-                      dropdownItems: ['Text', 'Video', 'Anyone'],
-                      onChanged: model.handlePostType,
+                      hint: 'Media Type',
+                      value: model.mediaType,
+                      dropdownItems: model.mediaTypes,
+                      onChanged: model.handleMediaType,
                       buttonDecoration: BoxDecoration(
                         border: Border.all(
                           width: 1,
@@ -85,12 +139,17 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
               ],
             ),
           ),
-          SizedBox(height: AppSize.s20),
+          const SizedBox(height: AppSize.s20),
           InputField(
             label: 'Title',
             hintText: 'Enter a title...',
+            controller: titleController,
+            focusnode: titleFocusnode,
+            formError: model.hasTitleValidationMessage
+                ? model.titleValidationMessage
+                : null,
           ),
-          SizedBox(height: AppSize.s24),
+          const SizedBox(height: AppSize.s24),
           Container(
             padding: EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -105,51 +164,101 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
                 Textarea(
                   label: 'Body',
                   hintText: 'Start writing here...',
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                     borderRadius: BorderRadius.zero,
                     borderSide: BorderSide(
                       color: ColorManager.kDarkColor,
                     ),
                   ),
-                  enabledBorder: OutlineInputBorder(
+                  enabledBorder: const OutlineInputBorder(
                     borderRadius: BorderRadius.zero,
                     borderSide: BorderSide(
                       color: ColorManager.kGrey1,
                     ),
                   ),
+                  controller: bodyController,
+                  focusnode: bodyFocusnode,
+                  formError: model.hasBodyValidationMessage
+                      ? model.bodyValidationMessage
+                      : null,
                 ),
-                SizedBox(height: AppSize.s16),
+                const SizedBox(height: AppSize.s16),
+                model.selectedFile == null
+                    ? Container()
+                    : model.mediaType == IMAGE
+                        ? SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: 200,
+                            child: Image.file(model.selectedFile!),
+                          )
+                        : model.mediaType == VIDEO
+                            ? SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height: 200,
+                                child: Text(
+                                  'No preview available',
+                                  style: getSemiBoldStyle(
+                                    color: ColorManager.kDarkColor,
+                                    fontSize: FontSize.s14,
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                if (model.errorMessage != null)
+                  Text(
+                    '${model.errorMessage}',
+                    style: getRegularStyle(
+                      color: ColorManager.kRed,
+                      fontSize: FontSize.s12,
+                    ),
+                  ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
+                    const Text(
                       'Add:',
                       style: TextStyle(
                         fontSize: FontSize.s12,
                       ),
                     ),
-                    SizedBox(width: AppSize.s12),
-                    Icon(
-                      Icons.photo,
-                      color: ColorManager.kDarkColor,
-                      size: AppSize.s24,
+                    const SizedBox(width: AppSize.s12),
+                    GestureDetector(
+                      onTap: model.mediaType != IMAGE
+                          ? null
+                          : model.handleImageChange,
+                      child: Icon(
+                        Icons.photo,
+                        color: model.mediaType == IMAGE
+                            ? ColorManager.kDarkColor
+                            : ColorManager.kBackgroundolor,
+                        size: AppSize.s24,
+                      ),
                     ),
-                    SizedBox(width: AppSize.s12),
-                    Icon(
-                      Icons.videocam,
-                      color: ColorManager.kDarkColor,
-                      size: AppSize.s24,
+                    const SizedBox(width: AppSize.s12),
+                    GestureDetector(
+                      onTap: model.mediaType != IMAGE
+                          ? null
+                          : model.handleVideoChange,
+                      child: Icon(
+                        Icons.videocam,
+                        color: model.mediaType == VIDEO
+                            ? ColorManager.kDarkColor
+                            : ColorManager.kBackgroundolor,
+                        size: AppSize.s24,
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
           ),
-          SizedBox(height: AppSize.s12),
+          const SizedBox(height: AppSize.s12),
           DefaultButton(
-            onPressed: () {},
+            onPressed:
+                !model.isFormValid || model.isBusy ? null : model.createPost,
             title: 'Post',
-            busy: false,
+            busy: model.isBusy,
+            disabled: !model.isFormValid || model.isBusy,
           ),
         ],
       ),
