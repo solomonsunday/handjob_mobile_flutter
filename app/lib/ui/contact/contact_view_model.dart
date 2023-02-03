@@ -130,6 +130,7 @@ class ContactViewModel extends ReactiveViewModel {
     );
   }
 
+  //handle video call
   handleVideoCall(Contact p1) {
     _bottomSheetService.showCustomSheet(
       variant: BottomSheetType.outgoing_call,
