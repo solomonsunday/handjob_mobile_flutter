@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/services/post.service.dart';

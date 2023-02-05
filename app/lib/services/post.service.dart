@@ -62,6 +62,13 @@ class PostService with ReactiveServiceMixin {
     print('response data: ${response.data}');
   }
 
+  Future<Post> likePost(String postId) async {
+    var response = await dioClient.put('/post/like/$postId');
+
+    print('like response: ${response.data}');
+    return Post.fromJson(response.data);
+  }
+
   // edit: (id, data) => requests.put(`/post/${id}`, data),
   // load: (page, take) =>
   //   requests.get(

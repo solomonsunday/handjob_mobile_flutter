@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
@@ -108,15 +109,48 @@ class HomeSearchWidget extends ViewModelWidget<HomeViewModel> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
               color: Color(0xffd9d9d9),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: NetworkImage(model.currentUser?.imageUrl ??
-                    'https://xsgames.co/randomusers/avatar.php?g=male'),
+              // image: DecorationImage(
+              //   fit: BoxFit.cover,
+              //   image: NetworkImage(model.currentUser?.imageUrl ??
+              //       'https://xsgames.co/randomusers/avatar.php?g=male'),
+              // ),
+            ),
+            child: CachedNetworkImage(
+              placeholder: (context, url) => Container(
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/logo.jpeg"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              errorWidget: (context, url, error) {
+                return Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: AssetImage("assets/images/logo.jpeg"),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+              },
+              imageUrl: model.currentUser?.imageUrl ??
+                  'https://picsum.photos/660/200',
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
           ),
-          SizedBox(width: AppSize.s8),
-          Expanded(
+          const SizedBox(width: AppSize.s8),
+          const Expanded(
             child: InputField(
               hintText: 'Search',
               paddingBottom: 0,

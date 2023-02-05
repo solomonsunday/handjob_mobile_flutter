@@ -14,6 +14,7 @@ import 'package:stacked_services/src/navigation/navigation_service.dart';
 import '../client/dio_client.dart';
 import '../services/account.service.dart';
 import '../services/authentication.service.dart';
+import '../services/comment.service.dart';
 import '../services/contact.service.dart';
 import '../services/education.service.dart';
 import '../services/experience.service.dart';
@@ -45,4 +46,5 @@ Future<void> setupLocator(
   locator.registerLazySingleton(() => EducationService());
   locator.registerLazySingleton(() => PostService());
   locator.registerLazySingleton(() => ContactService());
+  locator.registerLazySingleton(() => CommentService());
 }
