@@ -17,27 +17,22 @@ class ConnnectionRequestView extends StatelessWidget {
       builder: (context, model, child) {
         print(
             'data connection req: ${model.connectionRequestList?.map((e) => e.toJson())} loading ${model.busy(CONNECTION_REQUEST)}');
+        if ((model.connectionRequestList ?? []).isEmpty) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: Text(
+              'No connection requests available yet!',
+              style: getMediumStyle(
+                color: ColorManager.kDarkColor,
+                fontSize: FontSize.s14,
+              ),
+            ),
+          );
+        }
         return CustomScrollView(
           slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: AppSize.s24),
-                  if ((model.connectionRequestList ?? []).isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20.0),
-                      child: Text(
-                        'No connection requests available yet!',
-                        style: getMediumStyle(
-                          color: ColorManager.kDarkColor,
-                          fontSize: FontSize.s14,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: AppSize.s20),
             ),
             SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -55,67 +50,24 @@ class ConnnectionRequestView extends StatelessWidget {
                             .toList();
                     return ConnectionRequestItem(
                       name:
-                          "${model.topSuggestionContactList?[index].firstName} ${model.topSuggestionContactList?[index].lastName}",
+                          "${model.connectionRequestList?[index].firstName} ${model.connectionRequestList?[index].lastName}",
                       profession: experiences.isNotEmpty
                           ? "${experiences[0].jobTitle} at ${experiences[0].company}"
                           : "",
-                      rating:
-                          '${model.topSuggestionContactList?[index].rating}',
+                      rating: '${model.connectionRequestList?[index].rating}',
                       buttonTitle: 'Accept',
                       onClick: () => model.acceptContact(
-                          model.topSuggestionContactList![index].id!),
+                          model.connectionRequestList![index].id!),
                       onCancelClick: () => model.rejectContact(
-                          model.topSuggestionContactList![index].id!),
+                          model.connectionRequestList![index].id!),
                     );
                   },
                 ),
               ),
             ),
-            SliverToBoxAdapter(
+            const SliverToBoxAdapter(
               child: SizedBox(height: AppSize.s40),
             ),
-            // SliverToBoxAdapter(
-            //     child: Text(
-            //   'Top suggestions',
-            //   style: getBoldStyle(
-            //     color: ColorManager.kDarkColor,
-            //     fontSize: FontSize.s12,
-            //   ),
-            // )),
-            // SliverToBoxAdapter(
-            //   child: SizedBox(height: AppSize.s24),
-            // ),
-            // SliverGrid(
-            //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            //     crossAxisCount: 2,
-            //     mainAxisSpacing: 14,
-            //     crossAxisSpacing: 8,
-            //   ),
-            //   delegate: SliverChildListDelegate(
-            //     List.generate(
-            //       (model.topSuggestionContactList ?? []).length,
-            //       (index) {
-            //         List<Experience>? experiences =
-            //             (model.topSuggestionContactList?[index].experiences ??
-            //                     [])
-            //                 .where((element) => element.current!)
-            //                 .toList();
-            //         return ConnectionRequestItem(
-            //           name:
-            //               "${model.topSuggestionContactList?[index].firstName} ${model.topSuggestionContactList?[index].lastName}",
-            //           profession: experiences.isNotEmpty
-            //               ? "${experiences[0].jobTitle} at ${experiences[0].company}"
-            //               : "",
-            //           rating:
-            //               '${model.topSuggestionContactList?[index].rating}',
-            //           buttonTitle: 'Connect',
-            //           onClick: (){},
-            //           onCancelClick: (){},
-            //         );
-            //       },
-            //     ),
-            //   ),
-            // ),
           ],
         );
       },

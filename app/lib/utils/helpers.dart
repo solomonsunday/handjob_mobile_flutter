@@ -24,3 +24,25 @@ double getFileSizeInMB(File file) {
   double sizeInMb = sizeInBytes / (1024 * 1024);
   return sizeInMb;
 }
+
+String getTimeDiff(String dt) {
+  DateTime dt1 = DateTime.parse(dt);
+  DateTime dt2 = DateTime.now();
+
+  Duration diff = dt1.difference(dt2);
+
+  if (diff.inDays > 0) {
+    return '${diff.inDays}d';
+  }
+  if (diff.inHours > 0) {
+    return '${diff.inHours}h';
+  }
+  if (diff.inMinutes > 0) {
+    return '${diff.inMinutes}m';
+  }
+  if (diff.inSeconds > 0) {
+    return '${diff.inSeconds}s';
+  }
+
+  return 'just now';
+}

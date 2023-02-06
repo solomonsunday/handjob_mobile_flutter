@@ -12,7 +12,7 @@ class CommentItemViewModel extends ReactiveViewModel {
   bool _isLiked = false;
   bool get isLiked => _isLiked;
 
-  likeComment(Comment comment) async {
+  Future<void> likeComment(Comment comment) async {
     _isLiked = !_isLiked;
     comment.likes = (comment.likes ?? 0) + 1;
     notifyListeners();

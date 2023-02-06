@@ -69,22 +69,29 @@ class AddNewContactView extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: AppSize.s8),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: (model.contactList ?? []).length,
-                      itemBuilder: (BuildContext context, int index) {
-                        Contact contact = model.contactList![index];
-                        return AddNewContactListItem(
-                          contact: contact,
-                        );
-                      },
-                    ),
-                  ),
+                  Expanded(child: AddNewContactListView()),
                 ],
               ),
             ),
           );
         });
+  }
+}
+
+class AddNewContactListView extends ViewModelWidget<AddNewContactViewModel> {
+  const AddNewContactListView({super.key});
+
+  @override
+  Widget build(BuildContext context, AddNewContactViewModel model) {
+    return ListView.builder(
+      itemCount: (model.contactList ?? []).length,
+      itemBuilder: (BuildContext context, int index) {
+        Contact contact = model.contactList![index];
+        return AddNewContactListItem(
+          contact: contact,
+        );
+      },
+    );
   }
 }
 

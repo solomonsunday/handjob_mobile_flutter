@@ -3,6 +3,7 @@ import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
 import '../../../../../models/comment.model.dart';
+import '../../../../../utils/helpers.dart';
 import 'comment_item_view_model.dart';
 
 class CommentItemView extends StatelessWidget {
@@ -36,28 +37,27 @@ class CommentItemView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                          '${comment?.author?.firstName} ${comment?.author?.lastName}'),
+                      Text('${comment?.authorEmployer}'),
                       SizedBox(height: AppSize.s2),
                       Text('${comment?.message}'),
                       SizedBox(height: AppSize.s2),
                       Row(children: [
                         Text(
-                          '8h',
+                          getTimeDiff(comment!.createdAt!),
                           style: getRegularStyle(
                             color: ColorManager.kGrey4,
                             fontSize: FontSize.s11,
                           ),
                         ),
-                        SizedBox(width: AppSize.s12),
+                        const SizedBox(width: AppSize.s12),
                         Text(
-                          '12 likes',
+                          '${comment?.likes} likes',
                           style: getRegularStyle(
                             color: ColorManager.kGrey4,
                             fontSize: FontSize.s11,
                           ),
                         ),
-                        SizedBox(width: AppSize.s12),
+                        const SizedBox(width: AppSize.s12),
                         Text(
                           'Reply',
                           style: getRegularStyle(
@@ -72,7 +72,7 @@ class CommentItemView extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: model.likeComment(comment!),
+                  onTap: () => model.likeComment(comment!),
                   child: Icon(
                     (comment?.liked ?? false) || model.isLiked
                         ? Icons.favorite

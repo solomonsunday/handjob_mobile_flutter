@@ -35,11 +35,13 @@ class PostDetailViewModel extends ReactiveViewModel {
     Map<String, dynamic> formData = {
       "message": messageController.text,
     };
+    print('formdata: $formData');
     setBusy(true);
     try {
       await _commentService.createComment(postId!, formData);
     } on DioError catch (e) {
     } finally {
+      messageController.clear();
       setBusy(false);
       notifyListeners();
     }

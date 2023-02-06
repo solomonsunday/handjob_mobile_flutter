@@ -40,7 +40,11 @@ class PostDetailView extends StatelessWidget {
             children: [
               CommentView(post: post),
               Positioned(
-                  bottom: 0, left: 0, right: 0, child: CommentFormView()),
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: CommentFormView(),
+              ),
             ],
           ),
         );
