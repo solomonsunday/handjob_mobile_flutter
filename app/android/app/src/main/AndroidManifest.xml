@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
    <application
-        android:label="Handjob"
+        android:label="Handjobs"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon" 
         android:requestLegacyExternalStorage="true">
