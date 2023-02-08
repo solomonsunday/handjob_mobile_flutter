@@ -8,8 +8,9 @@
 import 'package:flutter/material.dart' as _i24;
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/dialogs/account_created.dialog.dart' as _i7;
-import 'package:handjob_mobile/models/applicant.model.dart' as _i28;
-import 'package:handjob_mobile/models/instant_job.model.dart' as _i27;
+import 'package:handjob_mobile/models/applicant.model.dart' as _i29;
+import 'package:handjob_mobile/models/contact.model.dart' as _i27;
+import 'package:handjob_mobile/models/instant_job.model.dart' as _i28;
 import 'package:handjob_mobile/models/post.model.dart' as _i26;
 import 'package:handjob_mobile/ui/application/application_view.dart' as _i21;
 import 'package:handjob_mobile/ui/application/rate_review/rate_review_view.dart'
@@ -310,8 +311,10 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i15.ChatDetailView: (data) {
+      final args = data.getArgs<ChatDetailViewArguments>(nullOk: false);
       return _i1.buildAdaptivePageRoute<dynamic>(
-        builder: (context) => const _i15.ChatDetailView(),
+        builder: (context) =>
+            _i15.ChatDetailView(key: args.key, contact: args.contact),
         settings: data,
       );
     },
@@ -446,6 +449,17 @@ class PostDetailViewArguments {
   final _i26.Post post;
 }
 
+class ChatDetailViewArguments {
+  const ChatDetailViewArguments({
+    this.key,
+    required this.contact,
+  });
+
+  final _i24.Key? key;
+
+  final _i27.Contact contact;
+}
+
 class ChangePasswordViewArguments {
   const ChangePasswordViewArguments({this.key});
 
@@ -460,7 +474,7 @@ class ApplicationViewArguments {
 
   final _i24.Key? key;
 
-  final _i27.InstantJob instantHire;
+  final _i28.InstantJob instantHire;
 }
 
 class RateReviewViewArguments {
@@ -472,9 +486,9 @@ class RateReviewViewArguments {
 
   final _i24.Key? key;
 
-  final _i27.InstantJob instantHire;
+  final _i28.InstantJob instantHire;
 
-  final _i28.Applicant applicant;
+  final _i29.Applicant applicant;
 }
 
 extension NavigatorStateExtension on _i25.NavigationService {
@@ -681,14 +695,17 @@ extension NavigatorStateExtension on _i25.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToChatDetailView([
+  Future<dynamic> navigateToChatDetailView({
+    _i24.Key? key,
+    required _i27.Contact contact,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.chatDetailView,
+        arguments: ChatDetailViewArguments(key: key, contact: contact),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -769,7 +786,7 @@ extension NavigatorStateExtension on _i25.NavigationService {
 
   Future<dynamic> navigateToApplicationView({
     _i24.Key? key,
-    required _i27.InstantJob instantHire,
+    required _i28.InstantJob instantHire,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -786,8 +803,8 @@ extension NavigatorStateExtension on _i25.NavigationService {
 
   Future<dynamic> navigateToRateReviewView({
     _i24.Key? key,
-    required _i27.InstantJob instantHire,
-    required _i28.Applicant applicant,
+    required _i28.InstantJob instantHire,
+    required _i29.Applicant applicant,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,

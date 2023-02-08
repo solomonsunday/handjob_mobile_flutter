@@ -1,7 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:handjob_mobile/models/conversation.model.dart';
+import 'package:handjob_mobile/utils/helpers.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
+import '../../../models/contact.model.dart';
 import '../../../models/instant_job.model.dart';
 import 'chat_view_model.dart';
 
@@ -12,9 +16,13 @@ class ChatView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ChatViewModel>.reactive(
         viewModelBuilder: () => ChatViewModel(),
-        onModelReady: (model) async {},
+        onModelReady: (model) {
+          model.initializeView();
+          model.getConversationList();
+        },
         builder: (context, model, child) {
           return Scaffold(
+            backgroundColor: ColorManager.kWhiteColor,
             appBar: Navbar(
               leadingIcon: Icon(
                 Icons.arrow_back,
@@ -65,14 +73,17 @@ class ChatView extends StatelessWidget {
                   Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: 8,
+                      itemCount: model.conversations.length,
                       itemBuilder: (BuildContext context, int index) {
-                        // Chat chat = model.chats[index];
-                        if (index > 3) {
-                          return ChatItem(time: 'Thur');
-                        }
+                        Conversation conversation = model.conversations[index];
                         return ChatItem(
-                          onTap: model.navigateToChatDetail,
+                          unReadCount: conversation.unReadCount ?? 0,
+                          imgUrl: conversation.partner?.imageUrl,
+                          firstName: conversation.partner?.firstName ?? '',
+                          lastName: conversation.partner?.lastName ?? '',
+                          message: conversation.message ?? '',
+                          createdAt: conversation.createdAt,
+                          onTap: () => model.navigateToChatDetail(conversation),
                         );
                       },
                     ),
@@ -88,10 +99,21 @@ class ChatView extends StatelessWidget {
 class ChatItem extends StatelessWidget {
   const ChatItem({
     Key? key,
-    this.time,
-    this.onTap,
+    this.imgUrl,
+    required this.unReadCount,
+    required this.firstName,
+    required this.lastName,
+    required this.message,
+    this.createdAt,
+    required this.onTap,
   }) : super(key: key);
-  final String? time;
+
+  final int unReadCount;
+  final String? imgUrl;
+  final String firstName;
+  final String lastName;
+  final String message;
+  final String? createdAt;
   final VoidCallback? onTap;
 
   @override
@@ -103,8 +125,8 @@ class ChatItem extends StatelessWidget {
           vertical: AppPadding.p16,
           horizontal: AppPadding.p24,
         ),
-        margin: EdgeInsets.only(bottom: AppPadding.p2),
-        decoration: BoxDecoration(
+        margin: const EdgeInsets.only(bottom: AppPadding.p2),
+        decoration: const BoxDecoration(
           color: ColorManager.kWhiteColor,
         ),
         child: Row(
@@ -116,12 +138,45 @@ class ChatItem extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
                 color: Color(0xffd9d9d9),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                      'https://xsgames.co/randomusers/avatar.php?g=male'),
-                ),
               ),
+              child: imgUrl == null
+                  ? Image.asset(
+                      'assets/images/logo.jpeg',
+                      fit: BoxFit.cover,
+                    )
+                  : CachedNetworkImage(
+                      placeholder: (context, url) => Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image:
+                                AssetImage("assets/images/default-avatar.jpeg"),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) {
+                        return Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: AssetImage("assets/images/logo.jpeg"),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                      imageUrl: imgUrl ?? "",
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
             ),
             SizedBox(width: AppSize.s8),
             Expanded(
@@ -130,14 +185,14 @@ class ChatItem extends StatelessWidget {
                 children: [
                   SizedBox(width: AppSize.s8),
                   Text(
-                    'Steven Okoro',
+                    '$firstName $lastName',
                     style: getBoldStyle(
                       color: ColorManager.kDarkColor,
                       fontSize: FontSize.s14,
                     ),
                   ),
                   Text(
-                    'Thanks for your service',
+                    '$message',
                     style: getRegularStyle(
                       color: ColorManager.kDarkCharcoal,
                       fontSize: FontSize.s12,
@@ -150,13 +205,13 @@ class ChatItem extends StatelessWidget {
             Column(
               children: [
                 Text(
-                  time ?? '21:44',
+                  getTimeDiff(createdAt!),
                   style: getRegularStyle(
                     color: ColorManager.kDarkCharcoal,
                     fontSize: FontSize.s8,
                   ),
                 ),
-                if (time == null)
+                if (unReadCount > 0)
                   Container(
                     padding: EdgeInsets.all(AppSize.s6),
                     decoration: BoxDecoration(
@@ -164,7 +219,7 @@ class ChatItem extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: Text(
-                      '1',
+                      '$unReadCount',
                       style: getSemiBoldStyle(
                         color: ColorManager.kWhiteColor,
                         fontSize: FontSize.s8,

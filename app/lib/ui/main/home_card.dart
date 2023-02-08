@@ -5,6 +5,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/services/post.service.dart';
+import 'package:handjob_mobile/utils/helpers.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:stacked/stacked.dart';
@@ -136,7 +137,7 @@ class HomeCard extends StatelessWidget {
                       const SizedBox(width: AppSize.s12),
                       Text(
                         // hoursago1MG (2439:4362)
-                        '11 hours ago',
+                        getTimeAgoDiff(post.createdAt!),
                         style: getMediumStyle(
                           fontSize: 10,
                           color: Color(0xff000000),
@@ -181,15 +182,12 @@ class HomeCard extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: onImageClick,
-                      child: Container(
-                        height: 320,
-                        width: double.infinity,
-                        child: (post.postMedia ?? []).isEmpty
-                            ? Image.asset(
-                                'assets/images/logo.jpeg',
-                                fit: BoxFit.cover,
-                              )
-                            : CachedNetworkImage(
+                      child: (post.postMedia ?? []).isEmpty
+                          ? Container()
+                          : Container(
+                              height: 320,
+                              width: double.infinity,
+                              child: CachedNetworkImage(
                                 placeholder: (context, url) => Container(
                                   decoration: const BoxDecoration(
                                     image: DecorationImage(
@@ -221,7 +219,7 @@ class HomeCard extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                      ),
+                            ),
                     ),
                     const SizedBox(
                       height: AppSize.s8,

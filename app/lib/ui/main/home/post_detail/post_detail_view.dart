@@ -94,6 +94,7 @@ class CommentView extends ViewModelWidget<PostDetailViewModel> {
                 itemBuilder: (context, index) {
                   return CommentItemView(
                     comment: model.comments[index],
+                    replyComment: model.replyComment,
                   );
                 }),
       ],

@@ -10,9 +10,10 @@ class CommentItemView extends StatelessWidget {
   CommentItemView({
     Key? key,
     required this.comment,
+    this.replyComment,
   }) : super(key: key);
   final Comment? comment;
-
+  final Function(Comment)? replyComment;
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CommentItemViewModel>.reactive(
@@ -58,16 +59,19 @@ class CommentItemView extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: AppSize.s12),
-                        Text(
-                          'Reply',
-                          style: getRegularStyle(
-                            color: ColorManager.kGrey4,
-                            fontSize: FontSize.s11,
+                        GestureDetector(
+                          onTap: () => replyComment!(comment!),
+                          child: Text(
+                            'Reply',
+                            style: getRegularStyle(
+                              color: ColorManager.kGrey4,
+                              fontSize: FontSize.s11,
+                            ),
                           ),
                         )
                       ]),
                       SizedBox(height: AppSize.s8),
-                      _buildCommentReplies(count: 10),
+                      _buildCommentReplies(count: 0),
                     ],
                   ),
                 ),

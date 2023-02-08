@@ -29,7 +29,7 @@ String getTimeDiff(String dt) {
   DateTime dt1 = DateTime.parse(dt);
   DateTime dt2 = DateTime.now();
 
-  Duration diff = dt1.difference(dt2);
+  Duration diff = dt2.difference(dt1);
 
   if (diff.inDays > 0) {
     return '${diff.inDays}d';
@@ -42,6 +42,28 @@ String getTimeDiff(String dt) {
   }
   if (diff.inSeconds > 0) {
     return '${diff.inSeconds}s';
+  }
+
+  return 'just now';
+}
+
+String getTimeAgoDiff(String dt) {
+  DateTime dt1 = DateTime.parse(dt);
+  DateTime dt2 = DateTime.now();
+
+  Duration diff = dt2.difference(dt1);
+
+  if (diff.inDays > 0) {
+    return '${diff.inDays} ${diff.inDays > 0 ? 'days' : 'day'} ago';
+  }
+  if (diff.inHours > 0) {
+    return '${diff.inHours} ${diff.inHours > 0 ? 'hours' : 'hour'} ago';
+  }
+  if (diff.inMinutes > 0) {
+    return '${diff.inMinutes} ${diff.inMinutes > 0 ? 'minutes' : 'minute'} ago';
+  }
+  if (diff.inSeconds > 0) {
+    return '${diff.inSeconds} ${diff.inSeconds > 0 ? 'seconds' : 'second'} ago';
   }
 
   return 'just now';

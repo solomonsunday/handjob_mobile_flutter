@@ -26,9 +26,13 @@ class PostDetailViewModel extends ReactiveViewModel {
   }
 
   Future<void> getComments() async {
+    _commentService.comments.clear();
+    notifyListeners();
     try {
       await _commentService.getComments(postId!);
-    } on DioError catch (e) {}
+    } on DioError catch (e) {
+      print('error commenting: ${e}');
+    }
   }
 
   Future<void> createComment() async {
@@ -45,6 +49,14 @@ class PostDetailViewModel extends ReactiveViewModel {
       setBusy(false);
       notifyListeners();
     }
+  }
+
+  replyComment(Comment comment) {
+    String textToSelect = '@${comment.authorEmployer}';
+    messageController.text = "@${comment.authorEmployer} ";
+    messageController.selection =
+        TextSelection(baseOffset: 0, extentOffset: textToSelect.length - 1);
+    notifyListeners();
   }
 
   @override

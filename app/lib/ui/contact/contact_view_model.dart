@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/enums/bottom_sheet_type.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../app/app.locator.dart';
 import '../../models/contact.model.dart';
@@ -14,6 +16,7 @@ const String CONTACT_LIST_REQUEST = "CONTACT_LIST_REQUEST";
 const String TOP_SUGGESTION_CONTACT_LIST_REQUEST =
     "TOP_SUGGESTION_CONTACT_LIST_REQUEST";
 const String CONNECTION_REQUEST = "CONNECTION_REQUEST";
+const String DELETE_CONTACT = "DELETE_CONTACT";
 
 const String AUDIO_CALL = "AUDIO_CALL";
 const String VIDEO_CALL = "VIDEO_CALL";
@@ -24,6 +27,7 @@ class ContactViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
   final _contactService = locator<ContactService>();
   final _bottomSheetService = locator<BottomSheetService>();
+  final _dialogService = locator<DialogService>();
 
   int? get contactListCount => _contactService.contactListCount;
   List<Contact>? get contactList => _contactService.contactList;
@@ -76,41 +80,27 @@ class ContactViewModel extends ReactiveViewModel {
     }
   }
 
-  Future<void> acceptContact(String contactId) async {
-    var formData = {"contactId": contactId};
-
-    try {
-      await _contactService.acceptContact(formData);
-      await _contactService.getConnectionRequests();
-      await _contactService.getContacts();
-      await _contactService.getContactsCount();
-    } on DioError catch (e) {
-    } finally {
-      setBusyForObject(CONNECTION_REQUEST, false);
-    }
-  }
-
-  Future<void> rejectContact(String accountId) async {
-    try {
-      await _contactService.rejectContact(accountId);
-      await _contactService.getConnectionRequests();
-      await _contactService.getContacts();
-      await _contactService.getContactsCount();
-    } on DioError catch (e) {
-    } finally {
-      setBusyForObject(CONNECTION_REQUEST, false);
-    }
-  }
-
   @override
   List<ReactiveServiceMixin> get reactiveServices => [_contactService];
 
   handleDeleteContact(String id) async {
+    var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Are you sure you want delete this contact?",
+    );
+    if (!response!.confirmed) return;
+
+    setBusyForObject(DELETE_CONTACT, true);
     try {
       await _contactService.deleteContact(id);
+      await _contactService.getContacts();
+      Fluttertoast.showToast(
+        msg: 'Contact removed successfully!',
+        toastLength: Toast.LENGTH_LONG,
+      );
     } on DioError catch (e) {
     } finally {
-      setBusyForObject(CONNECTION_REQUEST, false);
+      setBusyForObject(DELETE_CONTACT, false);
     }
   }
 
@@ -119,14 +109,23 @@ class ContactViewModel extends ReactiveViewModel {
     print('navigate ');
   }
 
-  handleChat(Contact p1) {}
+  handleChat(Contact contact) {
+    _navigationService.navigateTo(
+      Routes.chatDetailView,
+      arguments: ChatDetailViewArguments(contact: contact),
+    );
+  }
 
-  handleAudioCall(Contact p1) {
-    _bottomSheetService.showCustomSheet(
-      variant: BottomSheetType.outgoing_call,
-      title: "Outgoing Voice Call",
-      data: {"type": "audio"},
-      isScrollControlled: true,
+  handleAudioCall(Contact contact) {
+    _makePhoneCall(contact.phoneNumber!);
+  }
+
+  _makePhoneCall(String phoneNumber) async {
+    await launchUrl(
+      Uri(
+        scheme: 'tel',
+        path: phoneNumber,
+      ),
     );
   }
 

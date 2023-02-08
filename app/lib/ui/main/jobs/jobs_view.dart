@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -134,8 +135,39 @@ class JobItem extends StatelessWidget {
                       ),
                       child: instantJob.company?.imageUrl == null
                           ? Image.asset('assets/images/logo.jpeg')
-                          : Image.network(
-                              'https://xsgames.co/randomusers/avatar.php?g=male'),
+                          : CachedNetworkImage(
+                              placeholder: (context, url) => Container(
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image:
+                                        AssetImage("assets/images/logo.jpeg"),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) {
+                                return Container(
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      image:
+                                          AssetImage("assets/images/logo.jpeg"),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                );
+                              },
+                              imageUrl: instantJob.company!.imageUrl!,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
                     ),
                     const SizedBox(width: AppSize.s8),
                     Text(
@@ -207,17 +239,20 @@ class JobItem extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(width: AppSize.s4),
-                    Row(
-                      children: [
-                        Icon(Icons.pin_drop_outlined),
-                        Text(
-                          instantJob.location ?? "",
-                          softWrap: true,
-                          maxLines: 2,
-                          style:
-                              getMediumStyle(color: ColorManager.kDarkCharcoal),
-                        ),
-                      ],
+                    Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Icon(Icons.pin_drop_outlined),
+                          Text(
+                            instantJob.location ?? "",
+                            softWrap: false,
+                            maxLines: 2,
+                            style: getMediumStyle(
+                                color: ColorManager.kDarkCharcoal),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

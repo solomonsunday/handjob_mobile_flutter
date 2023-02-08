@@ -130,9 +130,9 @@ class ContactService with ReactiveServiceMixin {
 
   Future deleteContact(String contactId) async {
     var response = await dioClient.delete(
-      ' /contact/$contactId',
+      "/contact/$contactId",
     );
-
-    return Contact.fromJson(response.data);
+    print('response to delete ${response.data}');
+    return true;
   }
 }

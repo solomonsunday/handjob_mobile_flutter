@@ -1,7 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
+import '../../../../models/contact.model.dart';
+import '../../../../models/conversation.model.dart';
 import 'chat_detail_view_model.dart';
 
 const String ARCHIVE = 'ARCHIVE';
@@ -11,56 +16,134 @@ const String REPORT = 'REPORT';
 const String BLOCK = 'BLOCK';
 
 class ChatDetailView extends StatelessWidget {
-  const ChatDetailView({Key? key}) : super(key: key);
+  const ChatDetailView({
+    Key? key,
+    required this.contact,
+  }) : super(key: key);
+
+  final Contact contact;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ChatDetailViewModel>.reactive(
         viewModelBuilder: () => ChatDetailViewModel(),
-        onModelReady: (model) async {},
+        onModelReady: (model) {
+          model.getChatsWithPartner(contact);
+        },
         builder: (context, model, child) {
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: ColorManager.kWhiteColor,
-              shadowColor: ColorManager.kGrey1,
-              leading: GestureDetector(
-                onTap: model.navigateBack,
-                child: Icon(
-                  Icons.arrow_back,
-                  color: ColorManager.kDarkColor,
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.white,
+              flexibleSpace: SafeArea(
+                child: Container(
+                  padding: EdgeInsets.only(right: 16),
+                  child: Row(
+                    children: <Widget>[
+                      IconButton(
+                        onPressed: () {
+                          model.navigateBack();
+                        },
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      SizedBox(
+                        width: 36,
+                        height: 36,
+                        child: contact.imageUrl == null
+                            ? Image.asset(
+                                'assets/images/logo.jpeg',
+                                fit: BoxFit.cover,
+                              )
+                            : CachedNetworkImage(
+                                placeholder: (context, url) => Container(
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      image:
+                                          AssetImage("assets/images/logo.jpeg"),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) {
+                                  return Container(
+                                    decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            "assets/images/logo.jpeg"),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                imageUrl: contact.imageUrl!,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ),
+                      SizedBox(
+                        width: 12,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              "${contact.firstName} ${contact.lastName}",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            Text(
+                              "Online",
+                              style: getRegularStyle(
+                                  color: ColorManager.kSecondaryColor,
+                                  fontSize: 11),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(
+                        Icons.settings,
+                        color: Colors.black54,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              titleSpacing: 0,
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Steven Okoro',
-                    style: getBoldStyle(
-                      color: ColorManager.kDarkColor,
-                      fontSize: FontSize.s14,
-                    ),
-                  ),
-                  Text(
-                    'Online',
-                    style: getRegularStyle(
-                      color: ColorManager.kDarkCharcoal,
-                      fontSize: FontSize.s11,
-                    ),
-                  ),
-                ],
               ),
               actions: [
-                Icon(
-                  Icons.videocam,
-                  size: AppSize.s24,
-                  color: ColorManager.kDarkColor,
+                GestureDetector(
+                  onTap: () => model.handleVideoCall(contact),
+                  child: Icon(
+                    Icons.videocam,
+                    size: AppSize.s24,
+                    color: ColorManager.kDarkColor,
+                  ),
                 ),
                 SizedBox(width: AppSize.s16),
-                Icon(
-                  Icons.call,
-                  size: AppSize.s24,
-                  color: ColorManager.kDarkColor,
+                GestureDetector(
+                  onTap: () => model.handleAudioCall(contact),
+                  child: Icon(
+                    Icons.call,
+                    size: AppSize.s24,
+                    color: ColorManager.kDarkColor,
+                  ),
                 ),
                 SizedBox(width: AppSize.s16),
                 PopupMenuButton(
@@ -134,18 +217,27 @@ class ChatDetailView extends StatelessWidget {
             ),
             body: Stack(
               children: [
+                const SizedBox(height: AppSize.s12),
                 ListView.builder(
-                  itemCount: 20,
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: model.chatList.length,
                   itemBuilder: (context, index) {
-                    return Text('Chat text');
+                    Conversation conversation = model.chatList[index];
+
+                    print('conversation: ${conversation.message}');
+                    if (conversation.senderId != model.user?.id) {
+                      return SenderChatWidget(chat: conversation);
+                    }
+                    return ReceiverChatWidget(chat: conversation);
                   },
                 ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
+                Align(
+                  alignment: Alignment.bottomLeft,
                   child: Container(
-                    padding: const EdgeInsets.all(AppPadding.p24),
+                    height: 65,
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       color: ColorManager.kWhiteColor,
                     ),
@@ -155,38 +247,67 @@ class ChatDetailView extends StatelessWidget {
                           child: InputField(
                             hintText: 'Start typing here...',
                             fillColor: ColorManager.kWhiteColor,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(AppSize.s12),
+                              borderSide: BorderSide(
+                                color: ColorManager.kGrey1,
+                              ),
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(AppSize.s12),
                               borderSide: BorderSide(
-                                color: ColorManager.kDarkColor,
+                                color: ColorManager.kGrey1,
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(AppSize.s12),
                               borderSide: BorderSide(
-                                color: ColorManager.kGrey3,
+                                color: ColorManager.kGrey1,
                               ),
                             ),
-                            suffixIcon: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Icon(Icons.attach_file),
-                                ),
-                                SizedBox(width: AppSize.s8),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Icon(Icons.photo),
-                                ),
-                                SizedBox(width: AppSize.s16),
-                              ],
-                            ),
+                            // suffixIcon: Row(
+                            //   mainAxisSize: MainAxisSize.min,
+                            //   children: [
+                            //     GestureDetector(
+                            //       onTap: () {},
+                            //       child: Icon(
+                            //         Icons.attach_file,
+                            //         size: AppSize.s24,
+                            //       ),
+                            //     ),
+                            //     SizedBox(width: AppSize.s8),
+                            //     GestureDetector(
+                            //       onTap: () {},
+                            //       child: Icon(
+                            //         Icons.photo,
+                            //         size: AppSize.s24,
+                            //       ),
+                            //     ),
+                            //     SizedBox(width: AppSize.s16),
+                            //   ],
+                            // ),
+                            controller: model.chatMessageController,
                           ),
                         ),
-                        Icon(
-                          Icons.mic,
-                          size: AppSize.s24,
+                        SizedBox(width: 4),
+                        // model.chatMessageController.text.isEmpty
+                        //     ? GestureDetector(
+                        //         onTap: () {},
+                        //         child: Icon(
+                        //           Icons.mic,
+                        //           size: AppSize.s24,
+                        //         ),
+                        //       )
+                        //     :
+                        GestureDetector(
+                          onTap: () => model.createChat(contact),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.send,
+                              size: AppSize.s24,
+                            ),
+                          ),
                         )
                       ],
                     ),
@@ -196,5 +317,123 @@ class ChatDetailView extends StatelessWidget {
             ),
           );
         });
+  }
+}
+
+class SenderChatWidget extends StatelessWidget {
+  const SenderChatWidget({
+    super.key,
+    required this.chat,
+  });
+
+  final Conversation chat;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              constraints: BoxConstraints(
+                maxWidth: 200,
+              ),
+              margin: const EdgeInsets.symmetric(
+                horizontal: AppPadding.p8,
+                vertical: AppSize.s4,
+              ),
+              padding: const EdgeInsets.all(AppPadding.p10),
+              decoration: BoxDecoration(
+                color: ColorManager.kSecondaryColor,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(12.0),
+                  bottomRight: Radius.circular(12.0),
+                  bottomLeft: Radius.circular(12.0),
+                ),
+              ),
+              child: Text(
+                '${chat.message}',
+                style: getRegularStyle(
+                  color: ColorManager.kWhiteColor,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 12.0),
+          child: Text(
+            '19:38',
+            style: getRegularStyle(
+              color: ColorManager.kDarkColor,
+              fontSize: 9,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ReceiverChatWidget extends StatelessWidget {
+  const ReceiverChatWidget({
+    super.key,
+    required this.chat,
+  });
+
+  final Conversation chat;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              constraints: BoxConstraints(
+                maxWidth: 200,
+              ),
+              margin: const EdgeInsets.symmetric(
+                horizontal: AppPadding.p8,
+                vertical: AppSize.s4,
+              ),
+              padding: const EdgeInsets.all(AppPadding.p10),
+              decoration: const BoxDecoration(
+                color: ColorManager.kSecondaryColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(12.0),
+                  bottomRight: Radius.circular(12.0),
+                  bottomLeft: Radius.circular(12.0),
+                ),
+              ),
+              child: Text(
+                '${chat.message}',
+                style: getRegularStyle(
+                  color: ColorManager.kWhiteColor,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 12.0),
+          child: Text(
+            DateFormat.Hm().format(DateTime.parse(chat.createdAt!)),
+            style: getRegularStyle(
+              color: ColorManager.kDarkColor,
+              fontSize: 9,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

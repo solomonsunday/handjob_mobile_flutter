@@ -25,9 +25,10 @@ class CommentService with ReactiveServiceMixin {
   Meta? _commentMeta;
   Meta? get commentMeta => _commentMeta;
 
-  Future<List<Comment>> getComments(String postId) async {
+  Future<List<Comment>> getComments(String postId,
+      {int page = 1, int pageSize = 10}) async {
     var response = await dioClient.get(
-      '​/comment​/post​/$postId',
+      "/comment/post/$postId?page=$page&take=$pageSize",
     );
     _commentMeta = Meta.fromJson(response.data["meta"]);
     List<Map> mappedPosts =
