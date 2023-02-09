@@ -36,8 +36,8 @@ class ChatDetailViewModel extends ReactiveViewModel {
   // This is what you're looking for!
   void scrollDown() {
     scrollController.animateTo(
-      scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 300),
+      0.0,
+      duration: const Duration(milliseconds: 2000),
       curve: Curves.fastOutSlowIn,
     );
   }
@@ -68,7 +68,6 @@ class ChatDetailViewModel extends ReactiveViewModel {
   List<ReactiveServiceMixin> get reactiveServices => [_chatService];
 
   void createChat(Contact contact) async {
-    scrollDown();
     Map<String, dynamic> formData = {
       "audioUrl": "",
       "createdAt": DateTime.now().toIso8601String(),
@@ -82,6 +81,7 @@ class ChatDetailViewModel extends ReactiveViewModel {
     try {
       await _chatService.createChat(formData);
       // await _chatService.getChatsWithPartner(contact.id!);
+
     } on DioError catch (e) {
       print('error: ${e}');
     } finally {
