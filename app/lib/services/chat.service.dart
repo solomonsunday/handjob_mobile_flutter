@@ -7,25 +7,41 @@ import '../client/dio_client.dart';
 import '../models/chat.model.dart';
 import '../models/conversation.model.dart';
 
+const String CHAT_SOCKET_SERVER_URL =
+    'https://api-jobplicant.herokuapp.com/notigateway';
+
 class ChatService with ReactiveServiceMixin {
-  IO.Socket socket = IO.io('https://api-jobplicant.herokuapp.com/notigateway');
   Dio dioClient = locator<DioClient>().dio;
 
-  ChatService() {
-    socket.on('connect', (data) => print('connected'));
-    socket.onConnect((_) {
-      print('connect');
-      socket.emit('msg', 'test');
-    });
-    socket.on('event', (data) => print(data));
-    socket.onDisconnect((_) => print('disconnect'));
-    socket.on('fromServer', (_) => print(_));
+  late IO.Socket socket;
 
+  ChatService() {
     listenToReactiveValues([
       chats,
       // chatConversation,
       conversationList,
     ]);
+  }
+
+  initSocket() {
+    socket = IO.io(CHAT_SOCKET_SERVER_URL, <String, dynamic>{
+      'autoConnect': false,
+      'transports': ['websocket'],
+    });
+    socket.connect();
+    socket.onConnect((_) {
+      print('Connection established');
+      socket.on("chat_msg_to_client", (data) {
+        print('chat message realtime: $data');
+        Conversation content = Conversation.fromJson(data);
+        print('socket chat: ${content.toJson()}');
+        _chats = [...chats, content];
+        notifyListeners();
+      });
+    });
+    socket.onDisconnect((_) => print('Connection Disconnection'));
+    socket.onConnectError((err) => print(err));
+    socket.onError((err) => print(err));
   }
 
   IO.Socket get chatSocket => socket;

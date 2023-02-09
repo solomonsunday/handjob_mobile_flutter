@@ -19,7 +19,6 @@ class ChatViewModel extends ReactiveViewModel {
   List<String> chats = [];
   void navigateBack() => _navigationService.back();
 
-  IO.Socket get chatSocket => _chatService.socket;
   User? get user => _authenticationService.currentUser;
   List<Contact>? get contacts => _contactService.contactList;
   List<Conversation> get conversations => _chatService.conversationList;
@@ -45,15 +44,6 @@ class ChatViewModel extends ReactiveViewModel {
     await _contactService.getContacts();
     // await _chatService.getChats();
     print('initialize view');
-    chatSocket.on("chat_msg_to_client", (data) {
-      print("chat message sent to clients");
-      print('chat data: $data');
-      if (data && data?.recieverId == user?.id) {
-        // dispatch(getConversationWithPartnerId(data?.senderId));
-        // dispatch(getConversationList());
-
-      }
-    });
   }
 
   void getConversationList() async {

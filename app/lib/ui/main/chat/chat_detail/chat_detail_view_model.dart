@@ -21,8 +21,8 @@ class ChatDetailViewModel extends ReactiveViewModel {
 
   User? get user => _authenticationService.currentUser;
 
-  List<Conversation> _chatList = [];
-  List<Conversation> get chatList => _chatList;
+  // List<Conversation> _chatList = [];
+  List<Conversation> get chatList => _chatService.chats;
 
   bool _isSendText = false;
   bool get isSendText => _isSendText;
@@ -49,7 +49,6 @@ class ChatDetailViewModel extends ReactiveViewModel {
       await _chatService.markAsRead(contact.id!);
     } on DioError catch (e) {
     } finally {
-      _chatList = _chatService.chats;
       notifyListeners();
     }
   }
