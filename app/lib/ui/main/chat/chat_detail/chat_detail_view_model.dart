@@ -19,6 +19,8 @@ class ChatDetailViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
   final _bottomSheetService = locator<BottomSheetService>();
 
+  final ScrollController scrollController = ScrollController();
+
   User? get user => _authenticationService.currentUser;
 
   // List<Conversation> _chatList = [];
@@ -30,6 +32,15 @@ class ChatDetailViewModel extends ReactiveViewModel {
   String get chatMessage => _chatMessage;
 
   TextEditingController chatMessageController = TextEditingController();
+
+  // This is what you're looking for!
+  void scrollDown() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
 
   handleChange(String value) {
     _chatMessage = value;
@@ -57,6 +68,7 @@ class ChatDetailViewModel extends ReactiveViewModel {
   List<ReactiveServiceMixin> get reactiveServices => [_chatService];
 
   void createChat(Contact contact) async {
+    scrollDown();
     Map<String, dynamic> formData = {
       "audioUrl": "",
       "createdAt": DateTime.now().toIso8601String(),

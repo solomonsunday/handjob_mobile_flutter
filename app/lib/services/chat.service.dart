@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:handjob_mobile/models/chat-payload.model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:stacked/stacked.dart';
 
@@ -52,6 +54,7 @@ class ChatService with ReactiveServiceMixin {
   List<Conversation> get conversationList => _conversationList;
 
   Future<bool> createChat(Map<String, dynamic> formData) async {
+    // socket.emit('chat_msg_to_client', formData);
     var response = await dioClient.post('/chat', data: formData);
     print('response data : ${response.data}');
 

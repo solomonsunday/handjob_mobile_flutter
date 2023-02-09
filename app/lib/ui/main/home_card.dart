@@ -35,6 +35,7 @@ class HomeCard extends StatelessWidget {
     return ViewModelBuilder<HomeCardViewModel>.reactive(
         viewModelBuilder: () => HomeCardViewModel(),
         builder: (context, model, _) {
+          print('postm edia res: ${post.postMedia}');
           return Container(
             width: double.infinity,
             decoration: const BoxDecoration(
@@ -184,7 +185,7 @@ class HomeCard extends StatelessWidget {
                       onTap: onImageClick,
                       child: (post.postMedia ?? []).isEmpty
                           ? Container()
-                          : Container(
+                          : SizedBox(
                               height: 320,
                               width: double.infinity,
                               child: CachedNetworkImage(
@@ -208,7 +209,7 @@ class HomeCard extends StatelessWidget {
                                     ),
                                   );
                                 },
-                                imageUrl: post.postMedia![0],
+                                imageUrl: post.postMedia![0]['url'],
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
                                   decoration: BoxDecoration(

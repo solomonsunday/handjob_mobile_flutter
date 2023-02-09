@@ -215,22 +215,26 @@ class ChatDetailView extends StatelessWidget {
                 SizedBox(width: AppSize.s16),
               ],
             ),
-            body: Stack(
+            body: Column(
+              mainAxisSize: MainAxisSize.max,
               children: [
-                const SizedBox(height: AppSize.s12),
-                ListView.builder(
-                  padding: EdgeInsets.only(top: 10, bottom: 10),
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: model.chatList.length,
-                  itemBuilder: (context, index) {
-                    Conversation conversation = model.chatList[index];
+                Expanded(
+                  child: ListView.builder(
+                    controller: model.scrollController,
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: model.chatList.length,
+                    reverse: true,
+                    itemBuilder: (context, index) {
+                      Conversation conversation =
+                          model.chatList.reversed.toList()[index];
 
-                    print('conversation: ${conversation.message}');
-                    if (conversation.senderId != model.user?.id) {
-                      return SenderChatWidget(chat: conversation);
-                    }
-                    return ReceiverChatWidget(chat: conversation);
-                  },
+                      if (conversation.senderId != model.user?.id) {
+                        return SenderChatWidget(chat: conversation);
+                      }
+                      return ReceiverChatWidget(chat: conversation);
+                    },
+                  ),
                 ),
                 Align(
                   alignment: Alignment.bottomLeft,
