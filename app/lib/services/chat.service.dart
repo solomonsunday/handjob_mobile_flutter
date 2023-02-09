@@ -74,6 +74,7 @@ class ChatService with ReactiveServiceMixin {
   }
 
   Future<Chat> getChatsWithPartner(String partnerId) async {
+    _chats = [];
     var response =
         await dioClient.get("/chat/conversation-messages/$partnerId");
     print('response data: ${response.data}');
