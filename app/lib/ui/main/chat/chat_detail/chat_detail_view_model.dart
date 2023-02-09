@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/models/chat-payload.model.dart';
 import 'package:handjob_mobile/services/chat.service.dart';
+import 'package:handjob_mobile/ui/main/main_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -12,12 +14,16 @@ import '../../../../models/contact.model.dart';
 import '../../../../models/conversation.model.dart';
 import '../../../../models/user.model.dart';
 import '../../../../services/authentication.service.dart';
+import '../../../../services/shared.service.dart';
+
+const String CREATE_CHAT = "CREATE_CHAT";
 
 class ChatDetailViewModel extends ReactiveViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _chatService = locator<ChatService>();
   final _navigationService = locator<NavigationService>();
   final _bottomSheetService = locator<BottomSheetService>();
+  final _sharedService = locator<SharedService>();
 
   final ScrollController scrollController = ScrollController();
 
@@ -48,8 +54,10 @@ class ChatDetailViewModel extends ReactiveViewModel {
   }
 
   void navigateBack() {
-    print('back');
-    _navigationService.back();
+    _sharedService.setCurrentIndex(MainView.CHAT_VIEW);
+    _navigationService.replaceWith(
+      Routes.mainView,
+    );
   }
 
   handleSearch(String p1) {}
@@ -68,6 +76,8 @@ class ChatDetailViewModel extends ReactiveViewModel {
   List<ReactiveServiceMixin> get reactiveServices => [_chatService];
 
   void createChat(Contact contact) async {
+    if (chatMessageController.text.isEmpty) return;
+    setBusyForObject(CREATE_CHAT, true);
     Map<String, dynamic> formData = {
       "audioUrl": "",
       "createdAt": DateTime.now().toIso8601String(),
@@ -86,7 +96,7 @@ class ChatDetailViewModel extends ReactiveViewModel {
       print('error: ${e}');
     } finally {
       chatMessageController.clear();
-
+      setBusyForObject(CREATE_CHAT, false);
       notifyListeners();
     }
   }

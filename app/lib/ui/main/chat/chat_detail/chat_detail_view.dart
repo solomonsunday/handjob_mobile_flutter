@@ -304,12 +304,17 @@ class ChatDetailView extends StatelessWidget {
                         //       )
                         //     :
                         GestureDetector(
-                          onTap: () => model.createChat(contact),
+                          onTap: model.busy(CREATE_CHAT)
+                              ? () {}
+                              : () => model.createChat(contact),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(
                               Icons.send,
                               size: AppSize.s24,
+                              color: model.busy(CREATE_CHAT)
+                                  ? ColorManager.kGrey4
+                                  : ColorManager.kDarkColor,
                             ),
                           ),
                         )
@@ -371,7 +376,7 @@ class SenderChatWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 12.0),
           child: Text(
-            '19:38',
+            DateFormat.Hm().format(DateTime.parse(chat.createdAt!)),
             style: getRegularStyle(
               color: ColorManager.kDarkColor,
               fontSize: 9,
