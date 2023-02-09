@@ -145,9 +145,12 @@ class ConnectionRequestItem extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: AppSize.s12),
-                    ContactButton(
+                    if (!model.accepted)
+                      ContactButton(
                         onPressed: () => model.acceptContact(id),
-                        title: buttonTitle)
+                        title: buttonTitle,
+                        busy: model.busy(ACCEPT_CONNECTION),
+                      )
                   ],
                 ),
                 Positioned(
@@ -170,9 +173,11 @@ class ContactButton extends StatelessWidget {
     Key? key,
     required this.title,
     required this.onPressed,
+    this.busy = false,
   }) : super(key: key);
   final Function() onPressed;
   final String title;
+  final bool busy;
 
   @override
   Widget build(BuildContext context) {
@@ -187,12 +192,30 @@ class ContactButton extends StatelessWidget {
           color: ColorManager.kDarkColor,
           borderRadius: BorderRadius.circular(AppSize.s12),
         ),
-        child: Text(
-          title,
-          style: getRegularStyle(
-            color: ColorManager.kWhiteColor,
-            fontSize: FontSize.s10,
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title,
+              style: getRegularStyle(
+                color: ColorManager.kWhiteColor,
+                fontSize: FontSize.s10,
+              ),
+            ),
+            const SizedBox(width: 8),
+            busy
+                ? const SizedBox(
+                    height: 16,
+                    width: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1,
+                      valueColor:
+                          AlwaysStoppedAnimation(ColorManager.kWhiteColor),
+                      backgroundColor: ColorManager.kGrey2,
+                    ),
+                  )
+                : Container(),
+          ],
         ),
       ),
     );
@@ -206,7 +229,15 @@ class ConnectionRequestItemViewModel extends BaseViewModel {
   final _contactService = locator<ContactService>();
   final _dialogService = locator<DialogService>();
 
+  bool _accepted = false;
+  bool get accepted => _accepted;
+
   Future<void> acceptContact(String contactId) async {
+    var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Do you really want accept the connection?",
+    );
+    if (!response!.confirmed) return;
     var formData = {"contactId": contactId};
     setBusyForObject(ACCEPT_CONNECTION, true);
     try {
@@ -214,9 +245,9 @@ class ConnectionRequestItemViewModel extends BaseViewModel {
       await _contactService.getConnectionRequests();
       await _contactService.getContacts();
       await _contactService.getContactsCount();
+      _accepted = true;
     } on DioError catch (e) {
     } finally {
-      setBusyForObject(CONNECTION_REQUEST, false);
       setBusyForObject(ACCEPT_CONNECTION, false);
       notifyListeners();
     }

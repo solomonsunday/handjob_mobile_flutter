@@ -111,13 +111,13 @@ class ContactService with ReactiveServiceMixin {
     return true;
   }
 
-  Future<Contact> acceptContact(Map formData) async {
+  Future<bool> acceptContact(Map formData) async {
     var response = await dioClient.post(
       '/contact/accept',
       data: formData,
     );
-
-    return Contact.fromJson(response.data);
+    print('accept contact respone data: ${response.data}');
+    return true;
   }
 
   Future<Contact> rejectContact(String accountId) async {

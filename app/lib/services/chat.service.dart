@@ -56,7 +56,7 @@ class ChatService with ReactiveServiceMixin {
   Future<bool> createChat(Map<String, dynamic> formData) async {
     // socket.emit('chat_msg_to_client', formData);
     var response = await dioClient.post('/chat', data: formData);
-    print('response data : ${response.data}');
+    // print('response data : ${response.data}');
 
     return true;
   }
