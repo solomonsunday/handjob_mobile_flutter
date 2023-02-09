@@ -30,11 +30,9 @@ class ChatService with ReactiveServiceMixin {
     });
     socket.connect();
     socket.onConnect((_) {
-      print('Connection established');
+      // print('Connection established');
       socket.on("chat_msg_to_client", (data) {
-        print('chat message realtime: $data');
         Conversation content = Conversation.fromJson(data);
-        print('socket chat: ${content.toJson()}');
         _chats = [...chats, content];
         notifyListeners();
       });
