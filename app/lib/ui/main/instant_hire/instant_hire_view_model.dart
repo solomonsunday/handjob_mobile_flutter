@@ -47,6 +47,21 @@ class InstantHireViewModel extends BaseViewModel {
   String? get selectedProfession => _selectedProfession;
   int get currentIndex => _sharedService.currentIndex;
 
+  bool _isNow = false;
+  bool get isNow => _isNow;
+
+  handleChangeIsNow(bool value) {
+    _isNow = value;
+    if (value) {
+      DateFormat formatter = DateFormat('dd-MMM-yyyy');
+      String formatted = formatter.format(DateTime.now());
+      startDateController.text = formatted;
+    } else {
+      startDateController.text = "";
+    }
+    notifyListeners();
+  }
+
   void handleSelectedProfession(String? value) {
     _selectedProfession = value;
     serviceNeedController.text = value ?? "";
@@ -162,18 +177,38 @@ class InstantHireViewModel extends BaseViewModel {
     }
   }
 
+  String _errorMessage = "";
+  String get errorMessage => _errorMessage;
+
   Future requestInstantService() async {
     runBusyFuture(requestInstantServiceTask());
   }
 
   Future requestInstantServiceTask() async {
+    if (serviceNeedController.text.isEmpty ||
+        serviceLocationController.text.isEmpty ||
+        startDateController.text.isEmpty ||
+        endDateController.text.isEmpty ||
+        selectedStateValue == null ||
+        selectedLgaValue == null ||
+        describeServiceController.text.isEmpty) {
+      _errorMessage = "Some fields are required!";
+      notifyListeners();
+      return;
+    }
+
+    _errorMessage = "";
+    notifyListeners();
+
     DateFormat df = DateFormat("dd-MMM-yyyy");
     String input = df.parse(startDateController.text).toIso8601String();
     // String newDate = DateFormat.yMMMEd().format(input);
 
     var formData = {
       "service": serviceNeedController.text,
-      "meetupLocation": serviceLocationController.text,
+      "meetupLocation": serviceLocationController.text.isNotEmpty
+          ? serviceLocationController.text
+          : "",
       "lat": lat,
       "long": lon,
       "state": selectedStateValue,
@@ -182,7 +217,7 @@ class InstantHireViewModel extends BaseViewModel {
           ? meetupLocationController.text
           : serviceLocationController.text,
       "startDate": dateToIso8601String(startDateController.text),
-      "now": false, //
+      "now": isNow, //
       "endDate": dateToIso8601String(endDateController.text),
       "description": describeServiceController.text,
       "requesterLocation": {"lat": lat, "long": lon}

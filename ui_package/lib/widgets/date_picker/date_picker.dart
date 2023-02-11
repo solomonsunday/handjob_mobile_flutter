@@ -15,6 +15,7 @@ class DatePicker extends StatefulWidget {
   final DateTime? initialDate;
   final DateTime? firstDate;
   final DateTime? lastDate;
+  final bool isNow;
 
   DatePicker({
     Key? key,
@@ -29,6 +30,7 @@ class DatePicker extends StatefulWidget {
     this.initialDate,
     this.firstDate,
     this.lastDate,
+    this.isNow = false,
   });
 
   @override
@@ -49,17 +51,18 @@ class _DatePickerState extends State<DatePicker> {
 
   Future showCalender(BuildContext context) async {
     DateTime? dateTime = await showDatePicker(
-        context: context,
-        initialDate: widget.initialDate ?? DateTime.now(),
-        firstDate: widget.firstDate ??
-            DateTime.now().subtract(
-              Duration(days: 200000),
-            ),
-        lastDate: widget.lastDate ??
-            DateTime.now().add(
-              Duration(days: 200000),
-            ),
-        fieldLabelText: widget.label);
+      context: context,
+      initialDate: widget.initialDate ?? DateTime.now(),
+      firstDate: widget.firstDate ??
+          DateTime.now().subtract(
+            Duration(days: 200000),
+          ),
+      lastDate: widget.lastDate ??
+          DateTime.now().add(
+            Duration(days: 200000),
+          ),
+      fieldLabelText: widget.label,
+    );
 
     if (dateTime != null) {
       print(widget.dateFormat);

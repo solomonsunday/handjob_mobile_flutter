@@ -2,6 +2,12 @@ import 'dart:io';
 
 import 'package:intl/intl.dart';
 
+toDefaultDtFormat(String str) {
+  DateFormat df = DateFormat("dd-MMM-yyyy");
+  DateTime input = df.parse(str);
+  return input;
+}
+
 dateToIso8601String(String str) {
   DateFormat df = DateFormat("dd-MMM-yyyy");
   DateTime input = df.parse(str);

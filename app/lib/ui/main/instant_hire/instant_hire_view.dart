@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/ui/main/instant_hire/instant_hire_view_model.dart';
+import 'package:handjob_mobile/utils/helpers.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
@@ -216,16 +217,68 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
           Row(
             children: [
               Expanded(
-                child: DatePicker(
-                  label: 'Start date *',
-                  controller: model.startDateController,
-                  onSelected: model.handleStartDate,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'Start date',
+                          style: getRegularStyle(
+                            color: ColorManager.kDarkColor,
+                          ),
+                        ),
+                        Text(
+                          '*',
+                          style: getRegularStyle(
+                            color: ColorManager.kRed,
+                          ),
+                        ),
+                        Text(
+                          '(',
+                          style: getRegularStyle(
+                            color: ColorManager.kDarkColor,
+                          ),
+                        ),
+                        DefaultCheckBox(
+                          value: model.isNow,
+                          onChanged: model.handleChangeIsNow,
+                          richText: Text(
+                            'NOW',
+                            textAlign: TextAlign.center,
+                            style: getBoldStyle(
+                              color: ColorManager.kDarkColor,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          ')',
+                          style: getRegularStyle(
+                            color: ColorManager.kDarkColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    DatePicker(
+                      // label: 'Start date *',
+                      controller: model.startDateController,
+                      onSelected: model.handleStartDate,
+                      initialDate: model.isNow
+                          ? toDefaultDtFormat(model.startDateController.text)
+                          : DateTime.now(),
+                      firstDate: model.isNow
+                          ? DateTime.now()
+                          : model.startDateController.text.isNotEmpty
+                              ? toDefaultDtFormat(
+                                  model.startDateController.text)
+                              : null,
+                    ),
+                  ],
                 ),
               ),
               SizedBox(width: AppPadding.p10),
               Expanded(
                 child: DatePicker(
-                  label: 'End date *',
+                  label: 'End Date *',
                   controller: model.endDateController,
                   onSelected: model.handleEndDate,
                 ),
@@ -264,6 +317,25 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
             ],
           ),
           const SizedBox(height: AppSize.s40),
+          if (model.errorMessage.isNotEmpty)
+            Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.all(AppSize.s8),
+              margin: EdgeInsets.only(bottom: AppSize.s12),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  width: 1,
+                  color: ColorManager.kRed,
+                ),
+              ),
+              child: Text(
+                model.errorMessage,
+                style: getMediumStyle(
+                  color: ColorManager.kRed,
+                  fontSize: FontSize.s14,
+                ),
+              ),
+            ),
           if (model.hasError)
             Container(
               width: MediaQuery.of(context).size.width,

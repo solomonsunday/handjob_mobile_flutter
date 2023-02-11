@@ -26,7 +26,7 @@ class _DefaultCheckBoxState extends State<DefaultCheckBox> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(

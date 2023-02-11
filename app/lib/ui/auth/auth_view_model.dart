@@ -45,7 +45,7 @@ class AuthViewModel extends BaseViewModel {
   //   notifyListeners();
   // }
 
-  login() {
+  login() async {
     runBusyFuture(loginTask());
     // _navigationService.replaceWith(Routes.mainView);
   }
