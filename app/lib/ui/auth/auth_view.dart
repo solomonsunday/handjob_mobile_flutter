@@ -91,9 +91,9 @@ class AuthView extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: AppSize.s40),
-                  if (model.hasError)
+                  if (model.errorMessage.isNotEmpty)
                     Text(
-                      '${model.modelError}',
+                      '${model.errorMessage}',
                       style: getMediumStyle(
                         color: ColorManager.kRed,
                         fontSize: FontSize.s14,

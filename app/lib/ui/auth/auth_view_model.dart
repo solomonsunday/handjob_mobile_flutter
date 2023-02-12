@@ -25,6 +25,8 @@ class AuthViewModel extends BaseViewModel {
   // String? _email;
   // String? _password;
   bool _visibility = true;
+  String _errorMessage = "";
+  String get errorMessage => _errorMessage;
 
   String? get email => emailController.text;
   String? get password => passwordController.text;
@@ -50,7 +52,7 @@ class AuthViewModel extends BaseViewModel {
     // _navigationService.replaceWith(Routes.mainView);
   }
 
-  Future<Auth> loginTask() async {
+  Future<void> loginTask() async {
     var formData = {
       "email": email,
       "password": password,
@@ -63,9 +65,11 @@ class AuthViewModel extends BaseViewModel {
       Auth response = await _authenticationService.login(formData);
       await _authenticationService.getCurrentBaseUser();
       _navigationService.replaceWith(Routes.mainView);
-      return response;
+      return;
     } on DioError catch (err) {
-      throw HttpException("An error occured: please enter a valid credential");
+      _errorMessage = "An error occured: please enter a valid credential";
+      notifyListeners();
+      // throw HttpException("An error occured: please enter a valid credential");
     } finally {
       setBusy(false);
       notifyListeners();

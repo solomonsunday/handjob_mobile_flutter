@@ -159,6 +159,14 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
                     ),
                   ],
                 ),
+                if (model.hasError)
+                  Text(
+                    '${model.modelError}',
+                    style: getRegularStyle(
+                      color: ColorManager.kRed,
+                      fontSize: 14,
+                    ),
+                  ),
                 const SizedBox(height: AppSize.s24),
                 DefaultButton(
                   onPressed:
@@ -216,7 +224,9 @@ class ProfileContactSheetViewModel extends FormViewModel {
   }
 
   updateContact(Function(SheetResponse<dynamic>)? completer) {
-    runBusyFuture(updateContactRequest(completer));
+    runBusyFuture(
+      updateContactRequest(completer),
+    );
   }
 
   updateContactRequest(completer) async {
@@ -246,7 +256,7 @@ class ProfileContactSheetViewModel extends FormViewModel {
       completer!(SheetResponse(confirmed: true));
     } on DioError catch (error) {
       print('eror: ${error.response!.data}');
-      throw HttpException("An error occured");
+      throw HttpException("An error occured ${error.response!}");
     } finally {
       setBusy(false);
       notifyListeners();

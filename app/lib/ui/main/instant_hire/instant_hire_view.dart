@@ -121,7 +121,8 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
             fieldViewBuilder:
                 (context, textEditingController, focusNode, onFieldSubmitted) =>
                     InputField(
-              label: 'Service Location *',
+              label: 'Service Location ',
+              requiredField: true,
               controller: textEditingController,
               focusnode: focusNode,
               onTap: onFieldSubmitted,
@@ -174,7 +175,8 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
                   buttonWidth: MediaQuery.of(context).size.width,
                   buttonHeight: 50,
                   hint: 'Select',
-                  label: 'State*',
+                  label: 'State',
+                  requiredField: true,
                   value: model.selectedStateValue,
                   dropdownItems:
                       (model.stateNames ?? []).map((e) => e!).toList(),
@@ -196,7 +198,8 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
                   buttonWidth: MediaQuery.of(context).size.width,
                   buttonHeight: 50,
                   hint: 'Select',
-                  label: 'LGA*',
+                  label: 'LGA',
+                  requiredField: true,
                   value: model.selectedLgaValue,
                   dropdownItems: model.lgaNames?.map((e) => e).toList() ?? [],
                   onChanged: (String? value) {
@@ -228,7 +231,7 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
                           ),
                         ),
                         Text(
-                          '*',
+                          ' * ',
                           style: getRegularStyle(
                             color: ColorManager.kRed,
                           ),
@@ -275,29 +278,52 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
                   ],
                 ),
               ),
-              SizedBox(width: AppPadding.p10),
+              const SizedBox(width: AppPadding.p10),
               Expanded(
-                child: DatePicker(
-                  label: 'End Date *',
-                  controller: model.endDateController,
-                  onSelected: model.handleEndDate,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'End Date',
+                          style: getRegularStyle(
+                            color: ColorManager.kDarkColor,
+                          ),
+                        ),
+                        Text(
+                          ' *',
+                          style: getRegularStyle(
+                            color: ColorManager.kRed,
+                          ),
+                        ),
+                      ],
+                    ),
+                    DatePicker(
+                      // label: 'End Date *',
+                      // requiredField: true,
+                      controller: model.endDateController,
+                      onSelected: model.handleEndDate,
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
           SizedBox(height: AppSize.s8),
-          SizedBox(height: AppSize.s8),
-          Text(
-            'Describe service needed *',
-            style: getRegularStyle(
-              color: ColorManager.kDarkCharcoal,
-              fontSize: FontSize.s12,
-            ),
-          ),
+          // SizedBox(height: AppSize.s8),
+          // Text(
+          //   'Describe service needed *',
+          //   style: getRegularStyle(
+          //     color: ColorManager.kDarkCharcoal,
+          //     fontSize: FontSize.s12,
+          //   ),
+          // ),
           Row(
             children: [
               Expanded(
                 child: Textarea(
+                  label: 'Describe service needed',
+                  requiredField: true,
                   controller: model.describeServiceController,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppSize.s8),

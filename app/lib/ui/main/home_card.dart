@@ -265,7 +265,7 @@ class HomeCard extends StatelessWidget {
                                   color: ColorManager.kDarkColor,
                                 ),
                                 Text(
-                                  '${post.commentCount} messages',
+                                  '${post.commentCount} comments',
                                   style: getRegularStyle(
                                     color: ColorManager.kPrimary400Color,
                                     fontSize: FontSize.FontSize.s11,

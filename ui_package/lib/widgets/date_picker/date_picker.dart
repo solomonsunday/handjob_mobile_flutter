@@ -16,6 +16,7 @@ class DatePicker extends StatefulWidget {
   final DateTime? firstDate;
   final DateTime? lastDate;
   final bool isNow;
+  final bool requiredField;
 
   DatePicker({
     Key? key,
@@ -31,6 +32,7 @@ class DatePicker extends StatefulWidget {
     this.firstDate,
     this.lastDate,
     this.isNow = false,
+    this.requiredField = false,
   });
 
   @override

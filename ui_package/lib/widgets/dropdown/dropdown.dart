@@ -32,6 +32,7 @@ class DefaultDropDownField extends StatelessWidget {
   final TextStyle? labelStyle;
   final TextStyle? valueStyle;
   final Offset? offset;
+  final bool requiredField;
 
   const DefaultDropDownField({
     required this.hint,
@@ -64,6 +65,7 @@ class DefaultDropDownField extends StatelessWidget {
     this.offset,
     this.label,
     this.labelStyle,
+    this.requiredField = false,
     Key? key,
   }) : super(key: key);
 
@@ -75,13 +77,24 @@ class DefaultDropDownField extends StatelessWidget {
       children: [
         if (label != null)
           Column(children: [
-            Text(
-              label!,
-              style: labelStyle ??
-                  getRegularStyle(
-                    color: ColorManager.kDarkCharcoal,
-                    fontSize: FontSize.s14,
+            Row(
+              children: [
+                Text(
+                  label!,
+                  style: labelStyle ??
+                      getRegularStyle(
+                        color: ColorManager.kDarkCharcoal,
+                        fontSize: FontSize.s14,
+                      ),
+                ),
+                if (requiredField)
+                  Text(
+                    '*',
+                    style: getRegularStyle(
+                      color: ColorManager.kRed,
+                    ),
                   ),
+              ],
             ),
             const SizedBox(
               height: AppSize.s4,

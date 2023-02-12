@@ -37,6 +37,7 @@ class Textarea extends StatelessWidget {
   final TextStyle? labelStyle;
   final int? minLines;
   final int? maxLines;
+  final bool requiredField;
 
   const Textarea({
     this.autovalidateMode,
@@ -70,6 +71,7 @@ class Textarea extends StatelessWidget {
     this.readOnly = false,
     this.labelRightItem,
     this.labelStyle,
+    this.requiredField = false,
   });
 
   @override
@@ -78,15 +80,26 @@ class Textarea extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          label,
-          style: labelStyle ??
-              getRegularStyle(
-                color: ColorManager.kDarkCharcoal,
-                fontSize: FontSize.s14,
+        Row(
+          children: [
+            Text(
+              label,
+              style: labelStyle ??
+                  getRegularStyle(
+                    color: ColorManager.kDarkCharcoal,
+                    fontSize: FontSize.s14,
+                  ),
+            ),
+            if (requiredField)
+              Text(
+                ' *',
+                style: getRegularStyle(
+                  color: ColorManager.kRed,
+                ),
               ),
+            if (labelRightItem != null) labelRightItem!,
+          ],
         ),
-        if (labelRightItem != null) labelRightItem!,
         const SizedBox(
           height: AppSize.s4,
         ),

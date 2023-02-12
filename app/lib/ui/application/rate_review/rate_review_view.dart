@@ -38,7 +38,7 @@ class RateReviewView extends StatelessWidget with $RateReviewView {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<RateReviewViewModel>.nonReactive(
+    return ViewModelBuilder<RateReviewViewModel>.reactive(
         viewModelBuilder: () => RateReviewViewModel(),
         onModelReady: (model) {
           listenToFormUpdated(model);
@@ -70,7 +70,7 @@ class RateReviewView extends StatelessWidget with $RateReviewView {
                 horizontal: AppPadding.p24,
                 vertical: AppPadding.p40,
               ),
-              child: Column(children: [
+              child: ListView(children: [
                 Container(
                   padding: const EdgeInsets.only(bottom: AppPadding.p16),
                   child: Column(
@@ -150,7 +150,9 @@ class RateReviewView extends StatelessWidget with $RateReviewView {
                             ),
                           ),
                           const SizedBox(width: AppSize.s12),
-                          Rating(),
+                          Rating(
+                            value: double.parse(model.ratingValue ?? "0"),
+                          ),
                         ],
                       ),
                       const Divider(),
@@ -203,7 +205,7 @@ class RateReviewFormView extends ViewModelWidget<RateReviewViewModel> {
         InputField(
           label: 'Your name',
           hintText: 'e.g John Doe',
-          keyBoardType: TextInputType.emailAddress,
+          keyBoardType: TextInputType.text,
           controller: nameController,
         ),
         const SizedBox(height: AppSize.s40),
@@ -217,7 +219,7 @@ class RateReviewFormView extends ViewModelWidget<RateReviewViewModel> {
         Textarea(
           label: 'Detail review',
           hintText: 'Describe your experience with this applicant',
-          keyBoardType: TextInputType.emailAddress,
+          keyBoardType: TextInputType.text,
           controller: descriptionController,
         ),
         const SizedBox(height: AppSize.s40),
@@ -230,7 +232,7 @@ class RateReviewFormView extends ViewModelWidget<RateReviewViewModel> {
         ),
         const SizedBox(height: AppSize.s40),
         DefaultButton(
-          onPressed: model.isBusy || !model.isFormValid
+          onPressed: model.isBusy
               ? null
               : () => model.submitReview(applicantId, jobId),
           title: 'Submit',

@@ -19,19 +19,19 @@ class RateReviewViewModel extends FormViewModel {
 
   @override
   void setFormStatus() {
-    if (nameValue!.isEmpty) {
+    if ((nameValue ?? '').isEmpty) {
       setNameValidationMessage("Name is required");
       _isFormValid = false;
       return;
     }
 
-    if (titleValue!.isEmpty) {
+    if ((titleValue ?? '').isEmpty) {
       setTitleValidationMessage("Title is required");
       _isFormValid = false;
       return;
     }
 
-    if (descriptionValue!.isEmpty) {
+    if ((descriptionValue ?? '').isEmpty) {
       setDescriptionValidationMessage("Description is required");
       _isFormValid = false;
       return;
@@ -58,7 +58,8 @@ class RateReviewViewModel extends FormViewModel {
       'detail': descriptionValue,
       "applicantId": applicantId,
       "jobId": jobId,
-      "rating": int.tryParse((ratingValue ?? "0").toString())
+      "rating": ratingValue ?? 0,
+      // "rating": int.tryParse((ratingValue ?? "0").toString())
     };
     print('form: $formData');
     setBusy(true);

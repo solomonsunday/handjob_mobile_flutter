@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/models/applicant.model.dart';
 import 'package:handjob_mobile/services/instant_job.service.dart';
@@ -302,8 +303,14 @@ class ApplicantItemViewModel extends BaseViewModel {
     if (!response!.confirmed) return;
     setBusyForObject(ACCEPT_APPLICANT, true);
     var formData = {"jobId": jobId};
-    await _instantJobService.acceptApplication(applicationId, formData);
-    setBusyForObject(ACCEPT_APPLICANT, false);
+    try {
+      await _instantJobService.acceptApplication(applicationId, formData);
+    } on DioError catch (e) {
+      _dialogService.showDialog(
+          title: "Error occured", description: " ${e.response ?? ''}");
+    } finally {
+      setBusyForObject(ACCEPT_APPLICANT, false);
+    }
   }
 
   rejectApplication(String applicationId, String jobId) async {

@@ -40,6 +40,7 @@ class InputField extends StatelessWidget {
   final double? paddingLeft;
   final double? paddingTop;
   final double? paddingBottom;
+  final bool requiredField;
 
   const InputField({
     this.autovalidateMode,
@@ -51,6 +52,7 @@ class InputField extends StatelessWidget {
     this.message,
     this.hintText,
     this.label = '',
+    this.requiredField = false,
     this.formError,
     this.focusnode,
     this.controller,
@@ -96,6 +98,13 @@ class InputField extends StatelessWidget {
                       fontSize: FontSize.s14,
                     ),
               ),
+              if (requiredField)
+                Text(
+                  '*',
+                  style: getRegularStyle(
+                    color: ColorManager.kRed,
+                  ),
+                ),
               if (labelRightItem != null) labelRightItem!
             ],
           ),
