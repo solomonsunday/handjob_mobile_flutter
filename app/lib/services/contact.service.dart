@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:handjob_mobile/utils/http_exception.dart';
 import 'package:stacked/stacked.dart';
 
 import '../app/app.locator.dart';
@@ -51,16 +52,20 @@ class ContactService with ReactiveServiceMixin {
 
   Future<List<Contact>> getContacts(
       {int page = 1, int limit = 10, String? search, String? sort}) async {
-    var response = await dioClient.get(
-      '/contact?page=$page&limit=$limit&search=${search ?? ""}&sort=${sort ?? ""}',
-    );
-    _contactMeta = Meta.fromJson(response.data["meta"]);
-    List<Contact> list = (response.data["data"] as List<dynamic>)
-        .map((e) => Contact.fromJson(e))
-        .toList();
-    _contactList.value = list;
-    notifyListeners();
-    return list;
+    try {
+      var response = await dioClient.get(
+        '/contact?page=$page&limit=$limit&search=${search ?? ""}&sort=${sort ?? ""}',
+      );
+      _contactMeta = Meta.fromJson(response.data["meta"]);
+      List<Contact> list = (response.data["data"] as List<dynamic>)
+          .map((e) => Contact.fromJson(e))
+          .toList();
+      _contactList.value = list;
+      notifyListeners();
+      return list;
+    } on DioError catch (e) {
+      throw HttpException(e.response?.data ?? "");
+    }
   }
 
   Future<void> getContactsCount() async {

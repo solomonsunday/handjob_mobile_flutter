@@ -17,17 +17,19 @@ class AddNewContactViewModel extends ReactiveViewModel {
 
   void goBack() => _navigationService.back();
 
-  Future<void> fetchAllContacts() async {
+  Future<void> fetchAllContacts({String search = ''}) async {
     setBusyForObject(ALL_CONTACT_LIST_REQUEST, true);
     try {
-      await _contactService.getAllContacts();
+      await _contactService.getAllContacts(search: search);
     } on DioError catch (e) {
     } finally {
       setBusyForObject(ALL_CONTACT_LIST_REQUEST, false);
     }
   }
 
-  handleSearch(String p1) {}
+  handleSearch(String value) {
+    runBusyFuture(fetchAllContacts(search: value));
+  }
 
   @override
   List<ReactiveServiceMixin> get reactiveServices => [_contactService];

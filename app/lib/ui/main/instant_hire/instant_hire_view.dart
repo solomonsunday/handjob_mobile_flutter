@@ -82,6 +82,7 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
             value: model.selectedProfession,
             dropdownItems: model.professions,
             onChanged: model.handleSelectedProfession,
+            requiredField: true,
             buttonDecoration: BoxDecoration(
               border: Border.all(
                 width: 1,
@@ -121,7 +122,7 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
             fieldViewBuilder:
                 (context, textEditingController, focusNode, onFieldSubmitted) =>
                     InputField(
-              label: 'Service Location ',
+              label: 'Service Location',
               requiredField: true,
               controller: textEditingController,
               focusnode: focusNode,

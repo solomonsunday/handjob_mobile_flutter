@@ -90,21 +90,25 @@ class InputField extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                label,
-                style: labelStyle ??
-                    getRegularStyle(
-                      color: ColorManager.kDarkCharcoal,
-                      fontSize: FontSize.s14,
-                    ),
-              ),
-              if (requiredField)
-                Text(
-                  '*',
-                  style: getRegularStyle(
-                    color: ColorManager.kRed,
+              Row(
+                children: [
+                  Text(
+                    label,
+                    style: labelStyle ??
+                        getRegularStyle(
+                          color: ColorManager.kDarkCharcoal,
+                          fontSize: FontSize.s14,
+                        ),
                   ),
-                ),
+                  if (requiredField)
+                    Text(
+                      '*',
+                      style: getRegularStyle(
+                        color: ColorManager.kRed,
+                      ),
+                    ),
+                ],
+              ),
               if (labelRightItem != null) labelRightItem!
             ],
           ),

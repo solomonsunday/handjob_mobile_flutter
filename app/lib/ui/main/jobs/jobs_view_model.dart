@@ -14,19 +14,15 @@ import '../../../services/shared.service.dart';
 import '../main_view.dart';
 
 class JobsViewModel extends BaseViewModel {
-  final _navigationService = locator<NavigationService>();
   final _instantJobService = locator<InstantJobService>();
   final _authenticationService = locator<AuthenticationService>();
   final _sharedService = locator<SharedService>();
 
-  List<InstantJob> get jobs => _instantJobService.instantJobs ?? [];
+  List<InstantJob> get jobs => _instantJobService.instantJobs;
 
   User? get currentUser => _authenticationService.currentUser;
 
-  void navigateBack() {
-    _sharedService.setCurrentIndex(MainView.HOME_VIEW);
-    print('balck is clicked');
-  }
+  void navigateBack() => _sharedService.setCurrentIndex(MainView.HOME_VIEW);
 
   getInstantJobs() async {
     await runBusyFuture(getInstantJobsRequest());

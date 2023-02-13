@@ -81,10 +81,7 @@ class InstantHireViewModel extends BaseViewModel {
 
   List<Suggestion> get suggestions => _suggestions;
 
-  void navigateBack() {
-    _sharedService.setCurrentIndex(MainView.HOME_VIEW);
-    print('balck is clicked');
-  }
+  void navigateBack() => _sharedService.setCurrentIndex(MainView.HOME_VIEW);
 
   String? _selectedStateValue;
   String? _selectedLgaValue;
