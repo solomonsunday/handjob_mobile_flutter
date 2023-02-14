@@ -57,6 +57,7 @@ class ChangePasswordView extends StatelessWidget with $ChangePasswordView {
                   keyBoardType: TextInputType.text,
                   controller: oldPasswordController,
                   focusnode: oldPasswordFocusNode,
+                  requiredField: true,
                 ),
                 const SizedBox(height: AppSize.s40),
                 InputField(
@@ -65,6 +66,7 @@ class ChangePasswordView extends StatelessWidget with $ChangePasswordView {
                   keyBoardType: TextInputType.text,
                   controller: newPasswordController,
                   focusnode: newPasswordFocusNode,
+                  requiredField: true,
                 ),
                 const SizedBox(height: AppSize.s40),
                 InputField(
@@ -73,6 +75,7 @@ class ChangePasswordView extends StatelessWidget with $ChangePasswordView {
                   keyBoardType: TextInputType.text,
                   controller: confirmPasswordController,
                   focusnode: confirmPasswordFocusNode,
+                  requiredField: true,
                 ),
                 const SizedBox(height: AppSize.s40),
                 DefaultButton(
