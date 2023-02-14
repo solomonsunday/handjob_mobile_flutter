@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
+import 'package:handjob_mobile/models/contact.model.dart';
 import 'package:handjob_mobile/models/state.model.dart' as HandjobState;
 import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:handjob_mobile/sheets/profile_contact/profile_contact.sheet.form.dart';
@@ -15,6 +17,7 @@ import '../../models/place.model.dart';
 import '../../models/state.model.dart';
 import '../../models/suggestion.model.dart';
 import '../../services/account.service.dart';
+import '../../services/authentication.service.dart';
 import '../../services/location.service.dart';
 import '../../utils/contants.dart';
 import '../../utils/http_exception.dart';
@@ -41,144 +44,167 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileContactSheetViewModel>.reactive(
         viewModelBuilder: () => ProfileContactSheetViewModel(),
-        onModelReady: (model) => listenToFormUpdated(model),
+        onModelReady: (model) async {
+          listenToFormUpdated(model);
+          if (request?.data != null) {
+            print('contact params: ${request?.data}');
+            emailController.text = request?.data["email"] ?? "";
+            phoneController.text = request?.data["phone"] ?? "";
+            addressController.text = request?.data["address"] ?? "";
+
+            model.updateLocation(request?.data["address"] ?? "");
+            try {
+              Suggestion suggestion = (await model
+                  .fetchSuggestionRequest(request?.data["address"]))[0];
+              model.updateCoordinate(suggestion.placeId);
+            } catch (e) {}
+            model.handleSelectedState(request?.data["state"]);
+            model.handleSelectedLGA(request?.data["lga"]);
+            model.updateId(request?.data["id"]);
+            model.updateEditMode(true);
+          }
+        },
         onDispose: (model) => disposeForm(),
         builder: (context, model, child) {
           // print('states fetched: ${model.stateList}');
           return BottomSheetContainer(
             onClose: () => completer!(SheetResponse(confirmed: false)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      Icons.phone,
-                      color: ColorManager.kSecondaryColor,
-                    ),
-                    SizedBox(width: AppSize.s12),
-                    Text('Contact Information'),
-                  ],
-                ),
-                const SizedBox(height: AppSize.s24),
-                InputField(
-                  label: 'Email address',
-                  hintText: 'johndemola@gmail.com',
-                  fillColor: ColorManager.kWhiteColor,
-                  controller: emailController,
-                  focusnode: emailFocusNode,
-                ),
-                const SizedBox(height: AppSize.s12),
-                InputField(
-                  label: 'Phone number',
-                  hintText: 'Enter phone number',
-                  fillColor: ColorManager.kWhiteColor,
-                  controller: phoneController,
-                  focusnode: phoneFocusNode,
-                ),
-                const SizedBox(height: AppSize.s12),
-                Column(
-                  children: [
-                    DefaultDropDownField(
-                      label: 'State',
-                      hint: 'Enter',
-                      dropdownItems:
-                          (model.stateList ?? []).map((e) => e.name!).toList(),
-                      onChanged: model.handleSelectedState,
-                      value: model.selectedState,
-                      buttonWidth: MediaQuery.of(context).size.width,
-                      buttonHeight: 50,
-                      buttonDecoration: BoxDecoration(
-                        border: Border.all(
-                          width: 1,
-                          color: ColorManager.kDarkColor,
-                        ),
-                        borderRadius: BorderRadius.circular(AppSize.s8),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.phone,
+                        color: ColorManager.kSecondaryColor,
                       ),
-                      dropdownWidth: MediaQuery.of(context).size.width,
-                    ),
-                    const SizedBox(height: AppSize.s12),
-                    DefaultDropDownField(
-                      label: 'LGA',
-                      hint: 'Enter',
-                      dropdownItems: model.lgas ?? [],
-                      onChanged: model.handleSelectedLGA,
-                      value: model.selectedLGA,
-                      buttonHeight: 50,
-                      buttonWidth: MediaQuery.of(context).size.width,
-                      buttonDecoration: BoxDecoration(
-                        border: Border.all(
-                          width: 1,
-                          color: ColorManager.kDarkColor,
-                        ),
-                        borderRadius: BorderRadius.circular(AppSize.s8),
-                      ),
-                      dropdownWidth: MediaQuery.of(context).size.width,
-                    ),
-                  ],
-                ),
-                SizedBox(height: AppSize.s12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Autocomplete<Suggestion>(
-                        displayStringForOption: _displayStringForOption,
-                        optionsBuilder:
-                            (TextEditingValue textEditingValue) async {
-                          if (textEditingValue.text == '') {
-                            return const Iterable<Suggestion>.empty();
-                          }
-                          await model.handleSuggestion(textEditingValue.text);
-
-                          return model.suggestions.where((Suggestion option) {
-                            return option.description
-                                .toLowerCase()
-                                .contains(textEditingValue.text.toLowerCase());
-                          });
-                        },
-                        onSelected: (Suggestion selection) async {
-                          debugPrint(
-                              'You just selected ${_displayStringForOption(selection)}');
-
-                          model.updateLocation(
-                              _displayStringForOption(selection));
-                          await model.updateCoordinate(selection.placeId);
-                        },
-                        fieldViewBuilder: (context, textEditingController,
-                                focusNode, onFieldSubmitted) =>
-                            InputField(
-                          label: 'Address',
-                          controller: textEditingController,
-                          focusnode: focusNode,
-                          onTap: onFieldSubmitted,
-                          fillColor: ColorManager.kWhiteColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                if (model.hasError)
-                  Text(
-                    '${model.modelError}',
-                    style: getRegularStyle(
-                      color: ColorManager.kRed,
-                      fontSize: 14,
-                    ),
+                      SizedBox(width: AppSize.s12),
+                      Text('Contact Information'),
+                    ],
                   ),
-                const SizedBox(height: AppSize.s24),
-                DefaultButton(
-                  onPressed:
-                      model.isBusy || model.busy(LOCATION_SUGGESTION_REQUEST)
-                          ? () {}
-                          : () => model.updateContact(completer),
-                  title: 'Save changes',
-                  busy: model.isBusy,
-                  disabled:
-                      model.busy(LOCATION_SUGGESTION_REQUEST) || model.isBusy,
-                ),
-              ],
+                  const SizedBox(height: AppSize.s24),
+                  InputField(
+                    label: 'Email address',
+                    hintText: 'johndemola@gmail.com',
+                    fillColor: ColorManager.kWhiteColor,
+                    controller: emailController,
+                    focusnode: emailFocusNode,
+                  ),
+                  const SizedBox(height: AppSize.s12),
+                  InputField(
+                    label: 'Phone number',
+                    hintText: 'Enter phone number',
+                    fillColor: ColorManager.kWhiteColor,
+                    controller: phoneController,
+                    focusnode: phoneFocusNode,
+                  ),
+                  const SizedBox(height: AppSize.s12),
+                  Column(
+                    children: [
+                      DefaultDropDownField(
+                        label: 'State',
+                        hint: 'Enter',
+                        dropdownItems: (model.stateList ?? [])
+                            .map((e) => e.name!)
+                            .toList(),
+                        onChanged: model.handleSelectedState,
+                        value: model.selectedState,
+                        buttonWidth: MediaQuery.of(context).size.width,
+                        buttonHeight: 50,
+                        buttonDecoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: ColorManager.kDarkColor,
+                          ),
+                          borderRadius: BorderRadius.circular(AppSize.s8),
+                        ),
+                        dropdownWidth: MediaQuery.of(context).size.width,
+                      ),
+                      const SizedBox(height: AppSize.s12),
+                      DefaultDropDownField(
+                        label: 'LGA',
+                        hint: 'Enter',
+                        dropdownItems: model.lgas ?? [],
+                        onChanged: model.handleSelectedLGA,
+                        value: model.selectedLGA,
+                        buttonHeight: 50,
+                        buttonWidth: MediaQuery.of(context).size.width,
+                        buttonDecoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: ColorManager.kDarkColor,
+                          ),
+                          borderRadius: BorderRadius.circular(AppSize.s8),
+                        ),
+                        dropdownWidth: MediaQuery.of(context).size.width,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSize.s12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Autocomplete<Suggestion>(
+                          displayStringForOption: _displayStringForOption,
+                          optionsBuilder:
+                              (TextEditingValue textEditingValue) async {
+                            if (textEditingValue.text == '') {
+                              return const Iterable<Suggestion>.empty();
+                            }
+                            await model.handleSuggestion(textEditingValue.text);
+
+                            return model.suggestions.where((Suggestion option) {
+                              return option.description.toLowerCase().contains(
+                                  textEditingValue.text.toLowerCase());
+                            });
+                          },
+                          initialValue:
+                              TextEditingValue(text: addressController.text),
+                          onSelected: (Suggestion selection) async {
+                            debugPrint(
+                                'You just selected ${_displayStringForOption(selection)}');
+
+                            model.updateLocation(
+                                _displayStringForOption(selection));
+                            await model.updateCoordinate(selection.placeId);
+                          },
+                          fieldViewBuilder: (context, textEditingController,
+                                  focusNode, onFieldSubmitted) =>
+                              InputField(
+                            label: 'Address',
+                            controller: textEditingController,
+                            focusnode: focusNode,
+                            onTap: onFieldSubmitted,
+                            fillColor: ColorManager.kWhiteColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (model.hasError)
+                    Text(
+                      '${model.modelError}',
+                      style: getRegularStyle(
+                        color: ColorManager.kRed,
+                        fontSize: 14,
+                      ),
+                    ),
+                  const SizedBox(height: AppSize.s24),
+                  DefaultButton(
+                    onPressed:
+                        model.isBusy || model.busy(LOCATION_SUGGESTION_REQUEST)
+                            ? () {}
+                            : () => model.updateContact(completer),
+                    title: 'Save changes',
+                    busy: model.isBusy,
+                    disabled:
+                        model.busy(LOCATION_SUGGESTION_REQUEST) || model.isBusy,
+                  ),
+                ],
+              ),
             ),
           );
         });
@@ -188,6 +214,9 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
 class ProfileContactSheetViewModel extends FormViewModel {
   final _sharedService = locator<SharedService>();
   final _accountService = locator<AccountService>();
+  final _dialogService = locator<DialogService>();
+  final _authenticationService = locator<AuthenticationService>();
+
   String? _state;
   String? _lga;
   String? _selectedState;
@@ -230,6 +259,11 @@ class ProfileContactSheetViewModel extends FormViewModel {
   }
 
   updateContactRequest(completer) async {
+    var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Do you want to proceed?",
+    );
+    if (!response!.confirmed) return;
     var formData = {
       "phoneNumber": phoneValue,
       "email": emailValue,
@@ -253,10 +287,19 @@ class ProfileContactSheetViewModel extends FormViewModel {
     setBusy(true);
     try {
       await _accountService.updateContactInfo(formData);
-      completer!(SheetResponse(confirmed: true));
+      await _authenticationService.getCurrentBaseUser();
+      await completer!(SheetResponse(confirmed: true));
+      Fluttertoast.showToast(
+        msg: 'Contact was updated!',
+        toastLength: Toast.LENGTH_LONG,
+      );
     } on DioError catch (error) {
       print('eror: ${error.response!.data}');
-      throw HttpException("An error occured ${error.response!}");
+      // throw HttpException("An error occured ${error.response!}");
+      _dialogService.showDialog(
+        description: '${error.response?.data["message"] ?? ""}',
+        title: "An error occured",
+      );
     } finally {
       setBusy(false);
       notifyListeners();
@@ -275,6 +318,11 @@ class ProfileContactSheetViewModel extends FormViewModel {
   final TextEditingController addressController = TextEditingController();
   final TextEditingController regionController = TextEditingController();
 
+  bool _editMode = false;
+  bool get editMode => _editMode;
+
+  String? _id;
+  String? get id => _id;
   double? _lat;
   double? _lon;
   String? _postalCode;
@@ -321,5 +369,14 @@ class ProfileContactSheetViewModel extends FormViewModel {
     } finally {
       setBusyForObject(LOCATION_SUGGESTION_REQUEST, false);
     }
+  }
+
+  void updateEditMode(bool value) {
+    _editMode = value;
+    notifyListeners();
+  }
+
+  void updateId(String? id) {
+    _id = id;
   }
 }

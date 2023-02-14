@@ -221,14 +221,30 @@ class RateReviewFormView extends ViewModelWidget<RateReviewViewModel> {
           hintText: 'Describe your experience with this applicant',
           keyBoardType: TextInputType.text,
           controller: descriptionController,
+          maxLines: 5,
+          enabled: true,
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                width: 1,
+                color: ColorManager.kDarkColor,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(12))),
         ),
         const SizedBox(height: AppSize.s40),
         DefaultDropDownField(
           hint: 'Rating',
-          value: model.ratingValue,
+          value: model.rating,
           dropdownItems: RatingValueToTitleMap.values.toList(),
-          onChanged: (value) => model.setRating(value!),
+          onChanged: (value) => model.handleRating(value!),
           buttonWidth: MediaQuery.of(context).size.width,
+          buttonHeight: 50,
+          buttonDecoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+              color: ColorManager.kDarkColor,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
         ),
         const SizedBox(height: AppSize.s40),
         DefaultButton(

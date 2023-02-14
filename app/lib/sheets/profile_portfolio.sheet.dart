@@ -30,6 +30,10 @@ class ProfilePortfolioSheet extends StatelessWidget {
         viewModelBuilder: () => ProfilePortfolioSheetViewModel(),
         builder: (context, model, child) {
           return BottomSheetContainer(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppPadding.p24,
+              vertical: AppPadding.p10,
+            ),
             onClose: () => completer!(SheetResponse(confirmed: false)),
             child: SingleChildScrollView(
               child: Column(
@@ -54,7 +58,7 @@ class ProfilePortfolioSheet extends StatelessWidget {
                       const Text('Selected files'),
                       const SizedBox(height: AppSize.s12),
                       Column(
-                        children: (model.images ?? [])
+                        children: (model.images)
                             .map((e) => SelectedFileWidget(
                                   file: File(e.path),
                                   onDelete: (file) {
@@ -63,9 +67,6 @@ class ProfilePortfolioSheet extends StatelessWidget {
                                 ))
                             .toList(),
                       ),
-                      // SelectedFileWidget(),
-                      // SelectedFileWidget(),
-                      // SelectedFileWidget(),
                     ],
                   ),
                   const SizedBox(height: AppSize.s20),
@@ -85,16 +86,6 @@ class ProfilePortfolioSheet extends StatelessWidget {
                         currentUser: model.currentUser!,
                       ),
                       const SizedBox(height: AppSize.s8),
-                      // GestureDetector(
-                      //   onTap: () {},
-                      //   child: Text(
-                      //     'View more...',
-                      //     style: getRegularStyle(
-                      //       color: ColorManager.kDarkColor,
-                      //       fontSize: FontSize.s12,
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                   const SizedBox(height: AppSize.s24),
@@ -156,10 +147,11 @@ class ProfilePortfolioSheetViewModel extends BaseViewModel {
   final ImagePicker _picker = ImagePicker();
   final _accountService = locator<AccountService>();
   final _authenticationService = locator<AuthenticationService>();
+  final _dialogService = locator<DialogService>();
 
   User? get currentUser => _authenticationService.currentUser;
 
-  List<XFile> _images = [];
+  final List<XFile> _images = [];
   List<XFile> get images => _images;
 
   Future<void> openFileDialog() async {
@@ -182,6 +174,12 @@ class ProfilePortfolioSheetViewModel extends BaseViewModel {
   }
 
   Future uploadPortfoliosRequest() async {
+    var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Do you want to proceed ?",
+    );
+    if (!response!.confirmed) return;
+
     if (images.isEmpty) {
       print('no images file');
       return;
@@ -194,6 +192,10 @@ class ProfilePortfolioSheetViewModel extends BaseViewModel {
       await _authenticationService.getCurrentBaseUser();
     } on DioError catch (e) {
       print('error: ${e.response!.data}');
+      _dialogService.showDialog(
+        title: "An error occured",
+        description: '${e.response!.data["message"]}',
+      );
     }
   }
 }

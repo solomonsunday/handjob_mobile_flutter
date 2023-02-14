@@ -8,6 +8,7 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
 
   @override
   Widget build(BuildContext context, ProfileViewModel model) {
+    // print('user profile for ocntact: ${model.currentUser?.toJson()}');
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppPadding.p24,
@@ -46,12 +47,6 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
           const SizedBox(height: AppSize.s12),
           Row(
             children: [
-              const Icon(
-                Icons.star,
-                color: Colors.red,
-                size: 8,
-              ),
-              const SizedBox(width: AppSize.s8),
               Expanded(
                 child: Text(
                   'Phone number',
@@ -109,35 +104,22 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
           Text(
             model.currentUser?.contactPhoneNumber ?? "",
             style: getRegularStyle(
-              color: ColorManager.kGrey,
+              color: ColorManager.kDarkColor,
               fontSize: FontSize.s12,
             ),
           ),
           const SizedBox(height: AppSize.s8),
-          Row(
-            children: [
-              const Icon(
-                Icons.star,
-                color: Colors.red,
-                size: 8,
-              ),
-              const SizedBox(width: AppSize.s8),
-              Expanded(
-                child: Text(
-                  'Location',
-                  style: getBoldStyle(
-                    color: ColorManager.kDarkColor,
-                    fontSize: FontSize.s12,
-                  ),
-                ),
-              ),
-            ],
+          Text(
+            'Location',
+            style: getBoldStyle(
+              color: ColorManager.kDarkColor,
+              fontSize: FontSize.s12,
+            ),
           ),
           Text(
-            model.currentUser?.locations?.join(",") ??
-                '${model.currentUser?.city}, ${model.currentUser?.state}',
+            '${model.currentUser?.address}',
             style: getRegularStyle(
-              color: ColorManager.kGrey,
+              color: ColorManager.kDarkColor,
               fontSize: FontSize.s12,
             ),
           ),

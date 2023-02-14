@@ -11,9 +11,13 @@ import '../../../services/instant_job.service.dart';
 class RateReviewViewModel extends FormViewModel {
   final _navigationService = locator<NavigationService>();
   final _instantJobService = locator<InstantJobService>();
+  final _dialogService = locator<DialogService>();
 
   bool _isFormValid = false;
   bool get isFormValid => _isFormValid;
+
+  String? _rating;
+  String? get rating => _rating;
 
   goBack() => _navigationService.back();
 
@@ -52,16 +56,21 @@ class RateReviewViewModel extends FormViewModel {
       );
       return;
     }
+    var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Are you sure you want to continue?",
+    );
+    if (!response!.confirmed) return;
     var formData = {
       'reviewerDisplayName': nameValue,
       'title': titleValue,
       'detail': descriptionValue,
       "applicantId": applicantId,
       "jobId": jobId,
-      "rating": ratingValue ?? 0,
-      // "rating": int.tryParse((ratingValue ?? "0").toString())
+      "rating": rating,
     };
     print('form: $formData');
+    return;
     setBusy(true);
     try {
       await _instantJobService.submitReview(formData);
@@ -71,11 +80,18 @@ class RateReviewViewModel extends FormViewModel {
       );
       _navigationService.back();
     } on DioError catch (error) {
-      throw HttpException(
-          error.response?.data['message'] ?? "An error occured");
+      _dialogService.showDialog(
+        description: "${error.response?.data['message']}",
+        title: "An error occured",
+      );
     } finally {
       setBusy(false);
       notifyListeners();
     }
+  }
+
+  handleRating(String value) {
+    _rating = value;
+    notifyListeners();
   }
 }
