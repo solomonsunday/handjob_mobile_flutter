@@ -8,7 +8,7 @@ import '../shared/components/profile/profile_experience.dart';
 import '../shared/components/profile/profile_header.dart';
 import '../shared/components/profile/profile_portfolio.dart';
 import '../shared/components/profile/profile_services.dart';
-import '../shared/components/profile_tab.dart';
+import '../shared/components/profile/profile_tab.dart';
 import 'profile_view_model.dart';
 
 class ProfileView extends StatelessWidget {

@@ -9,7 +9,7 @@ import '../../shared/components/profile/profile_education_apprenticeship.dart';
 import '../../shared/components/profile/profile_experience.dart';
 import '../../shared/components/profile/profile_header.dart';
 import '../../shared/components/profile/profile_portfolio.dart';
-import '../../shared/components/profile_services.dart';
+import '../../shared/components/profile/profile_services.dart';
 
 class ApplicantProfileView extends StatelessWidget {
   const ApplicantProfileView({

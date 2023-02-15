@@ -7,7 +7,7 @@ class ProfileActionHeader extends StatelessWidget {
     Key? key,
     required this.icon,
     required this.title,
-    required this.onTap,
+    this.onTap,
   }) : super(key: key);
 
   final IconData icon;
@@ -38,14 +38,15 @@ class ProfileActionHeader extends StatelessWidget {
                 )
               ],
             ),
-            GestureDetector(
-              onTap: onTap,
-              child: const Icon(
-                Icons.add_circle_outline,
-                size: AppSize.s24,
-                color: ColorManager.kDarkColor,
-              ),
-            )
+            if (onTap != null)
+              GestureDetector(
+                onTap: onTap,
+                child: const Icon(
+                  Icons.add_circle_outline,
+                  size: AppSize.s24,
+                  color: ColorManager.kDarkColor,
+                ),
+              )
           ],
         ),
         const Divider(
