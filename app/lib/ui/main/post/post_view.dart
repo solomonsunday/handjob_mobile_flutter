@@ -188,29 +188,31 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
                       : null,
                 ),
                 const SizedBox(height: AppSize.s16),
-                model.mediaType == IMAGE
-                    ? SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: 200,
-                        child: Image.file(model.selectedFile!),
-                      )
-                    : model.mediaType == VIDEO
+                model.selectedFile == null
+                    ? Container()
+                    : model.mediaType == IMAGE
                         ? SizedBox(
                             width: MediaQuery.of(context).size.width,
                             height: 200,
-                            child: DefaultVideoPlayer(
-                              url: model.selectedFile!.path,
-                              videoType: VideoType.FILE,
-                            ),
-                            // child: Text(
-                            //   'No preview available',
-                            //   style: getSemiBoldStyle(
-                            //     color: ColorManager.kDarkColor,
-                            //     fontSize: FontSize.s14,
-                            //   ),
-                            // ),
+                            child: Image.file(model.selectedFile!),
                           )
-                        : Container(),
+                        : model.mediaType == VIDEO
+                            ? SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height: 200,
+                                child: DefaultVideoPlayer(
+                                  url: model.selectedFile!.path,
+                                  videoType: VideoType.FILE,
+                                ),
+                                // child: Text(
+                                //   'No preview available',
+                                //   style: getSemiBoldStyle(
+                                //     color: ColorManager.kDarkColor,
+                                //     fontSize: FontSize.s14,
+                                //   ),
+                                // ),
+                              )
+                            : Container(),
                 if (model.errorMessage != null)
                   Text(
                     '${model.errorMessage}',
@@ -243,7 +245,7 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
                     ),
                     const SizedBox(width: AppSize.s12),
                     GestureDetector(
-                      onTap: model.mediaType != IMAGE
+                      onTap: model.mediaType != VIDEO
                           ? null
                           : model.handleVideoChange,
                       child: Icon(
