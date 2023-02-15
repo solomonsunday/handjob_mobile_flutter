@@ -12,7 +12,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 
 import '../models/user.model.dart';
-import '../ui/profile/components/profile_portfolio_gallery.dart';
+import '../ui/shared/components/profile_portfolio_gallery.dart';
 
 class ProfilePortfolioSheet extends StatelessWidget {
   const ProfilePortfolioSheet({

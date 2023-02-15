@@ -9,7 +9,7 @@ import 'package:ui_package/utils/text_styles.dart';
 import 'package:ui_package/utils/values_manager.dart';
 import 'package:ui_package/widgets/input/input.dart';
 
-import '../rating/rating.dart';
+import '../shared/components/rating/rating.dart';
 import 'components/connection_request_view.dart';
 import 'components/contact_list_view.dart';
 

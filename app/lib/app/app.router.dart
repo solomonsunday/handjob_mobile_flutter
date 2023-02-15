@@ -385,8 +385,10 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i24.ApplicantProfileView: (data) {
+      final args = data.getArgs<ApplicantProfileViewArguments>(nullOk: false);
       return _i1.buildAdaptivePageRoute<dynamic>(
-        builder: (context) => const _i24.ApplicantProfileView(),
+        builder: (context) =>
+            _i24.ApplicantProfileView(key: args.key, applicant: args.applicant),
         settings: data,
       );
     },
@@ -502,6 +504,17 @@ class RateReviewViewArguments {
   final _i25.Key? key;
 
   final _i29.InstantJob instantHire;
+
+  final _i30.Applicant applicant;
+}
+
+class ApplicantProfileViewArguments {
+  const ApplicantProfileViewArguments({
+    this.key,
+    required this.applicant,
+  });
+
+  final _i25.Key? key;
 
   final _i30.Applicant applicant;
 }
@@ -849,14 +862,18 @@ extension NavigatorStateExtension on _i26.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToApplicantProfileView([
+  Future<dynamic> navigateToApplicantProfileView({
+    _i25.Key? key,
+    required _i30.Applicant applicant,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.applicantProfileView,
+        arguments:
+            ApplicantProfileViewArguments(key: key, applicant: applicant),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

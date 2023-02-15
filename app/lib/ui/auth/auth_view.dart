@@ -91,14 +91,14 @@ class AuthView extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: AppSize.s40),
-                  if (model.errorMessage.isNotEmpty)
-                    Text(
-                      '${model.errorMessage}',
-                      style: getMediumStyle(
-                        color: ColorManager.kRed,
-                        fontSize: FontSize.s14,
-                      ),
-                    ),
+                  // if (model.errorMessage.isNotEmpty)
+                  //   Text(
+                  //     '${model.errorMessage}',
+                  //     style: getMediumStyle(
+                  //       color: ColorManager.kRed,
+                  //       fontSize: FontSize.s14,
+                  //     ),
+                  //   ),
                   DefaultButton(
                     onPressed: model.login,
                     title: 'Login',

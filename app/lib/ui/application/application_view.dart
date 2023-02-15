@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:handjob_mobile/models/applicant.model.dart';
 import 'package:handjob_mobile/services/instant_job.service.dart';
 import 'package:handjob_mobile/ui/application/application_view_model.dart';
-import 'package:handjob_mobile/ui/rating/rating.dart';
+import 'package:handjob_mobile/ui/shared/components/rating/rating.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -216,7 +216,8 @@ class ApplicantItem extends StatelessWidget {
                         ),
                         Expanded(child: Container()),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () =>
+                              model.navigateToApplicantProfile(applicant),
                           child: Text(
                             'View profile',
                             style: getRegularStyle(
@@ -331,5 +332,9 @@ class ApplicantItemViewModel extends BaseViewModel {
           instantHire: instantHire,
           applicant: applicant,
         ));
+  }
+
+  navigateToApplicantProfile(Applicant applicant) {
+    _navigationService.navigateToApplicantProfileView(applicant: applicant);
   }
 }

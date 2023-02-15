@@ -76,39 +76,44 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
           Container(
             child: Row(
               children: [
-                model.currentUser?.imageUrl == null
-                    ? const CircleAvatar(
-                        radius: AppSize.s24,
-                        backgroundImage: AssetImage('assets/images/logo.jpeg'))
-                    : CachedNetworkImage(
-                        placeholder: (context, url) => const SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(),
-                        ),
-                        errorWidget: (context, url, error) {
-                          return Container(
-                            decoration: const BoxDecoration(
+                SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: model.currentUser?.imageUrl == null
+                      ? const CircleAvatar(
+                          radius: AppSize.s24,
+                          backgroundImage:
+                              AssetImage('assets/images/logo.jpeg'))
+                      : CachedNetworkImage(
+                          placeholder: (context, url) => const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(),
+                          ),
+                          errorWidget: (context, url, error) {
+                            return Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: AssetImage("assets/images/logo.jpeg"),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            );
+                          },
+                          imageUrl: model.currentUser?.imageUrl ??
+                              "https://i.picsum.photos/id/866/200/200.jpg?hmac=i0ngmQOk9dRZEzhEosP31m_vQnKBQ9C19TBP1CGoIUA",
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
-                                image: AssetImage("assets/images/logo.jpeg"),
+                                image: imageProvider,
                                 fit: BoxFit.cover,
                               ),
                             ),
-                          );
-                        },
-                        imageUrl: model.currentUser?.imageUrl ??
-                            "https://i.picsum.photos/id/866/200/200.jpg?hmac=i0ngmQOk9dRZEzhEosP31m_vQnKBQ9C19TBP1CGoIUA",
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
                           ),
                         ),
-                      ),
+                ),
                 SizedBox(width: AppSize.s12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,27 +188,29 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
                       : null,
                 ),
                 const SizedBox(height: AppSize.s16),
-                model.selectedFile == null
-                    ? Container()
-                    : model.mediaType == IMAGE
+                model.mediaType == IMAGE
+                    ? SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 200,
+                        child: Image.file(model.selectedFile!),
+                      )
+                    : model.mediaType == VIDEO
                         ? SizedBox(
                             width: MediaQuery.of(context).size.width,
                             height: 200,
-                            child: Image.file(model.selectedFile!),
+                            child: DefaultVideoPlayer(
+                              url: model.selectedFile!.path,
+                              videoType: VideoType.FILE,
+                            ),
+                            // child: Text(
+                            //   'No preview available',
+                            //   style: getSemiBoldStyle(
+                            //     color: ColorManager.kDarkColor,
+                            //     fontSize: FontSize.s14,
+                            //   ),
+                            // ),
                           )
-                        : model.mediaType == VIDEO
-                            ? SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                height: 200,
-                                child: Text(
-                                  'No preview available',
-                                  style: getSemiBoldStyle(
-                                    color: ColorManager.kDarkColor,
-                                    fontSize: FontSize.s14,
-                                  ),
-                                ),
-                              )
-                            : Container(),
+                        : Container(),
                 if (model.errorMessage != null)
                   Text(
                     '${model.errorMessage}',

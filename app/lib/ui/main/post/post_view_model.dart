@@ -8,7 +8,6 @@ import 'package:handjob_mobile/utils/helpers.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:video_player/video_player.dart';
 
 import '../../../app/app.locator.dart';
 import '../../../models/user.model.dart';
@@ -49,18 +48,19 @@ class PostViewModel extends FormViewModel {
   void navigateBack() => _navigationService.back();
 
   void handleMediaType(String? value) {
-    _selectedFile = null;
     _mediaType = value!;
-
-    if (_mediaType == IMAGE && selectedFile == null) {
-      _isFormValid = false;
-      return;
-    }
-    if (_mediaType == VIDEO && selectedFile == null) {
-      _isFormValid = false;
-      return;
-    }
+    _selectedFile = null;
+    print('value selectd: $value');
     notifyListeners();
+
+    // if (_mediaType == IMAGE && selectedFile == null) {
+    //   _isFormValid = false;
+    //   return;
+    // }
+    // if (_mediaType == VIDEO && selectedFile == null) {
+    //   _isFormValid = false;
+    //   return;
+    // }
   }
 
   handleImageChange() async {

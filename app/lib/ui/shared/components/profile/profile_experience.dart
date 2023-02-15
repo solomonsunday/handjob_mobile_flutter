@@ -1,24 +1,33 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/html_parser.dart';
 import 'package:handjob_mobile/ui/profile/profile_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 
-import '../../../app/app.locator.dart';
-import '../../../enums/bottom_sheet_type.dart';
-import '../../../models/experience.model.dart';
-import '../../../services/experience.service.dart';
-import '../../../utils/http_exception.dart';
+import '../../../../app/app.locator.dart';
+import '../../../../enums/bottom_sheet_type.dart';
+import '../../../../models/experience.model.dart';
+import '../../../../models/user.model.dart';
+import '../../../../services/experience.service.dart';
+import '../../../../utils/http_exception.dart';
 
-class ProfileExperience extends ViewModelWidget<ProfileViewModel> {
+class ProfileExperience extends StatelessWidget {
   const ProfileExperience({
     Key? key,
+    required this.currentUser,
+    this.isView = false,
+    this.showExperienceSheet,
   }) : super(key: key);
 
+  final User? currentUser;
+  final bool isView;
+  final VoidCallback? showExperienceSheet;
+
   @override
-  Widget build(BuildContext context, ProfileViewModel model) {
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppPadding.p24,
@@ -30,15 +39,16 @@ class ProfileExperience extends ViewModelWidget<ProfileViewModel> {
           ProfileActionHeader(
             icon: Icons.star_border,
             title: 'Experience',
-            onTap: () => model.showExperienceSheet(null),
+            onTap: showExperienceSheet,
           ),
           const SizedBox(height: AppSize.s8),
           Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: (model.currentUser!.experiences ?? [])
+              children: (currentUser?.experiences ?? [])
                   .map(
                     (experience) => ProfileExperienceItem(
                       experience: experience,
+                      isView: isView,
                     ),
                   )
                   .toList()),
@@ -52,9 +62,11 @@ class ProfileExperienceItem extends StatelessWidget {
   const ProfileExperienceItem({
     super.key,
     required this.experience,
+    this.isView = false,
   });
 
   final Experience experience;
+  final bool isView;
 
   @override
   Widget build(BuildContext context) {
@@ -102,36 +114,38 @@ class ProfileExperienceItem extends StatelessWidget {
                 fontSize: FontSize.s12,
               ),
             ),
-            trailing: SizedBox(
-              width: AppSize.s56,
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => model.editExperience(experience),
-                    child: const Icon(
-                      Icons.edit_outlined,
-                      color: ColorManager.kDarkColor,
-                      size: AppSize.s24,
-                    ),
-                  ),
-                  SizedBox(width: AppSize.s4),
-                  GestureDetector(
-                    onTap: () => model.deleteExperience(experience.id),
-                    child: model.busy(DELETE_EXPERIENCE)
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator.adaptive(),
-                          )
-                        : const Icon(
-                            Icons.close,
+            trailing: isView
+                ? const SizedBox(width: AppSize.s56)
+                : SizedBox(
+                    width: AppSize.s56,
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => model.editExperience(experience),
+                          child: const Icon(
+                            Icons.edit_outlined,
                             color: ColorManager.kDarkColor,
                             size: AppSize.s24,
                           ),
+                        ),
+                        SizedBox(width: AppSize.s4),
+                        GestureDetector(
+                          onTap: () => model.deleteExperience(experience.id),
+                          child: model.busy(DELETE_EXPERIENCE)
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator.adaptive(),
+                                )
+                              : const Icon(
+                                  Icons.close,
+                                  color: ColorManager.kDarkColor,
+                                  size: AppSize.s24,
+                                ),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
           );
         });
   }

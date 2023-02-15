@@ -52,11 +52,11 @@ dependencies:
   fluttertoast: ^8.1.2
   image_picker: ^0.8.6
   timeago: ^3.2.2
-  video_player: ^2.5.1
   flutter_html: ^3.0.0-alpha.6
   share_plus: ^6.3.0
   url_launcher: ^6.1.9
   socket_io_client: ^2.0.1
+  video_player: ^2.5.1
 
 dev_dependencies:
   flutter_test:

@@ -6,15 +6,15 @@ import 'package:ui_package/utils/font_styles.dart';
 import 'package:ui_package/utils/text_styles.dart';
 import 'package:ui_package/utils/values_manager.dart';
 
-import '../../../models/user.model.dart';
-import '../profile_view_model.dart';
+import '../../../../models/user.model.dart';
+import '../../../profile/profile_view_model.dart';
 
 class ProfilePortfolioGallery extends StatelessWidget {
   const ProfilePortfolioGallery({
     Key? key,
     required this.currentUser,
   }) : super(key: key);
-  final User currentUser;
+  final User? currentUser;
 
   @override
   Widget build(BuildContext context) {

@@ -14,6 +14,13 @@ class AccountService with ReactiveServiceMixin {
     listenToReactiveValues([]);
   }
 
+  Future<User> getAccount(String id) async {
+    var response = await dioClient.get(
+      '/accounts/$id',
+    );
+    return User.fromJson(response.data);
+  }
+
   Future<User> updateServices(Map formData) async {
     var response = await dioClient.put(
       '/accounts/services',

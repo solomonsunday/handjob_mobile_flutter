@@ -6,12 +6,9 @@ import 'package:handjob_mobile/utils/humanize_date.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
-import 'package:ui_package/utils/colors.dart';
-import 'package:ui_package/utils/text_styles.dart';
-import 'package:ui_package/utils/values_manager.dart';
 
-import '../../../models/applied_job.model.dart';
-import '../../../models/instant_job.model.dart';
+import '../../../../models/applied_job.model.dart';
+import '../../../../models/instant_job.model.dart';
 
 class ProfileTab extends ViewModelWidget<ProfileViewModel> {
   const ProfileTab({Key? key}) : super(key: key);
@@ -74,13 +71,11 @@ class TabItem extends StatelessWidget {
           children: [
             Row(
               children: [
-                Container(
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/logo.jpeg'),
-                    radius: 16,
-                  ),
+                const CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/logo.jpeg'),
+                  radius: 16,
                 ),
-                SizedBox(width: AppSize.s8),
+                const SizedBox(width: AppSize.s8),
                 Text(
                   instantHire.company?.companyName ?? "",
                   style: getBoldStyle(
@@ -99,7 +94,7 @@ class TabItem extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                     ),
-                    SizedBox(width: AppSize.s4),
+                    const SizedBox(width: AppSize.s4),
                     Text(
                       '5 mins ago',
                       style: getRegularStyle(
@@ -111,7 +106,7 @@ class TabItem extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: AppSize.s12),
+            const SizedBox(height: AppSize.s12),
             Text(
               instantHire.description ?? "",
               style: getBoldStyle(
@@ -126,7 +121,7 @@ class TabItem extends StatelessWidget {
                 fontSize: FontSize.s12,
               ),
             ),
-            SizedBox(height: AppSize.s20),
+            const SizedBox(height: AppSize.s20),
             Text(
               'MEET UP LOCATION: ${instantHire.meetupLocation}',
               style: getBoldStyle(

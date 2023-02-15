@@ -5,10 +5,12 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/services/post.service.dart';
+import 'package:handjob_mobile/ui/main/post/post_view_model.dart';
 import 'package:handjob_mobile/utils/helpers.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:stacked/stacked.dart';
+import 'package:ui_package/ui_package.dart';
 import 'package:ui_package/utils/colors.dart';
 import 'package:ui_package/utils/font_styles.dart' as FontSize;
 import 'package:ui_package/utils/text_styles.dart';
@@ -35,7 +37,6 @@ class HomeCard extends StatelessWidget {
     return ViewModelBuilder<HomeCardViewModel>.reactive(
         viewModelBuilder: () => HomeCardViewModel(),
         builder: (context, model, _) {
-          print('postm edia res: ${post.postMedia}');
           return Container(
             width: double.infinity,
             decoration: const BoxDecoration(
@@ -147,9 +148,10 @@ class HomeCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: AppSize.s12,
                 ),
+
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,42 +187,50 @@ class HomeCard extends StatelessWidget {
                       onTap: onImageClick,
                       child: (post.postMedia ?? []).isEmpty
                           ? Container()
-                          : SizedBox(
-                              height: 320,
-                              width: double.infinity,
-                              child: CachedNetworkImage(
-                                placeholder: (context, url) => Container(
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      image:
-                                          AssetImage("assets/images/logo.jpeg"),
-                                      fit: BoxFit.cover,
-                                    ),
+                          : post.postMedia![0]['mediaType'] == VIDEO
+                              ? SizedBox(
+                                  height: 320,
+                                  width: double.infinity,
+                                  child: DefaultVideoPlayer(
+                                    url: post.postMedia![0]['url'],
                                   ),
-                                ),
-                                errorWidget: (context, url, error) {
-                                  return Container(
-                                    decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            "assets/images/logo.jpeg"),
-                                        fit: BoxFit.cover,
+                                )
+                              : SizedBox(
+                                  height: 320,
+                                  width: double.infinity,
+                                  child: CachedNetworkImage(
+                                    placeholder: (context, url) => Container(
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage(
+                                              "assets/images/logo.jpeg"),
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
-                                  );
-                                },
-                                imageUrl: post.postMedia![0]['url'],
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.cover,
+                                    errorWidget: (context, url, error) {
+                                      return Container(
+                                        decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                                "assets/images/logo.jpeg"),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    imageUrl: post.postMedia![0]['url'],
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
                     ),
                     const SizedBox(
                       height: AppSize.s8,

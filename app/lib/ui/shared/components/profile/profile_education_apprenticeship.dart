@@ -7,17 +7,27 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 
-import '../../../app/app.locator.dart';
-import '../../../enums/bottom_sheet_type.dart';
-import '../../../models/education.model.dart';
-import '../../../services/authentication.service.dart';
-import '../../../utils/http_exception.dart';
+import '../../../../app/app.locator.dart';
+import '../../../../enums/bottom_sheet_type.dart';
+import '../../../../models/education.model.dart';
+import '../../../../models/user.model.dart';
+import '../../../../services/authentication.service.dart';
+import '../../../../utils/http_exception.dart';
 
-class ProfileEducationApprenticeship extends ViewModelWidget<ProfileViewModel> {
-  const ProfileEducationApprenticeship({Key? key}) : super(key: key);
+class ProfileEducationApprenticeship extends StatelessWidget {
+  const ProfileEducationApprenticeship({
+    Key? key,
+    required this.currentUser,
+    this.showEducationApprenticeSheet,
+    this.isView = false,
+  }) : super(key: key);
+
+  final User? currentUser;
+  final VoidCallback? showEducationApprenticeSheet;
+  final bool isView;
 
   @override
-  Widget build(BuildContext context, ProfileViewModel model) {
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppPadding.p24,
@@ -29,10 +39,10 @@ class ProfileEducationApprenticeship extends ViewModelWidget<ProfileViewModel> {
           ProfileActionHeader(
             icon: Icons.menu_book_rounded,
             title: 'Education/ Apprenticeship',
-            onTap: model.showEducationApprenticeSheet,
+            onTap: showEducationApprenticeSheet,
           ),
           const SizedBox(height: AppSize.s8),
-          if ((model.currentUser!.educations ?? []).isEmpty)
+          if ((currentUser?.educations ?? []).isEmpty)
             Text(
               'No education added',
               style: getRegularStyle(
@@ -40,15 +50,16 @@ class ProfileEducationApprenticeship extends ViewModelWidget<ProfileViewModel> {
                 fontSize: FontSize.s12,
               ),
             ),
-          if ((model.currentUser!.educations ?? []).isEmpty)
+          if ((currentUser?.educations ?? []).isEmpty)
             const SizedBox(height: AppSize.s8),
-          if ((model.currentUser!.educations ?? []).isNotEmpty)
+          if ((currentUser?.educations ?? []).isNotEmpty)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: (model.currentUser!.educations ?? [])
+              children: (currentUser?.educations ?? [])
                   .map(
                     (education) => ProfileEducationItem(
                       education: education,
+                      isView: isView,
                     ),
                   )
                   .toList(),
@@ -63,9 +74,11 @@ class ProfileEducationItem extends StatelessWidget {
   const ProfileEducationItem({
     super.key,
     required this.education,
+    this.isView = false,
   });
 
   final Education education;
+  final bool isView;
 
   @override
   Widget build(BuildContext context) {
@@ -124,36 +137,38 @@ class ProfileEducationItem extends StatelessWidget {
                 ),
               ],
             ),
-            trailing: SizedBox(
-              width: AppSize.s56,
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => model.editEducation(education),
-                    child: const Icon(
-                      Icons.edit_outlined,
-                      color: ColorManager.kDarkColor,
-                      size: AppSize.s24,
-                    ),
-                  ),
-                  const SizedBox(width: AppSize.s4),
-                  GestureDetector(
-                    onTap: () => model.deleteEducation(education.id),
-                    child: model.busy(DELETE_EDUCATION)
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator.adaptive(),
-                          )
-                        : const Icon(
-                            Icons.close,
+            trailing: isView
+                ? const SizedBox(width: AppSize.s56)
+                : SizedBox(
+                    width: AppSize.s56,
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => model.editEducation(education),
+                          child: const Icon(
+                            Icons.edit_outlined,
                             color: ColorManager.kDarkColor,
                             size: AppSize.s24,
                           ),
+                        ),
+                        const SizedBox(width: AppSize.s4),
+                        GestureDetector(
+                          onTap: () => model.deleteEducation(education.id),
+                          child: model.busy(DELETE_EDUCATION)
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator.adaptive(),
+                                )
+                              : const Icon(
+                                  Icons.close,
+                                  color: ColorManager.kDarkColor,
+                                  size: AppSize.s24,
+                                ),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
           );
         });
   }

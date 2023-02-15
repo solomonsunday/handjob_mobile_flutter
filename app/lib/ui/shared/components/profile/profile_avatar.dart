@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_package/ui_package.dart';
 
-import '../profile_view.dart';
 import 'profile_edit_icon.dart';
 
 class ProfileAvatar extends StatelessWidget {

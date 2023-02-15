@@ -23,20 +23,6 @@ class MyApp extends StatelessWidget {
 
   // This widget is the root of your application.
 
-  // initSocket() {
-  //   socket = IO.io(CHAT_SOCKET_SERVER_URL, <String, dynamic>{
-  //     'autoConnect': false,
-  //     'transports': ['websocket'],
-  //   });
-  //   socket.connect();
-  //   socket.onConnect((_) {
-  //     print('Connection established');
-  //   });
-  //   socket.onDisconnect((_) => print('Connection Disconnection'));
-  //   socket.onConnectError((err) => print(err));
-  //   socket.onError((err) => print(err));
-  // }
-
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AppViewModel>.nonReactive(

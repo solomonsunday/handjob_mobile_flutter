@@ -5,7 +5,7 @@ import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
 import '../../../models/contact.model.dart';
-import '../../rating/rating.dart';
+import '../../shared/components/rating/rating.dart';
 
 class ContactListView extends StatelessWidget {
   const ContactListView({Key? key}) : super(key: key);

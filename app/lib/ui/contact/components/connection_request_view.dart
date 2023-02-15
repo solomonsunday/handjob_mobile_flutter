@@ -8,7 +8,7 @@ import 'package:ui_package/ui_package.dart';
 import '../../../app/app.locator.dart';
 import '../../../models/experience.model.dart';
 import '../../../services/contact.service.dart';
-import '../../rating/rating.dart';
+import '../../shared/components/rating/rating.dart';
 import '../contact_view.dart';
 
 class ConnnectionRequestView extends StatelessWidget {

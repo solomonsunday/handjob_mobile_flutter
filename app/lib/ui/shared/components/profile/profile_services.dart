@@ -3,11 +3,19 @@ import 'package:handjob_mobile/ui/profile/profile_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
-class ProfileServices extends ViewModelWidget<ProfileViewModel> {
-  const ProfileServices({Key? key}) : super(key: key);
+import '../../../../models/user.model.dart';
+
+class ProfileServices extends StatelessWidget {
+  const ProfileServices({
+    Key? key,
+    required this.currentUser,
+    this.showServiceSheet,
+  }) : super(key: key);
+  final User? currentUser;
+  final VoidCallback? showServiceSheet;
 
   @override
-  Widget build(BuildContext context, ProfileViewModel model) {
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppPadding.p24,
@@ -19,7 +27,7 @@ class ProfileServices extends ViewModelWidget<ProfileViewModel> {
           ProfileActionHeader(
             icon: Icons.tag,
             title: 'Services',
-            onTap: model.showServiceSheet,
+            onTap: showServiceSheet,
           ),
           const SizedBox(height: AppSize.s8),
           Wrap(
@@ -27,7 +35,7 @@ class ProfileServices extends ViewModelWidget<ProfileViewModel> {
               runSpacing: -10,
               runAlignment: WrapAlignment.start,
               clipBehavior: Clip.none,
-              children: (model.currentUser!.services ?? [])
+              children: (currentUser?.services ?? [])
                   .map(
                     (service) => Chip(
                       label: Text(

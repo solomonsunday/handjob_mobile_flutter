@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handjob_mobile/ui/application/application_view_model.dart';
 import 'package:handjob_mobile/ui/application/rate_review/rate_review_view.form.dart';
 import 'package:handjob_mobile/ui/application/rate_review/rate_review_view_model.dart';
-import 'package:handjob_mobile/ui/rating/rating.dart';
+import 'package:handjob_mobile/ui/shared/components/rating/rating.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';

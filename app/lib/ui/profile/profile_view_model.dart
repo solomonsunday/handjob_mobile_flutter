@@ -15,6 +15,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import '../../models/applied_job.model.dart';
 import '../../models/instant_job.model.dart';
+import '../../services/contact.service.dart';
 import '../../services/instant_job.service.dart';
 import '../../app/app.locator.dart';
 import '../../services/authentication.service.dart';
@@ -30,10 +31,12 @@ class ProfileViewModel extends ReactiveViewModel {
   final _accountService = locator<AccountService>();
   final _instantJobService = locator<InstantJobService>();
   final _dialogService = locator<DialogService>();
+  final _contactService = locator<ContactService>();
 
   User? get currentUser => _authenticationService.currentUser;
   List<InstantJob> get instantHires => _instantJobService.instantHires;
   List<AppliedJob> get appliedJobs => _instantJobService.appliedJobs;
+  int? get contactListCount => _contactService.contactListCount;
 
   TabController? tabController;
 
@@ -124,6 +127,13 @@ class ProfileViewModel extends ReactiveViewModel {
     } finally {
       notifyListeners();
     }
+  }
+
+  Future<void> fetchContactsCount() async {
+    try {
+      await _contactService.getContactsCount();
+    } on DioError catch (e) {
+    } finally {}
   }
 
   @override

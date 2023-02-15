@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:handjob_mobile/ui/profile/components/profile_contact.dart';
-import 'package:handjob_mobile/ui/profile/components/profile_education_apprenticeship.dart';
-import 'package:handjob_mobile/ui/profile/components/profile_services.dart';
-import 'package:handjob_mobile/ui/profile/profile_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
-import 'components/profile_action_buttons.dart';
-import 'components/profile_bio.dart';
-import 'components/profile_experience.dart';
-import 'components/profile_header.dart';
-import 'components/profile_portfolio.dart';
-import 'components/profile_tab.dart';
+import '../shared/components/profile/profile_contact.dart';
+import '../shared/components/profile/profile_education_apprenticeship.dart';
+import '../shared/components/profile/profile_experience.dart';
+import '../shared/components/profile/profile_header.dart';
+import '../shared/components/profile/profile_portfolio.dart';
+import '../shared/components/profile/profile_services.dart';
+import '../shared/components/profile_tab.dart';
+import 'profile_view_model.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -53,23 +51,58 @@ class ProfileView extends StatelessWidget {
               scrollBehavior: const ScrollBehavior(),
               headerSliverBuilder: (context, value) {
                 return [
-                  const SliverToBoxAdapter(child: ProfileHeader()),
+                  SliverToBoxAdapter(
+                    child: ProfileHeader(
+                      currentUser: model.currentUser,
+                      uploadProfileAvatar: model.uploadProfileAvatar,
+                      busy: model.busy(PROFILE_AVATAR_UPLOAD),
+                      connectionCount: model.contactListCount ?? 0,
+                      rating: 3,
+                    ),
+                  ),
                   const SliverToBoxAdapter(
                       child: SizedBox(height: AppSize.s12)),
-                  const SliverToBoxAdapter(child: ProfileServices()),
+                  SliverToBoxAdapter(
+                      child: ProfileServices(
+                    currentUser: model.currentUser,
+                    showServiceSheet: model.showServiceSheet,
+                  )),
                   const SliverToBoxAdapter(
                       child: SizedBox(height: AppSize.s12)),
-                  const SliverToBoxAdapter(child: ProfileExperience()),
-                  const SliverToBoxAdapter(
-                      child: ProfileEducationApprenticeship()),
-                  const SliverToBoxAdapter(child: ProfileContact()),
+                  SliverToBoxAdapter(
+                      child: ProfileExperience(
+                    currentUser: model.currentUser,
+                    showExperienceSheet: () => model.showExperienceSheet(null),
+                  )),
+                  SliverToBoxAdapter(
+                    child: ProfileEducationApprenticeship(
+                      currentUser: model.currentUser,
+                      showEducationApprenticeSheet: () =>
+                          model.showEducationApprenticeSheet(),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                      child: ProfileContact(
+                    currentUser: model.currentUser,
+                    busy: model.busy(REQUEST_OTP),
+                    requestOTP: () async {
+                      await model.requestOTP();
+                      model.showVerifyPhoneSheet();
+                    },
+                    showContactSheet: () => model.showContactSheet(null),
+                  )),
                   const SliverToBoxAdapter(
                     child: Divider(
                       color: ColorManager.kPrimary100Color,
                       thickness: 1,
                     ),
                   ),
-                  const SliverToBoxAdapter(child: ProfilePortfolio()),
+                  SliverToBoxAdapter(
+                    child: ProfilePortfolio(
+                      currentUser: model.currentUser,
+                      showPortfolioSheet: () => model.showPortfolioSheet(),
+                    ),
+                  ),
                   const SliverToBoxAdapter(
                     child: Divider(
                       color: ColorManager.kPrimary100Color,

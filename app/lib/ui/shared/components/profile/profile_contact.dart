@@ -3,11 +3,23 @@ import 'package:handjob_mobile/ui/profile/profile_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
-class ProfileContact extends ViewModelWidget<ProfileViewModel> {
-  const ProfileContact({Key? key}) : super(key: key);
+import '../../../../models/user.model.dart';
+
+class ProfileContact extends StatelessWidget {
+  const ProfileContact({
+    Key? key,
+    required this.currentUser,
+    required this.busy,
+    this.showContactSheet,
+    this.requestOTP,
+  }) : super(key: key);
+  final User? currentUser;
+  final VoidCallback? showContactSheet;
+  final Function()? requestOTP;
+  final bool busy;
 
   @override
-  Widget build(BuildContext context, ProfileViewModel model) {
+  Widget build(BuildContext context) {
     // print('user profile for ocntact: ${model.currentUser?.toJson()}');
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -18,17 +30,10 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ProfileActionHeader(
-              icon: Icons.phone,
-              title: 'Contact Us',
-              onTap: () => model.showContactSheet({
-                    "email": model.currentUser?.contactEmail ??
-                        model.currentUser?.email ??
-                        "",
-                    "phone": model.currentUser?.phoneNumber ?? "",
-                    "state": model.currentUser?.state ?? "",
-                    "lga": model.currentUser?.lga ?? "",
-                    "address": model.currentUser?.address ?? "",
-                  })),
+            icon: Icons.phone,
+            title: 'Contact Us',
+            onTap: showContactSheet,
+          ),
           const SizedBox(height: AppSize.s24),
           Text(
             'Email address',
@@ -38,7 +43,7 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
             ),
           ),
           Text(
-            model.currentUser?.contactEmail ?? model.currentUser?.email ?? "",
+            currentUser?.contactEmail ?? currentUser?.email ?? "",
             style: getRegularStyle(
               color: ColorManager.kDarkColor,
               fontSize: FontSize.s12,
@@ -56,16 +61,12 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
                   ),
                 ),
               ),
-              !model.busy(REQUEST_OTP)
+              !busy && currentUser != null
                   ? InkWell(
-                      onTap: () async {
-                        //request otp
-                        await model.requestOTP();
-                        model.showVerifyPhoneSheet();
-                      },
+                      onTap: requestOTP,
                       child: Row(
                         children: [
-                          model.currentUser!.phoneNumberVerified!
+                          currentUser!.phoneNumberVerified!
                               ? Container(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: AppPadding.p8,
@@ -102,7 +103,7 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
             ],
           ),
           Text(
-            model.currentUser?.contactPhoneNumber ?? "",
+            currentUser?.contactPhoneNumber ?? "",
             style: getRegularStyle(
               color: ColorManager.kDarkColor,
               fontSize: FontSize.s12,
@@ -117,7 +118,7 @@ class ProfileContact extends ViewModelWidget<ProfileViewModel> {
             ),
           ),
           Text(
-            '${model.currentUser?.address}',
+            '${currentUser?.address}',
             style: getRegularStyle(
               color: ColorManager.kDarkColor,
               fontSize: FontSize.s12,

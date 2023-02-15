@@ -2,14 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
-import '../profile_view_model.dart';
+import '../../../../models/user.model.dart';
 import 'profile_portfolio_gallery.dart';
 
-class ProfilePortfolio extends ViewModelWidget<ProfileViewModel> {
-  const ProfilePortfolio({Key? key}) : super(key: key);
+class ProfilePortfolio extends StatelessWidget {
+  const ProfilePortfolio({
+    Key? key,
+    this.currentUser,
+    this.showPortfolioSheet,
+    this.isView = false,
+  }) : super(key: key);
+
+  final VoidCallback? showPortfolioSheet;
+  final bool isView;
+  final User? currentUser;
 
   @override
-  Widget build(BuildContext context, ProfileViewModel model) {
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppPadding.p24,
@@ -28,7 +37,7 @@ class ProfilePortfolio extends ViewModelWidget<ProfileViewModel> {
                     size: AppSize.s24,
                     color: ColorManager.kDarkColor,
                   ),
-                  SizedBox(width: AppSize.s4),
+                  const SizedBox(width: AppSize.s4),
                   Text(
                     'Portfolio',
                     style: getBoldStyle(
@@ -38,14 +47,15 @@ class ProfilePortfolio extends ViewModelWidget<ProfileViewModel> {
                   )
                 ],
               ),
-              GestureDetector(
-                onTap: model.showPortfolioSheet,
-                child: const Icon(
-                  Icons.add_circle_outline,
-                  size: AppSize.s24,
-                  color: ColorManager.kDarkColor,
-                ),
-              )
+              if (showPortfolioSheet != null)
+                GestureDetector(
+                  onTap: showPortfolioSheet,
+                  child: const Icon(
+                    Icons.add_circle_outline,
+                    size: AppSize.s24,
+                    color: ColorManager.kDarkColor,
+                  ),
+                )
             ],
           ),
           const Divider(
@@ -53,19 +63,8 @@ class ProfilePortfolio extends ViewModelWidget<ProfileViewModel> {
             color: ColorManager.kGrey,
           ),
           ProfilePortfolioGallery(
-            currentUser: model.currentUser!,
+            currentUser: currentUser,
           ),
-          // const SizedBox(height: AppSize.s8),
-          // GestureDetector(
-          //   onTap: () {},
-          //   child: Text(
-          //     'View more...',
-          //     style: getRegularStyle(
-          //       color: ColorManager.kDarkColor,
-          //       fontSize: FontSize.s12,
-          //     ),
-          //   ),
-          // )
         ],
       ),
     );

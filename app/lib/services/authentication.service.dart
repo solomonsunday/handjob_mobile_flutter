@@ -34,7 +34,7 @@ class AuthenticationService with ReactiveServiceMixin {
     final preferences = await SharedPreferences.getInstance();
     String? accessToken = preferences.getString(AUTH_TOKEN_KEY);
     String? refreshToken = preferences.getString(AUTH_REFRESH_KEY);
-    print('refresh token: $refreshToken');
+
     if (accessToken == null || refreshToken == null) {
       return false;
     }
@@ -42,12 +42,10 @@ class AuthenticationService with ReactiveServiceMixin {
     DateTime? expiryDate = Jwt.getExpiryDate(accessToken);
     DateTime? refreshTokenExpiryDate =
         Jwt.getExpiryDate(accessToken); //to be removed
-    print(
-        'refresh token expiry date: $refreshTokenExpiryDate, expiry date: $expiryDate');
+
     bool? isAccessTokenExpired = Jwt.isExpired(accessToken);
     bool? isRefreshTokenExpired = Jwt.isExpired(refreshToken);
-    print(
-        'Access token and Refresh token expired: $isAccessTokenExpired, refresh $isRefreshTokenExpired');
+
     if (isRefreshTokenExpired) {
       return false;
     }

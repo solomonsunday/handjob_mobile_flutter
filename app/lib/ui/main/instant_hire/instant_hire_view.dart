@@ -179,8 +179,7 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
                   label: 'State',
                   requiredField: true,
                   value: model.selectedStateValue,
-                  dropdownItems:
-                      (model.stateNames ?? []).map((e) => e!).toList(),
+                  dropdownItems: (model.stateNames).map((e) => e!).toList(),
                   onChanged: (String? value) {
                     model.setSelectedState(value);
                   },
