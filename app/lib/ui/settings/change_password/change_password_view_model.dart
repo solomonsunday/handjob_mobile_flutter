@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/ui/settings/change_password/change_password_view.form.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -25,6 +26,10 @@ class ChangePasswordViewModel extends FormViewModel {
     setBusy(true);
     try {
       await _authenticationService.changePassword(formData);
+      Fluttertoast.showToast(
+        msg: 'Password was changed!',
+        toastLength: Toast.LENGTH_LONG,
+      );
     } on DioError catch (err) {
     } finally {
       setBusy(false);
