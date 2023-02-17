@@ -15,12 +15,14 @@ class ProfileHeader extends StatelessWidget {
     required this.busy,
     required this.connectionCount,
     required this.rating,
+    this.isView = false,
   }) : super(key: key);
   final User? currentUser;
   final VoidCallback? uploadProfileAvatar;
   final bool busy;
   final int connectionCount;
   final double rating;
+  final bool isView;
 
   @override
   Widget build(
@@ -42,7 +44,9 @@ class ProfileHeader extends StatelessWidget {
                     decoration: const BoxDecoration(
                       color: ColorManager.kSecondaryColor,
                     ),
-                    child: currentUser == null
+                    child: currentUser == null ||
+                            currentUser?.imageUrl == "" ||
+                            currentUser?.imageUrl == null
                         ? Image.asset(
                             'assets/images/logo.jpeg',
                             fit: BoxFit.cover,
@@ -67,8 +71,7 @@ class ProfileHeader extends StatelessWidget {
                                 ),
                               );
                             },
-                            imageUrl: currentUser?.imageUrl ??
-                                "https://i.picsum.photos/id/866/200/200.jpg?hmac=i0ngmQOk9dRZEzhEosP31m_vQnKBQ9C19TBP1CGoIUA",
+                            imageUrl: currentUser!.imageUrl!,
                             imageBuilder: (context, imageProvider) => Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
@@ -79,11 +82,12 @@ class ProfileHeader extends StatelessWidget {
                             ),
                           ),
                   ),
-                  const Positioned(
-                    top: AppSize.s12,
-                    right: AppSize.s20,
-                    child: ProfileEditIcon(),
-                  )
+                  if (!isView)
+                    const Positioned(
+                      top: AppSize.s12,
+                      right: AppSize.s20,
+                      child: ProfileEditIcon(),
+                    )
                 ],
               ),
             ),
@@ -97,9 +101,9 @@ class ProfileHeader extends StatelessWidget {
                         ? () {}
                         : () => uploadProfileAvatar!(),
                     child: ProfileAvatar(
-                      imgUrl: currentUser?.imageUrl,
-                      busy: busy,
-                    ),
+                        imgUrl: currentUser?.imageUrl,
+                        busy: busy,
+                        isView: isView),
                   ),
                 ],
               ),

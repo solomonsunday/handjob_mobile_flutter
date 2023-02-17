@@ -9,4 +9,5 @@ enum BottomSheetType {
   outgoing_call,
   ongoing_voice_call,
   ongoing_video_call,
+  edit_instant_job,
 }

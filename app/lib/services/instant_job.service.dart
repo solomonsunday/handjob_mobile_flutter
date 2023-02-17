@@ -41,6 +41,22 @@ class InstantJobService with ReactiveServiceMixin {
     return InstantJob.fromJson(response.data);
   }
 
+  Future<InstantJob> updateInstantJob(String id, Map formData) async {
+    var response = await dioClient.put(
+      '/instant-job/$id',
+      data: formData,
+    );
+    return InstantJob.fromJson(response.data);
+  }
+
+  Future<bool> deleteInstantJob(String id) async {
+    var response = await dioClient.delete(
+      '/instant-job/$id',
+    );
+    print('response on delete instant job: ${response.data}');
+    return true;
+  }
+
   Future<List<InstantJob>> getInstantJobs({String? search}) async {
     String url = '/instant-job';
     if (search != null) {

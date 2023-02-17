@@ -141,6 +141,7 @@ class RateReviewView extends StatelessWidget with $RateReviewView {
                       ),
                       SizedBox(height: AppSize.s24),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Rate this applicant',
@@ -149,9 +150,8 @@ class RateReviewView extends StatelessWidget with $RateReviewView {
                               fontSize: FontSize.s14,
                             ),
                           ),
-                          const SizedBox(width: AppSize.s12),
                           Rating(
-                            value: double.parse(model.ratingValue ?? "0"),
+                            value: double.parse(model.rating ?? "0"),
                           ),
                         ],
                       ),
@@ -248,12 +248,12 @@ class RateReviewFormView extends ViewModelWidget<RateReviewViewModel> {
         ),
         const SizedBox(height: AppSize.s40),
         DefaultButton(
-          onPressed: model.isBusy
+          onPressed: model.busy(RATING_BUSY)
               ? null
               : () => model.submitReview(applicantId, jobId),
           title: 'Submit',
           // disabled: model.isBusy || model.isFormValid,
-          busy: model.isBusy,
+          busy: model.busy(RATING_BUSY),
         ),
       ],
     );

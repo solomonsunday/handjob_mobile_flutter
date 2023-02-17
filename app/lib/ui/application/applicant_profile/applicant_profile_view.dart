@@ -59,12 +59,12 @@ class ApplicantProfileView extends StatelessWidget {
                 : ListView(
                     children: [
                       ProfileHeader(
-                        currentUser: model.user,
-                        uploadProfileAvatar: () {},
-                        busy: false,
-                        connectionCount: model.contactListCount ?? 0,
-                        rating: 3,
-                      ),
+                          currentUser: model.user,
+                          uploadProfileAvatar: () {},
+                          busy: false,
+                          connectionCount: model.contactListCount ?? 0,
+                          rating: 3,
+                          isView: true),
                       const SizedBox(height: AppSize.s12),
                       Padding(
                         padding: const EdgeInsets.symmetric(

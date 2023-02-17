@@ -24,6 +24,12 @@ fromIsoToDateTimeToDefaultFormat(DateTime dt) {
   return df.format(dt);
 }
 
+fromDateTimeToDefaultFormat(DateTime dt) {
+  DateFormat df = DateFormat("dd-MMM-yyyy");
+
+  return df.format(dt);
+}
+
 //file size
 double getFileSizeInMB(File file) {
   int sizeInBytes = file.lengthSync();

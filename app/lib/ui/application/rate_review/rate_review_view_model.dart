@@ -8,6 +8,8 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../../app/app.locator.dart';
 import '../../../services/instant_job.service.dart';
 
+const String RATING_BUSY = 'RATING_BUSY';
+
 class RateReviewViewModel extends FormViewModel {
   final _navigationService = locator<NavigationService>();
   final _instantJobService = locator<InstantJobService>();
@@ -67,11 +69,11 @@ class RateReviewViewModel extends FormViewModel {
       'detail': descriptionValue,
       "applicantId": applicantId,
       "jobId": jobId,
-      "rating": rating,
+      "rating": double.parse(rating ?? "0"),
     };
     print('form: $formData');
-    return;
-    setBusy(true);
+
+    setBusyForObject(RATING_BUSY, true);
     try {
       await _instantJobService.submitReview(formData);
       Fluttertoast.showToast(
@@ -85,7 +87,7 @@ class RateReviewViewModel extends FormViewModel {
         title: "An error occured",
       );
     } finally {
-      setBusy(false);
+      setBusyForObject(RATING_BUSY, false);
       notifyListeners();
     }
   }

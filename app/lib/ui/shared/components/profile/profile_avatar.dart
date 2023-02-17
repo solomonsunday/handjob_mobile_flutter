@@ -9,9 +9,11 @@ class ProfileAvatar extends StatelessWidget {
     Key? key,
     this.imgUrl,
     this.busy,
+    this.isView = false,
   }) : super(key: key);
   final String? imgUrl;
   final bool? busy;
+  final bool isView;
 
   @override
   Widget build(BuildContext context) {
@@ -64,17 +66,18 @@ class ProfileAvatar extends StatelessWidget {
                   ),
                 ),
         ),
-        Positioned(
-          child: (busy ?? false)
-              ? const SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(),
-                )
-              : const ProfileEditIcon(),
-          right: -4,
-          bottom: 8,
-        )
+        if (!isView)
+          Positioned(
+            child: (busy ?? false)
+                ? const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(),
+                  )
+                : const ProfileEditIcon(),
+            right: -4,
+            bottom: 8,
+          )
       ],
     );
   }

@@ -1,3 +1,4 @@
+import 'package:handjob_mobile/sheets/edit_instant_job/edit_instant_job_sheet_view.dart';
 import 'package:handjob_mobile/sheets/incoming_call/incoming_call_view.dart';
 import 'package:handjob_mobile/sheets/ongoing_video_call/ongoing_video_call_view.dart';
 import 'package:handjob_mobile/sheets/ongoing_voice_call/ongoing_voice_call_view.dart';
@@ -38,6 +39,8 @@ void setupBottomSheetUi() {
         OngoingVoiceCallView(request: sheetRequest, completer: completer),
     BottomSheetType.ongoing_video_call: (context, sheetRequest, completer) =>
         OngoingVideoCallView(request: sheetRequest, completer: completer),
+    BottomSheetType.edit_instant_job: (context, sheetRequest, completer) =>
+        EditInstantJobSheetView(request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);
