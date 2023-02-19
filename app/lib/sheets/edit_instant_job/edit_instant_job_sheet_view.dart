@@ -31,7 +31,6 @@ class EditInstantJobSheetView extends StatelessWidget {
         // await model.fetchProfessionTypes();
         if (request?.data != null) {
           InstantJob job = request?.data as InstantJob;
-          print('job edit params: ${job.toJson()}');
 
           model.handleChangeIsNow(job.now ?? false);
           //  DateFormat formatter = DateFormat('dd-MMM-yyyy');
@@ -110,25 +109,15 @@ class EditInstantJobSheetView extends StatelessWidget {
                       ),
                     const SizedBox(height: AppSize.s12),
                     !model.editServiceLocation
-                        ? GestureDetector(
-                            onTap: model.handleEditServiceLocation,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              child: InputField(
-                                controller: model.serviceLocationController,
-                                readOnly: true,
-                                label: 'Service Location',
-                                requiredField: true,
-                              ),
-                            ),
-                            // child: InputField(
-                            //   controller: model.serviceLocationController,
-                            //   readOnly: true,
-                            //   label: 'Service Location',
-                            //   requiredField: true,
-                            // ),
-                          )
+                        ? InputField(
+                            controller: model.serviceLocationController,
+                            readOnly: true,
+                            label: 'Service Location',
+                            requiredField: true,
+                            onTap: model.handleEditServiceLocation)
                         : Autocomplete<Suggestion>(
+                            initialValue: TextEditingValue(
+                                text: model.serviceLocationController.text),
                             displayStringForOption: _displayStringForOption,
                             optionsBuilder:
                                 (TextEditingValue textEditingValue) async {
@@ -177,16 +166,17 @@ class EditInstantJobSheetView extends StatelessWidget {
                       children: [
                         Expanded(
                           child: !model.editMeetupLocation
-                              ? GestureDetector(
+                              ? InputField(
+                                  controller: model.meetupLocationController,
+                                  readOnly: true,
+                                  label:
+                                      'Meet up location (if different from service location)',
                                   onTap: model.handleEditMeetupLocation,
-                                  child: InputField(
-                                    controller: model.meetupLocationController,
-                                    readOnly: true,
-                                    label:
-                                        'Meet up location (if different from service location)',
-                                  ),
                                 )
                               : Autocomplete<Suggestion>(
+                                  initialValue: TextEditingValue(
+                                      text:
+                                          model.meetupLocationController.text),
                                   displayStringForOption:
                                       _displayStringForOption,
                                   optionsBuilder: (TextEditingValue

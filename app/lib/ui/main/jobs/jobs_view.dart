@@ -379,8 +379,6 @@ class JobItemViewModel extends BaseViewModel {
       data.address = job.address;
       data.meetupLocation = job.meetupLocation;
       data.now = job.now;
-
-      print('data confirmed: ${data.toJson()}');
       notifyListeners();
     }
   }
