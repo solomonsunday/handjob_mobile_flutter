@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:handjob_mobile/models/instant_job.model.dart';
 import 'package:handjob_mobile/sheets/edit_instant_job/edit_instant_job_sheet_view_model.dart';
 import 'package:stacked/stacked.dart';
@@ -27,7 +28,7 @@ class EditInstantJobSheetView extends StatelessWidget {
     return ViewModelBuilder<EditInstantJobSheetViewModel>.reactive(
       viewModelBuilder: () => EditInstantJobSheetViewModel(),
       onModelReady: (model) async {
-        await model.fetchProfessionTypes();
+        // await model.fetchProfessionTypes();
         if (request?.data != null) {
           InstantJob job = request?.data as InstantJob;
           print('job edit params: ${job.toJson()}');
@@ -48,13 +49,18 @@ class EditInstantJobSheetView extends StatelessWidget {
           model.updateMeetupLocation(job.meetupLocation ?? "");
           model.updateLocation(job.address ?? "");
           model.serviceLocationController.text = job.address ?? "";
-          // if (job.address != null || job.address != "") {
-          //   try {
-          //     Suggestion suggestion =
-          //         (await model.fetchSuggestionRequest(job.address!))[0];
-          //     model.updateCoordinate(suggestion.placeId);
-          //   } catch (e) {}
-          // }
+          model.serviceLocationValue =
+              TextEditingValue(text: job.address ?? "");
+          model.meetupLocationController.text = job.meetupLocation ?? "";
+
+          if (job.address != null || job.address != "") {
+            try {
+              await model.handleSuggestion(job.address ?? "");
+              print('suggestion: ${model.suggestions[0].toJson()}');
+
+              await model.updateCoordinate(model.suggestions[0].placeId);
+            } catch (e) {}
+          }
           // model.setSelectedState(request?.data["state"]);
           // model.setSelectedLGA(job.);
           model.updateDescription(job.description ?? "");
@@ -103,50 +109,30 @@ class EditInstantJobSheetView extends StatelessWidget {
                         color: ColorManager.kPrimaryColor,
                       ),
                     const SizedBox(height: AppSize.s12),
-                    Autocomplete<Suggestion>(
-                      initialValue: TextEditingValue(
-                        text: model.serviceLocationController.text,
-                      ),
-                      displayStringForOption: _displayStringForOption,
-                      optionsBuilder:
-                          (TextEditingValue textEditingValue) async {
-                        if (textEditingValue.text == '') {
-                          return const Iterable<Suggestion>.empty();
-                        }
-                        await model.handleSuggestion(textEditingValue.text);
-
-                        return model.suggestions.where((Suggestion option) {
-                          return option.description
-                              .toLowerCase()
-                              .contains(textEditingValue.text.toLowerCase());
-                        });
-                      },
-                      onSelected: (Suggestion selection) async {
-                        debugPrint(
-                            'You just selected ${_displayStringForOption(selection)}');
-                        model
-                            .updateLocation(_displayStringForOption(selection));
-                        await model.updateCoordinate(selection.placeId);
-                      },
-                      fieldViewBuilder: (context, textEditingController,
-                              focusNode, onFieldSubmitted) =>
-                          InputField(
-                        label: 'Service Location',
-                        requiredField: true,
-                        controller: textEditingController,
-                        focusnode: focusNode,
-                        onTap: onFieldSubmitted,
-                        fillColor: ColorManager.kWhiteColor,
-                      ),
-                    ),
-                    SizedBox(height: AppSize.s12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Autocomplete<Suggestion>(
+                    !model.editServiceLocation
+                        ? GestureDetector(
+                            onTap: model.handleEditServiceLocation,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: InputField(
+                                controller: model.serviceLocationController,
+                                readOnly: true,
+                                label: 'Service Location',
+                                requiredField: true,
+                              ),
+                            ),
+                            // child: InputField(
+                            //   controller: model.serviceLocationController,
+                            //   readOnly: true,
+                            //   label: 'Service Location',
+                            //   requiredField: true,
+                            // ),
+                          )
+                        : Autocomplete<Suggestion>(
                             displayStringForOption: _displayStringForOption,
                             optionsBuilder:
                                 (TextEditingValue textEditingValue) async {
+                              print('option builder: ${textEditingValue.text}');
                               if (textEditingValue.text == '') {
                                 return const Iterable<Suggestion>.empty();
                               }
@@ -161,23 +147,91 @@ class EditInstantJobSheetView extends StatelessWidget {
                                         textEditingValue.text.toLowerCase());
                               });
                             },
-                            onSelected: (Suggestion selection) {
+                            onSelected: (Suggestion selection) async {
                               debugPrint(
                                   'You just selected ${_displayStringForOption(selection)}');
-                              model.updateMeetupLocation(
+                              model.updateLocation(
                                   _displayStringForOption(selection));
+                              await model.updateCoordinate(selection.placeId);
                             },
                             fieldViewBuilder: (context, textEditingController,
-                                    focusNode, onFieldSubmitted) =>
-                                InputField(
-                              label:
-                                  'Meet up location (if different from service location)',
-                              controller: textEditingController,
-                              focusnode: focusNode,
-                              onTap: onFieldSubmitted,
-                              fillColor: ColorManager.kWhiteColor,
-                            ),
-                          ),
+                                focusNode, onFieldSubmitted) {
+                              // WidgetsBinding.instance?.addPostFrameCallback((_) {
+                              //   // <--- this part
+                              //   var initialValue =
+                              //       model.serviceLocationController.text;
+
+                              //   textEditingController.text = initialValue;
+                              // });
+                              return InputField(
+                                label: 'Service Location',
+                                requiredField: true,
+                                controller: textEditingController,
+                                focusnode: focusNode,
+                                onTap: onFieldSubmitted,
+                                fillColor: ColorManager.kWhiteColor,
+                              );
+                            }),
+                    SizedBox(height: AppSize.s12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: !model.editMeetupLocation
+                              ? GestureDetector(
+                                  onTap: model.handleEditMeetupLocation,
+                                  child: InputField(
+                                    controller: model.meetupLocationController,
+                                    readOnly: true,
+                                    label:
+                                        'Meet up location (if different from service location)',
+                                  ),
+                                )
+                              : Autocomplete<Suggestion>(
+                                  displayStringForOption:
+                                      _displayStringForOption,
+                                  optionsBuilder: (TextEditingValue
+                                      textEditingValue) async {
+                                    if (textEditingValue.text == '') {
+                                      return const Iterable<Suggestion>.empty();
+                                    }
+                                    await model.handleSuggestion(
+                                        textEditingValue.text);
+
+                                    return model.suggestions
+                                        .where((Suggestion option) {
+                                      return option.description
+                                          .toLowerCase()
+                                          .contains(textEditingValue.text
+                                              .toLowerCase());
+                                    });
+                                  },
+                                  onSelected: (Suggestion selection) {
+                                    debugPrint(
+                                        'You just selected ${_displayStringForOption(selection)}');
+                                    model.updateMeetupLocation(
+                                        _displayStringForOption(selection));
+                                  },
+                                  fieldViewBuilder: (context,
+                                      textEditingController,
+                                      focusNode,
+                                      onFieldSubmitted) {
+                                    // WidgetsBinding.instance
+                                    //     ?.addPostFrameCallback((_) {
+                                    //   // <--- this part
+                                    //   var initialValue =
+                                    //       model.meetupLocationController.text;
+
+                                    //   textEditingController.text = initialValue;
+                                    // });
+                                    return InputField(
+                                      label:
+                                          'Meet up location (if different from service location)',
+                                      controller: textEditingController,
+                                      focusnode: focusNode,
+                                      onTap: onFieldSubmitted,
+                                      fillColor: ColorManager.kWhiteColor,
+                                    );
+                                  }),
                         ),
                       ],
                     ),

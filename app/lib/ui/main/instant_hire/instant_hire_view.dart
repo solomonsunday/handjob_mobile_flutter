@@ -14,9 +14,6 @@ class InstantHireView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<InstantHireViewModel>.nonReactive(
       viewModelBuilder: () => InstantHireViewModel(),
-      onModelReady: (model) async {
-        await model.fetchProfessionTypes();
-      },
       builder: (context, model, child) {
         return Scaffold(
           appBar: Navbar(

@@ -7,6 +7,7 @@ import 'package:stacked/stacked.dart';
 import '../app/app.locator.dart';
 import '../client/dio_client.dart';
 import '../models/country.model.dart';
+import '../models/profession_type.model.dart';
 import '../models/state.model.dart';
 
 class SharedService with ReactiveServiceMixin {
@@ -21,6 +22,7 @@ class SharedService with ReactiveServiceMixin {
       lgasById,
       countries,
       currentIndex,
+      professionTypes,
     ]);
   }
 
@@ -35,6 +37,8 @@ class SharedService with ReactiveServiceMixin {
   List<Country>? get countries => _countries;
   List<Qualification>? _qualifications = [];
   List<Qualification>? get qualifications => _qualifications;
+  List<ProfessionType>? _professionTypes = [];
+  List<ProfessionType>? get professionTypes => _professionTypes;
 
   void setCurrentIndex(int index) {
     _currentIndex = index;
@@ -134,5 +138,18 @@ class SharedService with ReactiveServiceMixin {
     _qualifications = qualifications;
     notifyListeners();
     return qualifications;
+  }
+
+  Future<List<ProfessionType>> getProfessionTypes() async {
+    var response = await dioClient.get(
+      '/service',
+    );
+    List<ProfessionType> professionTypes =
+        (response.data["data"] as List<dynamic>)
+            .map((x) => ProfessionType.fromJson(x))
+            .toList();
+
+    _professionTypes = professionTypes;
+    return professionTypes;
   }
 }

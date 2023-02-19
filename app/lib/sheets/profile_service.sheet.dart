@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/services/authentication.service.dart';
+import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:handjob_mobile/utils/http_exception.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -26,9 +27,6 @@ class ProfileServiceSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileServiceSheetViewModel>.reactive(
       viewModelBuilder: () => ProfileServiceSheetViewModel(),
-      onModelReady: (model) async {
-        await model.fetchProfessionTypes();
-      },
       builder: (context, model, child) {
         return BottomSheetContainer(
           onClose: () => completer!(SheetResponse(confirmed: false)),
@@ -117,10 +115,10 @@ class ProfileServiceSheet extends StatelessWidget {
 class ProfileServiceSheetViewModel extends BaseViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _accountService = locator<AccountService>();
+  final _sharedService = locator<SharedService>();
 
   String? _selectedProfession;
-  List<ProfessionType>? get professionTypes =>
-      _authenticationService.professionTypes;
+  List<ProfessionType>? get professionTypes => _sharedService.professionTypes;
 
   String? get selectedProfession => _selectedProfession;
   List<String> get professions {
@@ -161,22 +159,6 @@ class ProfileServiceSheetViewModel extends BaseViewModel {
       throw HttpException(error.message);
     } finally {
       setBusy(false);
-      notifyListeners();
-    }
-  }
-
-  fetchProfessionTypes() async {
-    runBusyFuture(fetchProfessionTypesRequest(), busyObject: PROFESSION_TYPES);
-  }
-
-  fetchProfessionTypesRequest() async {
-    try {
-      print('fetch profession');
-      await _authenticationService.getProfessionTypes();
-      print('done fetching pro');
-    } on DioError catch (error) {
-      throw Exception(error.response!.data["message"]);
-    } finally {
       notifyListeners();
     }
   }

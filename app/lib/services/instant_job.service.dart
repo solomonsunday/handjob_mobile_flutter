@@ -70,6 +70,11 @@ class InstantJobService with ReactiveServiceMixin {
     return instantHires;
   }
 
+  Future<InstantJob> getInstantJob(String id) async {
+    var response = await dioClient.get('/instant-job/$id');
+    return InstantJob.fromJson(response.data);
+  }
+
   Future<List<InstantJob>> getCurrentInstantJobs({String? search}) async {
     String url = '/instant-job/current';
     if (search != null) {

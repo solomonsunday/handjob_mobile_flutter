@@ -6,6 +6,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../app/app.locator.dart';
+import '../../models/instant_job.model.dart';
 import '../../models/lga.model.dart';
 import '../../models/place.model.dart';
 import '../../models/profession_type.model.dart';
@@ -30,6 +31,7 @@ class EditInstantJobSheetViewModel extends BaseViewModel {
   final TextEditingController serviceNeedController = TextEditingController();
   final TextEditingController serviceLocationController =
       TextEditingController();
+  TextEditingValue serviceLocationValue = TextEditingValue(text: '');
   final TextEditingController meetupLocationController =
       TextEditingController();
   final TextEditingController startDateController = TextEditingController();
@@ -46,6 +48,11 @@ class EditInstantJobSheetViewModel extends BaseViewModel {
 
   bool _isNow = false;
   bool get isNow => _isNow;
+
+  bool _editServiceLocation = false;
+  bool get editServiceLocation => _editServiceLocation;
+  bool _editMeetupLocation = false;
+  bool get editMeetupLocation => _editMeetupLocation;
 
   handleChangeIsNow(bool value) {
     _isNow = value;
@@ -66,8 +73,7 @@ class EditInstantJobSheetViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  List<ProfessionType>? get professionTypes =>
-      _authenticationService.professionTypes;
+  List<ProfessionType>? get professionTypes => _sharedService.professionTypes;
   List<String> get professions {
     return (professionTypes ?? []).map((e) => e.name ?? "").toList();
   }
@@ -159,25 +165,30 @@ class EditInstantJobSheetViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  fetchProfessionTypes() async {
-    runBusyFuture(fetchProfessionTypesRequest(), busyObject: PROFESSION_TYPES);
-  }
+  // fetchProfessionTypes() async {
+  //   runBusyFuture(fetchProfessionTypesRequest(), busyObject: PROFESSION_TYPES);
+  // }
 
-  fetchProfessionTypesRequest() async {
-    try {
-      await _authenticationService.getProfessionTypes();
-    } on DioError catch (error) {
-      throw Exception(error.response!.data["message"]);
-    } finally {
-      notifyListeners();
-    }
-  }
+  // fetchProfessionTypesRequest() async {
+  //   try {
+  //     await _authenticationService.getProfessionTypes();
+  //   } on DioError catch (error) {
+  //     throw Exception(error.response!.data["message"]);
+  //   } finally {
+  //     notifyListeners();
+  //   }
+  // }
 
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
 
   Future updateInstantService(
       Function(SheetResponse<dynamic>)? completer) async {
+    var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Are you sure you want update this job?",
+    );
+    if (!response!.confirmed) return;
     runBusyFuture(updateInstantServiceTask(completer));
   }
 
@@ -223,17 +234,14 @@ class EditInstantJobSheetViewModel extends BaseViewModel {
 
     // print('form data: $formData');
 
-    var response = await _dialogService.showConfirmationDialog(
-      title: "Confirmation",
-      description: "Are you sure you want post this job?",
-    );
-    if (!response!.confirmed) return;
-
     setBusy(true);
     try {
       await _instantJobService.updateInstantJob(id!, formData);
-      await _instantJobService.getInstantJobs();
-      completer!(SheetResponse(confirmed: true));
+      InstantJob instantJob = await _instantJobService.getInstantJob(id!);
+      completer!(SheetResponse(
+        confirmed: true,
+        data: instantJob,
+      ));
     } on DioError catch (error) {
       throw HttpException(error.response!.data["message"]);
     } finally {
@@ -247,6 +255,7 @@ class EditInstantJobSheetViewModel extends BaseViewModel {
       Place place = await _locationService.getPlaceDetailFromId(placeId);
       _lat = place.lat;
       _lon = place.lon;
+      print('place detail: ${place.toJson()}');
     } on DioError catch (e) {
       // print(e.response!.data);
     } finally {
@@ -266,6 +275,17 @@ class EditInstantJobSheetViewModel extends BaseViewModel {
 
   void updateDescription(String value) {
     describeServiceController.text = value;
+    notifyListeners();
+  }
+
+  void handleEditServiceLocation() {
+    _editServiceLocation = !_editServiceLocation;
+    print('edit service : $_editServiceLocation');
+    notifyListeners();
+  }
+
+  void handleEditMeetupLocation() {
+    _editMeetupLocation = !_editMeetupLocation;
     notifyListeners();
   }
 }

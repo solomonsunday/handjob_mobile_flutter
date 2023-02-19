@@ -68,8 +68,7 @@ class InstantHireViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  List<ProfessionType>? get professionTypes =>
-      _authenticationService.professionTypes;
+  List<ProfessionType>? get professionTypes => _sharedService.professionTypes;
   List<String> get professions {
     if (professionTypes == null) {
       return [];
@@ -158,20 +157,6 @@ class InstantHireViewModel extends BaseViewModel {
   handleEndDate(String value) {
     endDateController.text = value;
     notifyListeners();
-  }
-
-  fetchProfessionTypes() async {
-    runBusyFuture(fetchProfessionTypesRequest(), busyObject: PROFESSION_TYPES);
-  }
-
-  fetchProfessionTypesRequest() async {
-    try {
-      await _authenticationService.getProfessionTypes();
-    } on DioError catch (error) {
-      throw Exception(error.response!.data["message"]);
-    } finally {
-      notifyListeners();
-    }
   }
 
   String _errorMessage = "";

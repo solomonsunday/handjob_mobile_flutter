@@ -60,6 +60,12 @@ class MainViewModel extends ReactiveViewModel {
     } on DioError catch (error) {}
   }
 
+  Future<void> fetchProfessionTypes() async {
+    try {
+      await _sharedService.getProfessionTypes();
+    } on DioError catch (error) {}
+  }
+
   @override
   List<ReactiveServiceMixin> get reactiveServices => [_sharedService];
 

@@ -22,6 +22,7 @@ class MainView extends StatelessWidget {
         await model.fetchLGA();
         await model.fetchCountries();
         await model.fetchQualification();
+        await model.fetchProfessionTypes();
         await model.fetchPost();
       },
       viewModelBuilder: () => MainViewModel(),

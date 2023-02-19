@@ -17,18 +17,15 @@ class AuthenticationService with ReactiveServiceMixin {
   AuthenticationService() {
     listenToReactiveValues([
       currentUser,
-      professionTypes,
       // _currentSuperAdminUser,
     ]);
   }
 
   User? _currentUser;
-  final ReactiveValue<List<ProfessionType>?> _professionTypes =
-      ReactiveValue<List<ProfessionType>?>([]);
+
   // final ReactiveValue<SuperAdmin?> _currentSuperAdminUser =
   //     ReactiveValue<SuperAdmin?>(null);
   User? get currentUser => _currentUser;
-  List<ProfessionType>? get professionTypes => _professionTypes.value;
 
   Future<bool> isAuthenticated() async {
     final preferences = await SharedPreferences.getInstance();
@@ -114,19 +111,6 @@ class AuthenticationService with ReactiveServiceMixin {
     _currentUser = authUser;
     notifyListeners();
     return authUser;
-  }
-
-  Future<List<ProfessionType>> getProfessionTypes() async {
-    var response = await dioClient.get(
-      '/service',
-    );
-    List<ProfessionType> professionTypes =
-        (response.data["data"] as List<dynamic>)
-            .map((x) => ProfessionType.fromJson(x))
-            .toList();
-
-    _professionTypes.value = professionTypes;
-    return professionTypes;
   }
 
   Future<Auth> verifyOTP(String code) async {

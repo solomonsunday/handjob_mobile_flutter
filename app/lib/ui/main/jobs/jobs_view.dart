@@ -222,19 +222,25 @@ class JobItem extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: AppSize.s20),
-                  Text(
-                    'MEET UP LOCATION: ${instantJob.meetupLocation ?? "NA"}',
-                    style: getBoldStyle(
-                      color: ColorManager.kDarkColor,
-                      fontSize: FontSize.s12,
-                    ),
+                  Wrap(
+                    children: [
+                      Text(
+                        'MEET UP LOCATION: ${instantJob.meetupLocation ?? instantJob.address ?? "NA"}',
+                        style: getBoldStyle(
+                          color: ColorManager.kDarkColor,
+                          fontSize: FontSize.s12,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: AppSize.s12),
-                  Row(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.calendar_month_rounded),
+                          const Icon(Icons.calendar_month_rounded),
+                          const SizedBox(width: AppSize.s4),
                           Text(
                             DateFormat.yMEd()
                                 .format(DateTime.parse(instantJob.startDate!)),
@@ -244,20 +250,20 @@ class JobItem extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(width: AppSize.s4),
-                      Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Icon(Icons.pin_drop_outlined),
-                            Text(
-                              instantJob.location ?? "",
-                              softWrap: false,
+                      Row(
+                        children: [
+                          const Icon(Icons.pin_drop_outlined),
+                          const SizedBox(width: AppSize.s4),
+                          Expanded(
+                            child: Text(
+                              instantJob.address ?? "",
+                              softWrap: true,
                               maxLines: 2,
                               style: getMediumStyle(
                                   color: ColorManager.kDarkCharcoal),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -358,13 +364,24 @@ class JobItemViewModel extends BaseViewModel {
         .isNotEmpty;
   }
 
-  showEditInstantJob(dynamic data) => _bottomSheetService.showCustomSheet(
-        variant: BottomSheetType.edit_instant_job,
-        data: data,
-        // isScrollControlled: true,
-        ignoreSafeArea: true,
-        enterBottomSheetDuration: const Duration(milliseconds: 400),
-        exitBottomSheetDuration: const Duration(milliseconds: 200),
-        enableDrag: true,
-      );
+  showEditInstantJob(InstantJob data) async {
+    var response = await _bottomSheetService.showCustomSheet(
+      variant: BottomSheetType.edit_instant_job,
+      data: data,
+      // isScrollControlled: true,
+      ignoreSafeArea: true,
+      enterBottomSheetDuration: const Duration(milliseconds: 400),
+      exitBottomSheetDuration: const Duration(milliseconds: 200),
+      enableDrag: true,
+    );
+    if (response?.confirmed ?? false) {
+      InstantJob job = response?.data as InstantJob;
+      data.address = job.address;
+      data.meetupLocation = job.meetupLocation;
+      data.now = job.now;
+
+      print('data confirmed: ${data.toJson()}');
+      notifyListeners();
+    }
+  }
 }

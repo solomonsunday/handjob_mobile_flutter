@@ -9,16 +9,17 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../app/app.router.dart';
+import '../../../../services/shared.service.dart';
 import '../../../../utils/contants.dart';
 import '../customer/customer_signup_view_model.dart';
 
 class ArtisanSignupViewModel extends FormViewModel {
   final _authenticationService = locator<AuthenticationService>();
+  final _sharedService = locator<SharedService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
   bool _tos = false;
-  List<ProfessionType>? get professionTypes =>
-      _authenticationService.professionTypes;
+  List<ProfessionType>? get professionTypes => _sharedService.professionTypes;
   // List<String?> get professionTypesName =>
   //     professionTypes!.map((e) => e.name).toList();
 
@@ -65,7 +66,7 @@ class ArtisanSignupViewModel extends FormViewModel {
   fetchProfessionTypesRequest() async {
     try {
       print('fetch profession');
-      await _authenticationService.getProfessionTypes();
+      await _sharedService.getProfessionTypes();
       print('done fetching pro');
     } on DioError catch (error) {
       throw Exception(error.response!.data["message"]);
