@@ -6,12 +6,16 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../app/app.locator.dart';
 import '../../../../models/comment.model.dart';
+import '../../../../models/user.model.dart';
+import '../../../../services/authentication.service.dart';
 import '../../../../services/comment.service.dart';
 
 class PostDetailViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
   final _commentService = locator<CommentService>();
+  final _authenticationService = locator<AuthenticationService>();
 
+  User? get currentUser => _authenticationService.currentUser;
   String? _postId;
   String? get postId => _postId;
 

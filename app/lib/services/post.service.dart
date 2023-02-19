@@ -62,11 +62,28 @@ class PostService with ReactiveServiceMixin {
     print('response data: ${response.data}');
   }
 
-  Future<Post> likePost(String postId) async {
-    var response = await dioClient.put('/post/like/$postId');
-
-    print('like response: ${response.data}');
+  Future<Post> getPost(String postId) async {
+    var response = await dioClient.get('/post/$postId');
     return Post.fromJson(response.data);
+  }
+
+  Future<bool> likePost(String postId) async {
+    await dioClient.put('/post/like/$postId');
+    return true;
+  }
+
+  Future<bool> disLikePost(String postId) async {
+    await dioClient.put('/post/dislike/$postId');
+    return true;
+  }
+
+  Future<Post> deletePost(String postId) async {
+    var response = await dioClient.delete("/post/$postId");
+
+    Post post = Post.fromJson(response.data);
+    _posts.removeWhere((element) => element.id == post.id);
+    notifyListeners();
+    return post;
   }
 
   // edit: (id, data) => requests.put(`/post/${id}`, data),

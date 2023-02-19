@@ -173,7 +173,7 @@ class HomePostWidget extends ViewModelWidget<HomeViewModel> {
 
   @override
   Widget build(BuildContext context, HomeViewModel model) {
-    print('post widget: ${model.posts}');
+    // print('post widget: ${model.posts}');
     return ListView.builder(
       itemCount: model.posts.length,
       itemBuilder: (BuildContext context, int index) {

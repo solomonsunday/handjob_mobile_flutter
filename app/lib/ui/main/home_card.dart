@@ -10,6 +10,7 @@ import 'package:handjob_mobile/utils/helpers.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 import 'package:ui_package/utils/colors.dart';
 import 'package:ui_package/utils/font_styles.dart' as FontSize;
@@ -17,6 +18,9 @@ import 'package:ui_package/utils/text_styles.dart';
 import 'package:ui_package/utils/values_manager.dart';
 
 import '../../models/post.model.dart';
+import '../../models/user.model.dart';
+import '../../services/authentication.service.dart';
+import '../contact/contact_view_model.dart';
 
 class HomeCard extends StatelessWidget {
   const HomeCard({
@@ -136,22 +140,44 @@ class HomeCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(width: AppSize.s12),
-                      Text(
-                        // hoursago1MG (2439:4362)
-                        getTimeAgoDiff(post.createdAt!),
-                        style: getMediumStyle(
-                          fontSize: 10,
-                          color: Color(0xff000000),
+                      if (post.author?.id == model.currentUser?.id)
+                        PopupMenuButton<String>(
+                          onSelected: (value) {
+                            print('value selected: $value');
+                            switch (value) {
+                              case DELETE:
+                                model.deletePost(post.id!);
+                                break;
+                              default:
+                                break;
+                            }
+                          },
+                          itemBuilder: (BuildContext bc) {
+                            return [
+                              PopupMenuItem(
+                                height: 10,
+                                child: Text(
+                                  'Delete Post',
+                                  style: getSemiBoldStyle(
+                                    color: ColorManager.kRed,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                value: DELETE,
+                              )
+                            ];
+                          },
+                          child: const Icon(
+                            Icons.more_vert,
+                            size: AppSize.s24,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),
                 const SizedBox(
                   height: AppSize.s12,
                 ),
-
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +202,20 @@ class HomeCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                // stop here...
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      // hoursago1MG (2439:4362)
+                      getTimeAgoDiff(post.createdAt!),
+                      style: getMediumStyle(
+                        fontSize: 10,
+                        color: Color(0xff000000),
+                      ),
+                    ),
+                    const SizedBox(width: AppSize.s12),
+                  ],
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -247,7 +286,7 @@ class HomeCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  post.liked! || model.isLiked
+                                  model.isLiked || post.liked!
                                       ? Icons.favorite
                                       : Icons.favorite_outline,
                                   color: ColorManager.kDarkColor,
@@ -314,6 +353,12 @@ class HomeCard extends StatelessWidget {
                     const Divider()
                   ],
                 ),
+                if (model.busy(DELETE_POST))
+                  const LinearProgressIndicator(
+                    color: ColorManager.kGrey1,
+                    valueColor:
+                        AlwaysStoppedAnimation(ColorManager.kPrimaryColor),
+                  ),
               ],
             ),
           );
@@ -322,26 +367,67 @@ class HomeCard extends StatelessWidget {
 }
 
 const String LIKE_POST = "LIKE_POST";
+const String DELETE_POST = 'DELETE_POST';
 
 class HomeCardViewModel extends BaseViewModel {
   final _postService = locator<PostService>();
+  final _dialogService = locator<DialogService>();
+  final _authenticationService = locator<AuthenticationService>();
+
+  User? get currentUser => _authenticationService.currentUser;
 
   bool _isLiked = false;
   bool get isLiked => _isLiked;
 
   Future onLikePost(Post post) async {
     _isLiked = !_isLiked;
-    post.likes = (post.likes ?? 0) + 1;
+
+    post.likes = _isLiked ? (post.likes ?? 0) + 1 : (post.likes ?? 0) - 1;
     notifyListeners();
     setBusyForObject(LIKE_POST, true);
+
     try {
-      await _postService.likePost(post.id!);
-      await _postService.getPosts();
-      Fluttertoast.showToast(msg: 'You just liked a post');
+      if (_isLiked) {
+        await _postService.likePost(post.id!);
+      } else {
+        await _postService.disLikePost(post.id!);
+      }
+      post = await _postService.getPost(post.id!);
+      Fluttertoast.showToast(
+          msg: 'You just ${_isLiked ? 'liked' : 'unliked'} a post');
     } on DioError catch (e) {
       print('error liking: ${e.response?.data ?? "error unknown"}');
+      post.likes = (post.likes ?? 0) - 1;
+      _isLiked = false;
+      Fluttertoast.showToast(
+          msg: 'Unable to like post. please try again later');
     } finally {
       setBusyForObject(LIKE_POST, false);
+      notifyListeners();
+    }
+  }
+
+  deletePost(String id) {
+    runBusyFuture(deletePostRequest(id), busyObject: DELETE_POST);
+  }
+
+  deletePostRequest(String id) async {
+    var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Do you really want to delete this post?",
+    );
+    if (!response!.confirmed) return;
+
+    try {
+      await _postService.deletePost(id);
+      Fluttertoast.showToast(
+        msg: 'Post has been deleted!',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+      );
+    } catch (e) {
+    } finally {
+      notifyListeners();
     }
   }
 }

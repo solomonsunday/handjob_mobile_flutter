@@ -16,7 +16,8 @@ class VerifyEmailViewModel extends FormViewModel {
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
 
-  int? _endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 60;
+  int? _endTime =
+      DateTime.now().millisecondsSinceEpoch + 1000 * 60 * 5; // 5minutes
   int? get endTime => _endTime;
 
   showSuccessDialog() async {
@@ -33,7 +34,7 @@ class VerifyEmailViewModel extends FormViewModel {
       setBusyForObject(OTP_REQUEST, true);
       var formData = {"email": email};
       await _authenticationService.requestOTP(formData);
-      _endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 60;
+      _endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 60 * 5;
     } on DioError catch (error) {
       throw HttpException(error.response!.data['message']);
     } finally {

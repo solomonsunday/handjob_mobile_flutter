@@ -43,9 +43,11 @@ class EditInstantJobSheetView extends StatelessWidget {
             model.handleEndDate(
                 fromDateTimeToDefaultFormat(fromIsoToDateTime(job.endDate!)));
           }
-          // model.handleSelectedProfession(job.service ?? "");
+          model.handleSelectedProfession(job.service ?? "");
+          print('profession: ${model.selectedProfession}');
           model.updateMeetupLocation(job.meetupLocation ?? "");
-          model.updateLocation(job.location ?? "");
+          model.updateLocation(job.address ?? "");
+          model.serviceLocationController.text = job.address ?? "";
           // if (job.address != null || job.address != "") {
           //   try {
           //     Suggestion suggestion =
@@ -55,6 +57,7 @@ class EditInstantJobSheetView extends StatelessWidget {
           // }
           // model.setSelectedState(request?.data["state"]);
           // model.setSelectedLGA(job.);
+          model.updateDescription(job.description ?? "");
           model.updateId(job.id);
         }
       },
@@ -101,6 +104,9 @@ class EditInstantJobSheetView extends StatelessWidget {
                       ),
                     const SizedBox(height: AppSize.s12),
                     Autocomplete<Suggestion>(
+                      initialValue: TextEditingValue(
+                        text: model.serviceLocationController.text,
+                      ),
                       displayStringForOption: _displayStringForOption,
                       optionsBuilder:
                           (TextEditingValue textEditingValue) async {

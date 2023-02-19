@@ -361,7 +361,7 @@ class JobItemViewModel extends BaseViewModel {
   showEditInstantJob(dynamic data) => _bottomSheetService.showCustomSheet(
         variant: BottomSheetType.edit_instant_job,
         data: data,
-        isScrollControlled: true,
+        // isScrollControlled: true,
         ignoreSafeArea: true,
         enterBottomSheetDuration: const Duration(milliseconds: 400),
         exitBottomSheetDuration: const Duration(milliseconds: 200),

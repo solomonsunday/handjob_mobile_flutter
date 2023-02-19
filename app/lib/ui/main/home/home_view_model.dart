@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/services/post.service.dart';
@@ -14,8 +15,8 @@ class HomeViewModel extends ReactiveViewModel {
   final _postService = locator<PostService>();
   final _authenticationService = locator<AuthenticationService>();
 
-  List<Post> get posts => _postService.posts;
   User? get currentUser => _authenticationService.currentUser;
+  List<Post> get posts => _postService.posts;
 
   void onPostImageClick(Post post) {
     _navigationService.navigateTo(Routes.postDetailView,

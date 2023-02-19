@@ -21,7 +21,6 @@ import '../../utils/helpers.dart';
 import '../../utils/http_exception.dart';
 
 class EditInstantJobSheetViewModel extends BaseViewModel {
-  final _navigationService = locator<NavigationService>();
   final _locationService = locator<LocationService>(param1: const Uuid().v4());
   final _instantJobService = locator<InstantJobService>();
   final _dialogService = locator<DialogService>();
@@ -63,16 +62,14 @@ class EditInstantJobSheetViewModel extends BaseViewModel {
   void handleSelectedProfession(String? value) {
     _selectedProfession = value;
     serviceNeedController.text = value ?? "";
+
     notifyListeners();
   }
 
   List<ProfessionType>? get professionTypes =>
       _authenticationService.professionTypes;
   List<String> get professions {
-    if (professionTypes == null) {
-      return [];
-    }
-    return professionTypes!.map((e) => e.name!).toList();
+    return (professionTypes ?? []).map((e) => e.name ?? "").toList();
   }
 
   List<Suggestion> _suggestions = [];
@@ -121,10 +118,12 @@ class EditInstantJobSheetViewModel extends BaseViewModel {
 
   void updateLocation(String location) {
     serviceLocationController.text = location;
+    notifyListeners();
   }
 
   void updateMeetupLocation(String location) {
     meetupLocationController.text = location;
+    notifyListeners();
   }
 
   void setSelectedState(String? value) {
@@ -204,14 +203,15 @@ class EditInstantJobSheetViewModel extends BaseViewModel {
 
     var formData = {
       "service": serviceNeedController.text,
-      "meetupLocation": serviceLocationController.text.isNotEmpty
-          ? serviceLocationController.text
+      "meetupLocation": meetupLocationController.text.isNotEmpty
+          ? meetupLocationController.text
           : "",
-      "lat": lat,
-      "long": lon,
       "state": selectedStateValue,
       "lga": selectedLgaValue,
-      "address": meetupLocationController.text.isNotEmpty
+      "lat": lat,
+      "long": lon,
+
+      "address": serviceLocationController.text.isEmpty
           ? meetupLocationController.text
           : serviceLocationController.text,
       "startDate": dateToIso8601String(startDateController.text),
@@ -249,6 +249,8 @@ class EditInstantJobSheetViewModel extends BaseViewModel {
       _lon = place.lon;
     } on DioError catch (e) {
       // print(e.response!.data);
+    } finally {
+      notifyListeners();
     }
   }
 
@@ -260,5 +262,10 @@ class EditInstantJobSheetViewModel extends BaseViewModel {
 
   void updateId(id) {
     _id = id;
+  }
+
+  void updateDescription(String value) {
+    describeServiceController.text = value;
+    notifyListeners();
   }
 }
