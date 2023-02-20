@@ -103,50 +103,54 @@ class HomeSearchWidget extends ViewModelWidget<HomeViewModel> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              color: Color(0xffd9d9d9),
-              // image: DecorationImage(
-              //   fit: BoxFit.cover,
-              //   image: NetworkImage(model.currentUser?.imageUrl ??
-              //       'https://xsgames.co/randomusers/avatar.php?g=male'),
-              // ),
-            ),
-            child: CachedNetworkImage(
-              placeholder: (context, url) => Container(
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/logo.jpeg"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+          GestureDetector(
+            onTap: () {
+              model.navigateToProfile();
+            },
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                color: Color(0xffd9d9d9),
               ),
-              errorWidget: (context, url, error) {
-                return Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/logo.jpeg"),
+              child: model.currentUser?.imageUrl == null
+                  ? Image.asset(
+                      'assets/images/logo.jpeg',
                       fit: BoxFit.cover,
+                    )
+                  : CachedNetworkImage(
+                      placeholder: (context, url) => Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/logo.jpeg"),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) {
+                        return Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: AssetImage("assets/images/logo.jpeg"),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                      imageUrl: model.currentUser?.imageUrl ?? "",
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                );
-              },
-              imageUrl: model.currentUser?.imageUrl ??
-                  'https://picsum.photos/660/200',
-              imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
             ),
           ),
           const SizedBox(width: AppSize.s8),
