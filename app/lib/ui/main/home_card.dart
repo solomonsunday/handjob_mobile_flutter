@@ -219,7 +219,7 @@ class HomeCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: AppSize.s12,
                     ),
                     GestureDetector(
@@ -232,6 +232,7 @@ class HomeCard extends StatelessWidget {
                                   width: double.infinity,
                                   child: DefaultVideoPlayer(
                                     url: post.postMedia![0]['url'],
+                                    videoType: VideoType.NETWORK,
                                   ),
                                 )
                               : SizedBox(

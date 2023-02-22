@@ -8,12 +8,14 @@ import '../../app/app.locator.dart';
 import '../../models/user.model.dart';
 import '../../services/authentication.service.dart';
 import '../../services/post.service.dart';
+import '../../services/video-call.service.dart';
 
 class MainViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
   final _authenticationService = locator<AuthenticationService>();
   final _sharedService = locator<SharedService>();
   final _postService = locator<PostService>();
+  final videoCallService = locator<VideoCallService>();
 
   int get currentIndex => _sharedService.currentIndex;
 

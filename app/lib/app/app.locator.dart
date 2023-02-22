@@ -23,6 +23,7 @@ import '../services/instant_job.service.dart';
 import '../services/location.service.dart';
 import '../services/post.service.dart';
 import '../services/shared.service.dart';
+import '../services/video-call.service.dart';
 
 final locator = StackedLocator.instance;
 
@@ -49,4 +50,5 @@ Future<void> setupLocator(
   locator.registerLazySingleton(() => ContactService());
   locator.registerLazySingleton(() => CommentService());
   locator.registerLazySingleton(() => ChatService());
+  locator.registerLazySingleton(() => VideoCallService());
 }

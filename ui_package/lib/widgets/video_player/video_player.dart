@@ -32,7 +32,12 @@ class _DefaultVideoPlayerState extends State<DefaultVideoPlayer> {
     } else {
       _videoPlayerController = VideoPlayerController.network(widget.url);
     }
-    _initializeVideoPlayerFuture = _videoPlayerController.initialize();
+
+    _videoPlayerController.initialize().then((_) {
+      setState(() {
+        _videoPlayerController.play();
+      });
+    });
   }
 
   @override
@@ -43,44 +48,39 @@ class _DefaultVideoPlayerState extends State<DefaultVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _initializeVideoPlayerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Stack(
-              children: [
-                AspectRatio(
-                  aspectRatio: _videoPlayerController.value.aspectRatio,
-                  child: VideoPlayer(_videoPlayerController),
-                ),
-                Positioned(
-                  bottom: 4,
-                  right: 4,
-                  child: GestureDetector(
-                    onTap: () {
-                      if (_videoPlayerController.value.volume > 0) {
-                        _videoPlayerController.setVolume(100);
-                      } else {
-                        _videoPlayerController.setVolume(0);
-                      }
-                    },
-                    child: _videoPlayerController.value.volume > 0
-                        ? const Icon(Icons.campaign)
-                        : const Icon(
-                            Icons.not_accessible,
-                          ),
+    return Stack(
+      children: [
+        AspectRatio(
+          aspectRatio: _videoPlayerController.value.aspectRatio,
+          child: GestureDetector(
+              onTap: () {
+                _videoPlayerController.value.isPlaying
+                    ? _videoPlayerController.pause()
+                    : _videoPlayerController.play();
+              },
+              child: VideoPlayer(_videoPlayerController)),
+        ),
+        Positioned(
+          bottom: 4,
+          right: 4,
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                if (_videoPlayerController.value.volume > 0.0) {
+                  _videoPlayerController.setVolume(0.0);
+                } else {
+                  _videoPlayerController.setVolume(1.0);
+                }
+              });
+            },
+            child: _videoPlayerController.value.volume > 0
+                ? const Icon(Icons.campaign)
+                : const Icon(
+                    Icons.not_accessible,
                   ),
-                )
-              ],
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(
-                backgroundColor: ColorManager.kGrey1,
-                valueColor: AlwaysStoppedAnimation(ColorManager.kWhiteColor),
-              ),
-            );
-          }
-        });
+          ),
+        )
+      ],
+    );
   }
 }

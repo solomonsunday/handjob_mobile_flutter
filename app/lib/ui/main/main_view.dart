@@ -24,6 +24,8 @@ class MainView extends StatelessWidget {
         await model.fetchQualification();
         await model.fetchProfessionTypes();
         await model.fetchPost();
+
+        model.videoCallService.initSocket();
       },
       viewModelBuilder: () => MainViewModel(),
       builder: (context, model, child) => Scaffold(
