@@ -33,7 +33,9 @@ class HomeCard extends StatelessWidget {
   final Function()? onImageClick;
 
   Widget getBody(String data) {
-    return Html(data: data);
+    return Html(
+      data: data,
+    );
   }
 
   @override

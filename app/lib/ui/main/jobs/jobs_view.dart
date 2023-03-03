@@ -49,25 +49,26 @@ class JobsView extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   SizedBox(height: AppSize.s8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSize.s12,
-                      vertical: AppSize.s12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: ColorManager.kWhiteColor,
-                    ),
-                    child: InputField(
-                      hintText: 'Search',
-                      paddingBottom: AppPadding.p8,
-                      paddingTop: AppPadding.p8,
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: ColorManager.kGrey3,
+                  if (model.jobs.isNotEmpty)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSize.s12,
+                        vertical: AppSize.s12,
                       ),
-                      onChanged: model.handleSearch,
+                      decoration: BoxDecoration(
+                        color: ColorManager.kWhiteColor,
+                      ),
+                      child: InputField(
+                        hintText: 'Search',
+                        paddingBottom: AppPadding.p8,
+                        paddingTop: AppPadding.p8,
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: ColorManager.kGrey3,
+                        ),
+                        onChanged: model.handleSearch,
+                      ),
                     ),
-                  ),
                   SizedBox(height: AppSize.s8),
                   if (model.isBusy)
                     Row(
@@ -77,6 +78,8 @@ class JobsView extends StatelessWidget {
                         CircularProgressIndicator(),
                       ],
                     ),
+                  if (model.jobs.isEmpty)
+                    Center(child: Text('There are no jobs yet!')),
                   Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
@@ -288,9 +291,10 @@ class JobItem extends StatelessWidget {
                           busy: model.busy(APPLY_JOB),
                           title: 'Apply',
                           buttonType: ButtonType.fill,
-                          paddingHeight: 20,
-                          paddingWidth: 40,
+                          paddingHeight: 8,
+                          paddingWidth: 20,
                           borderRadius: 4,
+                          fontSize: 12,
                         ),
                       if (model.isJobApplied(instantJob.id!))
                         DefaultButton(
@@ -350,7 +354,12 @@ class JobItemViewModel extends BaseViewModel {
         fontSize: FontSize.s16,
       );
     } on DioError catch (error) {
-      throw HttpException(error.response?.data['message'] ?? "");
+      print('error.response?.data: ${error.response?.data}');
+      _dialogService.showDialog(
+        description: "Unable to apply for this job. please try again",
+        title: "An error occured",
+      );
+      // throw HttpException(error.response?.data['message'] ?? "");
     } finally {
       setBusyForObject(APPLY_JOB, false);
       notifyListeners();

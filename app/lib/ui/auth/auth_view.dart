@@ -1,18 +1,26 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:handjob_mobile/ui/auth/auth_view.form.dart';
 import 'package:handjob_mobile/ui/auth/auth_view_model.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked/stacked_annotations.dart';
 import 'package:ui_package/ui_package.dart';
 
-class AuthView extends StatelessWidget {
-  const AuthView({Key? key}) : super(key: key);
+@FormView(fields: [
+  FormTextField(name: 'email'),
+  FormTextField(name: 'password'),
+])
+class AuthView extends StatelessWidget with $AuthView {
+  AuthView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AuthViewModel>.reactive(
       viewModelBuilder: () => AuthViewModel(),
+      onModelReady: listenToFormUpdated,
+      onDispose: (_) => disposeForm(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: ColorManager.kWhiteColor,
         body: SafeArea(
@@ -37,14 +45,14 @@ class AuthView extends StatelessWidget {
                   const SizedBox(height: AppSize.s24),
                   InputField(
                     hintText: 'Username',
-                    controller: model.emailController,
+                    controller: emailController,
                     keyBoardType: TextInputType.emailAddress,
                     fillColor: ColorManager.kWhiteColor,
                   ),
                   const SizedBox(height: AppSize.s12),
                   InputField(
                     hintText: 'Password',
-                    controller: model.passwordController,
+                    controller: passwordController,
                     fillColor: ColorManager.kWhiteColor,
                     obscureText: model.visibility,
                     suffixIcon: GestureDetector(

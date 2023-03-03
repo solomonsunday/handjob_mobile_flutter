@@ -25,9 +25,12 @@ class MainView extends StatelessWidget {
         await model.fetchProfessionTypes();
         await model.fetchPost();
 
-        model.videoCallService.initSocket();
+        model.initializeView();
       },
       viewModelBuilder: () => MainViewModel(),
+      onDispose: (model) {
+        model.dispose();
+      },
       builder: (context, model, child) => Scaffold(
         body: getView(model.currentIndex),
         drawer: const MainDrawerWidget(),

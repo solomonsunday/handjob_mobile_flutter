@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/ui/auth/auth_view_model.dart';
+import 'package:handjob_mobile/ui/auth/reset_password/reset_password_view.form.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -9,16 +10,27 @@ import 'package:ui_package/ui_package.dart';
 import 'reset_password_view_model.dart';
 
 @FormView(fields: [
+  FormTextField(name: 'code'),
   FormTextField(name: 'password'),
   FormTextField(name: 'confirmPassword'),
 ])
-class ResetPasswordView extends StatelessWidget {
-  ResetPasswordView({Key? key}) : super(key: key);
+class ResetPasswordView extends StatelessWidget with $ResetPasswordView {
+  ResetPasswordView({
+    Key? key,
+    required this.email,
+  }) : super(key: key);
+
+  String email;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ResetPasswordViewModel>.reactive(
       viewModelBuilder: () => ResetPasswordViewModel(),
+      onModelReady: (model) {
+        listenToFormUpdated(model);
+        model.setEmail(email);
+      },
+      onDispose: (_) => disposeForm(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: ColorManager.kWhiteColor,
         body: SafeArea(
@@ -42,6 +54,22 @@ class ResetPasswordView extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSize.s12),
                   Text(
+                    'Enter verification code',
+                    style: getRegularStyle(
+                      color: ColorManager.kDarkColor,
+                      fontSize: FontSize.s14,
+                    ),
+                  ),
+                  const SizedBox(height: AppSize.s12),
+                  InputField(
+                    hintText: 'Enter code',
+                    keyBoardType: TextInputType.number,
+                    fillColor: ColorManager.kWhiteColor,
+                    controller: codeController,
+                    focusnode: codeFocusNode,
+                  ),
+                  const SizedBox(height: AppSize.s12),
+                  Text(
                     'Enter your new password',
                     style: getRegularStyle(
                       color: ColorManager.kDarkColor,
@@ -51,14 +79,16 @@ class ResetPasswordView extends StatelessWidget {
                   const SizedBox(height: AppSize.s12),
                   InputField(
                     hintText: 'Enter password',
-                    // controller: pa,
+                    controller: passwordController,
+                    focusnode: passwordFocusNode,
                     keyBoardType: TextInputType.emailAddress,
                     fillColor: ColorManager.kWhiteColor,
                   ),
                   const SizedBox(height: AppSize.s12),
                   InputField(
                     hintText: 'Confirm password',
-                    // controller: model.emailController,
+                    controller: confirmPasswordController,
+                    focusnode: confirmPasswordFocusNode,
                     keyBoardType: TextInputType.emailAddress,
                     fillColor: ColorManager.kWhiteColor,
                   ),
@@ -73,7 +103,7 @@ class ResetPasswordView extends StatelessWidget {
                       ),
                     ),
                   DefaultButton(
-                    onPressed: model.recoverPassword,
+                    onPressed: model.resetPassword,
                     title: 'Reset password',
                     busy: model.isBusy,
                     buttonBgColor: ColorManager.kDarkColor,

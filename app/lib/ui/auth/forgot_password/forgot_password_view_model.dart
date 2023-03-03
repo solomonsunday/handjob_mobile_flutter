@@ -14,11 +14,6 @@ class ForgotPasswordViewModel extends FormViewModel {
   final _navigationService = locator<NavigationService>();
   final _authenticationService = locator<AuthenticationService>();
 
-  @override
-  void setFormStatus() {
-    // TODO: implement setFormStatus
-  }
-
   recoverPassword() async {
     runBusyFuture(reecoverPasswordRequest());
   }
@@ -31,7 +26,7 @@ class ForgotPasswordViewModel extends FormViewModel {
       };
       await _authenticationService.requestForgotPassword(formData);
       Fluttertoast.showToast(
-        msg: "A link has been sent to your mail to reset your password.",
+        msg: "A code has been sent to your mail to reset your password.",
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -39,7 +34,7 @@ class ForgotPasswordViewModel extends FormViewModel {
         textColor: Colors.white,
         fontSize: 16.0,
       );
-      _navigationService.back();
+      _navigationService.navigateToResetPasswordView(email: emailValue!);
     } on DioError catch (error) {
       throw HttpException(error.response!.data["message"]);
     } finally {
@@ -49,4 +44,9 @@ class ForgotPasswordViewModel extends FormViewModel {
   }
 
   void navigateToLogin() => _navigationService.navigateTo(Routes.authView);
+
+  @override
+  void setFormStatus() {
+    // TODO: implement setFormStatus
+  }
 }

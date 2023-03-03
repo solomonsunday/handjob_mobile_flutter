@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../app/app.locator.dart';
 import '../../models/contact.model.dart';
 import '../../services/contact.service.dart';
+import '../../services/video-call.service.dart';
 
 const String CONTACT_COUNT_REQUEST = "CONTACT_COUNT_REQUEST";
 const String CONTACT_LIST_REQUEST = "CONTACT_LIST_REQUEST";
@@ -28,6 +29,7 @@ class ContactViewModel extends ReactiveViewModel {
   final _contactService = locator<ContactService>();
   final _bottomSheetService = locator<BottomSheetService>();
   final _dialogService = locator<DialogService>();
+  final _videoCallService = locator<VideoCallService>();
 
   int? get contactListCount => _contactService.contactListCount;
   List<Contact>? get contactList => _contactService.contactList;
@@ -132,12 +134,16 @@ class ContactViewModel extends ReactiveViewModel {
   }
 
   //handle video call
-  handleVideoCall(Contact p1) {
-    _bottomSheetService.showCustomSheet(
-      variant: BottomSheetType.outgoing_call,
-      title: "Outgoing Video Call",
-      data: {"type": "video"},
-      isScrollControlled: true,
-    );
+  handleVideoCall(Contact contact) async {
+    print('contact ${contact.toJson()}');
+    //call
+    _videoCallService.callUser(contact.id);
+    try {} catch (e) {}
+    // _bottomSheetService.showCustomSheet(
+    //   variant: BottomSheetType.outgoing_call,
+    //   title: "Outgoing Video Call",
+    //   data: {"type": "video", "contact": contact},
+    //   isScrollControlled: true,
+    // );
   }
 }

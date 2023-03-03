@@ -7,9 +7,9 @@ part of 'socket-user.model.dart';
 // **************************************************************************
 
 SocketUser _$SocketUserFromJson(Map<String, dynamic> json) => SocketUser(
-      json['userId'] as String,
-      json['email'] as String,
-      json['socketId'] as String,
+      json['userId'] as String?,
+      json['email'] as String?,
+      json['socketId'] as String?,
     );
 
 Map<String, dynamic> _$SocketUserToJson(SocketUser instance) =>

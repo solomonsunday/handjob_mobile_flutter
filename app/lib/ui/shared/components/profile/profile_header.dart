@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_package/ui_package.dart';
 
+import '../../../../dialogs/account_type.dialog.dart';
 import '../../../../models/user.model.dart';
 import '../rating/rating.dart';
 import 'profile_avatar.dart';
@@ -144,7 +145,7 @@ class ProfileHeader extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: AppPadding.p24),
           child: Text(
-            '${currentUser?.profession ?? currentUser?.accountType}',
+            '${currentUser?.role == CUSTOMER ? "Customer" : currentUser?.profession ?? currentUser?.accountType}',
             style: getRegularStyle(
               color: ColorManager.kDarkColor,
               fontSize: FontSize.s12,

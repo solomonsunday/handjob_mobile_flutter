@@ -9,6 +9,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
+const String CodeValueKey = 'code';
 const String PasswordValueKey = 'password';
 const String ConfirmPasswordValueKey = 'confirmPassword';
 
@@ -19,15 +20,19 @@ final Map<String, FocusNode> _ResetPasswordViewFocusNodes = {};
 
 final Map<String, String? Function(String?)?>
     _ResetPasswordViewTextValidations = {
+  CodeValueKey: null,
   PasswordValueKey: null,
   ConfirmPasswordValueKey: null,
 };
 
 mixin $ResetPasswordView on StatelessWidget {
+  TextEditingController get codeController =>
+      _getFormTextEditingController(CodeValueKey);
   TextEditingController get passwordController =>
       _getFormTextEditingController(PasswordValueKey);
   TextEditingController get confirmPasswordController =>
       _getFormTextEditingController(ConfirmPasswordValueKey);
+  FocusNode get codeFocusNode => _getFormFocusNode(CodeValueKey);
   FocusNode get passwordFocusNode => _getFormFocusNode(PasswordValueKey);
   FocusNode get confirmPasswordFocusNode =>
       _getFormFocusNode(ConfirmPasswordValueKey);
@@ -53,6 +58,7 @@ mixin $ResetPasswordView on StatelessWidget {
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
   void listenToFormUpdated(FormViewModel model) {
+    codeController.addListener(() => _updateFormData(model));
     passwordController.addListener(() => _updateFormData(model));
     confirmPasswordController.addListener(() => _updateFormData(model));
   }
@@ -68,6 +74,7 @@ mixin $ResetPasswordView on StatelessWidget {
     model.setData(
       model.formValueMap
         ..addAll({
+          CodeValueKey: codeController.text,
           PasswordValueKey: passwordController.text,
           ConfirmPasswordValueKey: confirmPasswordController.text,
         }),
@@ -80,6 +87,7 @@ mixin $ResetPasswordView on StatelessWidget {
   /// Updates the fieldsValidationMessages on the FormViewModel
   void _updateValidationData(FormViewModel model) =>
       model.setValidationMessages({
+        CodeValueKey: _getValidationMessage(CodeValueKey),
         PasswordValueKey: _getValidationMessage(PasswordValueKey),
         ConfirmPasswordValueKey: _getValidationMessage(ConfirmPasswordValueKey),
       });
@@ -112,10 +120,14 @@ mixin $ResetPasswordView on StatelessWidget {
 extension ValueProperties on FormViewModel {
   bool get isFormValid =>
       this.fieldsValidationMessages.values.every((element) => element == null);
+  String? get codeValue => this.formValueMap[CodeValueKey] as String?;
   String? get passwordValue => this.formValueMap[PasswordValueKey] as String?;
   String? get confirmPasswordValue =>
       this.formValueMap[ConfirmPasswordValueKey] as String?;
 
+  bool get hasCode =>
+      this.formValueMap.containsKey(CodeValueKey) &&
+      (codeValue?.isNotEmpty ?? false);
   bool get hasPassword =>
       this.formValueMap.containsKey(PasswordValueKey) &&
       (passwordValue?.isNotEmpty ?? false);
@@ -123,12 +135,16 @@ extension ValueProperties on FormViewModel {
       this.formValueMap.containsKey(ConfirmPasswordValueKey) &&
       (confirmPasswordValue?.isNotEmpty ?? false);
 
+  bool get hasCodeValidationMessage =>
+      this.fieldsValidationMessages[CodeValueKey]?.isNotEmpty ?? false;
   bool get hasPasswordValidationMessage =>
       this.fieldsValidationMessages[PasswordValueKey]?.isNotEmpty ?? false;
   bool get hasConfirmPasswordValidationMessage =>
       this.fieldsValidationMessages[ConfirmPasswordValueKey]?.isNotEmpty ??
       false;
 
+  String? get codeValidationMessage =>
+      this.fieldsValidationMessages[CodeValueKey];
   String? get passwordValidationMessage =>
       this.fieldsValidationMessages[PasswordValueKey];
   String? get confirmPasswordValidationMessage =>
@@ -136,6 +152,8 @@ extension ValueProperties on FormViewModel {
 }
 
 extension Methods on FormViewModel {
+  setCodeValidationMessage(String? validationMessage) =>
+      this.fieldsValidationMessages[CodeValueKey] = validationMessage;
   setPasswordValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[PasswordValueKey] = validationMessage;
   setConfirmPasswordValidationMessage(String? validationMessage) =>

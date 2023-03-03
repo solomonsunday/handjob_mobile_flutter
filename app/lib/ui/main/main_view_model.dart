@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
+import 'package:peerdart/peerdart.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -10,18 +11,32 @@ import '../../services/authentication.service.dart';
 import '../../services/post.service.dart';
 import '../../services/video-call.service.dart';
 
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
 class MainViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
   final _authenticationService = locator<AuthenticationService>();
   final _sharedService = locator<SharedService>();
   final _postService = locator<PostService>();
-  final videoCallService = locator<VideoCallService>();
+  final _videoCallService = locator<VideoCallService>();
+
+  IO.Socket get videoSocket => _videoCallService.socket;
 
   int get currentIndex => _sharedService.currentIndex;
 
   User? get currentUser => _authenticationService.currentUser;
 
   navigateToProfile() => _navigationService.navigateTo(Routes.profileView);
+
+  void initializeView() {
+    _videoCallService.initSocket();
+  }
+
+  @override
+  dispose() {
+    videoSocket.dispose();
+    videoSocket.disconnect();
+  }
 
   setCurrentIndex(int value) {
     _sharedService.setCurrentIndex(value);

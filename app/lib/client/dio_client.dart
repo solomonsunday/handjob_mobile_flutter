@@ -7,7 +7,7 @@ class DioClient {
   final Dio _dio = Dio(
     BaseOptions(
       baseUrl: 'https://api-jobplicant.herokuapp.com',
-      connectTimeout: 15000,
+      // connectTimeout: 15000,
       // receiveTimeout: 3000,
     ),
   )..interceptors.add(BearerTokenInterceptor());
@@ -25,8 +25,8 @@ class BearerTokenInterceptor extends Interceptor {
     if (sharedPreferences.getString(AUTH_TOKEN_KEY) != null) {
       options.headers['Authorization'] =
           'Bearer ${sharedPreferences.getString(AUTH_TOKEN_KEY)}';
-      print('OPTIONS: ${options.toString()}');
     }
+    print('OPTIONS: ${options.headers.toString()}');
     return super.onRequest(options, handler);
   }
 

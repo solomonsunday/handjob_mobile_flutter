@@ -35,7 +35,7 @@ class _DefaultVideoPlayerState extends State<DefaultVideoPlayer> {
 
     _videoPlayerController.initialize().then((_) {
       setState(() {
-        _videoPlayerController.play();
+        //   _videoPlayerController.play();
         _videoPlayerController.setVolume(1.0);
       });
     });

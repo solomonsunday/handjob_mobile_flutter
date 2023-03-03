@@ -150,4 +150,13 @@ class AuthenticationService with ReactiveServiceMixin {
     print('change password resp: ${response.data}');
     return true;
   }
+
+  Future requestResetPassword(String email, String code, Map formData) async {
+    var response = await dioClient.put(
+      '/auth/change-password-email?shortCode=$code&email=$email',
+      data: formData,
+    );
+    print('change password resp: ${response.data}');
+    return true;
+  }
 }

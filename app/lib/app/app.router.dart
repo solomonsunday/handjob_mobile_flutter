@@ -236,8 +236,11 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i4.AuthView: (data) {
+      final args = data.getArgs<AuthViewArguments>(
+        orElse: () => const AuthViewArguments(),
+      );
       return _i1.buildAdaptivePageRoute<dynamic>(
-        builder: (context) => const _i4.AuthView(),
+        builder: (context) => _i4.AuthView(key: args.key),
         settings: data,
       );
     },
@@ -285,11 +288,10 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i10.ResetPasswordView: (data) {
-      final args = data.getArgs<ResetPasswordViewArguments>(
-        orElse: () => const ResetPasswordViewArguments(),
-      );
+      final args = data.getArgs<ResetPasswordViewArguments>(nullOk: false);
       return _i1.buildAdaptivePageRoute<dynamic>(
-        builder: (context) => _i10.ResetPasswordView(key: args.key),
+        builder: (context) =>
+            _i10.ResetPasswordView(key: args.key, email: args.email),
         settings: data,
       );
     },
@@ -406,6 +408,12 @@ class OnboardViewArguments {
   final _i25.Key? key;
 }
 
+class AuthViewArguments {
+  const AuthViewArguments({this.key});
+
+  final _i25.Key? key;
+}
+
 class ArtisanSignupViewArguments {
   const ArtisanSignupViewArguments({this.key});
 
@@ -450,9 +458,14 @@ class ForgotPasswordViewArguments {
 }
 
 class ResetPasswordViewArguments {
-  const ResetPasswordViewArguments({this.key});
+  const ResetPasswordViewArguments({
+    this.key,
+    required this.email,
+  });
 
   final _i25.Key? key;
+
+  final String email;
 }
 
 class PostDetailViewArguments {
@@ -550,14 +563,16 @@ extension NavigatorStateExtension on _i26.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToAuthView([
+  Future<dynamic> navigateToAuthView({
+    _i25.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.authView,
+        arguments: AuthViewArguments(key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -650,6 +665,7 @@ extension NavigatorStateExtension on _i26.NavigationService {
 
   Future<dynamic> navigateToResetPasswordView({
     _i25.Key? key,
+    required String email,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -657,7 +673,7 @@ extension NavigatorStateExtension on _i26.NavigationService {
         transition,
   }) async {
     return navigateTo<dynamic>(Routes.resetPasswordView,
-        arguments: ResetPasswordViewArguments(key: key),
+        arguments: ResetPasswordViewArguments(key: key, email: email),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

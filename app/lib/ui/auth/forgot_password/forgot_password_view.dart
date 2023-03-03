@@ -17,9 +17,7 @@ class ForgotPasswordView extends StatelessWidget with $ForgotPasswordView {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ForgotPasswordViewModel>.reactive(
       viewModelBuilder: () => ForgotPasswordViewModel(),
-      onModelReady: (model) {
-        listenToFormUpdated(model);
-      },
+      onModelReady: listenToFormUpdated,
       onDispose: (_) => disposeForm(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: ColorManager.kWhiteColor,

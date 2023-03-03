@@ -4,9 +4,9 @@ part 'socket-user.model.g.dart';
 
 @JsonSerializable()
 class SocketUser {
-  String userId;
-  String email;
-  String socketId;
+  String? userId;
+  String? email;
+  String? socketId;
 
   SocketUser(this.userId, this.email, this.socketId) {}
 

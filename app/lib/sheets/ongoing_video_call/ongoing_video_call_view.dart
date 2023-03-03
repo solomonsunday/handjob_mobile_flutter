@@ -19,10 +19,15 @@ class OngoingVideoCallView extends StatelessWidget {
   final SheetRequest? request;
   final Function(SheetResponse)? completer;
 
+  // RTCVideoRenderer _rtcVideoRenderer;
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<OngoingVideoCallViewModel>.reactive(
       viewModelBuilder: () => OngoingVideoCallViewModel(),
+      onModelReady: (model) {
+        print('contact: ${request!.data["contact"]}');
+      },
       builder: (context, model, _) {
         return BottomSheetContainer(
           showClose: false,
