@@ -93,7 +93,7 @@ class CustomerSignupViewModel extends FormViewModel {
       var formData = {
         "email": emailValue,
         "password": passwordValue,
-        "accountType": "Job Seeker",
+        "accountType": "Instant Hire",
         "firstName": firstnameValue,
         "lastName": lastnameValue,
       };

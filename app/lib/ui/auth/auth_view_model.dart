@@ -74,14 +74,14 @@ class AuthViewModel extends FormViewModel {
       switch (response.data) {
         case CUSTOMER:
           // do a customer job
-          _navigationService.navigateTo(Routes.customerSignupView);
+          _navigationService.navigateToCustomerSignupView();
           break;
         case ARTISAN:
           // do an artisan job
-          _navigationService.navigateTo(Routes.artisanSignupView);
+          _navigationService.navigateToArtisanSignupView();
           break;
         default:
-          _navigationService.navigateTo(Routes.customerSignupView);
+        //
       }
     }
   }
