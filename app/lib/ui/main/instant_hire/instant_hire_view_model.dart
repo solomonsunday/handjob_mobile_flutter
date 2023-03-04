@@ -216,6 +216,10 @@ class InstantHireViewModel extends BaseViewModel {
     setBusy(true);
     try {
       await _instantJobService.createInstantJob(formData);
+      Fluttertoast.showToast(
+        msg: 'Job posted successfully!',
+        toastLength: Toast.LENGTH_LONG,
+      );
       _sharedService.setCurrentIndex(MainView.JOB_VIEW);
     } on DioError catch (error) {
       throw HttpException(error.response!.data["message"]);

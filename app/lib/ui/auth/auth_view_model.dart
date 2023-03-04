@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/models/auth.model.dart';
@@ -52,6 +53,10 @@ class AuthViewModel extends FormViewModel {
       Auth response = await _authenticationService.login(formData);
       await _authenticationService.getCurrentBaseUser();
       _navigationService.replaceWith(Routes.mainView);
+      Fluttertoast.showToast(
+        msg: 'login successfully!',
+        toastLength: Toast.LENGTH_LONG,
+      );
       return;
     } on DioError catch (err) {
       _errorMessage = "An error occured: please enter a valid credential";

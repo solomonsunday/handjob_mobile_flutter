@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/ui/contact/contact_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -246,6 +247,10 @@ class ConnectionRequestItemViewModel extends BaseViewModel {
       await _contactService.getContacts();
       await _contactService.getContactsCount();
       _accepted = true;
+      Fluttertoast.showToast(
+        msg: 'Connection accepted successfully!',
+        toastLength: Toast.LENGTH_LONG,
+      );
     } on DioError catch (e) {
     } finally {
       setBusyForObject(ACCEPT_CONNECTION, false);
@@ -260,6 +265,10 @@ class ConnectionRequestItemViewModel extends BaseViewModel {
       await _contactService.getConnectionRequests();
       await _contactService.getContacts();
       await _contactService.getContactsCount();
+      Fluttertoast.showToast(
+        msg: 'Connection rejected!',
+        toastLength: Toast.LENGTH_LONG,
+      );
     } on DioError catch (e) {
     } finally {
       setBusyForObject(CONNECTION_REQUEST, false);

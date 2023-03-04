@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/models/auth.model.dart';
 import 'package:handjob_mobile/services/authentication.service.dart';
@@ -97,10 +98,14 @@ class CustomerSignupViewModel extends FormViewModel {
         "firstName": firstnameValue,
         "lastName": lastnameValue,
       };
-      print('form data customer: $formData');
+      // print('form data customer: $formData');
       await _authenticationService.createUser(formData);
       _navigationService.navigateTo(Routes.verifyEmailView,
           arguments: VerifyEmailViewArguments(email: emailValue!));
+      Fluttertoast.showToast(
+        msg: 'Account created!',
+        toastLength: Toast.LENGTH_LONG,
+      );
     } on DioError catch (error) {
       throw Exception(error.response?.data["message"]);
     } finally {
