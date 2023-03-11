@@ -11,6 +11,7 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../app/app.locator.dart';
 import '../../models/user.model.dart';
 import '../../services/authentication.service.dart';
+import '../../services/notification.service.dart';
 import '../../services/post.service.dart';
 import '../../services/video-call.service.dart';
 
@@ -22,6 +23,7 @@ class MainViewModel extends ReactiveViewModel {
   final _sharedService = locator<SharedService>();
   final _postService = locator<PostService>();
   final _videoCallService = locator<VideoCallService>();
+  final _notificationService = locator<NotificationService>();
   final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
   IO.Socket get videoSocket => _videoCallService.socket;
@@ -37,8 +39,8 @@ class MainViewModel extends ReactiveViewModel {
     //update device token
     String? token = await messaging.getToken();
     if (token != null && currentUser != null) {
-      print("device registration token: $token");
-      print(" current user: ${currentUser?.toJson()}");
+      // print("device registration token: $token");
+      // print(" current user: ${currentUser?.toJson()}");
       Map formData = {
         "userId": currentUser?.id,
         "deviceToken": token,
@@ -110,6 +112,12 @@ class MainViewModel extends ReactiveViewModel {
   Future<void> fetchProfessionTypes() async {
     try {
       await _sharedService.getProfessionTypes();
+    } on DioError catch (error) {}
+  }
+
+  fetchNotification() async {
+    try {
+      await _notificationService.getNotifications();
     } on DioError catch (error) {}
   }
 

@@ -24,6 +24,7 @@ class MainView extends StatelessWidget {
         await model.fetchQualification();
         await model.fetchProfessionTypes();
         await model.fetchPost();
+        await model.fetchNotification();
 
         model.initializeView();
       },

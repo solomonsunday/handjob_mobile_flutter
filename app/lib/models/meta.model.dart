@@ -6,6 +6,7 @@ part 'meta.model.g.dart';
 class Meta {
   int? page;
   int? take;
+  int? limit;
   int? itemCount;
   int? total;
 

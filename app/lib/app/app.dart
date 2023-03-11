@@ -7,6 +7,7 @@ import 'package:handjob_mobile/services/contact.service.dart';
 import 'package:handjob_mobile/services/education.service.dart';
 import 'package:handjob_mobile/services/experience.service.dart';
 import 'package:handjob_mobile/services/instant_job.service.dart';
+import 'package:handjob_mobile/services/notification.service.dart';
 import 'package:handjob_mobile/services/post.service.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:handjob_mobile/services/video-call.service.dart';
@@ -81,6 +82,7 @@ import '../ui/settings/change_password/change_password_view.dart';
     LazySingleton(classType: CommentService),
     LazySingleton(classType: ChatService),
     LazySingleton(classType: VideoCallService),
+    LazySingleton(classType: NotificationService),
   ],
   logger: StackedLogger(),
 )

@@ -14,70 +14,74 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.nonReactive(
-      viewModelBuilder: () => HomeViewModel(),
-      builder: (_, model, child) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: ColorManager.kDarkColor,
-          leading: GestureDetector(
-            onTap: () {
-              Scaffold.of(context).openDrawer();
-            },
-            child: const Icon(
-              Icons.menu,
-              size: AppSize.s24,
-              color: ColorManager.kWhiteColor,
-            ),
-          ),
-          // title: Text(
-          //   'HandJob',
-          //   style: getBoldStyle(color: ColorManager.kWhiteColor),
-          // ),
-          title: Image.asset(
-            'assets/images/HandJobs.png',
-          ),
-          centerTitle: true,
-          actions: [
-            GestureDetector(
-              onTap: model.navigateToNotification,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Icon(Icons.notifications),
-                  Positioned(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: ColorManager.kSecondaryColor,
-                        borderRadius: BorderRadius.circular(AppSize.s32),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        child: Text(
-                          '2',
-                          style: getBoldStyle(
-                            color: ColorManager.kWhiteColor,
-                            fontSize: FontSize.s10,
+        viewModelBuilder: () => HomeViewModel(),
+        builder: (_, model, child) {
+          print(
+              'model notification: ${(model.notifications ?? []).map((e) => e.toJson()).toList()}');
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: ColorManager.kDarkColor,
+              leading: GestureDetector(
+                onTap: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                child: const Icon(
+                  Icons.menu,
+                  size: AppSize.s24,
+                  color: ColorManager.kWhiteColor,
+                ),
+              ),
+              // title: Text(
+              //   'HandJob',
+              //   style: getBoldStyle(color: ColorManager.kWhiteColor),
+              // ),
+              title: Image.asset(
+                'assets/images/HandJobs.png',
+              ),
+              centerTitle: true,
+              actions: [
+                GestureDetector(
+                  onTap: model.navigateToNotification,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Icon(Icons.notifications),
+                      Positioned(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: ColorManager.kSecondaryColor,
+                            borderRadius: BorderRadius.circular(AppSize.s32),
+                          ),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Text(
+                              '${(model.notifications ?? []).length}',
+                              style: getBoldStyle(
+                                color: ColorManager.kWhiteColor,
+                                fontSize: FontSize.s10,
+                              ),
+                            ),
                           ),
                         ),
+                        top: 10,
+                        right: 0,
                       ),
-                    ),
-                    top: 10,
-                    right: 0,
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            HomeSearchWidget(),
-            Expanded(child: HomePostWidget()),
-          ],
-        ),
-      ),
-    );
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                HomeSearchWidget(),
+                Expanded(child: HomePostWidget()),
+              ],
+            ),
+          );
+        });
   }
 }
 
