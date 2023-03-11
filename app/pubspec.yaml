@@ -58,6 +58,10 @@ dependencies:
   socket_io_client: ^2.0.1
   video_player: ^2.5.1
   peerdart: ^0.5.0
+  firebase_core: ^2.7.1
+  flutter_local_notifications: ^9.3.2
+  firebase_messaging: ^14.2.6
+  device_info_plus: ^8.1.0
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,8 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:handjob_mobile/app/app.router.dart';
+import 'package:handjob_mobile/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -41,7 +44,8 @@ class SplashViewViewModel extends BaseViewModel {
     } finally {
       Future.delayed(const Duration(seconds: 2), () async {
         if (_isLoggedIn) {
-          await _authenticationService.getCurrentBaseUser();
+          User user = await _authenticationService.getCurrentBaseUser();
+
           _navigationService.replaceWith(Routes.mainView);
         } else {
           bool? isFirstTimeUser = preferences.getBool(IS_FIRST_TIME_USER);

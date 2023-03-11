@@ -1,5 +1,8 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:handjob_mobile/app/app.router.dart';
+import 'package:handjob_mobile/main.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:peerdart/peerdart.dart';
 import 'package:stacked/stacked.dart';
@@ -19,6 +22,7 @@ class MainViewModel extends ReactiveViewModel {
   final _sharedService = locator<SharedService>();
   final _postService = locator<PostService>();
   final _videoCallService = locator<VideoCallService>();
+  final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
   IO.Socket get videoSocket => _videoCallService.socket;
 
@@ -28,8 +32,34 @@ class MainViewModel extends ReactiveViewModel {
 
   navigateToProfile() => _navigationService.navigateTo(Routes.profileView);
 
-  void initializeView() {
+  void initializeView() async {
     _videoCallService.initSocket();
+    //update device token
+    String? token = await messaging.getToken();
+    if (token != null && currentUser != null) {
+      print("device registration token: $token");
+      print(" current user: ${currentUser?.toJson()}");
+      Map formData = {
+        "userId": currentUser?.id,
+        "deviceToken": token,
+        "platform": "mobile"
+      };
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        AndroidDeviceInfo info = await deviceInfo.androidInfo;
+        formData['deviceName'] = info.device;
+      } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+        IosDeviceInfo info = await deviceInfo.iosInfo;
+        formData['deviceName'] = info.name;
+      } else {
+        print('other devices');
+        final info = await deviceInfo.deviceInfo;
+        print('info json: ${info.data}');
+      }
+      print('formdata: $formData');
+      try {
+        await _authenticationService.updateDeviceToken(formData);
+      } catch (e) {}
+    }
   }
 
   @override

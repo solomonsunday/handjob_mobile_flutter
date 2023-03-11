@@ -159,4 +159,20 @@ class AuthenticationService with ReactiveServiceMixin {
     print('change password resp: ${response.data}');
     return true;
   }
+
+  Future updateDeviceToken(Map formData) async {
+    var response = await dioClient.post(
+      '/push-notification/device',
+      data: formData,
+    );
+    print('add device token: ${response.data}');
+    return true;
+  }
+
+  Future<bool> deleteDeviceToken(String id) async {
+    var response = await dioClient.delete(
+      '/push-notification/$id',
+    );
+    return true;
+  }
 }

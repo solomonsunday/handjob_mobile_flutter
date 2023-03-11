@@ -3,16 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
+import 'package:handjob_mobile/main.dart';
 import 'package:handjob_mobile/models/auth.model.dart';
 import 'package:handjob_mobile/services/authentication.service.dart';
 import 'package:handjob_mobile/ui/auth/forgot_password/forgot_password_view.form.dart';
 import 'package:handjob_mobile/ui/auth/reset_password/reset_password_view.form.dart';
+import 'package:handjob_mobile/utils/contants.dart';
 import 'package:handjob_mobile/utils/http_exception.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../dialogs/account_type.dialog.dart';
 import '../../enums/dialog.enum.dart';
+import '../../models/user.model.dart';
 
 class AuthViewModel extends FormViewModel {
   final _authenticationService = locator<AuthenticationService>();
@@ -52,6 +55,8 @@ class AuthViewModel extends FormViewModel {
     try {
       Auth response = await _authenticationService.login(formData);
       await _authenticationService.getCurrentBaseUser();
+      //subscribe to topics
+
       _navigationService.replaceWith(Routes.mainView);
       Fluttertoast.showToast(
         msg: 'login successfully!',
