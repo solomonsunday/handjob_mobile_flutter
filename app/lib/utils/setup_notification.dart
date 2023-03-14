@@ -117,6 +117,20 @@ void onDidReceiveNotificationResponse(
   if (payload != null) {
     debugPrint('notification payload: $payload');
   }
+  // switch(payload) {
+  //    case 'instant_services':
+  //       print('instant job type of noticiation');
+  //       break;
+  //     case 'post':
+  //       Post post =
+  //           posts.where((element) => element.id == notification.entityId).first;
+
+  //       _navigationService.navigateToPostDetailView(post: post);
+  //       break;
+  //     default:
+  //       print("default notification");
+  //       return;
+  // }
   // await Navigator.push(
   //   context,
   //   MaterialPageRoute<void>(builder: (context) => SecondScreen(payload)),

@@ -56,7 +56,7 @@ class HomeView extends StatelessWidget {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 4.0),
                             child: Text(
-                              '${(model.notifications ?? []).length}',
+                              '${(model.notifications ?? []).isNotEmpty ? (model.notifications ?? []).length : ''}',
                               style: getBoldStyle(
                                 color: ColorManager.kWhiteColor,
                                 fontSize: FontSize.s10,

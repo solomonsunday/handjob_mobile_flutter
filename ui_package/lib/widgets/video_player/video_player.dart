@@ -51,15 +51,17 @@ class _DefaultVideoPlayerState extends State<DefaultVideoPlayer> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        AspectRatio(
-          aspectRatio: _videoPlayerController.value.aspectRatio,
-          child: GestureDetector(
-              onTap: () {
-                _videoPlayerController.value.isPlaying
-                    ? _videoPlayerController.pause()
-                    : _videoPlayerController.play();
-              },
-              child: VideoPlayer(_videoPlayerController)),
+        Center(
+          child: AspectRatio(
+            aspectRatio: _videoPlayerController.value.aspectRatio,
+            child: GestureDetector(
+                onTap: () {
+                  _videoPlayerController.value.isPlaying
+                      ? _videoPlayerController.pause()
+                      : _videoPlayerController.play();
+                },
+                child: VideoPlayer(_videoPlayerController)),
+          ),
         ),
         Positioned(
           bottom: 4,
