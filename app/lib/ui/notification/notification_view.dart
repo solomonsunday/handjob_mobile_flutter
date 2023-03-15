@@ -7,7 +7,11 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 
 import '../../app/app.locator.dart';
+import '../../models/instant_job.model.dart';
 import '../../models/post.model.dart';
+import '../../models/user.model.dart';
+import '../../services/authentication.service.dart';
+import '../../services/instant_job.service.dart';
 import '../../services/notification.service.dart';
 import '../../services/post.service.dart';
 import '../../utils/helpers.dart';
@@ -24,11 +28,39 @@ class NotificationView extends StatelessWidget {
         await model.getNotification();
       },
       builder: (_, model, child) => Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+          leading: GestureDetector(
+            onTap: model.navigateBack,
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: ColorManager.kDarkColor,
+            ),
+          ),
+          title: Text(
+            'Notifications',
+            style: getMediumStyle(
+              color: ColorManager.kDarkColor,
+              fontSize: FontSize.s24,
+            ),
+          ),
+          backgroundColor: ColorManager.kWhiteColor,
+          elevation: 0,
+        ),
         body: SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              if (model.notifications == null) Container(),
+              if ((model.notifications ?? []).isEmpty)
+                Container(
+                  child: Text(
+                    'No notification available yet!',
+                    style: getMediumStyle(
+                      color: ColorManager.kDarkCharcoal,
+                      fontSize: FontSize.s14,
+                    ),
+                  ),
+                ),
               Expanded(
                 child: ListView.builder(
                   itemCount: (model.notifications ?? []).length,
@@ -106,8 +138,12 @@ class NotificationItemViewModel extends BaseViewModel {
   final _notificationService = locator<NotificationService>();
   final _navigationService = locator<NavigationService>();
   final _postService = locator<PostService>();
+  final _authenticationService = locator<AuthenticationService>();
+  final _instantJobService = locator<InstantJobService>();
 
   List<Post> get posts => _postService.posts;
+  List<InstantJob> get jobs => _instantJobService.instantJobs;
+  User? get currentUser => _authenticationService.currentUser;
 
   updateSeenNotification(String id) async {
     try {
@@ -118,13 +154,30 @@ class NotificationItemViewModel extends BaseViewModel {
   navigateNotification(NotificationModel.Notification notification) {
     switch (notification.notificationType) {
       case 'instant_services':
-        print('instant job type of noticiation');
+        print('instant job type of noticiation  ');
+        try {
+          InstantJob job = jobs.where((element) {
+            return element.id == notification.entityId;
+          }).first;
+          print('job: ${job.toJson()}');
+          _navigationService.navigateToJobDetailView(
+            instantJob: job,
+            user: currentUser!,
+          );
+        } catch (e) {
+          print("error: $e");
+        }
         break;
       case 'post':
-        Post post =
-            posts.where((element) => element.id == notification.entityId).first;
+        try {
+          Post post = posts
+              .where((element) => element.id == notification.entityId)
+              .first;
 
-        _navigationService.navigateToPostDetailView(post: post);
+          _navigationService.navigateToPostDetailView(post: post);
+        } catch (e) {
+          print('error: $e');
+        }
         break;
       default:
         print("default notification");

@@ -1,36 +1,31 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:handjob_mobile/app/app.router.dart';
-import 'package:handjob_mobile/ui/main/jobs/jobs_view_model.dart';
-import 'package:handjob_mobile/utils/helpers.dart';
-import 'package:handjob_mobile/utils/humanize_date.dart';
+import 'package:handjob_mobile/ui/main/jobs/job_detail/job_detail_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 
-import '../../../app/app.locator.dart';
-import '../../../enums/bottom_sheet_type.dart';
-import '../../../models/applied_job.model.dart';
-import '../../../models/instant_job.model.dart';
-import '../../../models/user.model.dart';
-import '../../../services/authentication.service.dart';
-import '../../../services/instant_job.service.dart';
-import '../../../utils/http_exception.dart';
+import '../../../../models/instant_job.model.dart';
+import '../../../../models/user.model.dart';
+import '../../../../utils/helpers.dart';
+import '../../../../utils/humanize_date.dart';
+import '../jobs_view.dart';
 
-class JobsView extends StatelessWidget {
-  const JobsView({Key? key}) : super(key: key);
+class JobDetailView extends StatelessWidget {
+  const JobDetailView({
+    super.key,
+    required this.instantJob,
+    required this.user,
+  });
+
+  final InstantJob instantJob;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<JobsViewModel>.reactive(
-        viewModelBuilder: () => JobsViewModel(),
-        onModelReady: (model) async {
-          await model.getInstantJobs();
-        },
-        builder: (context, model, child) {
+    return ViewModelBuilder<JobDetailViewModel>.nonReactive(
+        viewModelBuilder: () => JobDetailViewModel(),
+        builder: (context, model, _) {
           return Scaffold(
             appBar: Navbar(
               leadingIcon: const Icon(
@@ -38,97 +33,15 @@ class JobsView extends StatelessWidget {
                 color: ColorManager.kDarkColor,
               ),
               onTap: model.navigateBack,
-              title: AppString.allInstantJobTitle,
+              title: AppString.jobDetails,
             ),
             body: Container(
-              // height: MediaQuery.of(context).si,
-              decoration: BoxDecoration(
-                color: ColorManager.kSecondary100Color,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  SizedBox(height: AppSize.s8),
-                  if (model.jobs.isNotEmpty)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSize.s12,
-                        vertical: AppSize.s12,
-                      ),
-                      decoration: BoxDecoration(
-                        color: ColorManager.kWhiteColor,
-                      ),
-                      child: InputField(
-                        hintText: 'Search',
-                        paddingBottom: AppPadding.p8,
-                        paddingTop: AppPadding.p8,
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: ColorManager.kGrey3,
-                        ),
-                        onChanged: model.handleSearch,
-                      ),
-                    ),
-                  SizedBox(height: AppSize.s8),
-                  if (model.isBusy)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(),
-                      ],
-                    ),
-                  if (model.jobs.isEmpty)
-                    Center(child: Text('There are no jobs yet!')),
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: model.jobs.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        InstantJob instantJob = model.jobs[index];
-                        return JobItem(
-                          instantJob: instantJob,
-                          user: model.currentUser!,
-                        );
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),
-          );
-        });
-  }
-}
-
-class JobItem extends StatelessWidget {
-  const JobItem({
-    Key? key,
-    required this.instantJob,
-    required this.user,
-  }) : super(key: key);
-
-  final InstantJob instantJob;
-  final User user;
-
-  @override
-  Widget build(BuildContext context) {
-    return ViewModelBuilder<JobItemViewModel>.reactive(
-        viewModelBuilder: () => JobItemViewModel(),
-        builder: (context, model, child) {
-          return GestureDetector(
-            onTap: instantJob.company?.id == user.id
-                ? () => model.showEditInstantJob(instantJob)
-                : () => model.navigateToJobDetail(instantJob),
-            child: Container(
               padding: const EdgeInsets.symmetric(
                 vertical: AppPadding.p16,
                 horizontal: AppPadding.p24,
               ),
-              margin: EdgeInsets.only(bottom: AppPadding.p2),
-              decoration: BoxDecoration(
+              margin: const EdgeInsets.only(bottom: AppPadding.p2),
+              decoration: const BoxDecoration(
                 color: ColorManager.kWhiteColor,
               ),
               child: Column(
@@ -141,7 +54,7 @@ class JobItem extends StatelessWidget {
                         height: AppSize.s40,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(24),
-                          color: Color(0xffd9d9d9),
+                          color: const Color(0xffd9d9d9),
                         ),
                         child: instantJob.company?.imageUrl == null
                             ? Image.asset('assets/images/logo.jpeg')
@@ -200,8 +113,10 @@ class JobItem extends StatelessWidget {
                           ),
                           const SizedBox(width: AppSize.s4),
                           Text(
-                            humanizeDate(
-                                fromIsoToDateTime(instantJob.createdAt!)),
+                            instantJob.createdAt == null
+                                ? ""
+                                : humanizeDate(
+                                    fromIsoToDateTime(instantJob.createdAt!)),
                             style: getRegularStyle(
                               fontSize: FontSize.s10,
                               color: ColorManager.kPrimary400Color,
@@ -247,8 +162,10 @@ class JobItem extends StatelessWidget {
                           const Icon(Icons.calendar_month_rounded),
                           const SizedBox(width: AppSize.s4),
                           Text(
-                            DateFormat.yMEd()
-                                .format(DateTime.parse(instantJob.startDate!)),
+                            instantJob.startDate == null
+                                ? ""
+                                : DateFormat.yMEd().format(
+                                    DateTime.parse(instantJob.startDate!)),
                             style: getMediumStyle(
                                 color: ColorManager.kDarkCharcoal),
                           ),
@@ -284,7 +201,7 @@ class JobItem extends StatelessWidget {
                           ),
                         ),
                       if (instantJob.company?.id != user.id &&
-                          !model.isJobApplied(instantJob.id!))
+                          !model.isJobApplied(instantJob.id ?? ""))
                         DefaultButton(
                           onPressed: model.busy(APPLY_JOB)
                               ? null
@@ -298,7 +215,7 @@ class JobItem extends StatelessWidget {
                           borderRadius: 4,
                           fontSize: 12,
                         ),
-                      if (model.isJobApplied(instantJob.id!))
+                      if (model.isJobApplied(instantJob.id ?? ''))
                         DefaultButton(
                           onPressed: null,
                           title: 'Applied',
@@ -328,81 +245,4 @@ class JobItem extends StatelessWidget {
           );
         });
   }
-}
-
-const String APPLY_JOB = "APPLY_JOB";
-
-class JobItemViewModel extends BaseViewModel {
-  final _instantJobService = locator<InstantJobService>();
-  final _dialogService = locator<DialogService>();
-  final _bottomSheetService = locator<BottomSheetService>();
-  final _authenticationService = locator<AuthenticationService>();
-  final _navigationService = locator<NavigationService>();
-
-  List<AppliedJob>? get appliedJobs => _instantJobService.appliedJobs;
-
-  User? get currentUser => _authenticationService.currentUser;
-
-  Future applyInstantJob(String jobId) async {
-    var response = await _dialogService.showConfirmationDialog(
-      title: "Confirmation",
-      description: "Are you sure you want to apply for this job?",
-    );
-    if (!response!.confirmed) return;
-
-    try {
-      setBusyForObject(APPLY_JOB, true);
-      await _instantJobService.applyInstantJob({"jobId": jobId});
-      await _instantJobService.getCurrentInstantJobs();
-      Fluttertoast.showToast(
-        msg: 'Job applied successfully!',
-        toastLength: Toast.LENGTH_LONG,
-        fontSize: FontSize.s16,
-      );
-    } on DioError catch (error) {
-      print('error.response?.data: ${error.response?.data}');
-      _dialogService.showDialog(
-        description: "Unable to apply for this job. please try again",
-        title: "An error occured",
-      );
-      // throw HttpException(error.response?.data['message'] ?? "");
-    } finally {
-      setBusyForObject(APPLY_JOB, false);
-      notifyListeners();
-    }
-  }
-
-  bool isJobApplied(String id) {
-    return (appliedJobs ?? [])
-        .where((element) => element.jobId == id)
-        .toList()
-        .isNotEmpty;
-  }
-
-  showEditInstantJob(InstantJob data) async {
-    var response = await _bottomSheetService.showCustomSheet(
-      variant: BottomSheetType.edit_instant_job,
-      data: data,
-      // isScrollControlled: true,
-      ignoreSafeArea: true,
-      enterBottomSheetDuration: const Duration(milliseconds: 400),
-      exitBottomSheetDuration: const Duration(milliseconds: 200),
-      enableDrag: true,
-    );
-    if (response?.confirmed ?? false) {
-      InstantJob job = response?.data as InstantJob;
-      data.address = job.address;
-      data.meetupLocation = job.meetupLocation;
-      data.now = job.now;
-      notifyListeners();
-    }
-  }
-
-  navigateToJobDetail(InstantJob instantJob) => _navigationService.navigateTo(
-        Routes.jobDetailView,
-        arguments: JobDetailViewArguments(
-          instantJob: instantJob,
-          user: currentUser!,
-        ),
-      );
 }

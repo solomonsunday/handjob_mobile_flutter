@@ -180,29 +180,32 @@ class HomeCard extends StatelessWidget {
                 const SizedBox(
                   height: AppSize.s12,
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppPadding.p16,
-                      ),
-                      child: Text(
-                        post.title ?? "",
-                        style: getSemiBoldStyle(
-                          color: ColorManager.kDarkColor,
-                          fontSize: FontSize.FontSize.s14,
+                GestureDetector(
+                  onTap: onImageClick,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppPadding.p16,
+                        ),
+                        child: Text(
+                          post.title ?? "",
+                          style: getSemiBoldStyle(
+                            color: ColorManager.kDarkColor,
+                            fontSize: FontSize.FontSize.s14,
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppPadding.p8,
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppPadding.p8,
+                        ),
+                        child: getBody(post.body ?? ""),
                       ),
-                      child: getBody(post.body ?? ""),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,

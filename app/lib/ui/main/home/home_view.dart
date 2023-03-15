@@ -46,27 +46,28 @@ class HomeView extends StatelessWidget {
                     alignment: Alignment.center,
                     children: [
                       Icon(Icons.notifications),
-                      Positioned(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: ColorManager.kSecondaryColor,
-                            borderRadius: BorderRadius.circular(AppSize.s32),
-                          ),
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Text(
-                              '${(model.notifications ?? []).isNotEmpty ? (model.notifications ?? []).length : ''}',
-                              style: getBoldStyle(
-                                color: ColorManager.kWhiteColor,
-                                fontSize: FontSize.s10,
+                      if ((model.notifications ?? []).isNotEmpty)
+                        Positioned(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: ColorManager.kSecondaryColor,
+                              borderRadius: BorderRadius.circular(AppSize.s32),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Text(
+                                '${(model.notifications ?? []).length}',
+                                style: getBoldStyle(
+                                  color: ColorManager.kWhiteColor,
+                                  fontSize: FontSize.s10,
+                                ),
                               ),
                             ),
                           ),
+                          top: 10,
+                          right: 0,
                         ),
-                        top: 10,
-                        right: 0,
-                      ),
                     ],
                   ),
                 ),

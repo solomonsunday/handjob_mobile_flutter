@@ -107,6 +107,8 @@ class AppString {
 
   static String allChats = "All Chats";
 
+  static String jobDetails = "Job details";
+
   static String verifyEmailSubText(String email) =>
       "We sent a six-digit code to your email address ($email) for verification.";
   static const String otpCodeText = "OTP Code";

@@ -56,6 +56,7 @@ class CommentService with ReactiveServiceMixin {
       data: formData,
     );
     Comment comment = Comment.fromJson(response.data);
+
     _comments = [..._comments, comment];
     notifyListeners();
     return comment;

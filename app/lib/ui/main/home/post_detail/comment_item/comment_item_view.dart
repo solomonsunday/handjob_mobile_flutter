@@ -38,7 +38,11 @@ class CommentItemView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${comment?.authorEmployer}'),
+                      comment?.author == null
+                          ? Text(
+                              '${model.currentUser?.firstName} ${model.currentUser?.lastName}')
+                          : Text(
+                              '${comment?.author?.firstName} ${comment?.author?.lastName}'),
                       SizedBox(height: AppSize.s2),
                       Text('${comment?.message}'),
                       SizedBox(height: AppSize.s2),
