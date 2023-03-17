@@ -183,9 +183,16 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
                   ),
                   controller: bodyController,
                   focusnode: bodyFocusnode,
+                  maxLength: 500,
                   formError: model.hasBodyValidationMessage
                       ? model.bodyValidationMessage
                       : null,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text('${bodyController.text.length}/500'),
+                  ],
                 ),
                 const SizedBox(height: AppSize.s16),
                 model.selectedFile == null

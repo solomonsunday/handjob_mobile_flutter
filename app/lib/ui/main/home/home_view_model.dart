@@ -12,6 +12,8 @@ import '../../../models/post.model.dart';
 import '../../../models/user.model.dart';
 import '../../../services/authentication.service.dart';
 
+const String POST_BUSY = "POST_BUSY";
+
 class HomeViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
   final _postService = locator<PostService>();
@@ -20,6 +22,7 @@ class HomeViewModel extends ReactiveViewModel {
 
   User? get currentUser => _authenticationService.currentUser;
   List<Post> get posts => _postService.posts;
+  bool get loadingPosts => _postService.loadingPosts;
   List<Notification>? get notifications => _notificationService.notifications;
 
   void onPostImageClick(Post post) {

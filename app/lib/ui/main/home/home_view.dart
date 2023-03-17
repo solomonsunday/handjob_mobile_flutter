@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:handjob_mobile/ui/skeletons/post_view.skeleton.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 import 'package:ui_package/utils/colors.dart';
@@ -73,14 +74,16 @@ class HomeView extends StatelessWidget {
                 ),
               ],
             ),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                HomeSearchWidget(),
-                Expanded(child: HomePostWidget()),
-              ],
-            ),
+            body: model.loadingPosts
+                ? const PostViewSkeleton()
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: const [
+                      HomeSearchWidget(),
+                      Expanded(child: HomePostWidget()),
+                    ],
+                  ),
           );
         });
   }

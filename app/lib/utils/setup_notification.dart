@@ -3,7 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:handjob_mobile/app/app.router.dart';
+import 'package:stacked_services/stacked_services.dart';
 
+import '../app/app.locator.dart';
+import '../models/instant_job.model.dart';
+import '../models/post.model.dart';
+import '../models/user.model.dart';
+import '../models/notification.model.dart' as ModelNotification;
+import '../services/authentication.service.dart';
+import '../services/instant_job.service.dart';
+import '../services/notification.service.dart';
+import '../services/post.service.dart';
 import 'contants.dart';
 
 Future<void> setupNotification(FirebaseMessaging messaging) async {
@@ -65,7 +76,6 @@ Future<void> setupNotification(FirebaseMessaging messaging) async {
 
   flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
-
     // onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
     // onDidReceiveBackgroundNotificationResponse:
     //     onDidReceiveNotificationResponse,
@@ -110,30 +120,55 @@ Future<void> setupNotification(FirebaseMessaging messaging) async {
       );
     }
   });
+
+  FirebaseMessaging.onMessageOpenedApp.listen(onDidReceiveNotificationResponse);
 }
 
-void onDidReceiveNotificationResponse(
-    int id, String title, String body, String? payload) async {
-  if (payload != null) {
-    debugPrint('notification payload: $payload');
-  }
-  // switch(payload) {
-  //    case 'instant_services':
-  //       print('instant job type of noticiation');
-  //       break;
-  //     case 'post':
-  //       Post post =
-  //           posts.where((element) => element.id == notification.entityId).first;
+final _notificationService = locator<NotificationService>();
+final _navigationService = locator<NavigationService>();
+final _authenticationService = locator<AuthenticationService>();
+final _postService = locator<PostService>();
+final _instantJobService = locator<InstantJobService>();
 
-  //       _navigationService.navigateToPostDetailView(post: post);
-  //       break;
-  //     default:
-  //       print("default notification");
-  //       return;
-  // }
-  // await Navigator.push(
-  //   context,
-  //   MaterialPageRoute<void>(builder: (context) => SecondScreen(payload)),
-  // );
-  return;
+List<ModelNotification.Notification>? get notifications =>
+    _notificationService.notifications;
+User? get currentUser => _authenticationService.currentUser;
+List<InstantJob> get jobs => _instantJobService.instantJobs;
+List<Post> get posts => _postService.posts;
+
+void onDidReceiveNotificationResponse(RemoteMessage message) async {
+  if (message != null) {
+    debugPrint('notification payload: $message');
+  }
+
+  String entityId = message.data['entityId'];
+  switch (message.data['notificationType']) {
+    case 'instant_services':
+      print('instant job type of noticiation  ');
+      try {
+        InstantJob job = jobs.where((element) {
+          return element.id == entityId;
+        }).first;
+        print('job: ${job.toJson()}');
+        _navigationService.navigateToJobDetailView(
+          instantJob: job,
+          user: currentUser!,
+        );
+      } catch (e) {
+        print("error: $e");
+      }
+      break;
+    case 'post':
+      try {
+        Post post = posts.where((element) => element.id == entityId).first;
+
+        _navigationService.navigateToPostDetailView(post: post);
+      } catch (e) {
+        print('error: $e');
+      }
+      break;
+    default:
+      print("default notification");
+      return;
+  }
 }

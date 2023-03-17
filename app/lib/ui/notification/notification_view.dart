@@ -91,12 +91,18 @@ class NotificationItem extends StatelessWidget {
     return ViewModelBuilder<NotificationItemViewModel>.reactive(
       viewModelBuilder: () => NotificationItemViewModel(),
       onModelReady: (model) async {
-        if (!notification.seen!) {
-          await model.updateSeenNotification(notification.id!);
-        }
+        // if (!notification.seen!) {
+        //   await model.updateSeenNotification(notification.id!);
+        // }
       },
       builder: (context, model, child) => ListTile(
-        onTap: () => model.navigateNotification(notification),
+        onTap: () async {
+          model.navigateNotification(notification);
+
+          if (!notification.seen!) {
+            await model.updateSeenNotification(notification.id!);
+          }
+        },
         contentPadding: const EdgeInsets.symmetric(
           vertical: AppPadding.p10,
           horizontal: AppPadding.p24,
@@ -138,8 +144,8 @@ class NotificationItemViewModel extends BaseViewModel {
   final _notificationService = locator<NotificationService>();
   final _navigationService = locator<NavigationService>();
   final _postService = locator<PostService>();
-  final _authenticationService = locator<AuthenticationService>();
   final _instantJobService = locator<InstantJobService>();
+  final _authenticationService = locator<AuthenticationService>();
 
   List<Post> get posts => _postService.posts;
   List<InstantJob> get jobs => _instantJobService.instantJobs;

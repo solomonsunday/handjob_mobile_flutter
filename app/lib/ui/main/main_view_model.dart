@@ -75,16 +75,6 @@ class MainViewModel extends ReactiveViewModel {
     notifyListeners();
   }
 
-  fetchPost() async {
-    setBusy(true);
-    try {
-      await _postService.getPosts();
-    } on DioError catch (error) {
-    } finally {
-      setBusy(false);
-    }
-  }
-
   Future<void> fetchCountries() async {
     try {
       await _sharedService.getCountries();
@@ -113,6 +103,21 @@ class MainViewModel extends ReactiveViewModel {
     try {
       await _sharedService.getProfessionTypes();
     } on DioError catch (error) {}
+  }
+
+  fetchPost() {
+    runBusyFuture(
+      fetchPostRequest(),
+    );
+  }
+
+  fetchPostRequest() async {
+    try {
+      await _postService.getPosts();
+    } on DioError catch (error) {
+    } finally {
+      notifyListeners();
+    }
   }
 
   fetchNotification() async {

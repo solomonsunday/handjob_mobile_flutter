@@ -162,7 +162,7 @@ class Textarea extends StatelessWidget {
           onChanged: onChanged,
           onEditingComplete: onEdittingComplete,
           obscureText: obscureText ?? false,
-        ),
+        )
       ],
     );
   }

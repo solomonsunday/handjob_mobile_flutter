@@ -15,16 +15,20 @@ class PostService with ReactiveServiceMixin {
     listenToReactiveValues([
       posts,
       postMeta,
+      loadingPosts,
     ]);
   }
 
   List<Post> _posts = [];
   List<Post> get posts => _posts;
+  bool _loadingPosts = false;
+  bool get loadingPosts => _loadingPosts;
 
   Meta? _postMeta;
   Meta? get postMeta => _postMeta;
 
   Future<List<Post>> getPosts({int page = 1, int limit = 10}) async {
+    _loadingPosts = true;
     var response = await dioClient.get(
       '/post?page=$page&take=$limit',
     );
@@ -41,6 +45,7 @@ class PostService with ReactiveServiceMixin {
 
     List<Post> posts = newResponsePostMap.map((x) => Post.fromJson(x)).toList();
     _posts = posts;
+    _loadingPosts = false;
     notifyListeners();
     print('pststs: $_posts');
     return posts;
