@@ -161,18 +161,12 @@ class NotificationItemViewModel extends BaseViewModel {
     switch (notification.notificationType) {
       case 'instant_services':
         print('instant job type of noticiation  ');
-        try {
-          InstantJob job = jobs.where((element) {
-            return element.id == notification.entityId;
-          }).first;
-          print('job: ${job.toJson()}');
-          _navigationService.navigateToJobDetailView(
-            instantJob: job,
-            user: currentUser!,
-          );
-        } catch (e) {
-          print("error: $e");
-        }
+
+        _navigationService.navigateToNotificationJobDetailView(
+          instantJobId: notification.entityId!,
+          user: currentUser!,
+        );
+
         break;
       case 'post':
         try {

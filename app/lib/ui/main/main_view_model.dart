@@ -123,6 +123,7 @@ class MainViewModel extends ReactiveViewModel {
   fetchNotification() async {
     try {
       await _notificationService.getNotifications();
+      // await _notificationService.getAccountNotifications(currentUser!.id!);
     } on DioError catch (error) {}
   }
 

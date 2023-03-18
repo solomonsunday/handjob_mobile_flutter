@@ -38,6 +38,7 @@ import '../services/location.service.dart';
 import '../services/account.service.dart';
 import '../ui/application/application_view.dart';
 import '../ui/main/chat/chat_detail/chat_detail_view.dart';
+import '../ui/notification/notification_job_detail/notification_job_detail_view.dart';
 import '../ui/settings/change_password/change_password_view.dart';
 
 @StackedApp(
@@ -66,6 +67,7 @@ import '../ui/settings/change_password/change_password_view.dart';
     AdaptiveRoute(page: AddNewContactView),
     AdaptiveRoute(page: ApplicantProfileView),
     AdaptiveRoute(page: JobDetailView),
+    AdaptiveRoute(page: NotificationJobDetailView),
   ],
   dependencies: [
     LazySingleton(classType: NavigationService),
