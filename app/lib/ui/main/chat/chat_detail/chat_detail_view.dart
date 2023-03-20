@@ -230,9 +230,9 @@ class ChatDetailView extends StatelessWidget {
                           model.chatList.reversed.toList()[index];
 
                       if (conversation.senderId != model.user?.id) {
-                        return SenderChatWidget(chat: conversation);
+                        return ReceiverChatWidget(chat: conversation);
                       }
-                      return ReceiverChatWidget(chat: conversation);
+                      return SenderChatWidget(chat: conversation);
                     },
                   ),
                 ),
@@ -269,40 +269,10 @@ class ChatDetailView extends StatelessWidget {
                                 color: ColorManager.kGrey1,
                               ),
                             ),
-                            // suffixIcon: Row(
-                            //   mainAxisSize: MainAxisSize.min,
-                            //   children: [
-                            //     GestureDetector(
-                            //       onTap: () {},
-                            //       child: Icon(
-                            //         Icons.attach_file,
-                            //         size: AppSize.s24,
-                            //       ),
-                            //     ),
-                            //     SizedBox(width: AppSize.s8),
-                            //     GestureDetector(
-                            //       onTap: () {},
-                            //       child: Icon(
-                            //         Icons.photo,
-                            //         size: AppSize.s24,
-                            //       ),
-                            //     ),
-                            //     SizedBox(width: AppSize.s16),
-                            //   ],
-                            // ),
                             controller: model.chatMessageController,
                           ),
                         ),
                         SizedBox(width: 4),
-                        // model.chatMessageController.text.isEmpty
-                        //     ? GestureDetector(
-                        //         onTap: () {},
-                        //         child: Icon(
-                        //           Icons.mic,
-                        //           size: AppSize.s24,
-                        //         ),
-                        //       )
-                        //     :
                         GestureDetector(
                           onTap: model.busy(CREATE_CHAT)
                               ? () {}
@@ -329,8 +299,8 @@ class ChatDetailView extends StatelessWidget {
   }
 }
 
-class SenderChatWidget extends StatelessWidget {
-  const SenderChatWidget({
+class ReceiverChatWidget extends StatelessWidget {
+  const ReceiverChatWidget({
     super.key,
     required this.chat,
   });
@@ -388,8 +358,8 @@ class SenderChatWidget extends StatelessWidget {
   }
 }
 
-class ReceiverChatWidget extends StatelessWidget {
-  const ReceiverChatWidget({
+class SenderChatWidget extends StatelessWidget {
+  const SenderChatWidget({
     super.key,
     required this.chat,
   });
@@ -415,7 +385,7 @@ class ReceiverChatWidget extends StatelessWidget {
               ),
               padding: const EdgeInsets.all(AppPadding.p10),
               decoration: const BoxDecoration(
-                color: ColorManager.kSecondaryColor,
+                color: ColorManager.kGrey1,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12.0),
                   bottomRight: Radius.circular(12.0),
@@ -425,7 +395,7 @@ class ReceiverChatWidget extends StatelessWidget {
               child: Text(
                 '${chat.message}',
                 style: getRegularStyle(
-                  color: ColorManager.kWhiteColor,
+                  color: ColorManager.kDarkColor,
                   fontSize: 14,
                 ),
               ),

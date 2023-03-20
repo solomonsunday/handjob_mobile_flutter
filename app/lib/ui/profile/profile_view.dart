@@ -16,7 +16,7 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ProfileViewModel>.nonReactive(
+    return ViewModelBuilder<ProfileViewModel>.reactive(
       viewModelBuilder: () => ProfileViewModel(),
       onModelReady: (model) async {
         await model.fetchAppliedJobs();
@@ -70,10 +70,12 @@ class ProfileView extends StatelessWidget {
                   const SliverToBoxAdapter(
                       child: SizedBox(height: AppSize.s12)),
                   SliverToBoxAdapter(
-                      child: ProfileExperience(
-                    currentUser: model.currentUser,
-                    showExperienceSheet: () => model.showExperienceSheet(null),
-                  )),
+                    child: ProfileExperience(
+                      currentUser: model.currentUser,
+                      showExperienceSheet: () =>
+                          model.showExperienceSheet(null),
+                    ),
+                  ),
                   SliverToBoxAdapter(
                     child: ProfileEducationApprenticeship(
                       currentUser: model.currentUser,
@@ -87,7 +89,7 @@ class ProfileView extends StatelessWidget {
                     busy: model.busy(REQUEST_OTP),
                     requestOTP: () async {
                       await model.requestOTP();
-                      model.showVerifyPhoneSheet();
+                      model.showVerifyPhoneSheet(model.currentUser);
                     },
                     showContactSheet: () => model.showContactSheet(null),
                   )),

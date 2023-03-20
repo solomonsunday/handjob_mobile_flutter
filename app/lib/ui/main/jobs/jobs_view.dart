@@ -55,15 +55,13 @@ class JobsView extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppSize.s12,
-                        vertical: AppSize.s12,
+                        vertical: AppSize.s8,
                       ),
                       decoration: BoxDecoration(
                         color: ColorManager.kWhiteColor,
                       ),
-                      child: InputField(
+                      child: SearchInput(
                         hintText: 'Search',
-                        paddingBottom: AppPadding.p8,
-                        paddingTop: AppPadding.p8,
                         prefixIcon: Icon(
                           Icons.search,
                           color: ColorManager.kGrey3,

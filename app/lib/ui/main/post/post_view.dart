@@ -28,6 +28,7 @@ class PostView extends StatelessWidget with $PostView {
           onTap: model.navigateBack,
           title: 'Create Post',
           fontsize: FontSize.s16,
+          color: ColorManager.kWhiteColor,
         ),
         body: SingleChildScrollView(
           child: Container(

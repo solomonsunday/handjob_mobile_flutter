@@ -156,6 +156,7 @@ const String DELETE_EXPERIENCE = "DELETE_EXPERIENCE";
 class ProfileExperienceItemViewModel extends BaseViewModel {
   final _experienceService = locator<ExperienceService>();
   final _bottomSheetService = locator<BottomSheetService>();
+  final _dialogService = locator<DialogService>();
 
   showExperienceSheet(Experience? data) => _bottomSheetService.showCustomSheet(
         variant: BottomSheetType.profile_experience,
@@ -172,6 +173,11 @@ class ProfileExperienceItemViewModel extends BaseViewModel {
 
   ///Experience
   Future<void> deleteExperience(String? id) async {
+    var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Do you want to delete this experience ?",
+    );
+    if (!response!.confirmed) return;
     setBusyForObject(DELETE_EXPERIENCE, true);
     try {
       await _experienceService.deleteExperience(id!);

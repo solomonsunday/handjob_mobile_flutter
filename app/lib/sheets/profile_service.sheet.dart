@@ -151,10 +151,12 @@ class ProfileServiceSheetViewModel extends BaseViewModel {
     setBusy(true);
     try {
       var formData = {"services": services};
-      print('form data: $formData');
+      // print('form data: $formData');
       await _accountService.updateServices(formData);
       await _authenticationService.getCurrentBaseUser();
-      completer!(SheetResponse(confirmed: true));
+      completer!(SheetResponse(
+        confirmed: true,
+      ));
     } on DioError catch (error) {
       throw HttpException(error.message);
     } finally {

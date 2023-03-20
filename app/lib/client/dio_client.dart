@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:handjob_mobile/app/app.locator.dart';
+import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/utils/contants.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 class DioClient {
   final Dio _dio = Dio(
@@ -32,8 +35,12 @@ class BearerTokenInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
+    final NavigationService navigationService = locator<NavigationService>();
     print(
         'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
+    if (response.statusCode == 401) {
+      navigationService.navigateToAuthView();
+    }
     return super.onResponse(response, handler);
   }
 

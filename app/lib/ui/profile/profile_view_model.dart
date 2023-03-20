@@ -80,8 +80,10 @@ class ProfileViewModel extends ReactiveViewModel {
         enableDrag: true,
       );
 
-  void showVerifyPhoneSheet() => _bottomSheetService.showCustomSheet(
+  void showVerifyPhoneSheet(dynamic data) =>
+      _bottomSheetService.showCustomSheet(
         variant: BottomSheetType.verify_phone_number,
+        data: data,
         isScrollControlled: true,
         ignoreSafeArea: true,
         enterBottomSheetDuration: Duration(milliseconds: 400),
@@ -135,9 +137,6 @@ class ProfileViewModel extends ReactiveViewModel {
     } on DioError catch (e) {
     } finally {}
   }
-
-  @override
-  List<ReactiveServiceMixin> get reactiveServices => [_authenticationService];
 
   Future<void> requestOTP() async {
     runBusyFuture(requestOTPRequest(), busyObject: REQUEST_OTP);
@@ -193,4 +192,7 @@ class ProfileViewModel extends ReactiveViewModel {
           instantHire: instantJob,
         ),
       );
+
+  @override
+  List<ReactiveServiceMixin> get reactiveServices => [_authenticationService];
 }

@@ -65,6 +65,7 @@ class CommentView extends ViewModelWidget<PostDetailViewModel> {
     return ListView(
       children: [
         Column(children: [
+          const SizedBox(height: AppSize.s24),
           HomeCard(
             post: post,
           ),

@@ -67,6 +67,8 @@ class ColorManager {
   static const Color kFacebookColor = Color(0xff4267B2);
   static const Color kGoogleColor = Color(0xffDB4437);
 
+  static const Color kAppbarShadowColor = Color(0xff8E8E8E);
+
   static const Color kGrey1 = Color(0xffCCCCCC);
   static const Color kGrey2 = Color(0xffAAAAAA);
   static const Color kGrey3 = Color(0xff808080);

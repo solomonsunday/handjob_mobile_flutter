@@ -1,18 +1,22 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ui_package/ui_package.dart';
 
 part 'profession_type.model.g.dart';
 
 @JsonSerializable()
-class ProfessionType {
+class ProfessionType extends HasNameField {
   int? id;
-  String? name;
+
+  @JsonKey(name: "name")
+  String name;
+
   String? group;
   int? groupId;
   String? description;
 
   ProfessionType({
     this.id,
-    this.name,
+    required this.name,
     this.group,
     this.groupId,
     this.description,

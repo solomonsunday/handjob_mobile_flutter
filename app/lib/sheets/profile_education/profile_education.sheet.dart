@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:handjob_mobile/models/qualification.model.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:handjob_mobile/sheets/profile_education/profile_education.sheet.form.dart';
 import 'package:handjob_mobile/utils/helpers.dart';
@@ -37,11 +38,14 @@ class ProfileEducationSheet extends StatelessWidget
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileEducationSheetViewModel>.reactive(
         viewModelBuilder: () => ProfileEducationSheetViewModel(),
-        onModelReady: (model) {
+        onModelReady: (model) async {
           listenToFormUpdated(model);
           print('countires: ${model.countries}');
           print('qualification: ${model.qualification}');
-
+          if (model.qualifications.isEmpty) {
+            await model.fetchQualification();
+            print('qualification: ${model.qualification}');
+          }
           if (request?.data != null) {
             Education education = request?.data as Education;
             print('education params: ${education.toJson()}');
@@ -52,7 +56,16 @@ class ProfileEducationSheet extends StatelessWidget
             cityController.text = education.city ?? "";
             addressController.text = education.address ?? "";
             model.updateCountry(education.country);
-            model.updateQualification(education.qualification);
+
+            List<Qualification> localQualifications = model.qualifications
+                .where((element) => element.name == education.qualification)
+                .toList();
+            if (localQualifications.isEmpty) {
+              model.updateQualification(null);
+            } else {
+              model.updateQualification(localQualifications.first);
+            }
+
             model.updateId(education.id);
             model.updateEditMode(true);
           }
@@ -61,121 +74,122 @@ class ProfileEducationSheet extends StatelessWidget
         builder: (context, model, child) {
           return BottomSheetContainer(
             onClose: () => completer!(SheetResponse(confirmed: false)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      Icons.tag,
-                      color: ColorManager.kSecondaryColor,
-                    ),
-                    SizedBox(width: AppSize.s12),
-                    Text('Education'),
-                  ],
-                ),
-                SizedBox(height: AppSize.s24),
-                DefaultDropDownField(
-                  label: "Qualifications",
-                  hint: 'Enter qualification',
-                  dropdownItems: model.qualifications,
-                  onChanged: (value) => model.updateQualification(value!),
-                  value: model.qualification,
-                  buttonHeight: 50,
-                  buttonWidth: MediaQuery.of(context).size.width,
-                  buttonDecoration: BoxDecoration(
-                    border: Border.all(
-                      width: 1,
-                      color: ColorManager.kDarkColor,
-                    ),
-                    borderRadius: BorderRadius.circular(AppSize.s8),
-                  ),
-                  dropdownWidth: MediaQuery.of(context).size.width,
-                ),
-                SizedBox(height: AppSize.s12),
-                InputField(
-                  label: 'Course',
-                  hintText: 'Enter course name',
-                  fillColor: ColorManager.kWhiteColor,
-                  controller: courseController,
-                  focusnode: courseFocusNode,
-                ),
-                SizedBox(height: AppSize.s12),
-                InputField(
-                  label: 'Year of graduation',
-                  hintText: 'Enter ',
-                  fillColor: ColorManager.kWhiteColor,
-                  controller: yearOfGraduationController,
-                  focusnode: yearOfGraduationFocusNode,
-                ),
-                SizedBox(height: AppSize.s12),
-                InputField(
-                  label: 'Institution name',
-                  hintText: 'Enter ',
-                  fillColor: ColorManager.kWhiteColor,
-                  controller: institutionController,
-                  focusnode: institutionFocusNode,
-                ),
-                SizedBox(height: AppSize.s12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: InputField(
-                        label: 'City',
-                        hintText: 'Enter',
-                        controller: cityController,
-                        focusnode: cityFocusNode,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.tag,
+                        color: ColorManager.kSecondaryColor,
                       ),
+                      SizedBox(width: AppSize.s12),
+                      Text('Education'),
+                    ],
+                  ),
+                  SizedBox(height: AppSize.s24),
+                  GenericDropDownField<Qualification>(
+                    label: "Qualifications",
+                    hint: 'Enter qualification',
+                    dropdownItems: model.qualifications,
+                    onChanged: (value) => model.updateQualification(value!),
+                    value: model.qualification,
+                    buttonHeight: 50,
+                    buttonWidth: MediaQuery.of(context).size.width,
+                    buttonDecoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: ColorManager.kDarkColor,
+                      ),
+                      borderRadius: BorderRadius.circular(AppSize.s8),
                     ),
-                    SizedBox(width: AppSize.s12),
-                    Expanded(
-                      child: DefaultDropDownField(
-                        label: "Country",
-                        dropdownItems: model.countries,
-                        value: model.country,
-                        hint: 'Country',
-                        onChanged: (value) => model.updateCountry(value!),
-                        buttonHeight: 50,
-                        buttonWidth: MediaQuery.of(context).size.width,
-                        buttonDecoration: BoxDecoration(
-                          border: Border.all(
-                            width: 1,
-                            color: ColorManager.kDarkColor,
-                          ),
-                          borderRadius: BorderRadius.circular(AppSize.s8),
+                    dropdownWidth: MediaQuery.of(context).size.width,
+                  ),
+                  SizedBox(height: AppSize.s12),
+                  InputField(
+                    label: 'Course',
+                    hintText: 'Enter course name',
+                    fillColor: ColorManager.kWhiteColor,
+                    controller: courseController,
+                    focusnode: courseFocusNode,
+                  ),
+                  SizedBox(height: AppSize.s12),
+                  DatePicker(
+                    label: 'Year of graduation',
+                    hintText: 'Enter ',
+                    controller: yearOfGraduationController,
+                    onSelected: (p0) {},
+                  ),
+                  SizedBox(height: AppSize.s12),
+                  InputField(
+                    label: 'Institution name',
+                    hintText: 'Enter ',
+                    fillColor: ColorManager.kWhiteColor,
+                    controller: institutionController,
+                    focusnode: institutionFocusNode,
+                  ),
+                  SizedBox(height: AppSize.s12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InputField(
+                          label: 'City',
+                          hintText: 'Enter',
+                          controller: cityController,
+                          focusnode: cityFocusNode,
                         ),
-                        dropdownWidth: MediaQuery.of(context).size.width,
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSize.s12),
-                Textarea(
-                  label: 'Address',
-                  hintText: 'Enter',
-                  fillColor: ColorManager.kWhiteColor,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                      SizedBox(width: AppSize.s12),
+                      Expanded(
+                        child: DefaultDropDownField(
+                          label: "Country",
+                          dropdownItems: model.countries,
+                          value: model.country,
+                          hint: 'Country',
+                          onChanged: (value) => model.updateCountry(value!),
+                          buttonHeight: 50,
+                          buttonWidth: MediaQuery.of(context).size.width,
+                          buttonDecoration: BoxDecoration(
+                            border: Border.all(
+                              width: 1,
+                              color: ColorManager.kDarkColor,
+                            ),
+                            borderRadius: BorderRadius.circular(AppSize.s8),
+                          ),
+                          dropdownWidth: MediaQuery.of(context).size.width,
+                        ),
+                      ),
+                    ],
                   ),
-                  controller: addressController,
-                  focusnode: addressFocusNode,
-                ),
-                const SizedBox(height: AppSize.s24),
-                DefaultButton(
-                  onPressed: () {
-                    if (model.editMode) {
-                      model.updateEducation(completer);
-                    } else {
-                      model.createEducation(completer);
-                    }
-                  },
-                  title: 'Save changes',
-                  busy: model.isBusy,
-                  disabled: model.isBusy,
-                )
-              ],
+                  const SizedBox(height: AppSize.s12),
+                  Textarea(
+                    label: 'Address',
+                    hintText: 'Enter',
+                    fillColor: ColorManager.kWhiteColor,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    controller: addressController,
+                    focusnode: addressFocusNode,
+                  ),
+                  const SizedBox(height: AppSize.s24),
+                  DefaultButton(
+                    onPressed: () {
+                      if (model.editMode) {
+                        model.updateEducation(completer);
+                      } else {
+                        model.createEducation(completer);
+                      }
+                    },
+                    title: 'Save changes',
+                    busy: model.isBusy,
+                    disabled: model.isBusy,
+                  )
+                ],
+              ),
             ),
           );
         });
@@ -186,6 +200,7 @@ class ProfileEducationSheetViewModel extends FormViewModel {
   final _educationService = locator<EducationService>();
   final _authenticationService = locator<AuthenticationService>();
   final _sharedService = locator<SharedService>();
+  final _dialogService = locator<DialogService>();
 
   bool _editMode = false;
   bool get editMode => _editMode;
@@ -193,14 +208,23 @@ class ProfileEducationSheetViewModel extends FormViewModel {
   List<String> get countries =>
       (_sharedService.countries ?? []).map((e) => e.name!).toList();
 
-  List<String> get qualifications =>
-      (_sharedService.qualifications ?? []).map((e) => e.name!).toList();
+  List<Qualification> get qualifications => _sharedService.qualifications ?? [];
 
   createEducation(completer) async {
+    var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Are you sure you want create education?",
+    );
+    if (!response!.confirmed) return;
     runBusyFuture(createEducationRequest(completer));
   }
 
   updateEducation(completer) async {
+    var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Are you sure you want update education?",
+    );
+    if (!response!.confirmed) return;
     runBusyFuture(updateEducationRequest(completer));
   }
 
@@ -271,8 +295,8 @@ class ProfileEducationSheetViewModel extends FormViewModel {
   String? get id => _id;
   String? _country;
   String? get country => _country;
-  String? _qualification;
-  String? get qualification => _qualification;
+  Qualification? _qualification;
+  Qualification? get qualification => _qualification;
 
   updateCountry(String? value) {
     if ((_sharedService.countries ?? [])
@@ -285,14 +309,8 @@ class ProfileEducationSheetViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  updateQualification(String? value) {
-    if ((_sharedService.qualifications ?? [])
-        .where((element) => element.name == value)
-        .isNotEmpty) {
-      _qualification = value;
-    } else {
-      _qualification = null;
-    }
+  updateQualification(Qualification? value) {
+    _qualification = value;
     notifyListeners();
   }
 
@@ -303,5 +321,12 @@ class ProfileEducationSheetViewModel extends FormViewModel {
 
   void updateId(String? id) {
     _id = id;
+  }
+
+  Future<void> fetchQualification() async {
+    try {
+      await _sharedService.getQualification();
+      print('fetch qualifications');
+    } catch (e) {}
   }
 }

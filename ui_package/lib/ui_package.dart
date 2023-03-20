@@ -14,6 +14,8 @@ export 'widgets/bottom_sheet_container/bottom_sheet_container.dart';
 export 'widgets/custom_bottom_bar/custom_bottom_bar.dart';
 export 'widgets/progress_indicator/progress_indicator.dart';
 export 'widgets/video_player/video_player.dart';
+export 'widgets/search/search_input.dart';
+export 'widgets/dropdown/generic_dropdown.dart';
 //export the utils
 export './utils/colors.dart';
 export './utils/text_styles.dart';

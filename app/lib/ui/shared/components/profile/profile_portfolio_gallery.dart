@@ -28,10 +28,6 @@ class ProfilePortfolioGallery extends StatelessWidget {
           .map(
             (portfolio) => ClipRRect(
               borderRadius: BorderRadius.circular(AppSize.s4),
-              // child: Image.network(
-              //   portfolio,
-              //   fit: BoxFit.cover,
-              // ),
               child: CachedNetworkImage(
                 imageUrl: portfolio,
                 fit: BoxFit.cover,

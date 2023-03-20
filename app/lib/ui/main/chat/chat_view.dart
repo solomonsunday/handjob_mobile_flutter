@@ -32,10 +32,10 @@ class ChatView extends StatelessWidget {
               title: AppString.allChats,
             ),
             body: Container(
-              // height: MediaQuery.of(context).si,
-              decoration: BoxDecoration(
-                color: ColorManager.kSecondary100Color,
-              ),
+              // // height: MediaQuery.of(context).si,
+              // decoration: BoxDecoration(
+              //   color: ColorManager.kSecondary100Color,
+              // ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,10 +50,8 @@ class ChatView extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: ColorManager.kWhiteColor,
                     ),
-                    child: InputField(
+                    child: SearchInput(
                       hintText: 'Search',
-                      paddingBottom: AppPadding.p8,
-                      paddingTop: AppPadding.p8,
                       prefixIcon: Icon(
                         Icons.search,
                         color: ColorManager.kGrey3,
@@ -61,7 +59,8 @@ class ChatView extends StatelessWidget {
                       onChanged: model.handleSearch,
                     ),
                   ),
-                  SizedBox(height: AppSize.s8),
+                  const Divider(thickness: 2),
+                  SizedBox(height: AppSize.s4),
                   if (model.isBusy)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

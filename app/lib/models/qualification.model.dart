@@ -1,9 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ui_package/ui_package.dart';
 
 part 'qualification.model.g.dart';
 
 @JsonSerializable()
-class Qualification {
+class Qualification extends HasNameField {
   String? id;
   String? createdBy;
   String? updatedBy;
@@ -12,7 +13,7 @@ class Qualification {
   bool? isDeleted;
   bool? disabled;
   bool? isSystemDefined;
-  String? name;
+  String name;
   String? description;
 
   Qualification({
@@ -24,7 +25,7 @@ class Qualification {
     this.isDeleted,
     this.disabled,
     this.isSystemDefined,
-    this.name,
+    required this.name,
     this.description,
   });
 

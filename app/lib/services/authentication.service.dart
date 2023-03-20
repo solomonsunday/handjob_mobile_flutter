@@ -17,14 +17,10 @@ class AuthenticationService with ReactiveServiceMixin {
   AuthenticationService() {
     listenToReactiveValues([
       currentUser,
-      // _currentSuperAdminUser,
     ]);
   }
 
   User? _currentUser;
-
-  // final ReactiveValue<SuperAdmin?> _currentSuperAdminUser =
-  //     ReactiveValue<SuperAdmin?>(null);
   User? get currentUser => _currentUser;
 
   Future<bool> isAuthenticated() async {

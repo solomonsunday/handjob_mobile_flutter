@@ -27,8 +27,8 @@ class InstantHireView extends StatelessWidget {
           ),
           body: SingleChildScrollView(
             child: Container(
-              decoration: BoxDecoration(
-                color: ColorManager.kSecondary100Color,
+              decoration: const BoxDecoration(
+                color: Colors.white,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,

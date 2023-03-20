@@ -58,7 +58,7 @@ class AddNewContactView extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: ColorManager.kWhiteColor,
                     ),
-                    child: InputField(
+                    child: SearchInput(
                       hintText: 'Search',
                       paddingBottom: AppPadding.p8,
                       paddingTop: AppPadding.p8,

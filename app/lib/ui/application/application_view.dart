@@ -85,8 +85,8 @@ class ApplicationView extends StatelessWidget {
                           ),
                           const SizedBox(height: AppSize.s20),
                           Text(
-                            'MEET UP LOCATION: ${instantHire.meetupLocation}',
-                            style: getBoldStyle(
+                            'MEET UP LOCATION: ${instantHire.meetupLocation ?? instantHire.location}',
+                            style: getMediumStyle(
                               color: ColorManager.kDarkColor,
                               fontSize: FontSize.s12,
                             ),

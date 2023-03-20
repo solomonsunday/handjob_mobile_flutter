@@ -177,32 +177,64 @@ class ContactListItem extends StatelessWidget {
           }
         },
         itemBuilder: (BuildContext bc) {
-          return const [
+          return [
             PopupMenuItem(
-              child: Icon(
-                Icons.phone,
-                color: ColorManager.kDarkColor,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.phone,
+                    color: ColorManager.kDarkColor,
+                  ),
+                  SizedBox(
+                    width: AppSize.s16,
+                  ),
+                  Text('Audio Call')
+                ],
               ),
               value: AUDIO_CALL,
             ),
             PopupMenuItem(
-              child: Icon(
-                Icons.videocam,
-                color: ColorManager.kDarkColor,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.videocam,
+                    color: ColorManager.kDarkColor,
+                  ),
+                  SizedBox(
+                    width: AppSize.s16,
+                  ),
+                  Text('Video Call')
+                ],
               ),
               value: VIDEO_CALL,
             ),
             PopupMenuItem(
-              child: Icon(
-                Icons.chat,
-                color: ColorManager.kDarkColor,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.chat,
+                    color: ColorManager.kDarkColor,
+                  ),
+                  SizedBox(
+                    width: AppSize.s16,
+                  ),
+                  Text('Chat')
+                ],
               ),
               value: CHAT,
             ),
             PopupMenuItem(
-              child: Icon(
-                Icons.delete,
-                color: ColorManager.kDarkColor,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.delete,
+                    color: ColorManager.kDarkColor,
+                  ),
+                  SizedBox(
+                    width: AppSize.s16,
+                  ),
+                  Text('Delete')
+                ],
               ),
               value: DELETE,
             )

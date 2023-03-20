@@ -16,7 +16,7 @@ Qualification _$QualificationFromJson(Map<String, dynamic> json) =>
       isDeleted: json['isDeleted'] as bool?,
       disabled: json['disabled'] as bool?,
       isSystemDefined: json['isSystemDefined'] as bool?,
-      name: json['name'] as String?,
+      name: json['name'] as String,
       description: json['description'] as String?,
     );
 

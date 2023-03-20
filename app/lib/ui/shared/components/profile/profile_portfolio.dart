@@ -22,7 +22,7 @@ class ProfilePortfolio extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppPadding.p24,
-        vertical: AppPadding.p40,
+        vertical: AppPadding.p10,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,

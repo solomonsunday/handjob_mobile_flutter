@@ -23,6 +23,7 @@ class SharedService with ReactiveServiceMixin {
       countries,
       currentIndex,
       professionTypes,
+      qualifications
     ]);
   }
 
@@ -121,7 +122,7 @@ class SharedService with ReactiveServiceMixin {
 
   Future<List<Qualification>> getQualification() async {
     var response = await dioClient.get('/qualification');
-
+    print('list qualification: ${response.data}');
     List<Map> mappedQualifications =
         (response.data["data"] as List).map((e) => e as Map).toList();
     List<Map<String, dynamic>> newResponseQualificationMap =

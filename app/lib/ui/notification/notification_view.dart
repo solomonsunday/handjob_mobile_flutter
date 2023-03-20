@@ -28,24 +28,14 @@ class NotificationView extends StatelessWidget {
         await model.getNotification();
       },
       builder: (_, model, child) => Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: true,
-          leading: GestureDetector(
-            onTap: model.navigateBack,
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: ColorManager.kDarkColor,
-            ),
+        appBar: Navbar(
+          leadingIcon: const Icon(
+            Icons.arrow_back,
+            color: ColorManager.kDarkColor,
           ),
-          title: Text(
-            'Notifications',
-            style: getMediumStyle(
-              color: ColorManager.kDarkColor,
-              fontSize: FontSize.s24,
-            ),
-          ),
-          backgroundColor: ColorManager.kWhiteColor,
-          elevation: 0,
+          onTap: model.navigateBack,
+          title: "Notifications",
+          fontsize: FontSize.s16,
         ),
         body: SafeArea(
           child: Column(
