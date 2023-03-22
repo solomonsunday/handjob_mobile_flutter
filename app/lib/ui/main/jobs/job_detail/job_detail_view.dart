@@ -25,6 +25,9 @@ class JobDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<JobDetailViewModel>.nonReactive(
         viewModelBuilder: () => JobDetailViewModel(),
+        onModelReady: (model) {
+          print('id: ${instantJob.id}');
+        },
         builder: (context, model, _) {
           return Scaffold(
             appBar: Navbar(
@@ -200,12 +203,13 @@ class JobDetailView extends StatelessWidget {
                             color: ColorManager.kDarkCharcoal,
                           ),
                         ),
-                      if (instantJob.company?.id != user.id &&
-                          !model.isJobApplied(instantJob.id ?? ""))
+                      if (instantJob?.company?.id != user.id &&
+                          !model.isJobApplied(instantJob?.id ?? "") &&
+                          !model.isWaitingToBeAccepted)
                         DefaultButton(
                           onPressed: model.busy(APPLY_JOB)
                               ? null
-                              : () => model.applyInstantJob(instantJob.id!),
+                              : () => model.applyInstantJob(instantJob!.id!),
                           disabled: model.busy(APPLY_JOB),
                           busy: model.busy(APPLY_JOB),
                           title: 'Apply',
@@ -214,6 +218,14 @@ class JobDetailView extends StatelessWidget {
                           paddingWidth: 20,
                           borderRadius: 4,
                           fontSize: 12,
+                        ),
+                      if (model.isWaitingToBeAccepted)
+                        Text(
+                          'Waiting to be accepted',
+                          style: getBoldStyle(
+                            color: ColorManager.kSecondaryColor,
+                            fontSize: FontSize.s11,
+                          ),
                         ),
                       if (model.isJobApplied(instantJob.id ?? ''))
                         DefaultButton(

@@ -68,7 +68,8 @@ class NotificationService with ReactiveServiceMixin {
         newResponsePostMap.map((x) => Notification.fromJson(x)).toList();
     _notifications = notificationList;
     notifyListeners();
-    print('account notifications: $_notifications');
+    print(
+        'account notifications: ${_notifications.map((e) => e.toJson()).toList()}');
     return notificationList;
   }
 

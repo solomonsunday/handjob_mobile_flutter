@@ -242,7 +242,7 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                     ),
                   ),
                   Text(
-                    '${model.currentUser?.profession ?? model.currentUser?.accountType}',
+                    model.currentUser?.profession ?? "Customer",
                     style: getRegularStyle(
                       color: ColorManager.kDarkColor,
                       fontSize: FontSize.s12,

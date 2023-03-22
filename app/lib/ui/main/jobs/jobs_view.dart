@@ -281,12 +281,13 @@ class JobItem extends StatelessWidget {
                             color: ColorManager.kDarkCharcoal,
                           ),
                         ),
-                      if (instantJob.company?.id != user.id &&
-                          !model.isJobApplied(instantJob.id!))
+                      if (instantJob?.company?.id != user.id &&
+                          !model.isJobApplied(instantJob?.id ?? "") &&
+                          !model.isWaitingToBeAccepted)
                         DefaultButton(
                           onPressed: model.busy(APPLY_JOB)
                               ? null
-                              : () => model.applyInstantJob(instantJob.id!),
+                              : () => model.applyInstantJob(instantJob!.id!),
                           disabled: model.busy(APPLY_JOB),
                           busy: model.busy(APPLY_JOB),
                           title: 'Apply',
@@ -296,6 +297,15 @@ class JobItem extends StatelessWidget {
                           borderRadius: 4,
                           fontSize: 12,
                         ),
+                      if (model.isWaitingToBeAccepted)
+                        Text(
+                          'Waiting to be accepted',
+                          style: getBoldStyle(
+                            color: ColorManager.kSecondaryColor,
+                            fontSize: FontSize.s11,
+                          ),
+                        ),
+
                       if (model.isJobApplied(instantJob.id!))
                         DefaultButton(
                           onPressed: null,
@@ -337,6 +347,9 @@ class JobItemViewModel extends BaseViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
 
+  bool _isWaitingToBeAccepted = false;
+  bool get isWaitingToBeAccepted => _isWaitingToBeAccepted;
+
   List<AppliedJob>? get appliedJobs => _instantJobService.appliedJobs;
 
   User? get currentUser => _authenticationService.currentUser;
@@ -357,8 +370,10 @@ class JobItemViewModel extends BaseViewModel {
         toastLength: Toast.LENGTH_LONG,
         fontSize: FontSize.s16,
       );
+      _isWaitingToBeAccepted = true;
     } on DioError catch (error) {
       print('error.response?.data: ${error.response?.data}');
+      _isWaitingToBeAccepted = false;
       _dialogService.showDialog(
         description: "Unable to apply for this job. please try again",
         title: "An error occured",

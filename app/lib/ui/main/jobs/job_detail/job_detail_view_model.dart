@@ -14,6 +14,9 @@ class JobDetailViewModel extends BaseViewModel {
   final _instantJobService = locator<InstantJobService>();
   final _dialogService = locator<DialogService>();
 
+  bool _isWaitingToBeAccepted = false;
+  bool get isWaitingToBeAccepted => _isWaitingToBeAccepted;
+
   navigateBack() => _navigationService.back();
 
   List<AppliedJob>? get appliedJobs => _instantJobService.appliedJobs;
@@ -41,8 +44,10 @@ class JobDetailViewModel extends BaseViewModel {
         toastLength: Toast.LENGTH_LONG,
         fontSize: FontSize.s16,
       );
+      _isWaitingToBeAccepted = true;
     } on DioError catch (error) {
       print('error.response?.data: ${error.response?.data}');
+      _isWaitingToBeAccepted = false;
       _dialogService.showDialog(
         description: "Unable to apply for this job. please try again",
         title: "An error occured",

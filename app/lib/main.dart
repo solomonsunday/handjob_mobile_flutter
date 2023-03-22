@@ -34,13 +34,17 @@ void main() async {
   setupBottomSheetUi();
   setupDialogUi();
   //subscribe for push notification...
+  setupSubscription();
+  runApp(const MyApp());
+}
+
+void setupSubscription() async {
   await messaging.subscribeToTopic(JOBS);
   await messaging.subscribeToTopic(CONNECTION_REQUEST);
   await messaging.subscribeToTopic(POST);
   await messaging.subscribeToTopic(APPLICATION);
   await messaging.subscribeToTopic(REVIEW);
   await messaging.subscribeToTopic(CHAT);
-  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

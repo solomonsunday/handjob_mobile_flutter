@@ -137,8 +137,10 @@ List<InstantJob> get jobs => _instantJobService.instantJobs;
 List<Post> get posts => _postService.posts;
 
 void onDidReceiveNotificationResponse(RemoteMessage message) async {
-  if (message != null) {
-    debugPrint('notification payload: $message');
+  print('message: ${message.toMap()}');
+  print('message notification: ${message.notification?.toMap()}');
+  if (message.notification != null) {
+    debugPrint('notification payload: ${message.toMap()}');
   }
 
   String entityId = message.data['entityId'];

@@ -208,7 +208,8 @@ class NotificationJobDetailView extends StatelessWidget {
                                 ),
                               ),
                             if (instantJob?.company?.id != user.id &&
-                                !model.isJobApplied(instantJob?.id ?? ""))
+                                !model.isJobApplied(instantJob?.id ?? "") &&
+                                !model.isWaitingToBeAccepted)
                               DefaultButton(
                                 onPressed: model.busy(APPLY_JOB)
                                     ? null
@@ -224,18 +225,12 @@ class NotificationJobDetailView extends StatelessWidget {
                                 fontSize: 12,
                               ),
                             if (model.isWaitingToBeAccepted)
-                              DefaultButton(
-                                onPressed: null,
-                                title: 'Waiting to be accepted',
-                                trailingIcon: Icons.more_horiz,
-                                trailingIconColor: ColorManager.kWhiteColor,
-                                trailingIconSpace: 8,
-                                buttonType: ButtonType.fill,
-                                buttonBgColor: ColorManager.kGreen,
-                                buttonTextColor: ColorManager.kWhiteColor,
-                                paddingHeight: 20,
-                                paddingWidth: 40,
-                                borderRadius: 4,
+                              Text(
+                                'Waiting to be accepted',
+                                style: getBoldStyle(
+                                  color: ColorManager.kSecondaryColor,
+                                  fontSize: FontSize.s11,
+                                ),
                               ),
                             if (model.isJobApplied(instantJob?.id ?? ''))
                               DefaultButton(
