@@ -15,6 +15,7 @@ import '../../app/app.locator.dart';
 import '../../models/experience.model.dart';
 import '../../models/profession_type.model.dart';
 import '../../models/suggestion.model.dart';
+import '../../models/user.model.dart';
 import '../../services/authentication.service.dart';
 import '../../services/location.service.dart';
 import '../../services/shared.service.dart';
@@ -66,6 +67,10 @@ class ProfileExperienceSheet extends StatelessWidget
             locationController.text = experience.location ?? "";
             descriptionController.text = experience.description ?? "";
             model.updateCurrent(experience.current ?? false);
+
+            model.handleSelectedJobCategory(experience.jobCategoryName ?? "");
+            model.updateId(experience.id);
+            model.updateEditMode(true);
           }
         },
         onDispose: (_) => disposeForm(),
@@ -111,6 +116,7 @@ class ProfileExperienceSheet extends StatelessWidget
                           label: 'Start date',
                           hintText: 'Select',
                           controller: startDateController,
+                          dateFormat: 'MMM dd, yyyy',
                         ),
                       ),
                       if (!model.current) const SizedBox(width: AppSize.s12),
@@ -121,6 +127,7 @@ class ProfileExperienceSheet extends StatelessWidget
                             label: 'End date',
                             hintText: 'Select',
                             controller: endDateController,
+                            dateFormat: DEFAULT_DATE_TIME_FORMAT,
                           ),
                         ),
                     ],
@@ -208,7 +215,13 @@ class ProfileExperienceSheet extends StatelessWidget
                   ),
                   SizedBox(height: AppSize.s24),
                   DefaultButton(
-                    onPressed: () => model.createExperience(completer),
+                    onPressed: () {
+                      if (model.editMode) {
+                        model.updateExperience(completer);
+                      } else {
+                        model.createExperience(completer);
+                      }
+                    },
                     title: 'Save changes',
                     busy: model.isBusy,
                     disabled: model.isBusy,
@@ -240,31 +253,55 @@ class ProfileExperienceSheetViewModel extends FormViewModel {
   List<ProfessionType>? get professionTypes => _sharedService.professionTypes;
   List<ProfessionType>? get professions => professionTypes;
 
+  void handleSelectedJobCategory(String jobCategoryName) {
+    for (ProfessionType element in (professionTypes ?? [])) {
+      if (element.name.toLowerCase() == jobCategoryName.toLowerCase()) {
+        _selectedProfession = element;
+        print('found ${element.toJson()}');
+        notifyListeners();
+        break;
+      }
+    }
+  }
+
   void handleSelectedProfession(ProfessionType? value) {
     _selectedProfession = value;
 
     notifyListeners();
   }
 
-  createExperience(completer) async {
+  createExperience(Function(SheetResponse)? completer) async {
+    var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Are you sure you want create this experience?",
+    );
+    if (!response!.confirmed) return;
+    runBusyFuture(createExperienceRequest(completer));
+  }
+
+  updateExperience(Function(SheetResponse)? completer) async {
     var response = await _dialogService.showConfirmationDialog(
       title: "Confirmation",
       description: "Are you sure you want update this experience?",
     );
     if (!response!.confirmed) return;
-    runBusyFuture(createExperienceRequest(completer));
+    runBusyFuture(updateExperienceRequest(completer));
   }
 
   createExperienceRequest(completer) async {
     print('experience json: ${selectedProfession?.toJson()}');
     var formData = {
       "jobTitle": jobTitleValue,
-      "startDate": dateToIso8601String(startDateValue!),
+      "startDate": startDateValue != null
+          ? dateToIso8601String(startDateValue!,
+              dtFormat: DEFAULT_DATE_TIME_FORMAT)
+          : null,
       "endDate": current
           ? DateTime.now().toIso8601String()
           : endDateValue == null
               ? null
-              : dateToIso8601String(endDateValue!),
+              : dateToIso8601String(endDateValue!,
+                  dtFormat: DEFAULT_DATE_TIME_FORMAT),
       "current": current,
       "location": locationValue,
       "company": companyValue,
@@ -277,6 +314,47 @@ class ProfileExperienceSheetViewModel extends FormViewModel {
     setBusy(true);
     try {
       await _experienceService.createExperience(formData);
+      await _authenticationService.getCurrentBaseUser();
+      completer!(SheetResponse(confirmed: true));
+    } on DioError catch (error) {
+      print('eror: ${error.response!.data}');
+      _dialogService.showDialog(
+        title: "An error occured",
+        description: error.response?.data['message'],
+      );
+      // throw HttpException("An error occured");
+    } finally {
+      setBusy(false);
+      notifyListeners();
+    }
+  }
+
+  updateExperienceRequest(completer) async {
+    print('experience json: ${selectedProfession?.toJson()}');
+    var formData = {
+      "jobTitle": jobTitleValue,
+      "startDate": startDateValue != null
+          ? dateToIso8601String(startDateValue!,
+              dtFormat: DEFAULT_DATE_TIME_FORMAT)
+          : null,
+      "endDate": current
+          ? DateTime.now().toIso8601String()
+          : endDateValue == null
+              ? null
+              : dateToIso8601String(endDateValue!,
+                  dtFormat: DEFAULT_DATE_TIME_FORMAT),
+      "current": current,
+      "location": locationValue,
+      "company": companyValue,
+      "description": descriptionValue,
+      "jobCategoryName": selectedProfession?.name,
+      "jobCategoryId": selectedProfession?.id.toString(),
+    };
+    print('form Data: $formData');
+
+    setBusy(true);
+    try {
+      await _experienceService.updateExperience(id!, formData);
       await _authenticationService.getCurrentBaseUser();
       completer!(SheetResponse(confirmed: true));
     } on DioError catch (error) {
@@ -321,6 +399,20 @@ class ProfileExperienceSheetViewModel extends FormViewModel {
   @override
   void setFormStatus() {
     // TODO: implement setFormStatus
+  }
+
+  bool _editMode = false;
+  bool get editMode => _editMode;
+  String? _id;
+  String? get id => _id;
+
+  void updateEditMode(bool value) {
+    _editMode = value;
+    notifyListeners();
+  }
+
+  void updateId(String? id) {
+    _id = id;
   }
 
   updateCurrent(bool value) {

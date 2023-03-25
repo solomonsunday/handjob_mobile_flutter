@@ -24,12 +24,11 @@ class NotificationJobDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<NotificationJobDetailViewModel>.nonReactive(
+    return ViewModelBuilder<NotificationJobDetailViewModel>.reactive(
         viewModelBuilder: () => NotificationJobDetailViewModel(),
-        onModelReady: (model) => model.getInstantJob(instantJobId),
+        onViewModelReady: (model) => model.getInstantJob(instantJobId),
         builder: (context, model, _) {
           InstantJob? instantJob = model.instantJob;
-          print('instnat job: ${instantJob?.toJson()}');
           return Scaffold(
             appBar: Navbar(
               leadingIcon: const Icon(

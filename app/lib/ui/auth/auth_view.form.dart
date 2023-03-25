@@ -49,6 +49,15 @@ mixin $AuthView on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
+  void syncFormWithViewModel(FormViewModel model) {
+    emailController.addListener(() => _updateFormData(model));
+    passwordController.addListener(() => _updateFormData(model));
+  }
+
+  /// Registers a listener on every generated controller that calls [model.setData()]
+  /// with the latest textController values
+  @Deprecated('Use syncFormWithViewModel instead.'
+      'This feature was deprecated after 3.1.0.')
   void listenToFormUpdated(FormViewModel model) {
     emailController.addListener(() => _updateFormData(model));
     passwordController.addListener(() => _updateFormData(model));
@@ -112,6 +121,32 @@ extension ValueProperties on FormViewModel {
   String? get emailValue => this.formValueMap[EmailValueKey] as String?;
   String? get passwordValue => this.formValueMap[PasswordValueKey] as String?;
 
+  set emailValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          EmailValueKey: value,
+        }),
+    );
+
+    if (_AuthViewTextEditingControllers.containsKey(EmailValueKey)) {
+      _AuthViewTextEditingControllers[EmailValueKey]?.text = value ?? '';
+    }
+  }
+
+  set passwordValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          PasswordValueKey: value,
+        }),
+    );
+
+    if (_AuthViewTextEditingControllers.containsKey(PasswordValueKey)) {
+      _AuthViewTextEditingControllers[PasswordValueKey]?.text = value ?? '';
+    }
+  }
+
   bool get hasEmail =>
       this.formValueMap.containsKey(EmailValueKey) &&
       (emailValue?.isNotEmpty ?? false);
@@ -128,6 +163,10 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[EmailValueKey];
   String? get passwordValidationMessage =>
       this.fieldsValidationMessages[PasswordValueKey];
+  void clearForm() {
+    emailValue = '';
+    passwordValue = '';
+  }
 }
 
 extension Methods on FormViewModel {

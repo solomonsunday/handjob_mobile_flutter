@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/models/conversation.model.dart';
 import 'package:handjob_mobile/utils/helpers.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
@@ -61,32 +62,28 @@ class ChatView extends StatelessWidget {
                   ),
                   const Divider(thickness: 2),
                   SizedBox(height: AppSize.s4),
-                  if (model.isBusy)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(),
-                      ],
-                    ),
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: model.conversations.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        Conversation conversation = model.conversations[index];
-                        return ChatItem(
-                          unReadCount: conversation.unReadCount ?? 0,
-                          imgUrl: conversation.partner?.imageUrl,
-                          firstName: conversation.partner?.firstName ?? '',
-                          lastName: conversation.partner?.lastName ?? '',
-                          message: conversation.message ?? '',
-                          createdAt: conversation.createdAt,
-                          onTap: () => model.navigateToChatDetail(conversation),
-                        );
-                      },
-                    ),
-                  )
+                  if (model.isBusy) Expanded(child: SkeletonListView()),
+                  if (!model.isBusy)
+                    Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: model.conversations.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Conversation conversation =
+                              model.conversations[index];
+                          return ChatItem(
+                            unReadCount: conversation.unReadCount ?? 0,
+                            imgUrl: conversation.partner?.imageUrl,
+                            firstName: conversation.partner?.firstName ?? '',
+                            lastName: conversation.partner?.lastName ?? '',
+                            message: conversation.message ?? '',
+                            createdAt: conversation.createdAt,
+                            onTap: () =>
+                                model.navigateToChatDetail(conversation),
+                          );
+                        },
+                      ),
+                    )
                 ],
               ),
             ),

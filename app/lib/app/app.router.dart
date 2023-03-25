@@ -1,7 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
-// StackedRouterGenerator
+// StackedNavigatorGenerator
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
@@ -329,8 +329,8 @@ class StackedRouter extends _i1.RouterBase {
     _i13.PostDetailView: (data) {
       final args = data.getArgs<PostDetailViewArguments>(nullOk: false);
       return _i1.buildAdaptivePageRoute<dynamic>(
-        builder: (context) =>
-            _i13.PostDetailView(key: args.key, post: args.post),
+        builder: (context) => _i13.PostDetailView(
+            key: args.key, post: args.post, postIndex: args.postIndex),
         settings: data,
       );
     },
@@ -408,8 +408,8 @@ class StackedRouter extends _i1.RouterBase {
     _i24.ApplicantProfileView: (data) {
       final args = data.getArgs<ApplicantProfileViewArguments>(nullOk: false);
       return _i1.buildAdaptivePageRoute<dynamic>(
-        builder: (context) =>
-            _i24.ApplicantProfileView(key: args.key, applicant: args.applicant),
+        builder: (context) => _i24.ApplicantProfileView(
+            key: args.key, applicantId: args.applicantId),
         settings: data,
       );
     },
@@ -442,24 +442,44 @@ class OnboardViewArguments {
   const OnboardViewArguments({this.key});
 
   final _i27.Key? key;
+
+  @override
+  String toString() {
+    return '{"key": "$key"}';
+  }
 }
 
 class AuthViewArguments {
   const AuthViewArguments({this.key});
 
   final _i27.Key? key;
+
+  @override
+  String toString() {
+    return '{"key": "$key"}';
+  }
 }
 
 class ArtisanSignupViewArguments {
   const ArtisanSignupViewArguments({this.key});
 
   final _i27.Key? key;
+
+  @override
+  String toString() {
+    return '{"key": "$key"}';
+  }
 }
 
 class CustomerSignupViewArguments {
   const CustomerSignupViewArguments({this.key});
 
   final _i27.Key? key;
+
+  @override
+  String toString() {
+    return '{"key": "$key"}';
+  }
 }
 
 class AccountCreatedDialogArguments {
@@ -474,6 +494,11 @@ class AccountCreatedDialogArguments {
   final _i28.DialogRequest<dynamic> request;
 
   final dynamic Function(_i28.DialogResponse<dynamic>) completer;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "request": "$request", "completer": "$completer"}';
+  }
 }
 
 class VerifyEmailViewArguments {
@@ -485,12 +510,22 @@ class VerifyEmailViewArguments {
   final _i27.Key? key;
 
   final String email;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "email": "$email"}';
+  }
 }
 
 class ForgotPasswordViewArguments {
   const ForgotPasswordViewArguments({this.key});
 
   final _i27.Key? key;
+
+  @override
+  String toString() {
+    return '{"key": "$key"}';
+  }
 }
 
 class ResetPasswordViewArguments {
@@ -502,17 +537,30 @@ class ResetPasswordViewArguments {
   final _i27.Key? key;
 
   final String email;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "email": "$email"}';
+  }
 }
 
 class PostDetailViewArguments {
   const PostDetailViewArguments({
     this.key,
     required this.post,
+    required this.postIndex,
   });
 
   final _i27.Key? key;
 
   final _i29.Post post;
+
+  final int postIndex;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "post": "$post", "postIndex": "$postIndex"}';
+  }
 }
 
 class ChatDetailViewArguments {
@@ -524,12 +572,22 @@ class ChatDetailViewArguments {
   final _i27.Key? key;
 
   final _i30.Contact contact;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "contact": "$contact"}';
+  }
 }
 
 class ChangePasswordViewArguments {
   const ChangePasswordViewArguments({this.key});
 
   final _i27.Key? key;
+
+  @override
+  String toString() {
+    return '{"key": "$key"}';
+  }
 }
 
 class ApplicationViewArguments {
@@ -541,6 +599,11 @@ class ApplicationViewArguments {
   final _i27.Key? key;
 
   final _i31.InstantJob instantHire;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "instantHire": "$instantHire"}';
+  }
 }
 
 class RateReviewViewArguments {
@@ -555,17 +618,27 @@ class RateReviewViewArguments {
   final _i31.InstantJob instantHire;
 
   final _i32.Applicant applicant;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "instantHire": "$instantHire", "applicant": "$applicant"}';
+  }
 }
 
 class ApplicantProfileViewArguments {
   const ApplicantProfileViewArguments({
     this.key,
-    required this.applicant,
+    required this.applicantId,
   });
 
   final _i27.Key? key;
 
-  final _i32.Applicant applicant;
+  final String applicantId;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "applicantId": "$applicantId"}';
+  }
 }
 
 class JobDetailViewArguments {
@@ -580,6 +653,11 @@ class JobDetailViewArguments {
   final _i31.InstantJob instantJob;
 
   final _i33.User user;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "instantJob": "$instantJob", "user": "$user"}';
+  }
 }
 
 class NotificationJobDetailViewArguments {
@@ -594,6 +672,11 @@ class NotificationJobDetailViewArguments {
   final String instantJobId;
 
   final _i33.User user;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "instantJobId": "$instantJobId", "user": "$user"}';
+  }
 }
 
 extension NavigatorStateExtension on _i28.NavigationService {
@@ -775,6 +858,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   Future<dynamic> navigateToPostDetailView({
     _i27.Key? key,
     required _i29.Post post,
+    required int postIndex,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -782,7 +866,8 @@ extension NavigatorStateExtension on _i28.NavigationService {
         transition,
   }) async {
     return navigateTo<dynamic>(Routes.postDetailView,
-        arguments: PostDetailViewArguments(key: key, post: post),
+        arguments:
+            PostDetailViewArguments(key: key, post: post, postIndex: postIndex),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -944,7 +1029,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
 
   Future<dynamic> navigateToApplicantProfileView({
     _i27.Key? key,
-    required _i32.Applicant applicant,
+    required String applicantId,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -953,7 +1038,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }) async {
     return navigateTo<dynamic>(Routes.applicantProfileView,
         arguments:
-            ApplicantProfileViewArguments(key: key, applicant: applicant),
+            ApplicantProfileViewArguments(key: key, applicantId: applicantId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -990,6 +1075,409 @@ extension NavigatorStateExtension on _i28.NavigationService {
         transition,
   }) async {
     return navigateTo<dynamic>(Routes.notificationJobDetailView,
+        arguments: NotificationJobDetailViewArguments(
+            key: key, instantJobId: instantJobId, user: user),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithSplashView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.splashView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithOnboardView({
+    _i27.Key? key,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.onboardView,
+        arguments: OnboardViewArguments(key: key),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithAuthView({
+    _i27.Key? key,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.authView,
+        arguments: AuthViewArguments(key: key),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithArtisanSignupView({
+    _i27.Key? key,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.artisanSignupView,
+        arguments: ArtisanSignupViewArguments(key: key),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithCustomerSignupView({
+    _i27.Key? key,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.customerSignupView,
+        arguments: CustomerSignupViewArguments(key: key),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithAccountCreatedDialog({
+    _i27.Key? key,
+    required _i28.DialogRequest<dynamic> request,
+    required dynamic Function(_i28.DialogResponse<dynamic>) completer,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.accountCreatedDialog,
+        arguments: AccountCreatedDialogArguments(
+            key: key, request: request, completer: completer),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithVerifyEmailView({
+    _i27.Key? key,
+    required String email,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.verifyEmailView,
+        arguments: VerifyEmailViewArguments(key: key, email: email),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithForgotPasswordView({
+    _i27.Key? key,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.forgotPasswordView,
+        arguments: ForgotPasswordViewArguments(key: key),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithResetPasswordView({
+    _i27.Key? key,
+    required String email,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.resetPasswordView,
+        arguments: ResetPasswordViewArguments(key: key, email: email),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithMainView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.mainView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithProfileView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.profileView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithPostDetailView({
+    _i27.Key? key,
+    required _i29.Post post,
+    required int postIndex,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.postDetailView,
+        arguments:
+            PostDetailViewArguments(key: key, post: post, postIndex: postIndex),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithNotificationView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.notificationView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithChatDetailView({
+    _i27.Key? key,
+    required _i30.Contact contact,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.chatDetailView,
+        arguments: ChatDetailViewArguments(key: key, contact: contact),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithHelpAndSupportView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.helpAndSupportView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithFAQsView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.fAQsView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithContactView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.contactView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithSettingView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.settingView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithChangePasswordView({
+    _i27.Key? key,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.changePasswordView,
+        arguments: ChangePasswordViewArguments(key: key),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithApplicationView({
+    _i27.Key? key,
+    required _i31.InstantJob instantHire,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.applicationView,
+        arguments: ApplicationViewArguments(key: key, instantHire: instantHire),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithRateReviewView({
+    _i27.Key? key,
+    required _i31.InstantJob instantHire,
+    required _i32.Applicant applicant,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.rateReviewView,
+        arguments: RateReviewViewArguments(
+            key: key, instantHire: instantHire, applicant: applicant),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithAddNewContactView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.addNewContactView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithApplicantProfileView({
+    _i27.Key? key,
+    required String applicantId,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.applicantProfileView,
+        arguments:
+            ApplicantProfileViewArguments(key: key, applicantId: applicantId),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithJobDetailView({
+    _i27.Key? key,
+    required _i31.InstantJob instantJob,
+    required _i33.User user,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.jobDetailView,
+        arguments: JobDetailViewArguments(
+            key: key, instantJob: instantJob, user: user),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithNotificationJobDetailView({
+    _i27.Key? key,
+    required String instantJobId,
+    required _i33.User user,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.notificationJobDetailView,
         arguments: NotificationJobDetailViewArguments(
             key: key, instantJobId: instantJobId, user: user),
         id: routerId,

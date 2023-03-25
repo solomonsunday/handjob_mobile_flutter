@@ -64,6 +64,16 @@ mixin $RateReviewView on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
+  void syncFormWithViewModel(FormViewModel model) {
+    nameController.addListener(() => _updateFormData(model));
+    titleController.addListener(() => _updateFormData(model));
+    descriptionController.addListener(() => _updateFormData(model));
+  }
+
+  /// Registers a listener on every generated controller that calls [model.setData()]
+  /// with the latest textController values
+  @Deprecated('Use syncFormWithViewModel instead.'
+      'This feature was deprecated after 3.1.0.')
   void listenToFormUpdated(FormViewModel model) {
     nameController.addListener(() => _updateFormData(model));
     titleController.addListener(() => _updateFormData(model));
@@ -133,6 +143,47 @@ extension ValueProperties on FormViewModel {
       this.formValueMap[DescriptionValueKey] as String?;
   String? get ratingValue => this.formValueMap[RatingValueKey] as String?;
 
+  set nameValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          NameValueKey: value,
+        }),
+    );
+
+    if (_RateReviewViewTextEditingControllers.containsKey(NameValueKey)) {
+      _RateReviewViewTextEditingControllers[NameValueKey]?.text = value ?? '';
+    }
+  }
+
+  set titleValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          TitleValueKey: value,
+        }),
+    );
+
+    if (_RateReviewViewTextEditingControllers.containsKey(TitleValueKey)) {
+      _RateReviewViewTextEditingControllers[TitleValueKey]?.text = value ?? '';
+    }
+  }
+
+  set descriptionValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          DescriptionValueKey: value,
+        }),
+    );
+
+    if (_RateReviewViewTextEditingControllers.containsKey(
+        DescriptionValueKey)) {
+      _RateReviewViewTextEditingControllers[DescriptionValueKey]?.text =
+          value ?? '';
+    }
+  }
+
   bool get hasName =>
       this.formValueMap.containsKey(NameValueKey) &&
       (nameValue?.isNotEmpty ?? false);
@@ -161,6 +212,11 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[DescriptionValueKey];
   String? get ratingValidationMessage =>
       this.fieldsValidationMessages[RatingValueKey];
+  void clearForm() {
+    nameValue = '';
+    titleValue = '';
+    descriptionValue = '';
+  }
 }
 
 extension Methods on FormViewModel {

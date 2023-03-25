@@ -2,14 +2,16 @@ import 'dart:io';
 
 import 'package:intl/intl.dart';
 
+const String DEFAULT_DATE_TIME_FORMAT = 'MMM dd, yyyy';
+
 toDefaultDtFormat(String str) {
   DateFormat df = DateFormat("dd-MMM-yyyy");
   DateTime input = df.parse(str);
   return input;
 }
 
-dateToIso8601String(String str) {
-  DateFormat df = DateFormat("dd-MMM-yyyy");
+dateToIso8601String(String str, {String? dtFormat}) {
+  DateFormat df = DateFormat(dtFormat ?? "dd-MMM-yyyy");
   DateTime input = df.parse(str);
   return input.toIso8601String();
 }
@@ -18,8 +20,8 @@ fromIsoToDateTime(String str) {
   return DateTime.parse(str);
 }
 
-fromIsoToDateTimeToDefaultFormat(DateTime dt) {
-  DateFormat df = DateFormat("dd-MMM-yyyy");
+fromIsoToDateTimeToDefaultFormat(DateTime dt, String? dtFormat) {
+  DateFormat df = DateFormat(dtFormat ?? "dd-MMM-yyyy");
 
   return df.format(dt);
 }

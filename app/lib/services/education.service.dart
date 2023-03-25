@@ -14,13 +14,13 @@ class EducationService with ReactiveServiceMixin {
     listenToReactiveValues([]);
   }
 
-  Future<Education> createEducation(Map formData) async {
+  Future<bool> createEducation(Map formData) async {
     var response = await dioClient.post(
       '/education',
       data: formData,
     );
 
-    return Education.fromJson(response.data);
+    return true;
   }
 
   Future<Education> updateEducation(String id, Map formData) async {

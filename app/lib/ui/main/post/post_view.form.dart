@@ -49,6 +49,15 @@ mixin $PostView on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
+  void syncFormWithViewModel(FormViewModel model) {
+    titleController.addListener(() => _updateFormData(model));
+    bodyController.addListener(() => _updateFormData(model));
+  }
+
+  /// Registers a listener on every generated controller that calls [model.setData()]
+  /// with the latest textController values
+  @Deprecated('Use syncFormWithViewModel instead.'
+      'This feature was deprecated after 3.1.0.')
   void listenToFormUpdated(FormViewModel model) {
     titleController.addListener(() => _updateFormData(model));
     bodyController.addListener(() => _updateFormData(model));
@@ -112,6 +121,32 @@ extension ValueProperties on FormViewModel {
   String? get titleValue => this.formValueMap[TitleValueKey] as String?;
   String? get bodyValue => this.formValueMap[BodyValueKey] as String?;
 
+  set titleValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          TitleValueKey: value,
+        }),
+    );
+
+    if (_PostViewTextEditingControllers.containsKey(TitleValueKey)) {
+      _PostViewTextEditingControllers[TitleValueKey]?.text = value ?? '';
+    }
+  }
+
+  set bodyValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          BodyValueKey: value,
+        }),
+    );
+
+    if (_PostViewTextEditingControllers.containsKey(BodyValueKey)) {
+      _PostViewTextEditingControllers[BodyValueKey]?.text = value ?? '';
+    }
+  }
+
   bool get hasTitle =>
       this.formValueMap.containsKey(TitleValueKey) &&
       (titleValue?.isNotEmpty ?? false);
@@ -128,6 +163,10 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[TitleValueKey];
   String? get bodyValidationMessage =>
       this.fieldsValidationMessages[BodyValueKey];
+  void clearForm() {
+    titleValue = '';
+    bodyValue = '';
+  }
 }
 
 extension Methods on FormViewModel {

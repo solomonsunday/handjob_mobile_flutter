@@ -14,17 +14,17 @@ import '../../shared/components/profile/profile_services.dart';
 class ApplicantProfileView extends StatelessWidget {
   const ApplicantProfileView({
     super.key,
-    required this.applicant,
+    required this.applicantId,
   });
 
-  final Applicant applicant;
+  final String applicantId;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ApplicantProfileViewModel>.reactive(
         viewModelBuilder: () => ApplicantProfileViewModel(),
         onModelReady: (model) {
-          model.getAccount(applicant.applicantId!);
+          model.getAccount(applicantId);
           model.fetchContactsCount();
         },
         builder: (context, model, _) {
@@ -59,12 +59,13 @@ class ApplicantProfileView extends StatelessWidget {
                 : ListView(
                     children: [
                       ProfileHeader(
-                          currentUser: model.user,
-                          uploadProfileAvatar: () {},
-                          busy: false,
-                          connectionCount: model.contactListCount ?? 0,
-                          rating: 3,
-                          isView: true),
+                        currentUser: model.user,
+                        uploadProfileAvatar: () {},
+                        busy: false,
+                        connectionCount: model.contactListCount ?? 0,
+                        rating: 3,
+                        isView: true,
+                      ),
                       const SizedBox(height: AppSize.s12),
                       Padding(
                         padding: const EdgeInsets.symmetric(

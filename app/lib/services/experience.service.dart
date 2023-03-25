@@ -17,22 +17,21 @@ class ExperienceService with ReactiveServiceMixin {
   List<ServiceGroup> _serviceGroup = [];
   List<ServiceGroup> get serviceGroup => _serviceGroup;
 
-  Future<Experience> createExperience(Map formData) async {
+  Future<bool> createExperience(Map formData) async {
     var response = await dioClient.post(
       '/job-experience',
       data: formData,
     );
-
-    return Experience.fromJson(response.data);
+    return true;
   }
 
-  Future<Experience> updateeExperience(String id, Map formData) async {
+  Future<bool> updateExperience(String id, Map formData) async {
     var response = await dioClient.put(
       '/job-experience/$id',
       data: formData,
     );
 
-    return Experience.fromJson(response.data);
+    return true;
   }
 
   Future<bool> deleteExperience(String id) async {

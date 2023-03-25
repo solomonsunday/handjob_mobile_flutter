@@ -45,6 +45,14 @@ mixin $PostDetailView on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
+  void syncFormWithViewModel(FormViewModel model) {
+    messageController.addListener(() => _updateFormData(model));
+  }
+
+  /// Registers a listener on every generated controller that calls [model.setData()]
+  /// with the latest textController values
+  @Deprecated('Use syncFormWithViewModel instead.'
+      'This feature was deprecated after 3.1.0.')
   void listenToFormUpdated(FormViewModel model) {
     messageController.addListener(() => _updateFormData(model));
   }
@@ -104,6 +112,20 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages.values.every((element) => element == null);
   String? get messageValue => this.formValueMap[MessageValueKey] as String?;
 
+  set messageValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          MessageValueKey: value,
+        }),
+    );
+
+    if (_PostDetailViewTextEditingControllers.containsKey(MessageValueKey)) {
+      _PostDetailViewTextEditingControllers[MessageValueKey]?.text =
+          value ?? '';
+    }
+  }
+
   bool get hasMessage =>
       this.formValueMap.containsKey(MessageValueKey) &&
       (messageValue?.isNotEmpty ?? false);
@@ -113,6 +135,9 @@ extension ValueProperties on FormViewModel {
 
   String? get messageValidationMessage =>
       this.fieldsValidationMessages[MessageValueKey];
+  void clearForm() {
+    messageValue = '';
+  }
 }
 
 extension Methods on FormViewModel {

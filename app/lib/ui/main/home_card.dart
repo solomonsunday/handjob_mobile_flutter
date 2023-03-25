@@ -7,6 +7,7 @@ import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/services/post.service.dart';
 import 'package:handjob_mobile/ui/main/post/post_view_model.dart';
 import 'package:handjob_mobile/utils/helpers.dart';
+import 'package:handjob_mobile/utils/humanize_date.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:stacked/stacked.dart';
@@ -26,11 +27,15 @@ class HomeCard extends StatelessWidget {
   const HomeCard({
     Key? key,
     required this.post,
+    this.inPosition = false,
     this.onImageClick,
+    this.onAuthorClick,
   }) : super(key: key);
 
   final Post post;
+  final bool inPosition;
   final Function()? onImageClick;
+  final Function(String)? onAuthorClick;
 
   Widget getBody(String data) {
     return Html(
@@ -108,12 +113,16 @@ class HomeCard extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              // ayojohnsonToc (2052:4272)
-                              '${post.author?.firstName} ${post.author?.otherName ?? ""} ${post.author?.lastName}',
-                              style: getMediumStyle(
-                                fontSize: 14,
-                                color: Color(0xff000000),
+                            GestureDetector(
+                              onTap: () =>
+                                  onAuthorClick!(post.author?.id ?? ""),
+                              child: Text(
+                                // ayojohnsonToc (2052:4272)
+                                '${post.author?.firstName} ${post.author?.otherName ?? ""} ${post.author?.lastName}',
+                                style: getMediumStyle(
+                                  fontSize: 14,
+                                  color: Color(0xff000000),
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -212,7 +221,7 @@ class HomeCard extends StatelessWidget {
                   children: [
                     Text(
                       // hoursago1MG (2439:4362)
-                      getTimeAgoDiff(post.createdAt!),
+                      humanizeDate(fromIsoToDateTime(post.createdAt!)),
                       style: getMediumStyle(
                         fontSize: 10,
                         color: Color(0xff000000),
@@ -236,6 +245,7 @@ class HomeCard extends StatelessWidget {
                                   height: 320,
                                   width: double.infinity,
                                   child: DefaultVideoPlayer(
+                                    inPosition: inPosition,
                                     url: post.postMedia![0]['url'],
                                     videoType: VideoType.NETWORK,
                                   ),

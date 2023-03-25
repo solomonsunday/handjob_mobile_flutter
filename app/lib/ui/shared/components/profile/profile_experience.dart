@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/html_parser.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/ui/profile/profile_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
@@ -11,6 +12,7 @@ import '../../../../app/app.locator.dart';
 import '../../../../enums/bottom_sheet_type.dart';
 import '../../../../models/experience.model.dart';
 import '../../../../models/user.model.dart';
+import '../../../../services/authentication.service.dart';
 import '../../../../services/experience.service.dart';
 import '../../../../utils/http_exception.dart';
 
@@ -157,6 +159,7 @@ class ProfileExperienceItemViewModel extends BaseViewModel {
   final _experienceService = locator<ExperienceService>();
   final _bottomSheetService = locator<BottomSheetService>();
   final _dialogService = locator<DialogService>();
+  final _authenticationService = locator<AuthenticationService>();
 
   showExperienceSheet(Experience? data) => _bottomSheetService.showCustomSheet(
         variant: BottomSheetType.profile_experience,
@@ -181,10 +184,19 @@ class ProfileExperienceItemViewModel extends BaseViewModel {
     setBusyForObject(DELETE_EXPERIENCE, true);
     try {
       await _experienceService.deleteExperience(id!);
+      Fluttertoast.showToast(
+        msg: 'Experience deleted successfully!',
+        toastLength: Toast.LENGTH_LONG,
+      );
     } on DioError catch (error) {
-      throw HttpException("An error occured");
+      Fluttertoast.showToast(
+        msg: 'An error occured, Unable to delete experience',
+        toastLength: Toast.LENGTH_LONG,
+      );
+      // throw HttpException("An error occured");
     } finally {
       setBusyForObject(DELETE_EXPERIENCE, false);
+      await _authenticationService.getCurrentBaseUser();
     }
   }
 }

@@ -3,7 +3,7 @@ description: A new Flutter project for handjob.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -18,7 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+3
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: '>=2.17.0 <3.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -36,8 +36,8 @@ dependencies:
   logger:
   flutter_svg: ^1.1.6
   dropdown_button2: ^1.9.0
-  stacked: ^2.3.3
-  stacked_services:
+  stacked: ^3.2.0
+  stacked_services: ^1.0.0
   json_serializable: ^6.3.1
   material_design_icons_flutter: ^6.0.7096
   ui_package:
@@ -70,13 +70,14 @@ dev_dependencies:
 
   flutter_lints: ^1.0.0
   build_runner:
-  stacked_generator:
-  flutter_launcher_icons: "^0.11.0"
+  flutter_launcher_icons: '^0.11.0'
+  stacked_generator: ^1.0.0
+  mockito: ^5.3.2
 
 flutter_icons:
-  android: "launcher_icon"
+  android: 'launcher_icon'
   ios: true
-  image_path: "assets/images/logo.jpeg"
+  image_path: 'assets/images/logo.jpeg'
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -93,13 +94,10 @@ flutter:
     - assets/images/
     - assets/images/gallery/
   #   - images/a_dot_ham.jpeg
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
-
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
-
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a

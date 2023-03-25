@@ -17,6 +17,18 @@ import '../services/notification.service.dart';
 import '../services/post.service.dart';
 import 'contants.dart';
 
+final _notificationService = locator<NotificationService>();
+final _navigationService = locator<NavigationService>();
+final _authenticationService = locator<AuthenticationService>();
+final _postService = locator<PostService>();
+final _instantJobService = locator<InstantJobService>();
+
+List<ModelNotification.Notification>? get notifications =>
+    _notificationService.notifications;
+User? get currentUser => _authenticationService.currentUser;
+List<InstantJob> get jobs => _instantJobService.instantJobs;
+List<Post> get posts => _postService.posts;
+
 Future<void> setupNotification(FirebaseMessaging messaging) async {
   NotificationSettings settings = await messaging.requestPermission(
     alert: true,
@@ -46,7 +58,7 @@ Future<void> setupNotification(FirebaseMessaging messaging) async {
 //     DarwinInitializationSettings(
 //         onDidReceiveLocalNotification: onDidReceiveLocalNotification);
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
+      AndroidInitializationSettings('@mipmap/launcher_icon');
   const InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
     // iOS: DarwinInitializationSettings(),
@@ -82,6 +94,7 @@ Future<void> setupNotification(FirebaseMessaging messaging) async {
   );
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    await _notificationService.getAccountNotifications(currentUser!.id!);
     print('Got a message whilst in the foreground!');
     print('Message data: ${message.data}');
 
@@ -124,18 +137,6 @@ Future<void> setupNotification(FirebaseMessaging messaging) async {
   FirebaseMessaging.onMessageOpenedApp.listen(onDidReceiveNotificationResponse);
 }
 
-final _notificationService = locator<NotificationService>();
-final _navigationService = locator<NavigationService>();
-final _authenticationService = locator<AuthenticationService>();
-final _postService = locator<PostService>();
-final _instantJobService = locator<InstantJobService>();
-
-List<ModelNotification.Notification>? get notifications =>
-    _notificationService.notifications;
-User? get currentUser => _authenticationService.currentUser;
-List<InstantJob> get jobs => _instantJobService.instantJobs;
-List<Post> get posts => _postService.posts;
-
 void onDidReceiveNotificationResponse(RemoteMessage message) async {
   print('message: ${message.toMap()}');
   print('message notification: ${message.notification?.toMap()}');
@@ -157,7 +158,7 @@ void onDidReceiveNotificationResponse(RemoteMessage message) async {
       try {
         Post post = posts.where((element) => element.id == entityId).first;
 
-        _navigationService.navigateToPostDetailView(post: post);
+        _navigationService.navigateToPostDetailView(post: post, postIndex: 0);
       } catch (e) {
         print('error: $e');
       }

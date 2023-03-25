@@ -41,37 +41,7 @@ class HomeView extends StatelessWidget {
               ),
               centerTitle: true,
               actions: [
-                GestureDetector(
-                  onTap: model.navigateToNotification,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Icon(Icons.notifications),
-                      if ((model.notifications ?? []).isNotEmpty)
-                        Positioned(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: ColorManager.kSecondaryColor,
-                              borderRadius: BorderRadius.circular(AppSize.s32),
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Text(
-                                '${(model.notifications ?? []).length}',
-                                style: getBoldStyle(
-                                  color: ColorManager.kWhiteColor,
-                                  fontSize: FontSize.s10,
-                                ),
-                              ),
-                            ),
-                          ),
-                          top: 10,
-                          right: 0,
-                        ),
-                    ],
-                  ),
-                ),
+                NotificationIconWidget(),
               ],
             ),
             body: model.loadingPosts
@@ -187,15 +157,62 @@ class HomePostWidget extends ViewModelWidget<HomeViewModel> {
   Widget build(BuildContext context, HomeViewModel model) {
     // print('post widget: ${model.posts}');
     return ListView.builder(
+      controller: model.scrollController,
+      addAutomaticKeepAlives: false,
       itemCount: model.posts.length,
       itemBuilder: (BuildContext context, int index) {
         return HomeCard(
+          onAuthorClick: (id) => model.navigateToAuthorProfile(id),
           post: model.posts[index],
           onImageClick: () {
-            model.onPostImageClick(model.posts[index]);
+            model.onPostImageClick(model.posts[index], index);
           },
+          inPosition: model.offet <= (320 * index) &&
+              model.offet >= (320 * index) - 140,
+          key: ObjectKey(index),
         );
       },
+    );
+  }
+}
+
+class NotificationIconWidget extends ViewModelWidget<HomeViewModel> {
+  const NotificationIconWidget({super.key});
+
+  @override
+  Widget build(BuildContext context, HomeViewModel model) {
+    return GestureDetector(
+      onTap: model.navigateToNotification,
+      child: Padding(
+        padding: const EdgeInsets.only(right: AppPadding.p16),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Icon(Icons.notifications),
+            if ((model.notifications ?? []).isNotEmpty)
+              Positioned(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: ColorManager.kSecondaryColor,
+                    borderRadius: BorderRadius.circular(AppSize.s32),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Text(
+                      '${(model.notifications ?? []).where((element) => !element.seen!).length}',
+                      style: getBoldStyle(
+                        color: ColorManager.kWhiteColor,
+                        fontSize: FontSize.s10,
+                      ),
+                    ),
+                  ),
+                ),
+                top: 10,
+                right: 0,
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

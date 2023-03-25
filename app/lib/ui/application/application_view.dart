@@ -209,9 +209,9 @@ class ApplicantItem extends StatelessWidget {
                                 color: ColorManager.kDarkColor,
                               ),
                             ),
-                            SizedBox(height: AppSize.s2),
-                            Rating(),
-                            SizedBox(height: AppSize.s4)
+                            const SizedBox(height: AppSize.s2),
+                            const Rating(),
+                            const SizedBox(height: AppSize.s4)
                           ],
                         ),
                         Expanded(child: Container()),
@@ -235,7 +235,7 @@ class ApplicantItem extends StatelessWidget {
                             onPressed: model.busy(ACCEPT_APPLICANT)
                                 ? null
                                 : () => model.acceptApplication(
-                                    applicant.applicationId!, instantHire.id!),
+                                    applicant, instantHire.id!),
                             title: 'Accept',
                             buttonType: ButtonType.outline,
                             paddingHeight: 12,
@@ -247,7 +247,7 @@ class ApplicantItem extends StatelessWidget {
                             onPressed: model.busy(REJECT_APPLICANT)
                                 ? null
                                 : () => model.rejectApplication(
-                                    applicant.applicationId!, instantHire.id!),
+                                    applicant, instantHire.id!),
                             title: 'Reject',
                             buttonType: ButtonType.outline,
                             paddingHeight: 12,
@@ -262,20 +262,33 @@ class ApplicantItem extends StatelessWidget {
                           DefaultButton(
                             onPressed: () {},
                             title: 'Accepted',
-                            trailingIcon: Icons.check,
                             trailingIconColor: Colors.white,
                             paddingHeight: 12,
                             buttonType: ButtonType.fill,
                             buttonBgColor: ColorManager.kSecondaryColor,
                           ),
+                          const SizedBox(width: AppSize.s8),
                           DefaultButton(
                             onPressed: () => model.navigatoToRateReview(
                                 instantHire, applicant),
                             title: 'Leave a review',
                             buttonType: ButtonType.outline,
-                            paddingHeight: 16,
+                            paddingHeight: 12,
                             buttonTextColor: ColorManager.kDarkCharcoal,
                             buttonBgColor: ColorManager.kWhiteColor,
+                          ),
+                        ],
+                      ),
+                    if (applicant.rejected!)
+                      Row(
+                        children: [
+                          DefaultButton(
+                            onPressed: () {},
+                            title: 'Rejected',
+                            trailingIconColor: Colors.white,
+                            paddingHeight: 12,
+                            buttonType: ButtonType.fill,
+                            buttonBgColor: ColorManager.kRed,
                           ),
                         ],
                       )
@@ -296,7 +309,7 @@ class ApplicantItemViewModel extends BaseViewModel {
   final _instantJobService = locator<InstantJobService>();
   final _dialogService = locator<DialogService>();
 
-  acceptApplication(String applicationId, String jobId) async {
+  acceptApplication(Applicant applicant, String jobId) async {
     var response = await _dialogService.showConfirmationDialog(
       title: "Confirmation",
       description: "Are you sure you want accept this applicant?",
@@ -305,7 +318,9 @@ class ApplicantItemViewModel extends BaseViewModel {
     setBusyForObject(ACCEPT_APPLICANT, true);
     var formData = {"jobId": jobId};
     try {
-      await _instantJobService.acceptApplication(applicationId, formData);
+      await _instantJobService.acceptApplication(
+          applicant.applicationId!, formData);
+      applicant.accepted = true;
     } on DioError catch (e) {
       _dialogService.showDialog(
           title: "Error occured", description: " ${e.response ?? ''}");
@@ -314,7 +329,7 @@ class ApplicantItemViewModel extends BaseViewModel {
     }
   }
 
-  rejectApplication(String applicationId, String jobId) async {
+  rejectApplication(Applicant applicant, String jobId) async {
     var response = await _dialogService.showConfirmationDialog(
       title: "Confirmation",
       description: "Are you sure you want reject this applicant?",
@@ -322,7 +337,9 @@ class ApplicantItemViewModel extends BaseViewModel {
     if (!response!.confirmed) return;
     setBusyForObject(REJECT_APPLICANT, false);
     var formData = {"jobId": jobId};
-    await _instantJobService.rejectApplication(applicationId, formData);
+    await _instantJobService.rejectApplication(
+        applicant.applicationId!, formData);
+    applicant.rejected = true;
     setBusyForObject(REJECT_APPLICANT, false);
   }
 
@@ -335,6 +352,7 @@ class ApplicantItemViewModel extends BaseViewModel {
   }
 
   navigateToApplicantProfile(Applicant applicant) {
-    _navigationService.navigateToApplicantProfileView(applicant: applicant);
+    _navigationService.navigateToApplicantProfileView(
+        applicantId: applicant.applicantId!);
   }
 }

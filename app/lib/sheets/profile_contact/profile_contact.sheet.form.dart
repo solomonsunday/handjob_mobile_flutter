@@ -56,6 +56,16 @@ mixin $ProfileContactSheet on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
+  void syncFormWithViewModel(FormViewModel model) {
+    emailController.addListener(() => _updateFormData(model));
+    phoneController.addListener(() => _updateFormData(model));
+    addressController.addListener(() => _updateFormData(model));
+  }
+
+  /// Registers a listener on every generated controller that calls [model.setData()]
+  /// with the latest textController values
+  @Deprecated('Use syncFormWithViewModel instead.'
+      'This feature was deprecated after 3.1.0.')
   void listenToFormUpdated(FormViewModel model) {
     emailController.addListener(() => _updateFormData(model));
     phoneController.addListener(() => _updateFormData(model));
@@ -123,6 +133,49 @@ extension ValueProperties on FormViewModel {
   String? get phoneValue => this.formValueMap[PhoneValueKey] as String?;
   String? get addressValue => this.formValueMap[AddressValueKey] as String?;
 
+  set emailValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          EmailValueKey: value,
+        }),
+    );
+
+    if (_ProfileContactSheetTextEditingControllers.containsKey(EmailValueKey)) {
+      _ProfileContactSheetTextEditingControllers[EmailValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set phoneValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          PhoneValueKey: value,
+        }),
+    );
+
+    if (_ProfileContactSheetTextEditingControllers.containsKey(PhoneValueKey)) {
+      _ProfileContactSheetTextEditingControllers[PhoneValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set addressValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          AddressValueKey: value,
+        }),
+    );
+
+    if (_ProfileContactSheetTextEditingControllers.containsKey(
+        AddressValueKey)) {
+      _ProfileContactSheetTextEditingControllers[AddressValueKey]?.text =
+          value ?? '';
+    }
+  }
+
   bool get hasEmail =>
       this.formValueMap.containsKey(EmailValueKey) &&
       (emailValue?.isNotEmpty ?? false);
@@ -146,6 +199,11 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[PhoneValueKey];
   String? get addressValidationMessage =>
       this.fieldsValidationMessages[AddressValueKey];
+  void clearForm() {
+    emailValue = '';
+    phoneValue = '';
+    addressValue = '';
+  }
 }
 
 extension Methods on FormViewModel {

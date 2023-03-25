@@ -40,6 +40,7 @@ import '../ui/application/application_view.dart';
 import '../ui/main/chat/chat_detail/chat_detail_view.dart';
 import '../ui/notification/notification_job_detail/notification_job_detail_view.dart';
 import '../ui/settings/change_password/change_password_view.dart';
+// @stacked-import
 
 @StackedApp(
   routes: [
@@ -68,6 +69,7 @@ import '../ui/settings/change_password/change_password_view.dart';
     AdaptiveRoute(page: ApplicantProfileView),
     AdaptiveRoute(page: JobDetailView),
     AdaptiveRoute(page: NotificationJobDetailView),
+    // @stacked-route
   ],
   dependencies: [
     LazySingleton(classType: NavigationService),
@@ -87,7 +89,14 @@ import '../ui/settings/change_password/change_password_view.dart';
     LazySingleton(classType: ChatService),
     LazySingleton(classType: VideoCallService),
     LazySingleton(classType: NotificationService),
+    // @stacked-service
   ],
   logger: StackedLogger(),
+  // bottomsheets: [
+  //   // @stacked-bottom-sheet
+  // ],
+  // dialogs: [
+  //   // @stacked-dialog
+  // ],
 )
 class App {}

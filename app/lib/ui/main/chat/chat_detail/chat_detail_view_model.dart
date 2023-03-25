@@ -64,8 +64,8 @@ class ChatDetailViewModel extends ReactiveViewModel {
 
   void getChatsWithPartner(Contact contact) async {
     try {
-      await _chatService.getChatsWithPartner(contact.id!);
       await _chatService.markAsRead(contact.id!);
+      await _chatService.getChatsWithPartner(contact.id!);
     } on DioError catch (e) {
     } finally {
       notifyListeners();

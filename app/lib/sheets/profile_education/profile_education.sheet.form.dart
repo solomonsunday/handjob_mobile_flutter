@@ -67,6 +67,18 @@ mixin $ProfileEducationSheet on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
+  void syncFormWithViewModel(FormViewModel model) {
+    courseController.addListener(() => _updateFormData(model));
+    yearOfGraduationController.addListener(() => _updateFormData(model));
+    institutionController.addListener(() => _updateFormData(model));
+    cityController.addListener(() => _updateFormData(model));
+    addressController.addListener(() => _updateFormData(model));
+  }
+
+  /// Registers a listener on every generated controller that calls [model.setData()]
+  /// with the latest textController values
+  @Deprecated('Use syncFormWithViewModel instead.'
+      'This feature was deprecated after 3.1.0.')
   void listenToFormUpdated(FormViewModel model) {
     courseController.addListener(() => _updateFormData(model));
     yearOfGraduationController.addListener(() => _updateFormData(model));
@@ -146,6 +158,81 @@ extension ValueProperties on FormViewModel {
   String? get cityValue => this.formValueMap[CityValueKey] as String?;
   String? get addressValue => this.formValueMap[AddressValueKey] as String?;
 
+  set courseValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          CourseValueKey: value,
+        }),
+    );
+
+    if (_ProfileEducationSheetTextEditingControllers.containsKey(
+        CourseValueKey)) {
+      _ProfileEducationSheetTextEditingControllers[CourseValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set yearOfGraduationValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          YearOfGraduationValueKey: value,
+        }),
+    );
+
+    if (_ProfileEducationSheetTextEditingControllers.containsKey(
+        YearOfGraduationValueKey)) {
+      _ProfileEducationSheetTextEditingControllers[YearOfGraduationValueKey]
+          ?.text = value ?? '';
+    }
+  }
+
+  set institutionValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          InstitutionValueKey: value,
+        }),
+    );
+
+    if (_ProfileEducationSheetTextEditingControllers.containsKey(
+        InstitutionValueKey)) {
+      _ProfileEducationSheetTextEditingControllers[InstitutionValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set cityValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          CityValueKey: value,
+        }),
+    );
+
+    if (_ProfileEducationSheetTextEditingControllers.containsKey(
+        CityValueKey)) {
+      _ProfileEducationSheetTextEditingControllers[CityValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set addressValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          AddressValueKey: value,
+        }),
+    );
+
+    if (_ProfileEducationSheetTextEditingControllers.containsKey(
+        AddressValueKey)) {
+      _ProfileEducationSheetTextEditingControllers[AddressValueKey]?.text =
+          value ?? '';
+    }
+  }
+
   bool get hasCourse =>
       this.formValueMap.containsKey(CourseValueKey) &&
       (courseValue?.isNotEmpty ?? false);
@@ -184,6 +271,13 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[CityValueKey];
   String? get addressValidationMessage =>
       this.fieldsValidationMessages[AddressValueKey];
+  void clearForm() {
+    courseValue = '';
+    yearOfGraduationValue = '';
+    institutionValue = '';
+    cityValue = '';
+    addressValue = '';
+  }
 }
 
 extension Methods on FormViewModel {

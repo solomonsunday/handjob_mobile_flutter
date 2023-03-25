@@ -57,6 +57,16 @@ mixin $ResetPasswordView on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
+  void syncFormWithViewModel(FormViewModel model) {
+    codeController.addListener(() => _updateFormData(model));
+    passwordController.addListener(() => _updateFormData(model));
+    confirmPasswordController.addListener(() => _updateFormData(model));
+  }
+
+  /// Registers a listener on every generated controller that calls [model.setData()]
+  /// with the latest textController values
+  @Deprecated('Use syncFormWithViewModel instead.'
+      'This feature was deprecated after 3.1.0.')
   void listenToFormUpdated(FormViewModel model) {
     codeController.addListener(() => _updateFormData(model));
     passwordController.addListener(() => _updateFormData(model));
@@ -125,6 +135,50 @@ extension ValueProperties on FormViewModel {
   String? get confirmPasswordValue =>
       this.formValueMap[ConfirmPasswordValueKey] as String?;
 
+  set codeValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          CodeValueKey: value,
+        }),
+    );
+
+    if (_ResetPasswordViewTextEditingControllers.containsKey(CodeValueKey)) {
+      _ResetPasswordViewTextEditingControllers[CodeValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set passwordValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          PasswordValueKey: value,
+        }),
+    );
+
+    if (_ResetPasswordViewTextEditingControllers.containsKey(
+        PasswordValueKey)) {
+      _ResetPasswordViewTextEditingControllers[PasswordValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set confirmPasswordValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          ConfirmPasswordValueKey: value,
+        }),
+    );
+
+    if (_ResetPasswordViewTextEditingControllers.containsKey(
+        ConfirmPasswordValueKey)) {
+      _ResetPasswordViewTextEditingControllers[ConfirmPasswordValueKey]?.text =
+          value ?? '';
+    }
+  }
+
   bool get hasCode =>
       this.formValueMap.containsKey(CodeValueKey) &&
       (codeValue?.isNotEmpty ?? false);
@@ -149,6 +203,11 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[PasswordValueKey];
   String? get confirmPasswordValidationMessage =>
       this.fieldsValidationMessages[ConfirmPasswordValueKey];
+  void clearForm() {
+    codeValue = '';
+    passwordValue = '';
+    confirmPasswordValue = '';
+  }
 }
 
 extension Methods on FormViewModel {

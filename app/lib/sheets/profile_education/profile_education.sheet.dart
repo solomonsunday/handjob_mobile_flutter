@@ -50,20 +50,21 @@ class ProfileEducationSheet extends StatelessWidget
             Education education = request?.data as Education;
             print('education params: ${education.toJson()}');
             courseController.text = education.course ?? "";
-            yearOfGraduationController.text =
-                fromIsoToDateTimeToDefaultFormat(education.yearOfGraduation!);
+            yearOfGraduationController.text = fromIsoToDateTimeToDefaultFormat(
+                education.yearOfGraduation!, DEFAULT_DATE_TIME_FORMAT);
             institutionController.text = education.institution ?? "";
             cityController.text = education.city ?? "";
             addressController.text = education.address ?? "";
             model.updateCountry(education.country);
 
-            List<Qualification> localQualifications = model.qualifications
-                .where((element) => element.name == education.qualification)
-                .toList();
-            if (localQualifications.isEmpty) {
+            for (Qualification element in model.qualifications) {
+              if (element.name.toLowerCase() ==
+                  education.qualification?.toLowerCase()) {
+                model.updateQualification(element);
+                break;
+              }
+
               model.updateQualification(null);
-            } else {
-              model.updateQualification(localQualifications.first);
             }
 
             model.updateId(education.id);
@@ -122,6 +123,7 @@ class ProfileEducationSheet extends StatelessWidget
                     hintText: 'Enter ',
                     controller: yearOfGraduationController,
                     onSelected: (p0) {},
+                    dateFormat: DEFAULT_DATE_TIME_FORMAT,
                   ),
                   SizedBox(height: AppSize.s12),
                   InputField(
@@ -232,9 +234,10 @@ class ProfileEducationSheetViewModel extends FormViewModel {
     print('CREATE MODE');
     var formData = {
       "institution": institutionValue,
-      "qualification": qualification,
+      "qualification": qualification?.name,
       "course": courseValue,
-      "yearOfGraduation": dateToIso8601String(yearOfGraduationValue!),
+      "yearOfGraduation": dateToIso8601String(yearOfGraduationValue!,
+          dtFormat: DEFAULT_DATE_TIME_FORMAT),
       "address": addressValue,
       "city": cityValue,
       "country": country
@@ -248,7 +251,10 @@ class ProfileEducationSheetViewModel extends FormViewModel {
       completer!(SheetResponse(confirmed: true));
     } on DioError catch (error) {
       print('eror: ${error.response!.data}');
-      throw HttpException("An error occured");
+      _dialogService.showDialog(
+        title: "An error occured",
+        description: error.response?.data['message'],
+      );
     } finally {
       setBusy(false);
       notifyListeners();
@@ -259,9 +265,10 @@ class ProfileEducationSheetViewModel extends FormViewModel {
     print('update MODE');
     var formData = {
       "institution": institutionValue,
-      "qualification": qualification,
+      "qualification": qualification?.name,
       "course": courseValue,
-      "yearOfGraduation": dateToIso8601String(yearOfGraduationValue!),
+      "yearOfGraduation": dateToIso8601String(yearOfGraduationValue!,
+          dtFormat: DEFAULT_DATE_TIME_FORMAT),
       "address": addressValue,
       "city": cityValue,
       "country": country
@@ -275,7 +282,10 @@ class ProfileEducationSheetViewModel extends FormViewModel {
       completer!(SheetResponse(confirmed: true));
     } on DioError catch (error) {
       print('eror: ${error.response!.data}');
-      throw HttpException("An error occured");
+      _dialogService.showDialog(
+        title: "An error occured",
+        description: error.response?.data['message'],
+      );
     } finally {
       setBusy(false);
       notifyListeners();

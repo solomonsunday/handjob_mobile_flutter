@@ -19,6 +19,7 @@ import '../../../models/user.model.dart';
 import '../../../services/authentication.service.dart';
 import '../../../services/instant_job.service.dart';
 import '../../../utils/http_exception.dart';
+import '../../skeletons/post_view.skeleton.dart';
 
 class JobsView extends StatelessWidget {
   const JobsView({Key? key}) : super(key: key);
@@ -57,42 +58,36 @@ class JobsView extends StatelessWidget {
                         horizontal: AppSize.s12,
                         vertical: AppSize.s8,
                       ),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: ColorManager.kWhiteColor,
                       ),
                       child: SearchInput(
                         hintText: 'Search',
-                        prefixIcon: Icon(
+                        prefixIcon: const Icon(
                           Icons.search,
                           color: ColorManager.kGrey3,
                         ),
                         onChanged: model.handleSearch,
                       ),
                     ),
-                  SizedBox(height: AppSize.s8),
-                  if (model.isBusy)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(),
-                      ],
-                    ),
+                  const SizedBox(height: AppSize.s8),
+                  if (model.isBusy) const Expanded(child: PostViewSkeleton()),
                   if (model.jobs.isEmpty)
-                    Center(child: Text('There are no jobs yet!')),
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: model.jobs.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        InstantJob instantJob = model.jobs[index];
-                        return JobItem(
-                          instantJob: instantJob,
-                          user: model.currentUser!,
-                        );
-                      },
-                    ),
-                  )
+                    const Center(child: Text('There are no jobs yet!')),
+                  if (!model.isBusy)
+                    Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: model.jobs.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          InstantJob instantJob = model.jobs[index];
+                          return JobItem(
+                            instantJob: instantJob,
+                            user: model.currentUser!,
+                          );
+                        },
+                      ),
+                    )
                 ],
               ),
             ),
@@ -178,11 +173,15 @@ class JobItem extends StatelessWidget {
                               ),
                       ),
                       const SizedBox(width: AppSize.s8),
-                      Text(
-                        '${instantJob.company?.firstName} ${instantJob.company?.lastName}',
-                        style: getBoldStyle(
-                          color: ColorManager.kDarkColor,
-                          fontSize: FontSize.s12,
+                      GestureDetector(
+                        onTap: () => model.navigateToAuthorProfile(
+                            instantJob.company?.id ?? ""),
+                        child: Text(
+                          '${instantJob.company?.firstName} ${instantJob.company?.lastName}',
+                          style: getBoldStyle(
+                            color: ColorManager.kDarkColor,
+                            fontSize: FontSize.s12,
+                          ),
                         ),
                       ),
                       Expanded(child: Container()),
@@ -351,6 +350,7 @@ class JobItemViewModel extends BaseViewModel {
   bool get isWaitingToBeAccepted => _isWaitingToBeAccepted;
 
   List<AppliedJob>? get appliedJobs => _instantJobService.appliedJobs;
+  User? get user => _authenticationService.currentUser;
 
   User? get currentUser => _authenticationService.currentUser;
 
@@ -360,6 +360,14 @@ class JobItemViewModel extends BaseViewModel {
       description: "Are you sure you want to apply for this job?",
     );
     if (!response!.confirmed) return;
+
+    // if ((user?.phoneNumber ?? "").isEmpty) {
+    //   _dialogService.showDialog(
+    //     description:
+    //         "Kindly add your phone number in your profile to apply for this job.",
+    //     title: "Phone number required",
+    //   );
+    // }
 
     try {
       setBusyForObject(APPLY_JOB, true);
@@ -372,10 +380,10 @@ class JobItemViewModel extends BaseViewModel {
       );
       _isWaitingToBeAccepted = true;
     } on DioError catch (error) {
-      print('error.response?.data: ${error.response?.data}');
+      // print('error.response?.data: ${error.response?.data}');
       _isWaitingToBeAccepted = false;
       _dialogService.showDialog(
-        description: "Unable to apply for this job. please try again",
+        description: error.response?.data['message'],
         title: "An error occured",
       );
       // throw HttpException(error.response?.data['message'] ?? "");
@@ -418,4 +426,7 @@ class JobItemViewModel extends BaseViewModel {
           user: currentUser!,
         ),
       );
+
+  navigateToAuthorProfile(String id) =>
+      _navigationService.navigateToApplicantProfileView(applicantId: id);
 }

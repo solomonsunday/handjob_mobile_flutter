@@ -73,7 +73,8 @@ class DefaultFirebaseOptions {
     projectId: 'handjobs-notify',
     databaseURL: 'https://handjobs-notify-default-rtdb.firebaseio.com',
     storageBucket: 'handjobs-notify.appspot.com',
-    iosClientId: '1045537127567-dju0buvq3vbst2udsb1k2bk25lov2snp.apps.googleusercontent.com',
+    iosClientId:
+        '1045537127567-dju0buvq3vbst2udsb1k2bk25lov2snp.apps.googleusercontent.com',
     iosBundleId: 'com.handjobs.mobile.app',
   );
 }

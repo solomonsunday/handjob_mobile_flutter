@@ -57,6 +57,16 @@ mixin $ChangePasswordView on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
+  void syncFormWithViewModel(FormViewModel model) {
+    oldPasswordController.addListener(() => _updateFormData(model));
+    newPasswordController.addListener(() => _updateFormData(model));
+    confirmPasswordController.addListener(() => _updateFormData(model));
+  }
+
+  /// Registers a listener on every generated controller that calls [model.setData()]
+  /// with the latest textController values
+  @Deprecated('Use syncFormWithViewModel instead.'
+      'This feature was deprecated after 3.1.0.')
   void listenToFormUpdated(FormViewModel model) {
     oldPasswordController.addListener(() => _updateFormData(model));
     newPasswordController.addListener(() => _updateFormData(model));
@@ -127,6 +137,51 @@ extension ValueProperties on FormViewModel {
   String? get confirmPasswordValue =>
       this.formValueMap[ConfirmPasswordValueKey] as String?;
 
+  set oldPasswordValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          OldPasswordValueKey: value,
+        }),
+    );
+
+    if (_ChangePasswordViewTextEditingControllers.containsKey(
+        OldPasswordValueKey)) {
+      _ChangePasswordViewTextEditingControllers[OldPasswordValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set newPasswordValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          NewPasswordValueKey: value,
+        }),
+    );
+
+    if (_ChangePasswordViewTextEditingControllers.containsKey(
+        NewPasswordValueKey)) {
+      _ChangePasswordViewTextEditingControllers[NewPasswordValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set confirmPasswordValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          ConfirmPasswordValueKey: value,
+        }),
+    );
+
+    if (_ChangePasswordViewTextEditingControllers.containsKey(
+        ConfirmPasswordValueKey)) {
+      _ChangePasswordViewTextEditingControllers[ConfirmPasswordValueKey]?.text =
+          value ?? '';
+    }
+  }
+
   bool get hasOldPassword =>
       this.formValueMap.containsKey(OldPasswordValueKey) &&
       (oldPasswordValue?.isNotEmpty ?? false);
@@ -151,6 +206,11 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[NewPasswordValueKey];
   String? get confirmPasswordValidationMessage =>
       this.fieldsValidationMessages[ConfirmPasswordValueKey];
+  void clearForm() {
+    oldPasswordValue = '';
+    newPasswordValue = '';
+    confirmPasswordValue = '';
+  }
 }
 
 extension Methods on FormViewModel {

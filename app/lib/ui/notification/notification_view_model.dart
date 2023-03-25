@@ -19,7 +19,7 @@ class NotificationViewModel extends ReactiveViewModel {
 
   getNotification() async {
     try {
-      // await _notificationService.getAccountNotifications(currentUser!.id!);
+      await _notificationService.getAccountNotifications(currentUser!.id!);
     } catch (e) {}
   }
 

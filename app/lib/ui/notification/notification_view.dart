@@ -24,7 +24,7 @@ class NotificationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<NotificationViewModel>.reactive(
       viewModelBuilder: () => NotificationViewModel(),
-      onModelReady: (model) async {
+      onViewModelReady: (model) async {
         await model.getNotification();
       },
       builder: (_, model, child) => Scaffold(
@@ -80,15 +80,16 @@ class NotificationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<NotificationItemViewModel>.reactive(
       viewModelBuilder: () => NotificationItemViewModel(),
-      onModelReady: (model) async {
-        // if (!notification.seen!) {
-        //   await model.updateSeenNotification(notification.id!);
-        // }
+      onViewModelReady: (model) async {
+        if (!notification.seen!) {
+          await model.updateSeenNotification(notification.id!);
+        }
       },
       builder: (context, model, child) => ListTile(
         onTap: () async {
           model.navigateNotification(notification);
-
+          print(
+              'notification seen: ${notification.message} ${notification.id}');
           if (!notification.seen!) {
             await model.updateSeenNotification(notification.id!);
           }
@@ -164,7 +165,7 @@ class NotificationItemViewModel extends BaseViewModel {
               .where((element) => element.id == notification.entityId)
               .first;
 
-          _navigationService.navigateToPostDetailView(post: post);
+          _navigationService.navigateToPostDetailView(post: post, postIndex: 0);
         } catch (e) {
           print('error: $e');
         }

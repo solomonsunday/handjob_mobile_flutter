@@ -77,6 +77,20 @@ mixin $ProfileExperienceSheet on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
+  void syncFormWithViewModel(FormViewModel model) {
+    jobTitleController.addListener(() => _updateFormData(model));
+    companyController.addListener(() => _updateFormData(model));
+    startDateController.addListener(() => _updateFormData(model));
+    endDateController.addListener(() => _updateFormData(model));
+    jobCategoryNameController.addListener(() => _updateFormData(model));
+    locationController.addListener(() => _updateFormData(model));
+    descriptionController.addListener(() => _updateFormData(model));
+  }
+
+  /// Registers a listener on every generated controller that calls [model.setData()]
+  /// with the latest textController values
+  @Deprecated('Use syncFormWithViewModel instead.'
+      'This feature was deprecated after 3.1.0.')
   void listenToFormUpdated(FormViewModel model) {
     jobTitleController.addListener(() => _updateFormData(model));
     companyController.addListener(() => _updateFormData(model));
@@ -163,6 +177,111 @@ extension ValueProperties on FormViewModel {
   String? get descriptionValue =>
       this.formValueMap[DescriptionValueKey] as String?;
 
+  set jobTitleValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          JobTitleValueKey: value,
+        }),
+    );
+
+    if (_ProfileExperienceSheetTextEditingControllers.containsKey(
+        JobTitleValueKey)) {
+      _ProfileExperienceSheetTextEditingControllers[JobTitleValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set companyValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          CompanyValueKey: value,
+        }),
+    );
+
+    if (_ProfileExperienceSheetTextEditingControllers.containsKey(
+        CompanyValueKey)) {
+      _ProfileExperienceSheetTextEditingControllers[CompanyValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set startDateValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          StartDateValueKey: value,
+        }),
+    );
+
+    if (_ProfileExperienceSheetTextEditingControllers.containsKey(
+        StartDateValueKey)) {
+      _ProfileExperienceSheetTextEditingControllers[StartDateValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set endDateValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          EndDateValueKey: value,
+        }),
+    );
+
+    if (_ProfileExperienceSheetTextEditingControllers.containsKey(
+        EndDateValueKey)) {
+      _ProfileExperienceSheetTextEditingControllers[EndDateValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set jobCategoryNameValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          JobCategoryNameValueKey: value,
+        }),
+    );
+
+    if (_ProfileExperienceSheetTextEditingControllers.containsKey(
+        JobCategoryNameValueKey)) {
+      _ProfileExperienceSheetTextEditingControllers[JobCategoryNameValueKey]
+          ?.text = value ?? '';
+    }
+  }
+
+  set locationValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          LocationValueKey: value,
+        }),
+    );
+
+    if (_ProfileExperienceSheetTextEditingControllers.containsKey(
+        LocationValueKey)) {
+      _ProfileExperienceSheetTextEditingControllers[LocationValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set descriptionValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          DescriptionValueKey: value,
+        }),
+    );
+
+    if (_ProfileExperienceSheetTextEditingControllers.containsKey(
+        DescriptionValueKey)) {
+      _ProfileExperienceSheetTextEditingControllers[DescriptionValueKey]?.text =
+          value ?? '';
+    }
+  }
+
   bool get hasJobTitle =>
       this.formValueMap.containsKey(JobTitleValueKey) &&
       (jobTitleValue?.isNotEmpty ?? false);
@@ -215,6 +334,15 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[LocationValueKey];
   String? get descriptionValidationMessage =>
       this.fieldsValidationMessages[DescriptionValueKey];
+  void clearForm() {
+    jobTitleValue = '';
+    companyValue = '';
+    startDateValue = '';
+    endDateValue = '';
+    jobCategoryNameValue = '';
+    locationValue = '';
+    descriptionValue = '';
+  }
 }
 
 extension Methods on FormViewModel {

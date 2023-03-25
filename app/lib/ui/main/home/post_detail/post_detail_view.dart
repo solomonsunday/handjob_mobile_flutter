@@ -14,8 +14,10 @@ class PostDetailView extends StatelessWidget {
   const PostDetailView({
     Key? key,
     required this.post,
+    required this.postIndex,
   }) : super(key: key);
   final Post post;
+  final int postIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,10 @@ class PostDetailView extends StatelessWidget {
           ),
           body: Stack(
             children: [
-              CommentView(post: post),
+              CommentView(
+                post: post,
+                postIndex: postIndex,
+              ),
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -57,8 +62,10 @@ class CommentView extends ViewModelWidget<PostDetailViewModel> {
   const CommentView({
     Key? key,
     required this.post,
+    required this.postIndex,
   }) : super(key: key);
   final Post post;
+  final int postIndex;
 
   @override
   Widget build(BuildContext context, PostDetailViewModel model) {

@@ -66,6 +66,18 @@ mixin $CustomerSignupView on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
+  void syncFormWithViewModel(FormViewModel model) {
+    firstnameController.addListener(() => _updateFormData(model));
+    lastnameController.addListener(() => _updateFormData(model));
+    emailController.addListener(() => _updateFormData(model));
+    phoneController.addListener(() => _updateFormData(model));
+    passwordController.addListener(() => _updateFormData(model));
+  }
+
+  /// Registers a listener on every generated controller that calls [model.setData()]
+  /// with the latest textController values
+  @Deprecated('Use syncFormWithViewModel instead.'
+      'This feature was deprecated after 3.1.0.')
   void listenToFormUpdated(FormViewModel model) {
     firstnameController.addListener(() => _updateFormData(model));
     lastnameController.addListener(() => _updateFormData(model));
@@ -141,6 +153,79 @@ extension ValueProperties on FormViewModel {
   String? get phoneValue => this.formValueMap[PhoneValueKey] as String?;
   String? get passwordValue => this.formValueMap[PasswordValueKey] as String?;
 
+  set firstnameValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          FirstnameValueKey: value,
+        }),
+    );
+
+    if (_CustomerSignupViewTextEditingControllers.containsKey(
+        FirstnameValueKey)) {
+      _CustomerSignupViewTextEditingControllers[FirstnameValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set lastnameValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          LastnameValueKey: value,
+        }),
+    );
+
+    if (_CustomerSignupViewTextEditingControllers.containsKey(
+        LastnameValueKey)) {
+      _CustomerSignupViewTextEditingControllers[LastnameValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set emailValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          EmailValueKey: value,
+        }),
+    );
+
+    if (_CustomerSignupViewTextEditingControllers.containsKey(EmailValueKey)) {
+      _CustomerSignupViewTextEditingControllers[EmailValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set phoneValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          PhoneValueKey: value,
+        }),
+    );
+
+    if (_CustomerSignupViewTextEditingControllers.containsKey(PhoneValueKey)) {
+      _CustomerSignupViewTextEditingControllers[PhoneValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set passwordValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          PasswordValueKey: value,
+        }),
+    );
+
+    if (_CustomerSignupViewTextEditingControllers.containsKey(
+        PasswordValueKey)) {
+      _CustomerSignupViewTextEditingControllers[PasswordValueKey]?.text =
+          value ?? '';
+    }
+  }
+
   bool get hasFirstname =>
       this.formValueMap.containsKey(FirstnameValueKey) &&
       (firstnameValue?.isNotEmpty ?? false);
@@ -178,6 +263,13 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[PhoneValueKey];
   String? get passwordValidationMessage =>
       this.fieldsValidationMessages[PasswordValueKey];
+  void clearForm() {
+    firstnameValue = '';
+    lastnameValue = '';
+    emailValue = '';
+    phoneValue = '';
+    passwordValue = '';
+  }
 }
 
 extension Methods on FormViewModel {

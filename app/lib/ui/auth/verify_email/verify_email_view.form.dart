@@ -46,6 +46,14 @@ mixin $VerifyEmailView on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
+  void syncFormWithViewModel(FormViewModel model) {
+    otpCodeController.addListener(() => _updateFormData(model));
+  }
+
+  /// Registers a listener on every generated controller that calls [model.setData()]
+  /// with the latest textController values
+  @Deprecated('Use syncFormWithViewModel instead.'
+      'This feature was deprecated after 3.1.0.')
   void listenToFormUpdated(FormViewModel model) {
     otpCodeController.addListener(() => _updateFormData(model));
   }
@@ -105,6 +113,20 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages.values.every((element) => element == null);
   String? get otpCodeValue => this.formValueMap[OtpCodeValueKey] as String?;
 
+  set otpCodeValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          OtpCodeValueKey: value,
+        }),
+    );
+
+    if (_VerifyEmailViewTextEditingControllers.containsKey(OtpCodeValueKey)) {
+      _VerifyEmailViewTextEditingControllers[OtpCodeValueKey]?.text =
+          value ?? '';
+    }
+  }
+
   bool get hasOtpCode =>
       this.formValueMap.containsKey(OtpCodeValueKey) &&
       (otpCodeValue?.isNotEmpty ?? false);
@@ -114,6 +136,9 @@ extension ValueProperties on FormViewModel {
 
   String? get otpCodeValidationMessage =>
       this.fieldsValidationMessages[OtpCodeValueKey];
+  void clearForm() {
+    otpCodeValue = '';
+  }
 }
 
 extension Methods on FormViewModel {
