@@ -42,12 +42,12 @@ class BearerTokenInterceptor extends Interceptor {
     if (response.statusCode == 401) {
       navigationService.navigateToAuthView();
     }
-    if (response.statusCode == 500) {
-      print('500 error');
-      dialogService.showDialog(
-          title: 'An error occured 1',
-          description: response.data['message'] ?? "");
-    }
+    // if (response.statusCode == 500) {
+    //   print('500 error');
+    //   dialogService.showDialog(
+    //       title: 'An error occured 1',
+    //       description: response.data['message'] ?? "");
+    // }
     return super.onResponse(response, handler);
   }
 

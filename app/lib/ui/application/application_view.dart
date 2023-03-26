@@ -323,7 +323,9 @@ class ApplicantItemViewModel extends BaseViewModel {
       applicant.accepted = true;
     } on DioError catch (e) {
       _dialogService.showDialog(
-          title: "Error occured", description: " ${e.response ?? ''}");
+        title: "Error occured",
+        description: " ${e.response?.data["message"] ?? ''}",
+      );
     } finally {
       setBusyForObject(ACCEPT_APPLICANT, false);
     }
