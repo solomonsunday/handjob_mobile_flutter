@@ -122,7 +122,6 @@ class MainView extends StatelessWidget {
   static const int CHAT_VIEW = 4;
 
   getView(int currentIndex) {
-    print('reacted to chanages: $currentIndex');
     switch (currentIndex) {
       case HOME_VIEW:
         return HomeView();

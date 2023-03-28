@@ -118,6 +118,11 @@ class InstantJobService with ReactiveServiceMixin {
     return appliedJobs;
   }
 
+  clearJobApplicants() {
+    _applicants.value = [];
+    notifyListeners();
+  }
+
   Future<bool> acceptApplication(
       String applicationId, Map<String, String> formData) async {
     await dioClient.put(

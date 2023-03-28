@@ -28,6 +28,7 @@ class ChatViewModel extends ReactiveViewModel {
   handleSearch(String p1) {}
 
   void navigateToChatDetail(Conversation conversation) {
+    // await _chatService.markAsRead(conversation.partner!.id!);
     Contact? foundContact = contacts
         ?.where((element) => element.id == conversation.partner?.id)
         .first;

@@ -9,7 +9,7 @@ import '../../models/applicant.model.dart';
 import '../../models/applied_job.model.dart';
 import '../../services/instant_job.service.dart';
 
-class ApplicationViewModel extends BaseViewModel {
+class ApplicationViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
   final _instantJobService = locator<InstantJobService>();
 
@@ -22,6 +22,7 @@ class ApplicationViewModel extends BaseViewModel {
   }
 
   getApplicantsRequest(String jobId) async {
+    _instantJobService.clearJobApplicants();
     setBusy(true);
     try {
       await _instantJobService.getApplicants(jobId);
@@ -31,4 +32,7 @@ class ApplicationViewModel extends BaseViewModel {
       notifyListeners();
     }
   }
+
+  @override
+  List<ReactiveServiceMixin> get reactiveServices => [_instantJobService];
 }

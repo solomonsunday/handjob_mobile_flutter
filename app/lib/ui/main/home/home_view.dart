@@ -17,8 +17,6 @@ class HomeView extends StatelessWidget {
     return ViewModelBuilder<HomeViewModel>.nonReactive(
         viewModelBuilder: () => HomeViewModel(),
         builder: (_, model, child) {
-          print(
-              'model notification: ${(model.notifications ?? []).map((e) => e.toJson()).toList()}');
           return Scaffold(
             appBar: AppBar(
               backgroundColor: ColorManager.kDarkColor,

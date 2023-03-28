@@ -27,7 +27,7 @@ class ChatDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ChatDetailViewModel>.reactive(
         viewModelBuilder: () => ChatDetailViewModel(),
-        onModelReady: (model) {
+        onViewModelReady: (model) {
           model.getChatsWithPartner(contact);
         },
         builder: (context, model, child) {

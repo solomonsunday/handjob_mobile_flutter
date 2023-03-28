@@ -321,11 +321,6 @@ class ApplicantItemViewModel extends BaseViewModel {
       await _instantJobService.acceptApplication(
           applicant.applicationId!, formData);
       applicant.accepted = true;
-    } on DioError catch (e) {
-      _dialogService.showDialog(
-        title: "Error occured",
-        description: " ${e.response?.data["message"] ?? ''}",
-      );
     } finally {
       setBusyForObject(ACCEPT_APPLICANT, false);
     }

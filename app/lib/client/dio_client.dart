@@ -22,40 +22,40 @@ class BearerTokenInterceptor extends Interceptor {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    print('REQUEST[${options.method}] => PATH: ${options.path}');
     options.headers['platform'] = "mobile";
     final sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString(AUTH_TOKEN_KEY) != null) {
       options.headers['Authorization'] =
           'Bearer ${sharedPreferences.getString(AUTH_TOKEN_KEY)}';
     }
-    print('OPTIONS: ${options.headers.toString()}');
     return super.onRequest(options, handler);
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     final NavigationService navigationService = locator<NavigationService>();
-    final DialogService dialogService = locator<DialogService>();
-    print(
-        'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
+    /**
+         * // if token expires and app is unable to 
+         * authorize the user's request.
+         * It globally logs you out of the app
+         */
     if (response.statusCode == 401) {
       navigationService.navigateToAuthView();
     }
-    // if (response.statusCode == 500) {
-    //   print('500 error');
-    //   dialogService.showDialog(
-    //       title: 'An error occured 1',
-    //       description: response.data['message'] ?? "");
-    // }
+    // This is intended to intercept all 500 (internal server) related errors
+
     return super.onResponse(response, handler);
   }
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
-    print('err response: ${err.response?.data}');
-    print(
-        'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
+    final DialogService dialogService = locator<DialogService>();
+    if (err.response?.statusCode == 500) {
+      dialogService.showDialog(
+          title: 'An error occured',
+          description: "An error occured, kindly try again later");
+    }
+
     return super.onError(err, handler);
   }
 }
