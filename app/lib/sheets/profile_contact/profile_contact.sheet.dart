@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/models/contact.model.dart';
 import 'package:handjob_mobile/models/state.model.dart' as HandjobState;
+import 'package:handjob_mobile/models/user.model.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:handjob_mobile/sheets/profile_contact/profile_contact.sheet.form.dart';
 import 'package:stacked/stacked.dart';
@@ -44,23 +45,23 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileContactSheetViewModel>.reactive(
         viewModelBuilder: () => ProfileContactSheetViewModel(),
-        onModelReady: (model) async {
-          listenToFormUpdated(model);
+        onViewModelReady: (model) async {
+          syncFormWithViewModel(model);
           if (request?.data != null) {
-            print('contact params: ${request?.data}');
-            emailController.text = request?.data["email"] ?? "";
-            phoneController.text = request?.data["phone"] ?? "";
-            addressController.text = request?.data["address"] ?? "";
-
-            model.updateLocation(request?.data["address"] ?? "");
+            User? user = request?.data as User;
+            print('contact params: ${user.toJson()}');
+            emailController.text = user.email ?? "";
+            phoneController.text = user.phoneNumber ?? "";
+            addressController.text = user.address ?? "";
+            model.updateLocation(user.address ?? "");
             try {
-              Suggestion suggestion = (await model
-                  .fetchSuggestionRequest(request?.data["address"]))[0];
+              Suggestion suggestion =
+                  (await model.fetchSuggestionRequest(user.address ?? ""))[0];
               model.updateCoordinate(suggestion.placeId);
             } catch (e) {}
-            model.handleSelectedState(request?.data["state"]);
-            model.handleSelectedLGA(request?.data["lga"]);
-            model.updateId(request?.data["id"]);
+            model.handleSelectedState(user.state);
+            model.handleSelectedLGA(user.lga);
+            model.updateId(user.id);
             model.updateEditMode(true);
           }
         },
@@ -88,10 +89,11 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
                   const SizedBox(height: AppSize.s24),
                   InputField(
                     label: 'Email address',
-                    hintText: 'johndemola@gmail.com',
+                    hintText: 'j****@**.com',
                     fillColor: ColorManager.kWhiteColor,
                     controller: emailController,
                     focusnode: emailFocusNode,
+                    readOnly: true,
                   ),
                   const SizedBox(height: AppSize.s12),
                   InputField(

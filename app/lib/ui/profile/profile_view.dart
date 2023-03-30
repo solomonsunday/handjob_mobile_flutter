@@ -91,7 +91,8 @@ class ProfileView extends StatelessWidget {
                       await model.requestOTP();
                       model.showVerifyPhoneSheet(model.currentUser);
                     },
-                    showContactSheet: () => model.showContactSheet(null),
+                    showContactSheet: () =>
+                        model.showContactSheet(model.currentUser),
                   )),
                   const SliverToBoxAdapter(
                     child: Divider(

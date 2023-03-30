@@ -61,7 +61,7 @@ class ProfileContact extends StatelessWidget {
                   ),
                 ),
               ),
-              !busy && currentUser != null
+              !busy && currentUser != null && currentUser?.phoneNumber != null
                   ? InkWell(
                       onTap: requestOTP,
                       child: Row(

@@ -361,13 +361,14 @@ class JobItemViewModel extends BaseViewModel {
     );
     if (!response!.confirmed) return;
 
-    // if ((user?.phoneNumber ?? "").isEmpty) {
-    //   _dialogService.showDialog(
-    //     description:
-    //         "Kindly add your phone number in your profile to apply for this job.",
-    //     title: "Phone number required",
-    //   );
-    // }
+    if ((user?.phoneNumber ?? "").isEmpty) {
+      _dialogService.showDialog(
+        description:
+            "Kindly add your phone number in your profile to apply for this job.",
+        title: "Phone number required",
+      );
+      return;
+    }
 
     try {
       setBusyForObject(APPLY_JOB, true);
