@@ -72,6 +72,7 @@ class ContactService with ReactiveServiceMixin {
     var response = await dioClient.get(
       '/contact/count',
     );
+    print('contact count: ${response.data['data']}');
     _contactListCount.value = response.data['data'];
   }
 

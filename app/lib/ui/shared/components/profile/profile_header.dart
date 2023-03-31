@@ -13,6 +13,7 @@ class ProfileHeader extends StatelessWidget {
     Key? key,
     required this.currentUser,
     this.uploadProfileAvatar,
+    this.uploadProfileCover,
     required this.busy,
     required this.connectionCount,
     required this.rating,
@@ -20,6 +21,7 @@ class ProfileHeader extends StatelessWidget {
   }) : super(key: key);
   final User? currentUser;
   final VoidCallback? uploadProfileAvatar;
+  final VoidCallback? uploadProfileCover;
   final bool busy;
   final int connectionCount;
   final double rating;
@@ -84,10 +86,15 @@ class ProfileHeader extends StatelessWidget {
                           ),
                   ),
                   if (!isView)
-                    const Positioned(
+                    Positioned(
                       top: AppSize.s12,
                       right: AppSize.s20,
-                      child: ProfileEditIcon(),
+                      child: GestureDetector(
+                        onTap: uploadProfileCover == null
+                            ? null
+                            : () => uploadProfileCover!(),
+                        child: const ProfileEditIcon(),
+                      ),
                     )
                 ],
               ),
@@ -99,12 +106,13 @@ class ProfileHeader extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: uploadProfileAvatar == null
-                        ? () {}
+                        ? null
                         : () => uploadProfileAvatar!(),
                     child: ProfileAvatar(
-                        imgUrl: currentUser?.imageUrl,
-                        busy: busy,
-                        isView: isView),
+                      imgUrl: currentUser?.imageUrl,
+                      busy: busy,
+                      isView: isView,
+                    ),
                   ),
                 ],
               ),

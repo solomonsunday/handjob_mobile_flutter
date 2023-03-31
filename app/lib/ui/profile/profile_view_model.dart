@@ -157,13 +157,7 @@ class ProfileViewModel extends ReactiveViewModel {
 
   final ImagePicker _picker = ImagePicker();
 
-  void uploadProfileAvatar() {
-    runBusyFuture(
-      uploadProfileAvatarRequest(),
-    );
-  }
-
-  Future<void> uploadProfileAvatarRequest() async {
+  Future<void> uploadProfileAvatar() async {
     XFile? xfile = await _picker.pickImage(source: ImageSource.gallery);
     if (xfile == null) return;
 
@@ -194,5 +188,6 @@ class ProfileViewModel extends ReactiveViewModel {
       );
 
   @override
-  List<ReactiveServiceMixin> get reactiveServices => [_authenticationService];
+  List<ReactiveServiceMixin> get reactiveServices =>
+      [_authenticationService, _contactService];
 }

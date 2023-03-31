@@ -67,17 +67,11 @@ class ProfileAvatar extends StatelessWidget {
                 ),
         ),
         if (!isView)
-          Positioned(
-            child: (busy ?? false)
-                ? const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(),
-                  )
-                : const ProfileEditIcon(),
+          const Positioned(
             right: -4,
             bottom: 8,
-          )
+            child: ProfileEditIcon(),
+          ),
       ],
     );
   }

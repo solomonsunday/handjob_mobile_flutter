@@ -18,9 +18,10 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileViewModel>.reactive(
       viewModelBuilder: () => ProfileViewModel(),
-      onModelReady: (model) async {
+      onViewModelReady: (model) async {
         await model.fetchAppliedJobs();
         await model.fetchInstantHires();
+        await model.fetchContactsCount();
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -54,7 +55,10 @@ class ProfileView extends StatelessWidget {
                   SliverToBoxAdapter(
                     child: ProfileHeader(
                       currentUser: model.currentUser,
-                      uploadProfileAvatar: model.uploadProfileAvatar,
+                      uploadProfileAvatar: () async =>
+                          await model.uploadProfileAvatar(),
+                      uploadProfileCover: () async =>
+                          await model.uploadProfileAvatar(),
                       busy: model.busy(PROFILE_AVATAR_UPLOAD),
                       connectionCount: model.contactListCount ?? 0,
                       rating: 3,
@@ -66,6 +70,17 @@ class ProfileView extends StatelessWidget {
                       child: ProfileServices(
                     currentUser: model.currentUser,
                     showServiceSheet: model.showServiceSheet,
+                  )),
+                  SliverToBoxAdapter(
+                      child: ProfileContact(
+                    currentUser: model.currentUser,
+                    busy: model.busy(REQUEST_OTP),
+                    requestOTP: () async {
+                      await model.requestOTP();
+                      model.showVerifyPhoneSheet(model.currentUser);
+                    },
+                    showContactSheet: () =>
+                        model.showContactSheet(model.currentUser),
                   )),
                   const SliverToBoxAdapter(
                       child: SizedBox(height: AppSize.s12)),
@@ -83,17 +98,6 @@ class ProfileView extends StatelessWidget {
                           model.showEducationApprenticeSheet(),
                     ),
                   ),
-                  SliverToBoxAdapter(
-                      child: ProfileContact(
-                    currentUser: model.currentUser,
-                    busy: model.busy(REQUEST_OTP),
-                    requestOTP: () async {
-                      await model.requestOTP();
-                      model.showVerifyPhoneSheet(model.currentUser);
-                    },
-                    showContactSheet: () =>
-                        model.showContactSheet(model.currentUser),
-                  )),
                   const SliverToBoxAdapter(
                     child: Divider(
                       color: ColorManager.kPrimary100Color,
