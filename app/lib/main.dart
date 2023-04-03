@@ -29,12 +29,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  setupNotification(messaging);
   setupLocator();
   setupBottomSheetUi();
   setupDialogUi();
   //subscribe for push notification...
   setupSubscription();
+  setupNotification(messaging);
   runApp(const MyApp());
 }
 
