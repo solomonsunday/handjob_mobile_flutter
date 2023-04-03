@@ -36,7 +36,7 @@ class ChatService with ReactiveServiceMixin {
       socket.on("chat_msg_to_client", (data) {
         Conversation content = Conversation.fromJson(data);
         _chats = [...chats, content];
-        notifyListeners();
+        // notifyListeners();
       });
     });
     socket.onDisconnect((_) => print('Connection Disconnection'));
@@ -52,6 +52,10 @@ class ChatService with ReactiveServiceMixin {
   Chat? get chatConversation => _chatConversation;
   List<Conversation> _conversationList = [];
   List<Conversation> get conversationList => _conversationList;
+
+  void clearChatWithPartner() {
+    _chats = [];
+  }
 
   Future<bool> createChat(Map<String, dynamic> formData) async {
     // socket.emit('chat_msg_to_client', formData);
@@ -75,6 +79,7 @@ class ChatService with ReactiveServiceMixin {
 
   Future<Chat> getChatsWithPartner(String partnerId) async {
     _chats = [];
+
     var response =
         await dioClient.get("/chat/conversation-messages/$partnerId");
     print('response data: ${response.data}');

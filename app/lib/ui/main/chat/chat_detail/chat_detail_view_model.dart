@@ -30,7 +30,7 @@ class ChatDetailViewModel extends ReactiveViewModel {
   User? get user => _authenticationService.currentUser;
 
   // List<Conversation> _chatList = [];
-  List<Conversation> get chatList => _chatService.chats;
+  Set<Conversation> get chatList => _chatService.chats.toSet();
 
   bool _isSendText = false;
   bool get isSendText => _isSendText;
@@ -64,6 +64,7 @@ class ChatDetailViewModel extends ReactiveViewModel {
 
   void getChatsWithPartner(Contact contact) async {
     try {
+      _chatService.clearChatWithPartner();
       await _chatService.markAsRead(contact.id!);
       await _chatService.getChatsWithPartner(contact.id!);
     } on DioError catch (e) {

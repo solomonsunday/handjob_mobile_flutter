@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<AppViewModel>.nonReactive(
       viewModelBuilder: () => AppViewModel(),
-      onModelReady: (model) {
+      onViewModelReady: (model) {
         model.initializeView();
       },
       onDispose: (model) {

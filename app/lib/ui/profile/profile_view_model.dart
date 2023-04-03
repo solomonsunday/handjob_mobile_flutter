@@ -189,5 +189,5 @@ class ProfileViewModel extends ReactiveViewModel {
 
   @override
   List<ReactiveServiceMixin> get reactiveServices =>
-      [_authenticationService, _contactService];
+      [_authenticationService, _contactService,];
 }

@@ -227,7 +227,7 @@ class ChatDetailView extends StatelessWidget {
                     reverse: true,
                     itemBuilder: (context, index) {
                       Conversation conversation =
-                          model.chatList.reversed.toList()[index];
+                          model.chatList.toList().reversed.toList()[index];
 
                       if (conversation.senderId != model.user?.id) {
                         return ReceiverChatWidget(chat: conversation);
