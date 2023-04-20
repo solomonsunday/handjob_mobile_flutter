@@ -49,7 +49,8 @@ class VerifyEmailViewModel extends FormViewModel {
       await _authenticationService.verifyOTP(otpCodeValue!);
       showSuccessDialog();
     } on DioError catch (error) {
-      throw HttpException(error.response!.data['message']);
+      _dialogService.showDialog(description: error.response?.data['message'] ?? "");
+      // throw HttpException(error.response!.data['message']);
     } finally {
       setBusy(false);
       notifyListeners();

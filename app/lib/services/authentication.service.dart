@@ -111,8 +111,9 @@ class AuthenticationService with ReactiveServiceMixin {
 
   Future<Auth> verifyOTP(String code) async {
     final preferences = await SharedPreferences.getInstance();
+    print('/verification/signup/${code.toUpperCase()}');
     var response = await dioClient.get(
-      '/verification/signup/$code',
+      '/verification/signup/${code.toUpperCase()}',
     );
     // print('login detail: ${response.data}');
     Auth auth = Auth.fromJson(response.data);

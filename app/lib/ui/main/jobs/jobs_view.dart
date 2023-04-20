@@ -72,7 +72,7 @@ class JobsView extends StatelessWidget {
                     ),
                   const SizedBox(height: AppSize.s8),
                   if (model.isBusy) const Expanded(child: PostViewSkeleton()),
-                  if (model.jobs.isEmpty)
+                  if (model.jobs.isEmpty && !model.isBusy)
                     const Center(child: Text('There are no jobs yet!')),
                   if (!model.isBusy)
                     Expanded(
@@ -385,7 +385,7 @@ class JobItemViewModel extends BaseViewModel {
       _isWaitingToBeAccepted = false;
       _dialogService.showDialog(
         description: error.response?.data['message'],
-        title: "An error occured",
+        title: "",
       );
       // throw HttpException(error.response?.data['message'] ?? "");
     } finally {

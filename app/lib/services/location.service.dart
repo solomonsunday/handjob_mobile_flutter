@@ -39,6 +39,7 @@ class LocationService {
       if (result['status'] == 'ZERO_RESULTS') {
         return [];
       }
+      print('error message location service: ${result["error_message"]}');
       throw result['error_message'];
     } else {
       throw 'Failed to fetch suggestion';

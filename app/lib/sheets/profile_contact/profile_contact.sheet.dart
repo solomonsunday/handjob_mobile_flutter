@@ -102,6 +102,7 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
                     fillColor: ColorManager.kWhiteColor,
                     controller: phoneController,
                     focusnode: phoneFocusNode,
+                    keyBoardType: TextInputType.phone,
                   ),
                   const SizedBox(height: AppSize.s12),
                   Column(
@@ -240,7 +241,7 @@ class ProfileContactSheetViewModel extends FormViewModel {
 
     _lgas = [];
     CustomState customState = stateList!.firstWhere((element) =>
-        element.name!.toLowerCase().contains(value!.toLowerCase()));
+        element.name!.toLowerCase().contains((value ?? "").toLowerCase()));
     List<LGA> foundLGAs = (lgaList ?? []).where((element) {
       return element.stateId == customState.id;
     }).toList();

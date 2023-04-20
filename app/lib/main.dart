@@ -15,6 +15,9 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'utils/setup_notification.dart';
 import '../../utils/contants.dart';
 
+const APP_ID = '5feb1c0eda2d48b0ada9566bd39adaea';
+const TOKEN = 'f0449690a0c940c581cbaaad2570ee3d';
+
 FirebaseMessaging messaging = FirebaseMessaging.instance;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

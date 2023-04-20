@@ -52,5 +52,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>Privacy - Camera Usage Description</key>
+	<string>App requires access to your phone’s camera.</string>
+	<key>Privacy - Microphone Usage Description</key>
+	<string>App requires access to your phone’s microphone.</string>
 </dict>
 </plist>
