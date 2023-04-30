@@ -40,7 +40,8 @@ class LocationService {
         return [];
       }
       print('error message location service: ${result["error_message"]}');
-      throw result['error_message'];
+      // throw result['error_message'];
+      throw 'location service error';
     } else {
       throw 'Failed to fetch suggestion';
     }

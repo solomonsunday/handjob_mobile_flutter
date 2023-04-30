@@ -67,7 +67,6 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
         },
         onDispose: (model) => disposeForm(),
         builder: (context, model, child) {
-          // print('states fetched: ${model.stateList}');
           return BottomSheetContainer(
             onClose: () => completer!(SheetResponse(confirmed: false)),
             child: SingleChildScrollView(
@@ -103,6 +102,7 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
                     controller: phoneController,
                     focusnode: phoneFocusNode,
                     keyBoardType: TextInputType.phone,
+                    formError: model.phoneValidationMessage,
                   ),
                   const SizedBox(height: AppSize.s12),
                   Column(
@@ -255,6 +255,17 @@ class ProfileContactSheetViewModel extends FormViewModel {
     notifyListeners();
   }
 
+  String? validatePhoneNumber(String value) {
+    if (value.isEmpty) {
+      return 'Mobile can\'t be empty';
+    } else if (value.isNotEmpty) {
+      //bool mobileValid = RegExp(r"^(?:\+88||01)?(?:\d{10}|\d{13})$").hasMatch(value);
+
+      bool mobileValid = RegExp(r'(^(?:[+0]9)?[0-9]{11}$)').hasMatch(value);
+      return mobileValid ? null : "Invalid mobile";
+    }
+  }
+
   updateContact(Function(SheetResponse<dynamic>)? completer) {
     runBusyFuture(
       updateContactRequest(completer),
@@ -267,6 +278,37 @@ class ProfileContactSheetViewModel extends FormViewModel {
       description: "Do you want to proceed?",
     );
     if (!response!.confirmed) return;
+
+    if (validatePhoneNumber(phoneValue ?? "") != null) {
+      // null indicates that 'all is well'
+      print('i got to invalid mobile');
+      _dialogService.showDialog(
+          title: "Invalid phone number",
+          description: "Please provide valid phone number");
+      return;
+    }
+
+    if (addressController.text.isEmpty) {
+      _dialogService.showDialog(
+          title: "Addess required",
+          description: "Please select from the address suggestion provided");
+      return;
+    }
+
+    if (selectedState == null) {
+      _dialogService.showDialog(
+          title: "State required",
+          description: "Please select your state from the list");
+      return;
+    }
+
+    if (selectedLGA == null) {
+      _dialogService.showDialog(
+          title: "LGA required",
+          description: "Please select your LGA from the list");
+      return;
+    }
+
     var formData = {
       "phoneNumber": phoneValue,
       "email": emailValue,
@@ -287,6 +329,7 @@ class ProfileContactSheetViewModel extends FormViewModel {
     };
     print('form data: $formData');
 
+    print('i am here now');
     setBusy(true);
     try {
       await _accountService.updateContactInfo(formData);
@@ -311,7 +354,11 @@ class ProfileContactSheetViewModel extends FormViewModel {
 
   @override
   void setFormStatus() {
-    // TODO: implement setFormStatus
+    if (hasPhone) {
+      print('validation message: ${validatePhoneNumber(phoneValue ?? "")}');
+      setPhoneValidationMessage(validatePhoneNumber(phoneValue ?? ""));
+      return;
+    }
   }
 
   //

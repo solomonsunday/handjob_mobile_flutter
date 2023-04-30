@@ -362,11 +362,26 @@ class JobItemViewModel extends BaseViewModel {
     if (!response!.confirmed) return;
 
     if ((user?.phoneNumber ?? "").isEmpty) {
-      _dialogService.showDialog(
+      var dialogResponse = await _dialogService.showDialog(
         description:
             "Kindly add your phone number in your profile to apply for this job.",
         title: "Phone number required",
+        buttonTitle: "Update Phone number",
+        cancelTitle: "Cancel",
       );
+
+      print('dialog confirmed response: ${dialogResponse?.confirmed}');
+      if (dialogResponse != null && dialogResponse.confirmed) {
+        _bottomSheetService.showCustomSheet(
+          variant: BottomSheetType.profile_contact,
+          data: user,
+          isScrollControlled: true,
+          ignoreSafeArea: true,
+          enterBottomSheetDuration: const Duration(milliseconds: 400),
+          exitBottomSheetDuration: const Duration(milliseconds: 200),
+          enableDrag: true,
+        );
+      }
       return;
     }
 

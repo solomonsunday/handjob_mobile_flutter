@@ -137,6 +137,7 @@ class NotificationItemViewModel extends BaseViewModel {
   final _postService = locator<PostService>();
   final _instantJobService = locator<InstantJobService>();
   final _authenticationService = locator<AuthenticationService>();
+  final _dialogService = locator<DialogService>();
 
   List<Post> get posts => _postService.posts;
   List<InstantJob> get jobs => _instantJobService.instantJobs;
@@ -149,6 +150,8 @@ class NotificationItemViewModel extends BaseViewModel {
   }
 
   navigateNotification(NotificationModel.Notification notification) {
+    print(
+        'notification: ${notification.notificationType} ${notification.toJson()}');
     switch (notification.notificationType) {
       case 'instant_services':
         print('instant job type of noticiation  ');
@@ -170,9 +173,25 @@ class NotificationItemViewModel extends BaseViewModel {
           print('error: $e');
         }
         break;
+
       default:
-        print("default notification");
+        _dialogService.showDialog(
+          description: notification.message,
+          title: notification.notificationType,
+        );
+        print("default notification: ${notification.toJson()}");
         return;
     }
   }
 }
+
+/**
+ * export enum notificationTopics {
+  JOB = 'job',
+  CONNECTION_REQUEST = 'connection',
+  POST = 'post',
+  APPLICATION = 'application',
+  REVIEW = 'review',
+  CHAT = 'chat'
+}
+ */
