@@ -12,6 +12,8 @@ import '../../models/contact.model.dart';
 import '../../services/contact.service.dart';
 import '../../services/video-call.service.dart';
 
+const int CONTACT_TAB = 0;
+const int CONNECTION_REQUEST_TAB = 1;
 const String CONTACT_COUNT_REQUEST = "CONTACT_COUNT_REQUEST";
 const String CONTACT_LIST_REQUEST = "CONTACT_LIST_REQUEST";
 const String TOP_SUGGESTION_CONTACT_LIST_REQUEST =
@@ -145,5 +147,22 @@ class ContactViewModel extends ReactiveViewModel {
     //   data: {"type": "video", "contact": contact},
     //   isScrollControlled: true,
     // );
+  }
+
+  int _activeTab = 0;
+  int get activeTab => _activeTab;
+
+  void updateActiveTab(int index) {
+    _activeTab = index;
+    notifyListeners();
+  }
+
+  void init() async {
+    setBusy(true);
+    await fetchContacts();
+    await fetchConnectionRequests();
+    await fetchTopSuggestionContacts();
+    await fetchContactsCount();
+    setBusy(false);
   }
 }

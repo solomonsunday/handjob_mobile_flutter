@@ -197,14 +197,16 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
                     ),
                   const SizedBox(height: AppSize.s24),
                   DefaultButton(
-                    onPressed:
-                        model.isBusy || model.busy(LOCATION_SUGGESTION_REQUEST)
-                            ? () {}
-                            : () => model.updateContact(completer),
+                    onPressed: model.isBusy ||
+                            model.busy(LOCATION_SUGGESTION_REQUEST) ||
+                            model.hasPhoneValidationMessage
+                        ? () {}
+                        : () => model.updateContact(completer),
                     title: 'Save changes',
                     busy: model.isBusy,
-                    disabled:
-                        model.busy(LOCATION_SUGGESTION_REQUEST) || model.isBusy,
+                    disabled: model.busy(LOCATION_SUGGESTION_REQUEST) ||
+                        model.isBusy ||
+                        model.hasPhoneValidationMessage,
                   ),
                 ],
               ),

@@ -18,6 +18,7 @@ class ArtisanSignupViewModel extends FormViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _sharedService = locator<SharedService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  final _dialogService = locator<DialogService>();
 
   bool _tos = false;
   List<ProfessionType>? get professionTypes => _sharedService.professionTypes;
@@ -81,6 +82,13 @@ class ArtisanSignupViewModel extends FormViewModel {
   }
 
   Future<void> registerRequest() async {
+    String? validatePhone = validatePhoneNumber(phoneValue!);
+    if (validatePhone != null) {
+      _dialogService.showDialog(
+          title: "Invalid phone number",
+          description: "Please provide valid phone number");
+      return;
+    }
     try {
       setBusyForObject(DEFAULT_AUTH, true);
       var formData = {
@@ -109,13 +117,27 @@ class ArtisanSignupViewModel extends FormViewModel {
 
   void navigateToLogin() => _navigationService.navigateTo(Routes.authView);
 
+  String? validatePhoneNumber(String value) {
+    if (value.isEmpty) {
+      return 'Mobile can\'t be empty';
+    } else if (value.isNotEmpty) {
+      //bool mobileValid = RegExp(r"^(?:\+88||01)?(?:\d{10}|\d{13})$").hasMatch(value);
+
+      bool mobileValid = RegExp(r'(^(?:[+0]9)?[0-9]{11}$)').hasMatch(value);
+      return mobileValid ? null : "Invalid mobile";
+    }
+  }
+
   bool _formIsValid = false;
   bool get formIsValid => _formIsValid;
 
   @override
   void setFormStatus() {
     // TODO: implement setFormStatus
+    String? validatePhone = validatePhoneNumber(phoneValue!);
+    setPhoneValidationMessage(validatePhone);
     _formIsValid = false;
+
     if (firstnameValue!.isNotEmpty &&
         lastnameValue!.isNotEmpty &&
         emailValue!.isNotEmpty &&

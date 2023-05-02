@@ -8,6 +8,7 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:ui_package/ui_package.dart';
 
 import '../../../../utils/contants.dart';
+import '../customer/customer_signup_view_model.dart';
 import 'artisan_signup_view_model.dart';
 
 const List<String> accountTypes = ["Job Seeker", "Employer"];
@@ -81,6 +82,7 @@ class ArtisanSignupView extends StatelessWidget with $ArtisanSignupView {
                   controller: phoneController,
                   fillColor: ColorManager.kWhiteColor,
                   keyBoardType: TextInputType.phone,
+                  formError: model.phoneValidationMessage,
                 ),
                 const SizedBox(height: AppSize.s12),
                 InputField(
@@ -149,13 +151,20 @@ class ArtisanSignupView extends StatelessWidget with $ArtisanSignupView {
                 //   ),
                 // ),
                 const SizedBox(height: AppSize.s24),
+
                 DefaultButton(
-                  onPressed: model.formIsValid ? model.register : () {},
+                  onPressed: model.formIsValid ||
+                          !model.hasPhoneValidationMessage ||
+                          model.busy(DEFAULT_AUTH)
+                      ? model.register
+                      : () {},
                   title: 'Sign Up',
                   busy: model.isBusy,
                   fontWeight: FontWeightManager.regular,
                   fontSize: FontSize.s12,
-                  disabled: !model.formIsValid,
+                  disabled: !model.formIsValid ||
+                      model.hasPhoneValidationMessage ||
+                      model.busy(DEFAULT_AUTH),
                 ),
                 const SizedBox(height: AppSize.s48),
                 DefaultButton(

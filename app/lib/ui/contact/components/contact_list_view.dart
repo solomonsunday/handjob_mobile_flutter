@@ -8,8 +8,9 @@ import '../../../models/contact.model.dart';
 import '../../shared/components/rating/rating.dart';
 
 class ContactListView extends StatelessWidget {
-  const ContactListView({Key? key}) : super(key: key);
-
+  const ContactListView({Key? key, required this.contactRequestBusy})
+      : super(key: key);
+  final bool contactRequestBusy;
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ContactViewModel>.reactive(

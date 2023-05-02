@@ -361,8 +361,12 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i18.ContactView: (data) {
+      final args = data.getArgs<ContactViewArguments>(
+        orElse: () => const ContactViewArguments(),
+      );
       return _i1.buildAdaptivePageRoute<dynamic>(
-        builder: (context) => const _i18.ContactView(),
+        builder: (context) =>
+            _i18.ContactView(key: args.key, activeTab: args.activeTab),
         settings: data,
       );
     },
@@ -576,6 +580,22 @@ class ChatDetailViewArguments {
   @override
   String toString() {
     return '{"key": "$key", "contact": "$contact"}';
+  }
+}
+
+class ContactViewArguments {
+  const ContactViewArguments({
+    this.key,
+    this.activeTab = 0,
+  });
+
+  final _i27.Key? key;
+
+  final int activeTab;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "activeTab": "$activeTab"}';
   }
 }
 
@@ -933,14 +953,17 @@ extension NavigatorStateExtension on _i28.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToContactView([
+  Future<dynamic> navigateToContactView({
+    _i27.Key? key,
+    int activeTab = 0,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.contactView,
+        arguments: ContactViewArguments(key: key, activeTab: activeTab),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -1336,14 +1359,17 @@ extension NavigatorStateExtension on _i28.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithContactView([
+  Future<dynamic> replaceWithContactView({
+    _i27.Key? key,
+    int activeTab = 0,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.contactView,
+        arguments: ContactViewArguments(key: key, activeTab: activeTab),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

@@ -1,30 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:handjob_mobile/ui/contact/contact_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
-import 'package:ui_package/utils/colors.dart';
-import 'package:ui_package/utils/font_styles.dart';
-import 'package:ui_package/utils/text_styles.dart';
-import 'package:ui_package/utils/values_manager.dart';
-import 'package:ui_package/widgets/input/input.dart';
-
-import '../shared/components/rating/rating.dart';
 import 'components/connection_request_view.dart';
 import 'components/contact_list_view.dart';
 
 class ContactView extends StatelessWidget {
-  const ContactView({Key? key}) : super(key: key);
+  const ContactView({
+    Key? key,
+    this.activeTab = 0,
+  }) : super(key: key);
+
+  final int activeTab;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ContactViewModel>.nonReactive(
         viewModelBuilder: () => ContactViewModel(),
-        onModelReady: (model) async {
-          await model.fetchContacts();
-          await model.fetchTopSuggestionContacts();
-          await model.fetchConnectionRequests();
-          await model.fetchContactsCount();
+        onViewModelReady: (model) async {
+          model.updateActiveTab(activeTab);
+
+          model.init();
         },
         builder: (context, model, child) {
           return Scaffold(
@@ -68,6 +64,9 @@ class TabHeader extends ViewModelWidget<ContactViewModel> {
   @override
   Widget build(BuildContext context, ContactViewModel model) {
     return CustomTabView(
+      connectionRequestBusy: model.isBusy,
+      contactRequestBusy: model.isBusy,
+      activeTab: model.activeTab,
       tabs: [
         Tab(
           child: Row(
@@ -132,8 +131,14 @@ class CustomTabView extends StatefulWidget {
   CustomTabView({
     Key? key,
     required this.tabs,
+    this.activeTab = 0,
+    this.connectionRequestBusy = false,
+    this.contactRequestBusy = false,
   }) : super(key: key);
-  List<Tab> tabs;
+  final List<Tab> tabs;
+  final int activeTab;
+  final bool connectionRequestBusy;
+  final bool contactRequestBusy;
 
   @override
   State<CustomTabView> createState() => _CustomTabViewState();
@@ -144,7 +149,12 @@ class _CustomTabViewState extends State<CustomTabView>
   TabController? _tabController;
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(
+      length: 2,
+      vsync: this,
+      initialIndex: widget.activeTab,
+    );
+    // _tabController?.animateTo(1);
     super.initState();
   }
 
@@ -172,8 +182,12 @@ class _CustomTabViewState extends State<CustomTabView>
             child: TabBarView(
               controller: _tabController,
               children: [
-                ContactListView(),
-                ConnnectionRequestView(),
+                ContactListView(
+                  contactRequestBusy: widget.contactRequestBusy,
+                ),
+                ConnnectionRequestView(
+                  connectionRequestBusy: widget.connectionRequestBusy,
+                ),
               ],
             ),
           )

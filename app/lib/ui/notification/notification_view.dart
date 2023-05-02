@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/models/notification.model.dart'
     as NotificationModel;
+import 'package:handjob_mobile/ui/contact/contact_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 
 import '../../app/app.locator.dart';
+import '../../models/contact.model.dart';
 import '../../models/instant_job.model.dart';
 import '../../models/post.model.dart';
 import '../../models/user.model.dart';
 import '../../services/authentication.service.dart';
+import '../../services/contact.service.dart';
 import '../../services/instant_job.service.dart';
 import '../../services/notification.service.dart';
 import '../../services/post.service.dart';
@@ -81,18 +84,18 @@ class NotificationItem extends StatelessWidget {
     return ViewModelBuilder<NotificationItemViewModel>.reactive(
       viewModelBuilder: () => NotificationItemViewModel(),
       onViewModelReady: (model) async {
-        if (!notification.seen!) {
-          await model.updateSeenNotification(notification.id!);
-        }
+        // if (!notification.seen!) {
+        //   await model.updateSeenNotification(notification.id!);
+        // }
       },
       builder: (context, model, child) => ListTile(
         onTap: () async {
           model.navigateNotification(notification);
           print(
               'notification seen: ${notification.message} ${notification.id}');
-          if (!notification.seen!) {
-            await model.updateSeenNotification(notification.id!);
-          }
+          // if (!notification.seen!) {
+          //   await model.updateSeenNotification(notification.id!);
+          // }
         },
         contentPadding: const EdgeInsets.symmetric(
           vertical: AppPadding.p10,
@@ -136,12 +139,15 @@ class NotificationItemViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final _postService = locator<PostService>();
   final _instantJobService = locator<InstantJobService>();
+  final _contactService = locator<ContactService>();
   final _authenticationService = locator<AuthenticationService>();
   final _dialogService = locator<DialogService>();
 
   List<Post> get posts => _postService.posts;
   List<InstantJob> get jobs => _instantJobService.instantJobs;
   User? get currentUser => _authenticationService.currentUser;
+  List<Contact> get connectionRequestList =>
+      _contactService.connectionRequestList;
 
   updateSeenNotification(String id) async {
     try {
@@ -150,8 +156,8 @@ class NotificationItemViewModel extends BaseViewModel {
   }
 
   navigateNotification(NotificationModel.Notification notification) {
-    print(
-        'notification: ${notification.notificationType} ${notification.toJson()}');
+    // print(
+    //     'notification: ${notification.notificationType} ${notification.toJson()}');
     switch (notification.notificationType) {
       case 'instant_services':
         print('instant job type of noticiation  ');
@@ -173,7 +179,12 @@ class NotificationItemViewModel extends BaseViewModel {
           print('error: $e');
         }
         break;
+      case 'contact_request':
+        _navigationService.navigateToContactView(
+          activeTab: CONNECTION_REQUEST_TAB,
+        );
 
+        break;
       default:
         _dialogService.showDialog(
           description: notification.message,

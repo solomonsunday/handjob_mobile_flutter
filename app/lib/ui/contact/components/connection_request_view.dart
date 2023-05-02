@@ -14,7 +14,11 @@ import '../../shared/components/rating/rating.dart';
 import '../contact_view.dart';
 
 class ConnnectionRequestView extends StatelessWidget {
-  const ConnnectionRequestView({Key? key}) : super(key: key);
+  const ConnnectionRequestView({
+    Key? key,
+    required this.connectionRequestBusy,
+  }) : super(key: key);
+  final bool connectionRequestBusy;
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +27,11 @@ class ConnnectionRequestView extends StatelessWidget {
       builder: (context, model, child) {
         print(
             'data connection req: ${model.connectionRequestList?.map((e) => e.toJson())} loading ${model.busy(CONNECTION_REQUEST)}');
-        if (model.busy(CONNECTION_REQUEST)) {
+        if (connectionRequestBusy) {
           return SkeletonListView();
         }
-        if ((model.connectionRequestList ?? []).isEmpty) {
+        if ((model.connectionRequestList ?? []).isEmpty &&
+            !connectionRequestBusy) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 20.0),
             child: Text(
