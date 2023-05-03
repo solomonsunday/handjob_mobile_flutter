@@ -13,6 +13,7 @@ import 'package:ui_package/ui_package.dart';
 
 import '../../../app/app.locator.dart';
 import '../../../enums/bottom_sheet_type.dart';
+import '../../../models/applicant.model.dart';
 import '../../../models/applied_job.model.dart';
 import '../../../models/instant_job.model.dart';
 import '../../../models/user.model.dart';
@@ -20,6 +21,8 @@ import '../../../services/authentication.service.dart';
 import '../../../services/instant_job.service.dart';
 import '../../../utils/http_exception.dart';
 import '../../skeletons/post_view.skeleton.dart';
+
+const String VIEW_APPLICANTS = 'VIEW_APPLICANTS';
 
 class JobsView extends StatelessWidget {
   const JobsView({Key? key}) : super(key: key);
@@ -110,6 +113,9 @@ class JobItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<JobItemViewModel>.reactive(
         viewModelBuilder: () => JobItemViewModel(),
+        onViewModelReady: (model) {
+          model.getApplicants(instantJob.id!);
+        },
         builder: (context, model, child) {
           return GestureDetector(
             onTap: instantJob.company?.id == user.id
@@ -206,6 +212,39 @@ class JobItem extends StatelessWidget {
                           ),
                         ],
                       ),
+                      if (instantJob.company?.id == model.currentUser?.id &&
+                          (model.applicants ?? []).isNotEmpty)
+                        PopupMenuButton<String>(
+                          onSelected: (value) {
+                            print('value selected: $value');
+                            switch (value) {
+                              case VIEW_APPLICANTS:
+                                model.navigateToApplicants(instantJob.id!);
+                                break;
+                              default:
+                                break;
+                            }
+                          },
+                          itemBuilder: (BuildContext bc) {
+                            return [
+                              PopupMenuItem(
+                                height: 10,
+                                child: Text(
+                                  'View Applicants',
+                                  style: getSemiBoldStyle(
+                                    color: ColorManager.kRed,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                value: VIEW_APPLICANTS,
+                              )
+                            ];
+                          },
+                          child: const Icon(
+                            Icons.more_vert,
+                            size: AppSize.s24,
+                          ),
+                        ),
                     ],
                   ),
                   SizedBox(height: AppSize.s12),
@@ -351,7 +390,7 @@ class JobItemViewModel extends BaseViewModel {
 
   List<AppliedJob>? get appliedJobs => _instantJobService.appliedJobs;
   User? get user => _authenticationService.currentUser;
-
+  List<Applicant>? get applicants => _instantJobService.applicants;
   User? get currentUser => _authenticationService.currentUser;
 
   Future applyInstantJob(String jobId) async {
@@ -445,4 +484,11 @@ class JobItemViewModel extends BaseViewModel {
 
   navigateToAuthorProfile(String id) =>
       _navigationService.navigateToApplicantProfileView(applicantId: id);
+
+  void navigateToApplicants(String id) =>
+      _navigationService.navigateToApplicationView(instantJobId: id);
+
+  void getApplicants(String jobId) async {
+    await _instantJobService.getApplicants(jobId);
+  }
 }

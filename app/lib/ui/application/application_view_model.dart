@@ -14,6 +14,7 @@ class ApplicationViewModel extends ReactiveViewModel {
   final _instantJobService = locator<InstantJobService>();
 
   List<Applicant>? get applicants => _instantJobService.applicants;
+  InstantJob? get instantJob => _instantJobService.instantJob;
 
   goBack() => _navigationService.back();
 
@@ -25,6 +26,7 @@ class ApplicationViewModel extends ReactiveViewModel {
     _instantJobService.clearJobApplicants();
     setBusy(true);
     try {
+      await _instantJobService.getInstantJob(jobId);
       await _instantJobService.getApplicants(jobId);
     } on DioError catch (error) {
     } finally {

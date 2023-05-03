@@ -388,8 +388,8 @@ class StackedRouter extends _i1.RouterBase {
     _i21.ApplicationView: (data) {
       final args = data.getArgs<ApplicationViewArguments>(nullOk: false);
       return _i1.buildAdaptivePageRoute<dynamic>(
-        builder: (context) =>
-            _i21.ApplicationView(key: args.key, instantHire: args.instantHire),
+        builder: (context) => _i21.ApplicationView(
+            key: args.key, instantJobId: args.instantJobId),
         settings: data,
       );
     },
@@ -398,7 +398,7 @@ class StackedRouter extends _i1.RouterBase {
       return _i1.buildAdaptivePageRoute<dynamic>(
         builder: (context) => _i22.RateReviewView(
             key: args.key,
-            instantHire: args.instantHire,
+            instantJob: args.instantJob,
             applicant: args.applicant),
         settings: data,
       );
@@ -613,35 +613,35 @@ class ChangePasswordViewArguments {
 class ApplicationViewArguments {
   const ApplicationViewArguments({
     this.key,
-    required this.instantHire,
+    required this.instantJobId,
   });
 
   final _i27.Key? key;
 
-  final _i31.InstantJob instantHire;
+  final String instantJobId;
 
   @override
   String toString() {
-    return '{"key": "$key", "instantHire": "$instantHire"}';
+    return '{"key": "$key", "instantJobId": "$instantJobId"}';
   }
 }
 
 class RateReviewViewArguments {
   const RateReviewViewArguments({
     this.key,
-    required this.instantHire,
+    required this.instantJob,
     required this.applicant,
   });
 
   final _i27.Key? key;
 
-  final _i31.InstantJob instantHire;
+  final _i31.InstantJob instantJob;
 
   final _i32.Applicant applicant;
 
   @override
   String toString() {
-    return '{"key": "$key", "instantHire": "$instantHire", "applicant": "$applicant"}';
+    return '{"key": "$key", "instantJob": "$instantJob", "applicant": "$applicant"}';
   }
 }
 
@@ -1002,7 +1002,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
 
   Future<dynamic> navigateToApplicationView({
     _i27.Key? key,
-    required _i31.InstantJob instantHire,
+    required String instantJobId,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1010,7 +1010,8 @@ extension NavigatorStateExtension on _i28.NavigationService {
         transition,
   }) async {
     return navigateTo<dynamic>(Routes.applicationView,
-        arguments: ApplicationViewArguments(key: key, instantHire: instantHire),
+        arguments:
+            ApplicationViewArguments(key: key, instantJobId: instantJobId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -1019,7 +1020,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
 
   Future<dynamic> navigateToRateReviewView({
     _i27.Key? key,
-    required _i31.InstantJob instantHire,
+    required _i31.InstantJob instantJob,
     required _i32.Applicant applicant,
     int? routerId,
     bool preventDuplicates = true,
@@ -1029,7 +1030,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }) async {
     return navigateTo<dynamic>(Routes.rateReviewView,
         arguments: RateReviewViewArguments(
-            key: key, instantHire: instantHire, applicant: applicant),
+            key: key, instantJob: instantJob, applicant: applicant),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -1408,7 +1409,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
 
   Future<dynamic> replaceWithApplicationView({
     _i27.Key? key,
-    required _i31.InstantJob instantHire,
+    required String instantJobId,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1416,7 +1417,8 @@ extension NavigatorStateExtension on _i28.NavigationService {
         transition,
   }) async {
     return replaceWith<dynamic>(Routes.applicationView,
-        arguments: ApplicationViewArguments(key: key, instantHire: instantHire),
+        arguments:
+            ApplicationViewArguments(key: key, instantJobId: instantJobId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -1425,7 +1427,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
 
   Future<dynamic> replaceWithRateReviewView({
     _i27.Key? key,
-    required _i31.InstantJob instantHire,
+    required _i31.InstantJob instantJob,
     required _i32.Applicant applicant,
     int? routerId,
     bool preventDuplicates = true,
@@ -1435,7 +1437,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }) async {
     return replaceWith<dynamic>(Routes.rateReviewView,
         arguments: RateReviewViewArguments(
-            key: key, instantHire: instantHire, applicant: applicant),
+            key: key, instantJob: instantJob, applicant: applicant),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

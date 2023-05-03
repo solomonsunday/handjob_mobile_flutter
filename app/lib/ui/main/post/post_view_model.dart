@@ -45,7 +45,7 @@ class PostViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  void navigateBack() => _navigationService.back();
+  void navigateBack() => _sharedService.setCurrentIndex(MainView.HOME_VIEW);
 
   void handleMediaType(String? value) {
     _mediaType = value!;

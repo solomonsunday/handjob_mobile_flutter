@@ -34,6 +34,7 @@ class JobsViewModel extends BaseViewModel {
       var response =
           await _instantJobService.getCurrentInstantJobs(search: search);
       await _instantJobService.getAppliedJobs();
+
       return response;
     } on DioError catch (e) {
       throw Exception(e.response!.data["message"]);

@@ -16,6 +16,7 @@ class InstantJobService with ReactiveServiceMixin {
       appliedJobs,
       instantHires,
       applicants,
+      instantJob,
     ]);
   }
 
@@ -27,11 +28,12 @@ class InstantJobService with ReactiveServiceMixin {
       ReactiveValue<List<AppliedJob>>([]);
   final ReactiveValue<List<Applicant>> _applicants =
       ReactiveValue<List<Applicant>>([]);
-
+  InstantJob? _instantJob;
   List<InstantJob> get instantJobs => _instantJobs.value;
   List<InstantJob> get instantHires => _instantHires.value;
   List<AppliedJob> get appliedJobs => _appliedJobs.value;
   List<Applicant> get applicants => _applicants.value;
+  InstantJob? get instantJob => _instantJob;
 
   Future<InstantJob> createInstantJob(Map formData) async {
     var response = await dioClient.post(
@@ -72,7 +74,9 @@ class InstantJobService with ReactiveServiceMixin {
 
   Future<InstantJob> getInstantJob(String id) async {
     var response = await dioClient.get('/instant-job/$id');
-    return InstantJob.fromJson(response.data);
+    InstantJob instantJob = InstantJob.fromJson(response.data);
+    _instantJob = instantJob;
+    return instantJob;
   }
 
   Future<List<InstantJob>> getCurrentInstantJobs({String? search}) async {

@@ -183,11 +183,13 @@ class ProfileViewModel extends ReactiveViewModel {
       _navigationService.navigateTo(
         Routes.applicationView,
         arguments: ApplicationViewArguments(
-          instantHire: instantJob,
+          instantJobId: instantJob.id!,
         ),
       );
 
   @override
-  List<ReactiveServiceMixin> get reactiveServices =>
-      [_authenticationService, _contactService,];
+  List<ReactiveServiceMixin> get reactiveServices => [
+        _authenticationService,
+        _contactService,
+      ];
 }

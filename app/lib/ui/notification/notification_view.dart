@@ -156,15 +156,15 @@ class NotificationItemViewModel extends BaseViewModel {
   }
 
   navigateNotification(NotificationModel.Notification notification) {
-    // print(
-    //     'notification: ${notification.notificationType} ${notification.toJson()}');
+    print(
+        'notification: ${notification.notificationType} ${notification.toJson()}');
     switch (notification.notificationType) {
       case 'instant_services':
         print('instant job type of noticiation  ');
 
-        _navigationService.navigateToNotificationJobDetailView(
+        _navigationService.navigateToApplicationView(
           instantJobId: notification.entityId!,
-          user: currentUser!,
+          // user: currentUser!,
         );
 
         break;
@@ -184,6 +184,9 @@ class NotificationItemViewModel extends BaseViewModel {
           activeTab: CONNECTION_REQUEST_TAB,
         );
 
+        break;
+      case 'review':
+        _navigationService.navigateToProfileView();
         break;
       default:
         _dialogService.showDialog(

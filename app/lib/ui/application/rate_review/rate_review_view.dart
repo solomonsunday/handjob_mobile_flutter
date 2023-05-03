@@ -29,19 +29,19 @@ import '../../../models/instant_job.model.dart';
 class RateReviewView extends StatelessWidget with $RateReviewView {
   RateReviewView({
     super.key,
-    required this.instantHire,
+    required this.instantJob,
     required this.applicant,
   });
 
-  final InstantJob instantHire;
+  final InstantJob instantJob;
   final Applicant applicant;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<RateReviewViewModel>.reactive(
         viewModelBuilder: () => RateReviewViewModel(),
-        onModelReady: (model) {
-          listenToFormUpdated(model);
+        onViewModelReady: (model) {
+          syncFormWithViewModel(model);
         },
         onDispose: (model) => disposeForm(),
         builder: (context, model, _) {
@@ -86,7 +86,7 @@ class RateReviewView extends StatelessWidget with $RateReviewView {
                             ),
                           ),
                           Text(
-                            instantHire.id ?? "",
+                            instantJob.id ?? "",
                             style: getRegularStyle(
                               color: ColorManager.kDarkColor,
                               fontSize: FontSize.s16,
@@ -105,7 +105,7 @@ class RateReviewView extends StatelessWidget with $RateReviewView {
                           ),
                           Text(
                             DateFormat.yMEd()
-                                .format(DateTime.parse(instantHire.endDate!)),
+                                .format(DateTime.parse(instantJob.endDate!)),
                             style: getRegularStyle(
                               color: ColorManager.kDarkColor,
                               fontSize: FontSize.s16,
@@ -166,7 +166,7 @@ class RateReviewView extends StatelessWidget with $RateReviewView {
                         ),
                       RateReviewFormView(
                         applicantId: applicant.applicantId!,
-                        jobId: instantHire.id!,
+                        jobId: instantJob.id!,
                         nameController: nameController,
                         titleController: titleController,
                         descriptionController: descriptionController,

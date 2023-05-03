@@ -1,29 +1,28 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/models/applicant.model.dart';
 import 'package:handjob_mobile/services/instant_job.service.dart';
 import 'package:handjob_mobile/ui/application/application_view_model.dart';
 import 'package:handjob_mobile/ui/shared/components/rating/rating.dart';
 import 'package:intl/intl.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 
 import '../../app/app.locator.dart';
 import '../../app/app.router.dart';
-import '../../models/applied_job.model.dart';
 import '../../models/instant_job.model.dart';
 
 class ApplicationView extends StatelessWidget {
-  const ApplicationView({super.key, required this.instantHire});
+  const ApplicationView({super.key, required this.instantJobId});
 
-  final InstantJob instantHire;
+  final String instantJobId;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ApplicationViewModel>.reactive(
         viewModelBuilder: () => ApplicationViewModel(),
-        onModelReady: (model) => model.getApplicants(instantHire.id!),
+        onViewModelReady: (model) => model.getApplicants(instantJobId),
         builder: (context, model, _) {
           print(
               'applicants: ${model.applicants?.map((e) => e.toJson()).toList()}');
@@ -69,46 +68,55 @@ class ApplicationView extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: AppSize.s24),
-                          Text(
-                            '${instantHire.service} at ${instantHire.location}',
-                            style: getBoldStyle(
-                              color: ColorManager.kDarkColor,
-                              fontSize: FontSize.s14,
-                            ),
-                          ),
-                          Text(
-                            instantHire.description ?? "",
-                            style: getRegularStyle(
-                              color: ColorManager.kDarkColor,
-                              fontSize: FontSize.s12,
-                            ),
-                          ),
+                          model.isBusy
+                              ? SkeletonLine()
+                              : Text(
+                                  '${model.instantJob?.service} ${model.instantJob?.location == null ? "" : "at ${model.instantJob?.location}"}',
+                                  style: getBoldStyle(
+                                    color: ColorManager.kDarkColor,
+                                    fontSize: FontSize.s14,
+                                  ),
+                                ),
+                          model.isBusy
+                              ? SkeletonLine()
+                              : Text(
+                                  model.instantJob?.description ?? "",
+                                  style: getRegularStyle(
+                                    color: ColorManager.kDarkColor,
+                                    fontSize: FontSize.s12,
+                                  ),
+                                ),
                           const SizedBox(height: AppSize.s20),
-                          Text(
-                            'MEET UP LOCATION: ${instantHire.meetupLocation ?? instantHire.location}',
-                            style: getMediumStyle(
-                              color: ColorManager.kDarkColor,
-                              fontSize: FontSize.s12,
-                            ),
-                          ),
+                          model.isBusy
+                              ? SkeletonLine()
+                              : Text(
+                                  'MEET UP LOCATION: ${model.instantJob?.meetupLocation ?? model.instantJob?.location}',
+                                  style: getMediumStyle(
+                                    color: ColorManager.kDarkColor,
+                                    fontSize: FontSize.s12,
+                                  ),
+                                ),
                           const SizedBox(height: AppSize.s12),
-                          Row(
-                            children: [
-                              DefaultButton(
-                                onPressed: () {},
-                                title:
-                                    '${DateFormat.yMEd().format(DateTime.parse(instantHire.startDate!))}  - ${DateFormat.yMEd().format(DateTime.parse(instantHire.endDate!))}',
-                                leadingIcon:
-                                    const Icon(Icons.calendar_month_rounded),
-                                leadingIconColor: ColorManager.kSecondaryColor,
-                                buttonType: ButtonType.outline,
-                                paddingHeight: 12,
-                                paddingWidth: 4,
-                                borderRadius: 4,
-                              ),
-                              const SizedBox(width: AppSize.s4),
-                            ],
-                          ),
+                          model.isBusy
+                              ? SkeletonLine()
+                              : Row(
+                                  children: [
+                                    DefaultButton(
+                                      onPressed: () {},
+                                      title:
+                                          '${model.instantJob?.startDate == null ? "" : DateFormat.yMEd().format(DateTime.parse(model.instantJob!.startDate!))}  - ${model.instantJob?.endDate == null ? "" : DateFormat.yMEd().format(DateTime.parse(model.instantJob!.endDate!))}',
+                                      leadingIcon: const Icon(
+                                          Icons.calendar_month_rounded),
+                                      leadingIconColor:
+                                          ColorManager.kSecondaryColor,
+                                      buttonType: ButtonType.outline,
+                                      paddingHeight: 12,
+                                      paddingWidth: 4,
+                                      borderRadius: 4,
+                                    ),
+                                    const SizedBox(width: AppSize.s4),
+                                  ],
+                                ),
                           const SizedBox(height: AppSize.s8),
                         ],
                       ),
@@ -146,7 +154,7 @@ class ApplicationView extends StatelessWidget {
                         Applicant applicant = (model.applicants ?? [])[index];
                         return ApplicantItem(
                           applicant: applicant,
-                          instantHire: instantHire,
+                          instantHire: model.instantJob!,
                         );
                       },
                     ))
@@ -340,10 +348,10 @@ class ApplicantItemViewModel extends BaseViewModel {
     setBusyForObject(REJECT_APPLICANT, false);
   }
 
-  navigatoToRateReview(InstantJob instantHire, Applicant applicant) {
+  navigatoToRateReview(InstantJob instantJob, Applicant applicant) {
     _navigationService.navigateTo(Routes.rateReviewView,
         arguments: RateReviewViewArguments(
-          instantHire: instantHire,
+          instantJob: instantJob,
           applicant: applicant,
         ));
   }
