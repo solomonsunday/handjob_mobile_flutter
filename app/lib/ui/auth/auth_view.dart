@@ -59,8 +59,8 @@ class AuthView extends StatelessWidget with $AuthView {
                       onTap: model.toggleVisibility,
                       child: Icon(
                         model.visibility
-                            ? Icons.visibility_off
-                            : Icons.visibility,
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                         size: AppSize.s24,
                         color: ColorManager.kDarkCharcoal,
                       ),

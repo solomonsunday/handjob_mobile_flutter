@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:handjob_mobile/models/post.model.dart';
 import 'package:handjob_mobile/ui/main/home/post_detail/post_detail_view_model.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:ui_package/ui_package.dart';
@@ -84,7 +86,19 @@ class CommentView extends ViewModelWidget<PostDetailViewModel> {
             ),
           ),
         ]),
-        model.comments.isEmpty
+        if (model.comments.isEmpty && model.isBusy)
+          ListView.builder(
+              scrollDirection: Axis.vertical,
+              physics: const BouncingScrollPhysics(),
+              itemCount: 5,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: SkeletonListTile(),
+                );
+              }),
+        model.comments.isEmpty && !model.isBusy
             ? Center(
                 child: Text(
                   "No comments available",
@@ -117,25 +131,25 @@ class CommentFormView extends ViewModelWidget<PostDetailViewModel> {
   Widget build(BuildContext context, PostDetailViewModel model) {
     return Container(
       padding: const EdgeInsets.all(AppPadding.p24),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: ColorManager.kWhiteColor,
       ),
       child: InputField(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSize.s12),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: ColorManager.kDarkColor,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSize.s12),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: ColorManager.kGrey3,
           ),
         ),
-        prefixIcon: Icon(Icons.person),
+        // prefixIcon: Icon(Icons.person),
         suffixIcon: GestureDetector(
-          onTap: model.createComment,
+          onTap: model.busy(CREATE_COMMENT_BUSY) ? null : model.createComment,
           child: Icon(
               color: model.messageController.text.isEmpty
                   ? ColorManager.kGrey

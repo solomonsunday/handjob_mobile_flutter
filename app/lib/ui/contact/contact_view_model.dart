@@ -165,4 +165,7 @@ class ContactViewModel extends ReactiveViewModel {
     await fetchContactsCount();
     setBusy(false);
   }
+
+  handleViewContactProfile(Contact contact) => _navigationService
+      .navigateToApplicantProfileView(applicantId: contact.id!);
 }

@@ -10,6 +10,8 @@ import '../../../../models/user.model.dart';
 import '../../../../services/authentication.service.dart';
 import '../../../../services/comment.service.dart';
 
+const String CREATE_COMMENT_BUSY = 'CREATE_COMMENT_BUSY';
+
 class PostDetailViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
   final _commentService = locator<CommentService>();
@@ -31,27 +33,33 @@ class PostDetailViewModel extends ReactiveViewModel {
 
   Future<void> getComments() async {
     _commentService.comments.clear();
-    notifyListeners();
+    setBusy(true);
+    // notifyListeners();
     try {
       await _commentService.getComments(postId!);
     } on DioError catch (e) {
       print('error commenting: ${e}');
+    } finally {
+      setBusy(false);
     }
   }
 
   Future<void> createComment() async {
+    if (messageController.text.isEmpty) return;
+
     Map<String, dynamic> formData = {
       "message": messageController.text,
     };
     print('formdata: $formData');
-    setBusy(true);
+    setBusyForObject(CREATE_COMMENT_BUSY, true);
     try {
       await _commentService.createComment(postId!, formData);
+      messageController.clear();
+      await _commentService.getComments(postId!);
     } on DioError catch (e) {
     } finally {
-      messageController.clear();
-      setBusy(false);
-      notifyListeners();
+      setBusyForObject(CREATE_COMMENT_BUSY, false);
+      // notifyListeners();
     }
   }
 

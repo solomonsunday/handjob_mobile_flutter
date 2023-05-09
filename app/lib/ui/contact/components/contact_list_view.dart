@@ -76,6 +76,7 @@ class ContactListView extends StatelessWidget {
                           onVideoCall: model.handleVideoCall,
                           onChat: model.handleChat,
                           onDeleteContact: model.handleDeleteContact,
+                          onViewContactProfile: model.handleViewContactProfile,
                         );
                       },
                     ),
@@ -94,12 +95,14 @@ class ContactListItem extends StatelessWidget {
     required this.onAudioCall,
     required this.onVideoCall,
     required this.onChat,
+    required this.onViewContactProfile,
   });
 
   final Contact contact;
   final Function(Contact) onAudioCall;
   final Function(Contact) onVideoCall;
   final Function(Contact) onChat;
+  final Function(Contact) onViewContactProfile;
   final Function(String) onDeleteContact;
 
   @override
@@ -110,9 +113,7 @@ class ContactListItem extends StatelessWidget {
 
     // print('expereince : $currentExperience');
     return ListTile(
-      onTap: () {
-        print('tapping');
-      },
+      onTap: () => onViewContactProfile(contact),
       leading: contact.imageUrl == null
           ? CircleAvatar(
               backgroundImage: AssetImage("assets/images/default-avatar.jpeg"),

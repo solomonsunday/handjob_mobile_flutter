@@ -358,14 +358,14 @@ class HomeCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    model.busy(LIKE_POST)
-                        ? const LinearProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation(
-                              ColorManager.kDarkColor,
-                            ),
-                            backgroundColor: ColorManager.kBackgroundolor,
-                          )
-                        : Container(),
+                    // model.busy(LIKE_POST)
+                    //     ? const LinearProgressIndicator(
+                    //         valueColor: AlwaysStoppedAnimation(
+                    //           ColorManager.kDarkColor,
+                    //         ),
+                    //         backgroundColor: ColorManager.kBackgroundolor,
+                    //       )
+                    //     : Container(),
                     const Divider()
                   ],
                 ),
