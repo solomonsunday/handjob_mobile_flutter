@@ -36,5 +36,5 @@ class ApplicationViewModel extends ReactiveViewModel {
   }
 
   @override
-  List<ReactiveServiceMixin> get reactiveServices => [_instantJobService];
+  List<ListenableServiceMixin> get listenableServices => [_instantJobService];
 }

@@ -16,3 +16,7 @@ const String POST = 'post';
 const String APPLICATION = 'application';
 const String REVIEW = 'review';
 const String CHAT = 'chat';
+
+//ACCOUNT TYPES
+const String ACCOUNT_INSTANT_HIRE = 'Instant Hire';
+const String ACCOUNT_ARTISAN = 'Artisan';

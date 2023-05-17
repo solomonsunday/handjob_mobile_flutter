@@ -151,9 +151,10 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
             hintText: 'Enter a title...',
             controller: titleController,
             focusnode: titleFocusnode,
-            formError: model.hasTitleValidationMessage
-                ? model.titleValidationMessage
-                : null,
+            formError:
+                titleFocusnode.hasFocus && model.hasTitleValidationMessage
+                    ? model.titleValidationMessage
+                    : null,
           ),
           const SizedBox(height: AppSize.s24),
           Container(
@@ -185,15 +186,11 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
                   controller: bodyController,
                   focusnode: bodyFocusnode,
                   maxLength: 500,
-                  formError: model.hasBodyValidationMessage
-                      ? model.bodyValidationMessage
-                      : null,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text('${bodyController.text.length}/500'),
-                  ],
+                  formError:
+                      bodyFocusnode.hasFocus && model.hasBodyValidationMessage
+                          ? model.bodyValidationMessage
+                          : null,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 const SizedBox(height: AppSize.s16),
                 model.selectedFile == null
@@ -268,6 +265,13 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
                 ),
               ],
             ),
+          ),
+          SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text('${bodyController.text.length}/500'),
+            ],
           ),
           const SizedBox(height: AppSize.s12),
           DefaultButton(

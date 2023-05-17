@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/ui/main/jobs/job_detail/job_detail_view_model.dart';
+import 'package:handjob_mobile/utils/contants.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
@@ -23,10 +24,12 @@ class JobDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<JobDetailViewModel>.nonReactive(
+    return ViewModelBuilder<JobDetailViewModel>.reactive(
         viewModelBuilder: () => JobDetailViewModel(),
-        onModelReady: (model) {
+        onViewModelReady: (model) {
           print('id: ${instantJob.id}');
+          model.fetchAppliedJobs();
+          model.getApplicants(instantJob.id!);
         },
         builder: (context, model, _) {
           return Scaffold(
@@ -203,9 +206,20 @@ class JobDetailView extends StatelessWidget {
                             color: ColorManager.kDarkCharcoal,
                           ),
                         ),
-                      if (instantJob?.company?.id != user.id &&
-                          !model.isJobApplied(instantJob?.id ?? "") &&
-                          !model.isWaitingToBeAccepted)
+                      if (model.currentUser?.accountType ==
+                          ACCOUNT_INSTANT_HIRE)
+                        model.busy(FETCH_APPLICANTS)
+                            ? const SizedBox(
+                                height: 16,
+                                width: 16,
+                                child: CircularProgressIndicator(),
+                              )
+                            : Text('${model.applicantCount} Applicants'),
+                      if (instantJob.company?.id != user.id &&
+                          !model.isJobApplied(instantJob.id ?? "") &&
+                          !model.isWaitingToBeAccepted &&
+                          model.currentUser?.accountType !=
+                              ACCOUNT_INSTANT_HIRE)
                         DefaultButton(
                           onPressed: model.busy(APPLY_JOB)
                               ? null

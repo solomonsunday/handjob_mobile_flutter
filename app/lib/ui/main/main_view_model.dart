@@ -26,7 +26,7 @@ class MainViewModel extends ReactiveViewModel {
   final _notificationService = locator<NotificationService>();
   final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
-  IO.Socket get videoSocket => _videoCallService.socket;
+  // IO.Socket get videoSocket => _videoCallService.socket;
 
   int get currentIndex => _sharedService.currentIndex;
 
@@ -35,7 +35,7 @@ class MainViewModel extends ReactiveViewModel {
   navigateToProfile() => _navigationService.navigateTo(Routes.profileView);
 
   void initializeView() async {
-    _videoCallService.initSocket();
+    // _videoCallService.initSocket();
     //update device token
     String? token = await messaging.getToken();
     if (token != null && currentUser != null) {
@@ -66,8 +66,8 @@ class MainViewModel extends ReactiveViewModel {
 
   @override
   dispose() {
-    videoSocket.dispose();
-    videoSocket.disconnect();
+    // videoSocket.dispose();
+    // videoSocket.disconnect();
   }
 
   setCurrentIndex(int value) {

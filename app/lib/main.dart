@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
       },
       builder: (context, model, _) {
         return MaterialApp(
-          title: 'HandJobs Mobile',
+          title: 'Handyworker Mobile',
           debugShowCheckedModeBanner: false,
           navigatorKey: StackedService.navigatorKey,
           onGenerateRoute: StackedRouter().onGenerateRoute,
@@ -83,16 +83,16 @@ class MyApp extends StatelessWidget {
 class AppViewModel extends BaseViewModel {
   final _chatService = locator<ChatService>();
 
-  IO.Socket get chatSocket => _chatService.chatSocket;
+  // IO.Socket get chatSocket => _chatService.chatSocket;
 
   initializeView() async {
-    await _chatService.initSocket();
+    // await _chatService.initSocket();
   }
 
   @override
   void dispose() {
-    chatSocket.disconnect();
-    chatSocket.dispose();
+    // chatSocket.disconnect();
+    // chatSocket.dispose();
     super.dispose();
   }
 }

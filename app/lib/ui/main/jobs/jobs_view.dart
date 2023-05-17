@@ -3,7 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.router.dart';
+import 'package:handjob_mobile/ui/auth/signup/artisan/artisan_signup_view.dart';
 import 'package:handjob_mobile/ui/main/jobs/jobs_view_model.dart';
+import 'package:handjob_mobile/utils/contants.dart';
 import 'package:handjob_mobile/utils/helpers.dart';
 import 'package:handjob_mobile/utils/humanize_date.dart';
 import 'package:intl/intl.dart';
@@ -12,6 +14,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../dialogs/account_type.dialog.dart';
 import '../../../enums/bottom_sheet_type.dart';
 import '../../../models/applicant.model.dart';
 import '../../../models/applied_job.model.dart';
@@ -114,6 +117,7 @@ class JobItem extends StatelessWidget {
     return ViewModelBuilder<JobItemViewModel>.reactive(
         viewModelBuilder: () => JobItemViewModel(),
         onViewModelReady: (model) {
+          print('instant jbo id: ${instantJob.id}');
           model.getApplicants(instantJob.id!);
         },
         builder: (context, model, child) {
@@ -309,6 +313,8 @@ class JobItem extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: AppSize.s8),
+                  if (model.user?.accountType == ACCOUNT_INSTANT_HIRE)
+                    Text('${model.applicantCount} Applicants'),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -319,9 +325,11 @@ class JobItem extends StatelessWidget {
                             color: ColorManager.kDarkCharcoal,
                           ),
                         ),
-                      if (instantJob?.company?.id != user.id &&
-                          !model.isJobApplied(instantJob?.id ?? "") &&
-                          !model.isWaitingToBeAccepted)
+
+                      if (instantJob.company?.id != user.id &&
+                          !model.isJobApplied(instantJob.id ?? "") &&
+                          !model.isWaitingToBeAccepted &&
+                          model.user?.accountType != ACCOUNT_INSTANT_HIRE)
                         DefaultButton(
                           onPressed: model.busy(APPLY_JOB)
                               ? null
@@ -335,7 +343,8 @@ class JobItem extends StatelessWidget {
                           borderRadius: 4,
                           fontSize: 12,
                         ),
-                      if (model.isWaitingToBeAccepted)
+                      if (instantJob.company?.id != user.id &&
+                          model.isWaitingToBeAccepted)
                         Text(
                           'Waiting to be accepted',
                           style: getBoldStyle(
@@ -392,6 +401,8 @@ class JobItemViewModel extends BaseViewModel {
   User? get user => _authenticationService.currentUser;
   List<Applicant>? get applicants => _instantJobService.applicants;
   User? get currentUser => _authenticationService.currentUser;
+  int _applicantCount = 0;
+  int get applicantCount => _applicantCount;
 
   Future applyInstantJob(String jobId) async {
     var response = await _dialogService.showConfirmationDialog(
@@ -489,6 +500,8 @@ class JobItemViewModel extends BaseViewModel {
       _navigationService.navigateToApplicationView(instantJobId: id);
 
   void getApplicants(String jobId) async {
-    await _instantJobService.getApplicants(jobId);
+    List<Applicant> applicants = await _instantJobService.getApplicants(jobId);
+    _applicantCount = applicants.length;
+    notifyListeners();
   }
 }

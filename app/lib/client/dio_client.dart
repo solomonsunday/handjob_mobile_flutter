@@ -9,7 +9,7 @@ import 'package:stacked_services/stacked_services.dart';
 class DioClient {
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'https://api-jobplicant.herokuapp.com',
+      baseUrl: 'https://jobplicant-api.onrender.com',
       // connectTimeout: 15000,
       // receiveTimeout: 3000,
     ),

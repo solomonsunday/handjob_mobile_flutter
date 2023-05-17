@@ -7,7 +7,7 @@ import '../app/app.locator.dart';
 import '../client/dio_client.dart';
 import '../models/applicant.model.dart';
 
-class InstantJobService with ReactiveServiceMixin {
+class InstantJobService with ListenableServiceMixin {
   Dio dioClient = locator<DioClient>().dio;
 
   InstantJobService() {
@@ -24,15 +24,13 @@ class InstantJobService with ReactiveServiceMixin {
       ReactiveValue<List<InstantJob>>([]);
   final ReactiveValue<List<InstantJob>> _instantJobs =
       ReactiveValue<List<InstantJob>>([]);
-  final ReactiveValue<List<AppliedJob>> _appliedJobs =
-      ReactiveValue<List<AppliedJob>>([]);
-  final ReactiveValue<List<Applicant>> _applicants =
-      ReactiveValue<List<Applicant>>([]);
+  List<AppliedJob> _appliedJobs = [];
+  List<Applicant> _applicants = [];
   InstantJob? _instantJob;
   List<InstantJob> get instantJobs => _instantJobs.value;
   List<InstantJob> get instantHires => _instantHires.value;
-  List<AppliedJob> get appliedJobs => _appliedJobs.value;
-  List<Applicant> get applicants => _applicants.value;
+  List<AppliedJob> get appliedJobs => _appliedJobs;
+  List<Applicant> get applicants => _applicants;
   InstantJob? get instantJob => _instantJob;
 
   Future<InstantJob> createInstantJob(Map formData) async {
@@ -107,23 +105,24 @@ class InstantJobService with ReactiveServiceMixin {
     List<AppliedJob> appliedJobs = (response.data["data"] as List<dynamic>)
         .map((x) => AppliedJob.fromJson(x))
         .toList();
-    _appliedJobs.value = appliedJobs;
+    _appliedJobs = appliedJobs;
+    notifyListeners();
     return appliedJobs;
   }
 
-  Future<List<AppliedJob>> getApplicants(String jobId) async {
+  Future<List<Applicant>> getApplicants(String jobId) async {
     String url = '/instant-job/$jobId/applicants';
 
     var response = await dioClient.get(url);
     List<Applicant> applicants = (response.data["data"] as List<dynamic>)
         .map((x) => Applicant.fromJson(x))
         .toList();
-    _applicants.value = applicants;
-    return appliedJobs;
+    _applicants = applicants;
+    return _applicants;
   }
 
   clearJobApplicants() {
-    _applicants.value = [];
+    _applicants = [];
     notifyListeners();
   }
 
