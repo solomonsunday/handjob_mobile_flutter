@@ -123,12 +123,18 @@ class ProfileExperienceSheet extends StatelessWidget
                       if (!model.current)
                         Expanded(
                           child: DatePicker(
-                            onSelected: (p0) {},
-                            label: 'End date',
-                            hintText: 'Select',
-                            controller: endDateController,
-                            dateFormat: DEFAULT_DATE_TIME_FORMAT,
-                          ),
+                              onSelected: (p0) {},
+                              label: 'End date',
+                              hintText: 'Select',
+                              controller: endDateController,
+                              dateFormat: DEFAULT_DATE_TIME_FORMAT,
+                              disable: startDateController.text.isEmpty,
+                              firstDate: startDateController.text.isEmpty
+                                  ? DateTime.now().subtract(
+                                      Duration(days: 200000),
+                                    )
+                                  : toDefaultDtFormat(startDateController.text,
+                                      format: DEFAULT_DATE_TIME_FORMAT)),
                         ),
                     ],
                   ),

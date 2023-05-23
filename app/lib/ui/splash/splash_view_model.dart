@@ -18,7 +18,7 @@ class SplashViewViewModel extends BaseViewModel {
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
-
+  final _dialogService = locator<DialogService>();
   void navigateToOnboard() async =>
       await _navigationService.replaceWith(Routes.onboardView);
   void navigateToLogin() => _navigationService.replaceWith(Routes.authView);
@@ -42,20 +42,28 @@ class SplashViewViewModel extends BaseViewModel {
       _isLoggedIn = false;
       throw Exception(error.response?.data["message"]);
     } finally {
-      Future.delayed(const Duration(seconds: 2), () async {
-        if (_isLoggedIn) {
+      // Future.delayed(const Duration(seconds: 2), () async {
+
+      // });
+      if (_isLoggedIn) {
+        try {
           User user = await _authenticationService.getCurrentBaseUser();
 
           _navigationService.replaceWith(Routes.mainView);
-        } else {
-          bool? isFirstTimeUser = preferences.getBool(IS_FIRST_TIME_USER);
-          if (isFirstTimeUser == null) {
-            navigateToOnboard();
-          } else {
-            navigateToLogin();
-          }
+        } catch (e) {
+          _dialogService.showDialog(
+            title: 'Network Error',
+            description: 'An error occured',
+          );
         }
-      });
+      } else {
+        bool? isFirstTimeUser = preferences.getBool(IS_FIRST_TIME_USER);
+        if (isFirstTimeUser == null) {
+          navigateToOnboard();
+        } else {
+          navigateToLogin();
+        }
+      }
     }
   }
 

@@ -17,6 +17,7 @@ class DatePicker extends StatefulWidget {
   final DateTime? lastDate;
   final bool isNow;
   final bool requiredField;
+  final bool disable;
 
   DatePicker({
     Key? key,
@@ -33,6 +34,7 @@ class DatePicker extends StatefulWidget {
     this.lastDate,
     this.isNow = false,
     this.requiredField = false,
+    this.disable = false,
   });
 
   @override
@@ -78,10 +80,12 @@ class _DatePickerState extends State<DatePicker> {
   @override
   Widget build(BuildContext context) {
     return InputField(
-      onTap: () {
-        Util.removeFocus(context);
-        showCalender(context);
-      },
+      onTap: widget.disable
+          ? null
+          : () {
+              Util.removeFocus(context);
+              showCalender(context);
+            },
       suffixIcon: GestureDetector(
         onTap: () {
           Util.removeFocus(context);
@@ -100,7 +104,8 @@ class _DatePickerState extends State<DatePicker> {
       readOnly: true,
       showCursor: false,
       validationCallback: widget.validateCallBack,
-      fillColor: ColorManager.kWhiteColor,
+      fillColor:
+          widget.disable ? ColorManager.kGrey1 : ColorManager.kWhiteColor,
     );
   }
 }

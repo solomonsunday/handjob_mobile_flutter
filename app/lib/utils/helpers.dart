@@ -4,8 +4,8 @@ import 'package:intl/intl.dart';
 
 const String DEFAULT_DATE_TIME_FORMAT = 'MMM dd, yyyy';
 
-toDefaultDtFormat(String str) {
-  DateFormat df = DateFormat("dd-MMM-yyyy");
+toDefaultDtFormat(String str, {String? format}) {
+  DateFormat df = DateFormat(format ?? "dd-MMM-yyyy");
   DateTime input = df.parse(str);
   return input;
 }
