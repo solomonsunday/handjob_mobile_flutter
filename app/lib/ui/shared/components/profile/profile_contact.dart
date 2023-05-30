@@ -12,10 +12,12 @@ class ProfileContact extends StatelessWidget {
     required this.busy,
     this.showContactSheet,
     this.requestOTP,
+    this.sendEmail,
   }) : super(key: key);
   final User? currentUser;
   final VoidCallback? showContactSheet;
   final Function()? requestOTP;
+  final Function()? sendEmail;
   final bool busy;
 
   @override
@@ -42,11 +44,14 @@ class ProfileContact extends StatelessWidget {
               fontSize: FontSize.s12,
             ),
           ),
-          Text(
-            currentUser?.contactEmail ?? currentUser?.email ?? "",
-            style: getRegularStyle(
-              color: ColorManager.kDarkColor,
-              fontSize: FontSize.s12,
+          GestureDetector(
+            onTap: sendEmail,
+            child: Text(
+              currentUser?.contactEmail ?? currentUser?.email ?? "",
+              style: getRegularStyle(
+                color: ColorManager.kDarkColor,
+                fontSize: FontSize.s12,
+              ),
             ),
           ),
           const SizedBox(height: AppSize.s12),

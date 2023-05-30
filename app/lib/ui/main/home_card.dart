@@ -308,7 +308,7 @@ class HomeCard extends StatelessWidget {
                                   color: ColorManager.kDarkColor,
                                 ),
                                 Text(
-                                  '${post.likes} likes',
+                                  '${post.likes} like${post.likes! > 1 ? 's' : ''}',
                                   style: getRegularStyle(
                                     color: ColorManager.kPrimary400Color,
                                     fontSize: FontSize.FontSize.s11,
@@ -330,7 +330,7 @@ class HomeCard extends StatelessWidget {
                                   color: ColorManager.kDarkColor,
                                 ),
                                 Text(
-                                  '${post.commentCount} comments',
+                                  '${post.commentCount} comment${post.commentCount! > 1 ? 's' : ''}',
                                   style: getRegularStyle(
                                     color: ColorManager.kPrimary400Color,
                                     fontSize: FontSize.FontSize.s11,

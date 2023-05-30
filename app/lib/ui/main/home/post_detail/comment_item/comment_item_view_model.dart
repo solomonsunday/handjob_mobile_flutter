@@ -30,5 +30,5 @@ class CommentItemViewModel extends ReactiveViewModel {
   }
 
   @override
-  List<ReactiveServiceMixin> get reactiveServices => [_commentService];
+  List<ListenableServiceMixin> get listenableServices => [_commentService];
 }

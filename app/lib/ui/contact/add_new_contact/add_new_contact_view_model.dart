@@ -32,5 +32,5 @@ class AddNewContactViewModel extends ReactiveViewModel {
   }
 
   @override
-  List<ReactiveServiceMixin> get reactiveServices => [_contactService];
+  List<ListenableServiceMixin> get listenableServices => [_contactService];
 }

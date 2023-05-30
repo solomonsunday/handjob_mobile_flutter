@@ -3,6 +3,7 @@ import 'package:handjob_mobile/models/lga.model.dart';
 import 'package:handjob_mobile/models/qualification.model.dart';
 import 'package:handjob_mobile/ui/main/main_view.dart';
 import 'package:stacked/stacked.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../app/app.locator.dart';
 import '../client/dio_client.dart';
@@ -152,5 +153,24 @@ class SharedService with ReactiveServiceMixin {
 
     _professionTypes = professionTypes;
     return professionTypes;
+  }
+
+  makePhoneCall(String phoneNumber) async {
+    await launchUrl(
+      Uri(
+        scheme: 'tel',
+        path: phoneNumber,
+      ),
+    );
+  }
+
+  sendEmail(String email) async {
+    await launchUrl(Uri(
+      scheme: 'mailto',
+      path: email,
+      queryParameters: {
+        'subject': '',
+      },
+    ));
   }
 }

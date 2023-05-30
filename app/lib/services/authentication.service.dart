@@ -11,7 +11,7 @@ import '../models/auth.model.dart';
 import '../models/user.model.dart';
 import '../utils/contants.dart';
 
-class AuthenticationService with ReactiveServiceMixin {
+class AuthenticationService with ListenableServiceMixin {
   Dio dioClient = locator<DioClient>().dio;
 
   AuthenticationService() {

@@ -87,7 +87,7 @@ class ContactViewModel extends ReactiveViewModel {
   }
 
   @override
-  List<ReactiveServiceMixin> get reactiveServices => [_contactService];
+  List<ListenableServiceMixin> get listenableServices => [_contactService];
 
   handleDeleteContact(String id) async {
     var response = await _dialogService.showConfirmationDialog(

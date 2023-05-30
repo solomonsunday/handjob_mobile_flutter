@@ -83,11 +83,7 @@ class NotificationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<NotificationItemViewModel>.reactive(
       viewModelBuilder: () => NotificationItemViewModel(),
-      onViewModelReady: (model) async {
-        if (!notification.seen!) {
-          await model.updateSeenNotification(notification.id!);
-        }
-      },
+      onViewModelReady: (model) async {},
       builder: (context, model, child) => ListTile(
         onTap: () async {
           model.navigateNotification(notification);

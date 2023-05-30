@@ -25,9 +25,9 @@ class PostDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<PostDetailViewModel>.nonReactive(
       viewModelBuilder: () => PostDetailViewModel(),
-      onModelReady: (model) {
-        model.updatePostId(post.id!);
-        model.getComments();
+      onViewModelReady: (model) async {
+        model.updatePost(post);
+        await model.getComments();
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -150,11 +150,27 @@ class CommentFormView extends ViewModelWidget<PostDetailViewModel> {
         // prefixIcon: Icon(Icons.person),
         suffixIcon: GestureDetector(
           onTap: model.busy(CREATE_COMMENT_BUSY) ? null : model.createComment,
-          child: Icon(
-              color: model.messageController.text.isEmpty
-                  ? ColorManager.kGrey
-                  : ColorManager.kPrimaryColor,
-              Icons.send),
+          child: model.busy(CREATE_COMMENT_BUSY)
+              ? const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: SizedBox(
+                    height: 4,
+                    width: 4,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1.5,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          ColorManager.kDarkColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : Icon(
+                  color: model.messageController.text.isEmpty
+                      ? ColorManager.kGrey
+                      : ColorManager.kPrimaryColor,
+                  Icons.send),
         ),
         controller: model.messageController,
       ),

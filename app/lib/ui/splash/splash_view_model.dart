@@ -51,14 +51,13 @@ class SplashViewViewModel extends BaseViewModel {
 
           _navigationService.replaceWith(Routes.mainView);
         } catch (e) {
-          _dialogService.showDialog(
-            title: 'Network Error',
-            description: 'An error occured',
+          print(
+            'An error occured: $e',
           );
         }
       } else {
         bool? isFirstTimeUser = preferences.getBool(IS_FIRST_TIME_USER);
-        if (isFirstTimeUser == null) {
+        if (isFirstTimeUser == null || isFirstTimeUser) {
           navigateToOnboard();
         } else {
           navigateToLogin();

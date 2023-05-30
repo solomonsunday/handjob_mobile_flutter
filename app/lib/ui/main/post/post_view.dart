@@ -158,7 +158,7 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
           ),
           const SizedBox(height: AppSize.s24),
           Container(
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               border: Border.all(
                 width: 1,
@@ -185,7 +185,7 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
                   ),
                   controller: bodyController,
                   focusnode: bodyFocusnode,
-                  maxLength: 500,
+                  maxLength: 250,
                   formError:
                       bodyFocusnode.hasFocus && model.hasBodyValidationMessage
                           ? model.bodyValidationMessage

@@ -30,9 +30,14 @@ class JobDetailViewModel extends BaseViewModel {
 
   List<AppliedJob>? get appliedJobs => _instantJobService.appliedJobs;
 
+  updateIsWaitingToBeAccepted(bool value) {
+    _isWaitingToBeAccepted = value;
+    notifyListeners();
+  }
+
   bool isJobApplied(String id) {
-    print(
-        'appliedJobs: ${(appliedJobs ?? []).where((element) => element.jobId == id).toList().isNotEmpty}');
+    // print(
+    //     'appliedJobs: ${(appliedJobs ?? []).where((element) => element.jobId == id).first}');
     return (appliedJobs ?? [])
         .where((element) {
           print(

@@ -6,6 +6,7 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../app/app.locator.dart';
 import '../../../../models/comment.model.dart';
+import '../../../../models/post.model.dart';
 import '../../../../models/user.model.dart';
 import '../../../../services/authentication.service.dart';
 import '../../../../services/comment.service.dart';
@@ -18,8 +19,8 @@ class PostDetailViewModel extends ReactiveViewModel {
   final _authenticationService = locator<AuthenticationService>();
 
   User? get currentUser => _authenticationService.currentUser;
-  String? _postId;
-  String? get postId => _postId;
+  Post? _post;
+  Post? get postId => _post;
 
   TextEditingController messageController = TextEditingController();
 
@@ -27,8 +28,8 @@ class PostDetailViewModel extends ReactiveViewModel {
 
   void navigateBack() => _navigationService.back();
 
-  void updatePostId(String postId) {
-    _postId = postId;
+  void updatePost(Post post) {
+    _post = post;
   }
 
   Future<void> getComments() async {
@@ -36,7 +37,7 @@ class PostDetailViewModel extends ReactiveViewModel {
     setBusy(true);
     // notifyListeners();
     try {
-      await _commentService.getComments(postId!);
+      await _commentService.getComments(_post!.id!);
     } on DioError catch (e) {
       print('error commenting: ${e}');
     } finally {
@@ -53,13 +54,15 @@ class PostDetailViewModel extends ReactiveViewModel {
     print('formdata: $formData');
     setBusyForObject(CREATE_COMMENT_BUSY, true);
     try {
-      await _commentService.createComment(postId!, formData);
+      await _commentService.createComment(_post!.id!, formData);
       messageController.clear();
-      await _commentService.getComments(postId!);
+      _post!.commentCount = _post!.commentCount! + 1;
+      notifyListeners();
     } on DioError catch (e) {
     } finally {
       setBusyForObject(CREATE_COMMENT_BUSY, false);
-      // notifyListeners();
+      await _commentService.getComments(_post!.id!);
+      notifyListeners();
     }
   }
 
@@ -72,5 +75,5 @@ class PostDetailViewModel extends ReactiveViewModel {
   }
 
   @override
-  List<ReactiveServiceMixin> get reactiveServices => [_commentService];
+  List<ListenableServiceMixin> get listenableServices => [_commentService];
 }

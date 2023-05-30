@@ -421,7 +421,10 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<JobDetailViewArguments>(nullOk: false);
       return _i1.buildAdaptivePageRoute<dynamic>(
         builder: (context) => _i25.JobDetailView(
-            key: args.key, instantJob: args.instantJob, user: args.user),
+            key: args.key,
+            instantJob: args.instantJob,
+            user: args.user,
+            isWaitingToBeAccepted: args.isWaitingToBeAccepted),
         settings: data,
       );
     },
@@ -666,6 +669,7 @@ class JobDetailViewArguments {
     this.key,
     required this.instantJob,
     required this.user,
+    required this.isWaitingToBeAccepted,
   });
 
   final _i27.Key? key;
@@ -674,9 +678,11 @@ class JobDetailViewArguments {
 
   final _i33.User user;
 
+  final bool isWaitingToBeAccepted;
+
   @override
   String toString() {
-    return '{"key": "$key", "instantJob": "$instantJob", "user": "$user"}';
+    return '{"key": "$key", "instantJob": "$instantJob", "user": "$user", "isWaitingToBeAccepted": "$isWaitingToBeAccepted"}';
   }
 }
 
@@ -1073,6 +1079,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
     _i27.Key? key,
     required _i31.InstantJob instantJob,
     required _i33.User user,
+    required bool isWaitingToBeAccepted,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1081,7 +1088,10 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }) async {
     return navigateTo<dynamic>(Routes.jobDetailView,
         arguments: JobDetailViewArguments(
-            key: key, instantJob: instantJob, user: user),
+            key: key,
+            instantJob: instantJob,
+            user: user,
+            isWaitingToBeAccepted: isWaitingToBeAccepted),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -1480,6 +1490,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
     _i27.Key? key,
     required _i31.InstantJob instantJob,
     required _i33.User user,
+    required bool isWaitingToBeAccepted,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1488,7 +1499,10 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }) async {
     return replaceWith<dynamic>(Routes.jobDetailView,
         arguments: JobDetailViewArguments(
-            key: key, instantJob: instantJob, user: user),
+            key: key,
+            instantJob: instantJob,
+            user: user,
+            isWaitingToBeAccepted: isWaitingToBeAccepted),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

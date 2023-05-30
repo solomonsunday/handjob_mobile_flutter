@@ -17,10 +17,12 @@ class JobDetailView extends StatelessWidget {
     super.key,
     required this.instantJob,
     required this.user,
+    required this.isWaitingToBeAccepted,
   });
 
   final InstantJob instantJob;
   final User user;
+  final bool isWaitingToBeAccepted;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class JobDetailView extends StatelessWidget {
         viewModelBuilder: () => JobDetailViewModel(),
         onViewModelReady: (model) {
           print('id: ${instantJob.id}');
+          model.updateIsWaitingToBeAccepted(isWaitingToBeAccepted);
           model.fetchAppliedJobs();
           model.getApplicants(instantJob.id!);
         },
@@ -233,27 +236,15 @@ class JobDetailView extends StatelessWidget {
                           borderRadius: 4,
                           fontSize: 12,
                         ),
-                      if (model.isWaitingToBeAccepted)
+
+                      if (model.isWaitingToBeAccepted ||
+                          model.isJobApplied(instantJob.id ?? ''))
                         Text(
                           'Waiting to be accepted',
                           style: getBoldStyle(
                             color: ColorManager.kSecondaryColor,
                             fontSize: FontSize.s11,
                           ),
-                        ),
-                      if (model.isJobApplied(instantJob.id ?? ''))
-                        DefaultButton(
-                          onPressed: null,
-                          title: 'Applied',
-                          trailingIcon: Icons.check,
-                          trailingIconColor: ColorManager.kWhiteColor,
-                          trailingIconSpace: 8,
-                          buttonType: ButtonType.fill,
-                          buttonBgColor: ColorManager.kGreen,
-                          buttonTextColor: ColorManager.kWhiteColor,
-                          paddingHeight: 20,
-                          paddingWidth: 40,
-                          borderRadius: 4,
                         ),
 
                       const SizedBox(width: AppSize.s8),

@@ -124,7 +124,11 @@ class JobItem extends StatelessWidget {
           return GestureDetector(
             onTap: instantJob.company?.id == user.id
                 ? () => model.showEditInstantJob(instantJob)
-                : () => model.navigateToJobDetail(instantJob),
+                : () => model.navigateToJobDetail(
+                      instantJob,
+                      model.isWaitingToBeAccepted,
+                      model.isJobApplied(instantJob.id ?? ""),
+                    ),
             child: Container(
               padding: const EdgeInsets.symmetric(
                 vertical: AppPadding.p16,
@@ -446,7 +450,7 @@ class JobItemViewModel extends BaseViewModel {
       );
       _isWaitingToBeAccepted = true;
     } on DioError catch (error) {
-      // print('error.response?.data: ${error.response?.data}');
+      print('error.response?.data: ${error.response?.data}');
       _isWaitingToBeAccepted = false;
       _dialogService.showDialog(
         description: error.response?.data['message'],
@@ -485,11 +489,17 @@ class JobItemViewModel extends BaseViewModel {
     }
   }
 
-  navigateToJobDetail(InstantJob instantJob) => _navigationService.navigateTo(
+  navigateToJobDetail(
+    InstantJob instantJob,
+    bool isWaitingToBeAccepted,
+    bool isJobApplied,
+  ) =>
+      _navigationService.navigateTo(
         Routes.jobDetailView,
         arguments: JobDetailViewArguments(
           instantJob: instantJob,
           user: currentUser!,
+          isWaitingToBeAccepted: isWaitingToBeAccepted,
         ),
       );
 

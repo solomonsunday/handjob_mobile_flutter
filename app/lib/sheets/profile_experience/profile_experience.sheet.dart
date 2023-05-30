@@ -49,8 +49,8 @@ class ProfileExperienceSheet extends StatelessWidget
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileExperienceSheetViewModel>.reactive(
         viewModelBuilder: () => ProfileExperienceSheetViewModel(),
-        onModelReady: (model) {
-          listenToFormUpdated(model);
+        onViewModelReady: (model) {
+          syncFormWithViewModel(model);
           //
 
           if (request?.data != null) {
@@ -187,7 +187,7 @@ class ProfileExperienceSheet extends StatelessWidget
                     fieldViewBuilder: (context, textEditingController,
                             focusNode, onFieldSubmitted) =>
                         InputField(
-                      label: 'Service Location *',
+                      label: 'Location *',
                       controller: locationController,
                       focusnode: focusNode,
                       onTap: onFieldSubmitted,
@@ -219,18 +219,21 @@ class ProfileExperienceSheet extends StatelessWidget
                       ),
                     ),
                   ),
-                  SizedBox(height: AppSize.s24),
+                  const SizedBox(height: AppSize.s24),
+
                   DefaultButton(
-                    onPressed: () {
-                      if (model.editMode) {
-                        model.updateExperience(completer);
-                      } else {
-                        model.createExperience(completer);
-                      }
-                    },
+                    onPressed: !model.isFormFieldValue
+                        ? null
+                        : () {
+                            if (model.editMode) {
+                              model.updateExperience(completer);
+                            } else {
+                              model.createExperience(completer);
+                            }
+                          },
                     title: 'Save changes',
                     busy: model.isBusy,
-                    disabled: model.isBusy,
+                    disabled: model.isBusy || !model.isFormFieldValue,
                   )
                 ],
               ),
@@ -296,6 +299,7 @@ class ProfileExperienceSheetViewModel extends FormViewModel {
 
   createExperienceRequest(completer) async {
     print('experience json: ${selectedProfession?.toJson()}');
+
     var formData = {
       "jobTitle": jobTitleValue,
       "startDate": startDateValue != null
@@ -337,6 +341,13 @@ class ProfileExperienceSheetViewModel extends FormViewModel {
 
   updateExperienceRequest(completer) async {
     print('experience json: ${selectedProfession?.toJson()}');
+    if (selectedProfession == null) {
+      _dialogService.showDialog(
+        title: 'Validation error',
+        description: 'Job category is required',
+      );
+      return;
+    }
     var formData = {
       "jobTitle": jobTitleValue,
       "startDate": startDateValue != null
@@ -402,9 +413,29 @@ class ProfileExperienceSheetViewModel extends FormViewModel {
     // locationController.text = location;
   }
 
+  bool _isFormFieldValid = false;
+  bool get isFormFieldValue => _isFormFieldValid;
   @override
   void setFormStatus() {
-    // TODO: implement setFormStatus
+    /**
+     * hasJobTitle &&
+        hasCompany &&
+        hasStartDate &&
+        hasEndDate &&
+        hasJobCategoryName &&
+        hasLocation &&
+     */
+
+    if (hasJobTitle &&
+        hasCompany &&
+        hasStartDate &&
+        hasEndDate &&
+        hasDescription &&
+        hasLocation) {
+      _isFormFieldValid = true;
+      return;
+    }
+    _isFormFieldValid = false;
   }
 
   bool _editMode = false;

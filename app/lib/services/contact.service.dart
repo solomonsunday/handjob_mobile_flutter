@@ -7,7 +7,7 @@ import '../client/dio_client.dart';
 import '../models/contact.model.dart';
 import '../models/meta.model.dart';
 
-class ContactService with ReactiveServiceMixin {
+class ContactService with ListenableServiceMixin {
   Dio dioClient = locator<DioClient>().dio;
 
   ContactService() {
