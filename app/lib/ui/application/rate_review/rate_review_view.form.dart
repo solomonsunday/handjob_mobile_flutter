@@ -33,7 +33,7 @@ final Map<String, String? Function(String?)?> _RateReviewViewTextValidations = {
   DescriptionValueKey: null,
 };
 
-mixin $RateReviewView on StatelessWidget {
+mixin $RateReviewView {
   TextEditingController get nameController =>
       _getFormTextEditingController(NameValueKey);
   TextEditingController get titleController =>
@@ -44,11 +44,14 @@ mixin $RateReviewView on StatelessWidget {
   FocusNode get titleFocusNode => _getFormFocusNode(TitleValueKey);
   FocusNode get descriptionFocusNode => _getFormFocusNode(DescriptionValueKey);
 
-  TextEditingController _getFormTextEditingController(String key,
-      {String? initialValue}) {
+  TextEditingController _getFormTextEditingController(
+    String key, {
+    String? initialValue,
+  }) {
     if (_RateReviewViewTextEditingControllers.containsKey(key)) {
       return _RateReviewViewTextEditingControllers[key]!;
     }
+
     _RateReviewViewTextEditingControllers[key] =
         TextEditingController(text: initialValue);
     return _RateReviewViewTextEditingControllers[key]!;
@@ -72,15 +75,17 @@ mixin $RateReviewView on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
-  @Deprecated('Use syncFormWithViewModel instead.'
-      'This feature was deprecated after 3.1.0.')
+  @Deprecated(
+    'Use syncFormWithViewModel instead.'
+    'This feature was deprecated after 3.1.0.',
+  )
   void listenToFormUpdated(FormViewModel model) {
     nameController.addListener(() => _updateFormData(model));
     titleController.addListener(() => _updateFormData(model));
     descriptionController.addListener(() => _updateFormData(model));
   }
 
-  final bool _autoTextFieldValidation = true;
+  static const bool _autoTextFieldValidation = true;
   bool validateFormFields(FormViewModel model) {
     _updateFormData(model, forceValidate: true);
     return model.isFormValid;
@@ -96,26 +101,10 @@ mixin $RateReviewView on StatelessWidget {
           DescriptionValueKey: descriptionController.text,
         }),
     );
+
     if (_autoTextFieldValidation || forceValidate) {
-      _updateValidationData(model);
+      updateValidationData(model);
     }
-  }
-
-  /// Updates the fieldsValidationMessages on the FormViewModel
-  void _updateValidationData(FormViewModel model) =>
-      model.setValidationMessages({
-        NameValueKey: _getValidationMessage(NameValueKey),
-        TitleValueKey: _getValidationMessage(TitleValueKey),
-        DescriptionValueKey: _getValidationMessage(DescriptionValueKey),
-      });
-
-  /// Returns the validation message for the given key
-  String? _getValidationMessage(String key) {
-    final validatorForKey = _RateReviewViewTextValidations[key];
-    if (validatorForKey == null) return null;
-    String? validationMessageForKey =
-        validatorForKey(_RateReviewViewTextEditingControllers[key]!.text);
-    return validationMessageForKey;
   }
 
   /// Calls dispose on all the generated controllers and focus nodes
@@ -212,11 +201,6 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[DescriptionValueKey];
   String? get ratingValidationMessage =>
       this.fieldsValidationMessages[RatingValueKey];
-  void clearForm() {
-    nameValue = '';
-    titleValue = '';
-    descriptionValue = '';
-  }
 }
 
 extension Methods on FormViewModel {
@@ -232,4 +216,39 @@ extension Methods on FormViewModel {
       this.fieldsValidationMessages[DescriptionValueKey] = validationMessage;
   setRatingValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[RatingValueKey] = validationMessage;
+
+  /// Clears text input fields on the Form
+  void clearForm() {
+    nameValue = '';
+    titleValue = '';
+    descriptionValue = '';
+  }
+
+  /// Validates text input fields on the Form
+  void validateForm() {
+    this.setValidationMessages({
+      NameValueKey: getValidationMessage(NameValueKey),
+      TitleValueKey: getValidationMessage(TitleValueKey),
+      DescriptionValueKey: getValidationMessage(DescriptionValueKey),
+    });
+  }
 }
+
+/// Returns the validation message for the given key
+String? getValidationMessage(String key) {
+  final validatorForKey = _RateReviewViewTextValidations[key];
+  if (validatorForKey == null) return null;
+
+  String? validationMessageForKey = validatorForKey(
+    _RateReviewViewTextEditingControllers[key]!.text,
+  );
+
+  return validationMessageForKey;
+}
+
+/// Updates the fieldsValidationMessages on the FormViewModel
+void updateValidationData(FormViewModel model) => model.setValidationMessages({
+      NameValueKey: getValidationMessage(NameValueKey),
+      TitleValueKey: getValidationMessage(TitleValueKey),
+      DescriptionValueKey: getValidationMessage(DescriptionValueKey),
+    });

@@ -31,11 +31,11 @@ class RateReviewViewModel extends FormViewModel {
       return;
     }
 
-    if ((titleValue ?? '').isEmpty) {
-      setTitleValidationMessage("Title is required");
-      _isFormValid = false;
-      return;
-    }
+    // if ((titleValue ?? '').isEmpty) {
+    //   setTitleValidationMessage("Title is required");
+    //   _isFormValid = false;
+    //   return;
+    // }
 
     if ((descriptionValue ?? '').isEmpty) {
       setDescriptionValidationMessage("Description is required");
@@ -65,7 +65,7 @@ class RateReviewViewModel extends FormViewModel {
     if (!response!.confirmed) return;
     var formData = {
       'reviewerDisplayName': nameValue,
-      'title': titleValue,
+      'title': 'TITLE',
       'detail': descriptionValue,
       "applicantId": applicantId,
       "jobId": jobId,

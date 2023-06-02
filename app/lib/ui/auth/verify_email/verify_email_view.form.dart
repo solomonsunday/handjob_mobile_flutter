@@ -21,16 +21,19 @@ final Map<String, String? Function(String?)?> _VerifyEmailViewTextValidations =
   OtpCodeValueKey: null,
 };
 
-mixin $VerifyEmailView on StatelessWidget {
+mixin $VerifyEmailView {
   TextEditingController get otpCodeController =>
       _getFormTextEditingController(OtpCodeValueKey);
   FocusNode get otpCodeFocusNode => _getFormFocusNode(OtpCodeValueKey);
 
-  TextEditingController _getFormTextEditingController(String key,
-      {String? initialValue}) {
+  TextEditingController _getFormTextEditingController(
+    String key, {
+    String? initialValue,
+  }) {
     if (_VerifyEmailViewTextEditingControllers.containsKey(key)) {
       return _VerifyEmailViewTextEditingControllers[key]!;
     }
+
     _VerifyEmailViewTextEditingControllers[key] =
         TextEditingController(text: initialValue);
     return _VerifyEmailViewTextEditingControllers[key]!;
@@ -52,13 +55,15 @@ mixin $VerifyEmailView on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
-  @Deprecated('Use syncFormWithViewModel instead.'
-      'This feature was deprecated after 3.1.0.')
+  @Deprecated(
+    'Use syncFormWithViewModel instead.'
+    'This feature was deprecated after 3.1.0.',
+  )
   void listenToFormUpdated(FormViewModel model) {
     otpCodeController.addListener(() => _updateFormData(model));
   }
 
-  final bool _autoTextFieldValidation = true;
+  static const bool _autoTextFieldValidation = true;
   bool validateFormFields(FormViewModel model) {
     _updateFormData(model, forceValidate: true);
     return model.isFormValid;
@@ -72,24 +77,10 @@ mixin $VerifyEmailView on StatelessWidget {
           OtpCodeValueKey: otpCodeController.text,
         }),
     );
+
     if (_autoTextFieldValidation || forceValidate) {
-      _updateValidationData(model);
+      updateValidationData(model);
     }
-  }
-
-  /// Updates the fieldsValidationMessages on the FormViewModel
-  void _updateValidationData(FormViewModel model) =>
-      model.setValidationMessages({
-        OtpCodeValueKey: _getValidationMessage(OtpCodeValueKey),
-      });
-
-  /// Returns the validation message for the given key
-  String? _getValidationMessage(String key) {
-    final validatorForKey = _VerifyEmailViewTextValidations[key];
-    if (validatorForKey == null) return null;
-    String? validationMessageForKey =
-        validatorForKey(_VerifyEmailViewTextEditingControllers[key]!.text);
-    return validationMessageForKey;
   }
 
   /// Calls dispose on all the generated controllers and focus nodes
@@ -136,12 +127,38 @@ extension ValueProperties on FormViewModel {
 
   String? get otpCodeValidationMessage =>
       this.fieldsValidationMessages[OtpCodeValueKey];
-  void clearForm() {
-    otpCodeValue = '';
-  }
 }
 
 extension Methods on FormViewModel {
   setOtpCodeValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[OtpCodeValueKey] = validationMessage;
+
+  /// Clears text input fields on the Form
+  void clearForm() {
+    otpCodeValue = '';
+  }
+
+  /// Validates text input fields on the Form
+  void validateForm() {
+    this.setValidationMessages({
+      OtpCodeValueKey: getValidationMessage(OtpCodeValueKey),
+    });
+  }
 }
+
+/// Returns the validation message for the given key
+String? getValidationMessage(String key) {
+  final validatorForKey = _VerifyEmailViewTextValidations[key];
+  if (validatorForKey == null) return null;
+
+  String? validationMessageForKey = validatorForKey(
+    _VerifyEmailViewTextEditingControllers[key]!.text,
+  );
+
+  return validationMessageForKey;
+}
+
+/// Updates the fieldsValidationMessages on the FormViewModel
+void updateValidationData(FormViewModel model) => model.setValidationMessages({
+      OtpCodeValueKey: getValidationMessage(OtpCodeValueKey),
+    });

@@ -29,7 +29,7 @@ final Map<String, String? Function(String?)?>
   PasswordValueKey: null,
 };
 
-mixin $CustomerSignupView on StatelessWidget {
+mixin $CustomerSignupView {
   TextEditingController get firstnameController =>
       _getFormTextEditingController(FirstnameValueKey);
   TextEditingController get lastnameController =>
@@ -46,11 +46,14 @@ mixin $CustomerSignupView on StatelessWidget {
   FocusNode get phoneFocusNode => _getFormFocusNode(PhoneValueKey);
   FocusNode get passwordFocusNode => _getFormFocusNode(PasswordValueKey);
 
-  TextEditingController _getFormTextEditingController(String key,
-      {String? initialValue}) {
+  TextEditingController _getFormTextEditingController(
+    String key, {
+    String? initialValue,
+  }) {
     if (_CustomerSignupViewTextEditingControllers.containsKey(key)) {
       return _CustomerSignupViewTextEditingControllers[key]!;
     }
+
     _CustomerSignupViewTextEditingControllers[key] =
         TextEditingController(text: initialValue);
     return _CustomerSignupViewTextEditingControllers[key]!;
@@ -76,8 +79,10 @@ mixin $CustomerSignupView on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
-  @Deprecated('Use syncFormWithViewModel instead.'
-      'This feature was deprecated after 3.1.0.')
+  @Deprecated(
+    'Use syncFormWithViewModel instead.'
+    'This feature was deprecated after 3.1.0.',
+  )
   void listenToFormUpdated(FormViewModel model) {
     firstnameController.addListener(() => _updateFormData(model));
     lastnameController.addListener(() => _updateFormData(model));
@@ -86,7 +91,7 @@ mixin $CustomerSignupView on StatelessWidget {
     passwordController.addListener(() => _updateFormData(model));
   }
 
-  final bool _autoTextFieldValidation = true;
+  static const bool _autoTextFieldValidation = true;
   bool validateFormFields(FormViewModel model) {
     _updateFormData(model, forceValidate: true);
     return model.isFormValid;
@@ -104,28 +109,10 @@ mixin $CustomerSignupView on StatelessWidget {
           PasswordValueKey: passwordController.text,
         }),
     );
+
     if (_autoTextFieldValidation || forceValidate) {
-      _updateValidationData(model);
+      updateValidationData(model);
     }
-  }
-
-  /// Updates the fieldsValidationMessages on the FormViewModel
-  void _updateValidationData(FormViewModel model) =>
-      model.setValidationMessages({
-        FirstnameValueKey: _getValidationMessage(FirstnameValueKey),
-        LastnameValueKey: _getValidationMessage(LastnameValueKey),
-        EmailValueKey: _getValidationMessage(EmailValueKey),
-        PhoneValueKey: _getValidationMessage(PhoneValueKey),
-        PasswordValueKey: _getValidationMessage(PasswordValueKey),
-      });
-
-  /// Returns the validation message for the given key
-  String? _getValidationMessage(String key) {
-    final validatorForKey = _CustomerSignupViewTextValidations[key];
-    if (validatorForKey == null) return null;
-    String? validationMessageForKey =
-        validatorForKey(_CustomerSignupViewTextEditingControllers[key]!.text);
-    return validationMessageForKey;
   }
 
   /// Calls dispose on all the generated controllers and focus nodes
@@ -263,13 +250,6 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[PhoneValueKey];
   String? get passwordValidationMessage =>
       this.fieldsValidationMessages[PasswordValueKey];
-  void clearForm() {
-    firstnameValue = '';
-    lastnameValue = '';
-    emailValue = '';
-    phoneValue = '';
-    passwordValue = '';
-  }
 }
 
 extension Methods on FormViewModel {
@@ -283,4 +263,45 @@ extension Methods on FormViewModel {
       this.fieldsValidationMessages[PhoneValueKey] = validationMessage;
   setPasswordValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[PasswordValueKey] = validationMessage;
+
+  /// Clears text input fields on the Form
+  void clearForm() {
+    firstnameValue = '';
+    lastnameValue = '';
+    emailValue = '';
+    phoneValue = '';
+    passwordValue = '';
+  }
+
+  /// Validates text input fields on the Form
+  void validateForm() {
+    this.setValidationMessages({
+      FirstnameValueKey: getValidationMessage(FirstnameValueKey),
+      LastnameValueKey: getValidationMessage(LastnameValueKey),
+      EmailValueKey: getValidationMessage(EmailValueKey),
+      PhoneValueKey: getValidationMessage(PhoneValueKey),
+      PasswordValueKey: getValidationMessage(PasswordValueKey),
+    });
+  }
 }
+
+/// Returns the validation message for the given key
+String? getValidationMessage(String key) {
+  final validatorForKey = _CustomerSignupViewTextValidations[key];
+  if (validatorForKey == null) return null;
+
+  String? validationMessageForKey = validatorForKey(
+    _CustomerSignupViewTextEditingControllers[key]!.text,
+  );
+
+  return validationMessageForKey;
+}
+
+/// Updates the fieldsValidationMessages on the FormViewModel
+void updateValidationData(FormViewModel model) => model.setValidationMessages({
+      FirstnameValueKey: getValidationMessage(FirstnameValueKey),
+      LastnameValueKey: getValidationMessage(LastnameValueKey),
+      EmailValueKey: getValidationMessage(EmailValueKey),
+      PhoneValueKey: getValidationMessage(PhoneValueKey),
+      PasswordValueKey: getValidationMessage(PasswordValueKey),
+    });

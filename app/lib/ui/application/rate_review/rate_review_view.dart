@@ -79,30 +79,13 @@ class RateReviewView extends StatelessWidget with $RateReviewView {
                       Row(
                         children: [
                           Text(
-                            'Job ID',
-                            style: getBoldStyle(
-                              color: ColorManager.kDarkColor,
-                              fontSize: FontSize.s16,
-                            ),
-                          ),
-                          Text(
-                            instantJob.id ?? "",
-                            style: getRegularStyle(
-                              color: ColorManager.kDarkColor,
-                              fontSize: FontSize.s16,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
                             'Job closed',
                             style: getBoldStyle(
                               color: ColorManager.kDarkColor,
                               fontSize: FontSize.s16,
                             ),
                           ),
+                          SizedBox(width: 4),
                           Text(
                             DateFormat.yMEd()
                                 .format(DateTime.parse(instantJob.endDate!)),
@@ -122,6 +105,7 @@ class RateReviewView extends StatelessWidget with $RateReviewView {
                               fontSize: FontSize.s16,
                             ),
                           ),
+                          SizedBox(width: 4),
                           Text(
                             applicant.name ?? '',
                             style: getRegularStyle(
@@ -168,7 +152,7 @@ class RateReviewView extends StatelessWidget with $RateReviewView {
                         applicantId: applicant.applicantId!,
                         jobId: instantJob.id!,
                         nameController: nameController,
-                        titleController: titleController,
+                        // titleController: titleController,
                         descriptionController: descriptionController,
                       ),
                       const SizedBox(height: AppSize.s8),
@@ -187,7 +171,7 @@ class RateReviewFormView extends ViewModelWidget<RateReviewViewModel> {
   const RateReviewFormView({
     super.key,
     required this.nameController,
-    required this.titleController,
+    // required this.titleController,
     required this.descriptionController,
     required this.jobId,
     required this.applicantId,
@@ -195,7 +179,7 @@ class RateReviewFormView extends ViewModelWidget<RateReviewViewModel> {
   final String applicantId;
   final String jobId;
   final TextEditingController nameController;
-  final TextEditingController titleController;
+  // final TextEditingController titleController;
   final TextEditingController descriptionController;
 
   @override
@@ -208,13 +192,13 @@ class RateReviewFormView extends ViewModelWidget<RateReviewViewModel> {
           keyBoardType: TextInputType.text,
           controller: nameController,
         ),
-        const SizedBox(height: AppSize.s40),
-        InputField(
-          label: 'Review title',
-          hintText: 'e.g example@gmail.com',
-          keyBoardType: TextInputType.emailAddress,
-          controller: titleController,
-        ),
+        // const SizedBox(height: AppSize.s40),
+        // InputField(
+        //   label: 'Review title',
+        //   hintText: 'e.g example@gmail.com',
+        //   keyBoardType: TextInputType.emailAddress,
+        //   controller: titleController,
+        // ),
         const SizedBox(height: AppSize.s40),
         Textarea(
           label: 'Detail review',

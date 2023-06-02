@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:handjob_mobile/ui/profile/profile_view_model.dart';
-import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
 import '../../../../models/user.model.dart';
@@ -10,18 +8,25 @@ class ProfileContact extends StatelessWidget {
     Key? key,
     required this.currentUser,
     required this.busy,
+    this.isLoggedInUser = true,
+    this.revealContactDetail = true,
     this.showContactSheet,
     this.requestOTP,
     this.sendEmail,
+    this.makePhoneCall,
   }) : super(key: key);
   final User? currentUser;
   final VoidCallback? showContactSheet;
   final Function()? requestOTP;
   final Function()? sendEmail;
+  final Function()? makePhoneCall;
   final bool busy;
+  final bool isLoggedInUser;
+  final bool revealContactDetail;
 
   @override
   Widget build(BuildContext context) {
+    print('isLoggedInUser: $isLoggedInUser');
     // print('user profile for ocntact: ${model.currentUser?.toJson()}');
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -45,14 +50,22 @@ class ProfileContact extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: sendEmail,
-            child: Text(
-              currentUser?.contactEmail ?? currentUser?.email ?? "",
-              style: getRegularStyle(
-                color: ColorManager.kDarkColor,
-                fontSize: FontSize.s12,
-              ),
-            ),
+            onTap: !revealContactDetail ? null : sendEmail,
+            child: !revealContactDetail
+                ? Container(
+                    width: 80,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: ColorManager.kDarkColor,
+                    ),
+                  )
+                : Text(
+                    currentUser?.contactEmail ?? currentUser?.email ?? "",
+                    style: getRegularStyle(
+                      color: ColorManager.kDarkColor,
+                      fontSize: FontSize.s12,
+                    ),
+                  ),
           ),
           const SizedBox(height: AppSize.s12),
           Row(
@@ -66,53 +79,89 @@ class ProfileContact extends StatelessWidget {
                   ),
                 ),
               ),
-              !busy && currentUser != null && currentUser?.phoneNumber != null
-                  ? InkWell(
-                      onTap: requestOTP,
-                      child: Row(
-                        children: [
-                          currentUser!.phoneNumberVerified!
-                              ? Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: AppPadding.p8,
-                                    vertical: AppSize.s4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: ColorManager.kGreen,
-                                    borderRadius:
-                                        BorderRadius.circular(AppSize.s16),
-                                  ),
-                                  child: Text(
-                                    'Verified',
-                                    style: getRegularStyle(
-                                      color: ColorManager.kWhiteColor,
-                                      fontSize: FontSize.s12,
-                                    ),
-                                  ),
-                                )
-                              : Text(
-                                  'Verify',
-                                  style: getRegularStyle(
-                                    color: const Color(0xffFFC107),
-                                    fontSize: FontSize.s12,
-                                  ),
-                                ),
-                        ],
+              isLoggedInUser
+                  ? Container(
+                      child: !busy &&
+                              currentUser != null &&
+                              currentUser?.phoneNumber != null
+                          ? InkWell(
+                              onTap: requestOTP,
+                              child: Row(
+                                children: [
+                                  currentUser!.phoneNumberVerified!
+                                      ? Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: AppPadding.p8,
+                                            vertical: AppSize.s4,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: ColorManager.kGreen,
+                                            borderRadius: BorderRadius.circular(
+                                                AppSize.s16),
+                                          ),
+                                          child: Text(
+                                            'Verified',
+                                            style: getRegularStyle(
+                                              color: ColorManager.kWhiteColor,
+                                              fontSize: FontSize.s12,
+                                            ),
+                                          ),
+                                        )
+                                      : Text(
+                                          'Verify',
+                                          style: getRegularStyle(
+                                            color: const Color(0xffFFC107),
+                                            fontSize: FontSize.s12,
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            )
+                          : const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(strokeWidth: 1),
+                            ),
+                    )
+                  : Container(),
+              !isLoggedInUser && currentUser!.phoneNumberVerified!
+                  ? Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppPadding.p8,
+                        vertical: AppSize.s4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: ColorManager.kGreen,
+                        borderRadius: BorderRadius.circular(AppSize.s16),
+                      ),
+                      child: Text(
+                        'Verified',
+                        style: getRegularStyle(
+                          color: ColorManager.kWhiteColor,
+                          fontSize: FontSize.s12,
+                        ),
                       ),
                     )
-                  : const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(strokeWidth: 1),
-                    )
+                  : Container()
             ],
           ),
-          Text(
-            currentUser?.contactPhoneNumber ?? "",
-            style: getRegularStyle(
-              color: ColorManager.kDarkColor,
-              fontSize: FontSize.s12,
-            ),
+          GestureDetector(
+            onTap: !revealContactDetail ? null : makePhoneCall,
+            child: !revealContactDetail
+                ? Container(
+                    width: 80,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: ColorManager.kDarkColor,
+                    ),
+                  )
+                : Text(
+                    currentUser?.contactPhoneNumber ?? "",
+                    style: getRegularStyle(
+                      color: ColorManager.kDarkColor,
+                      fontSize: FontSize.s12,
+                    ),
+                  ),
           ),
           const SizedBox(height: AppSize.s8),
           Text(

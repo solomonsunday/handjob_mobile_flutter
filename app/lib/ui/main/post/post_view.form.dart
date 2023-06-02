@@ -21,7 +21,7 @@ final Map<String, String? Function(String?)?> _PostViewTextValidations = {
   BodyValueKey: null,
 };
 
-mixin $PostView on StatelessWidget {
+mixin $PostView {
   TextEditingController get titleController =>
       _getFormTextEditingController(TitleValueKey);
   TextEditingController get bodyController =>
@@ -29,11 +29,14 @@ mixin $PostView on StatelessWidget {
   FocusNode get titleFocusNode => _getFormFocusNode(TitleValueKey);
   FocusNode get bodyFocusNode => _getFormFocusNode(BodyValueKey);
 
-  TextEditingController _getFormTextEditingController(String key,
-      {String? initialValue}) {
+  TextEditingController _getFormTextEditingController(
+    String key, {
+    String? initialValue,
+  }) {
     if (_PostViewTextEditingControllers.containsKey(key)) {
       return _PostViewTextEditingControllers[key]!;
     }
+
     _PostViewTextEditingControllers[key] =
         TextEditingController(text: initialValue);
     return _PostViewTextEditingControllers[key]!;
@@ -56,14 +59,16 @@ mixin $PostView on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
-  @Deprecated('Use syncFormWithViewModel instead.'
-      'This feature was deprecated after 3.1.0.')
+  @Deprecated(
+    'Use syncFormWithViewModel instead.'
+    'This feature was deprecated after 3.1.0.',
+  )
   void listenToFormUpdated(FormViewModel model) {
     titleController.addListener(() => _updateFormData(model));
     bodyController.addListener(() => _updateFormData(model));
   }
 
-  final bool _autoTextFieldValidation = true;
+  static const bool _autoTextFieldValidation = true;
   bool validateFormFields(FormViewModel model) {
     _updateFormData(model, forceValidate: true);
     return model.isFormValid;
@@ -78,25 +83,10 @@ mixin $PostView on StatelessWidget {
           BodyValueKey: bodyController.text,
         }),
     );
+
     if (_autoTextFieldValidation || forceValidate) {
-      _updateValidationData(model);
+      updateValidationData(model);
     }
-  }
-
-  /// Updates the fieldsValidationMessages on the FormViewModel
-  void _updateValidationData(FormViewModel model) =>
-      model.setValidationMessages({
-        TitleValueKey: _getValidationMessage(TitleValueKey),
-        BodyValueKey: _getValidationMessage(BodyValueKey),
-      });
-
-  /// Returns the validation message for the given key
-  String? _getValidationMessage(String key) {
-    final validatorForKey = _PostViewTextValidations[key];
-    if (validatorForKey == null) return null;
-    String? validationMessageForKey =
-        validatorForKey(_PostViewTextEditingControllers[key]!.text);
-    return validationMessageForKey;
   }
 
   /// Calls dispose on all the generated controllers and focus nodes
@@ -163,10 +153,6 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[TitleValueKey];
   String? get bodyValidationMessage =>
       this.fieldsValidationMessages[BodyValueKey];
-  void clearForm() {
-    titleValue = '';
-    bodyValue = '';
-  }
 }
 
 extension Methods on FormViewModel {
@@ -174,4 +160,36 @@ extension Methods on FormViewModel {
       this.fieldsValidationMessages[TitleValueKey] = validationMessage;
   setBodyValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[BodyValueKey] = validationMessage;
+
+  /// Clears text input fields on the Form
+  void clearForm() {
+    titleValue = '';
+    bodyValue = '';
+  }
+
+  /// Validates text input fields on the Form
+  void validateForm() {
+    this.setValidationMessages({
+      TitleValueKey: getValidationMessage(TitleValueKey),
+      BodyValueKey: getValidationMessage(BodyValueKey),
+    });
+  }
 }
+
+/// Returns the validation message for the given key
+String? getValidationMessage(String key) {
+  final validatorForKey = _PostViewTextValidations[key];
+  if (validatorForKey == null) return null;
+
+  String? validationMessageForKey = validatorForKey(
+    _PostViewTextEditingControllers[key]!.text,
+  );
+
+  return validationMessageForKey;
+}
+
+/// Updates the fieldsValidationMessages on the FormViewModel
+void updateValidationData(FormViewModel model) => model.setValidationMessages({
+      TitleValueKey: getValidationMessage(TitleValueKey),
+      BodyValueKey: getValidationMessage(BodyValueKey),
+    });

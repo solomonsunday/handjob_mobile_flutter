@@ -21,16 +21,19 @@ final Map<String, String? Function(String?)?>
   EmailValueKey: null,
 };
 
-mixin $ForgotPasswordView on StatelessWidget {
+mixin $ForgotPasswordView {
   TextEditingController get emailController =>
       _getFormTextEditingController(EmailValueKey);
   FocusNode get emailFocusNode => _getFormFocusNode(EmailValueKey);
 
-  TextEditingController _getFormTextEditingController(String key,
-      {String? initialValue}) {
+  TextEditingController _getFormTextEditingController(
+    String key, {
+    String? initialValue,
+  }) {
     if (_ForgotPasswordViewTextEditingControllers.containsKey(key)) {
       return _ForgotPasswordViewTextEditingControllers[key]!;
     }
+
     _ForgotPasswordViewTextEditingControllers[key] =
         TextEditingController(text: initialValue);
     return _ForgotPasswordViewTextEditingControllers[key]!;
@@ -52,13 +55,15 @@ mixin $ForgotPasswordView on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
-  @Deprecated('Use syncFormWithViewModel instead.'
-      'This feature was deprecated after 3.1.0.')
+  @Deprecated(
+    'Use syncFormWithViewModel instead.'
+    'This feature was deprecated after 3.1.0.',
+  )
   void listenToFormUpdated(FormViewModel model) {
     emailController.addListener(() => _updateFormData(model));
   }
 
-  final bool _autoTextFieldValidation = true;
+  static const bool _autoTextFieldValidation = true;
   bool validateFormFields(FormViewModel model) {
     _updateFormData(model, forceValidate: true);
     return model.isFormValid;
@@ -72,24 +77,10 @@ mixin $ForgotPasswordView on StatelessWidget {
           EmailValueKey: emailController.text,
         }),
     );
+
     if (_autoTextFieldValidation || forceValidate) {
-      _updateValidationData(model);
+      updateValidationData(model);
     }
-  }
-
-  /// Updates the fieldsValidationMessages on the FormViewModel
-  void _updateValidationData(FormViewModel model) =>
-      model.setValidationMessages({
-        EmailValueKey: _getValidationMessage(EmailValueKey),
-      });
-
-  /// Returns the validation message for the given key
-  String? _getValidationMessage(String key) {
-    final validatorForKey = _ForgotPasswordViewTextValidations[key];
-    if (validatorForKey == null) return null;
-    String? validationMessageForKey =
-        validatorForKey(_ForgotPasswordViewTextEditingControllers[key]!.text);
-    return validationMessageForKey;
   }
 
   /// Calls dispose on all the generated controllers and focus nodes
@@ -136,12 +127,38 @@ extension ValueProperties on FormViewModel {
 
   String? get emailValidationMessage =>
       this.fieldsValidationMessages[EmailValueKey];
-  void clearForm() {
-    emailValue = '';
-  }
 }
 
 extension Methods on FormViewModel {
   setEmailValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[EmailValueKey] = validationMessage;
+
+  /// Clears text input fields on the Form
+  void clearForm() {
+    emailValue = '';
+  }
+
+  /// Validates text input fields on the Form
+  void validateForm() {
+    this.setValidationMessages({
+      EmailValueKey: getValidationMessage(EmailValueKey),
+    });
+  }
 }
+
+/// Returns the validation message for the given key
+String? getValidationMessage(String key) {
+  final validatorForKey = _ForgotPasswordViewTextValidations[key];
+  if (validatorForKey == null) return null;
+
+  String? validationMessageForKey = validatorForKey(
+    _ForgotPasswordViewTextEditingControllers[key]!.text,
+  );
+
+  return validationMessageForKey;
+}
+
+/// Updates the fieldsValidationMessages on the FormViewModel
+void updateValidationData(FormViewModel model) => model.setValidationMessages({
+      EmailValueKey: getValidationMessage(EmailValueKey),
+    });

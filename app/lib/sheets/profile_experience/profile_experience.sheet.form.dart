@@ -33,7 +33,7 @@ final Map<String, String? Function(String?)?>
   DescriptionValueKey: null,
 };
 
-mixin $ProfileExperienceSheet on StatelessWidget {
+mixin $ProfileExperienceSheet {
   TextEditingController get jobTitleController =>
       _getFormTextEditingController(JobTitleValueKey);
   TextEditingController get companyController =>
@@ -57,11 +57,14 @@ mixin $ProfileExperienceSheet on StatelessWidget {
   FocusNode get locationFocusNode => _getFormFocusNode(LocationValueKey);
   FocusNode get descriptionFocusNode => _getFormFocusNode(DescriptionValueKey);
 
-  TextEditingController _getFormTextEditingController(String key,
-      {String? initialValue}) {
+  TextEditingController _getFormTextEditingController(
+    String key, {
+    String? initialValue,
+  }) {
     if (_ProfileExperienceSheetTextEditingControllers.containsKey(key)) {
       return _ProfileExperienceSheetTextEditingControllers[key]!;
     }
+
     _ProfileExperienceSheetTextEditingControllers[key] =
         TextEditingController(text: initialValue);
     return _ProfileExperienceSheetTextEditingControllers[key]!;
@@ -89,8 +92,10 @@ mixin $ProfileExperienceSheet on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
-  @Deprecated('Use syncFormWithViewModel instead.'
-      'This feature was deprecated after 3.1.0.')
+  @Deprecated(
+    'Use syncFormWithViewModel instead.'
+    'This feature was deprecated after 3.1.0.',
+  )
   void listenToFormUpdated(FormViewModel model) {
     jobTitleController.addListener(() => _updateFormData(model));
     companyController.addListener(() => _updateFormData(model));
@@ -101,7 +106,7 @@ mixin $ProfileExperienceSheet on StatelessWidget {
     descriptionController.addListener(() => _updateFormData(model));
   }
 
-  final bool _autoTextFieldValidation = true;
+  static const bool _autoTextFieldValidation = true;
   bool validateFormFields(FormViewModel model) {
     _updateFormData(model, forceValidate: true);
     return model.isFormValid;
@@ -121,30 +126,10 @@ mixin $ProfileExperienceSheet on StatelessWidget {
           DescriptionValueKey: descriptionController.text,
         }),
     );
+
     if (_autoTextFieldValidation || forceValidate) {
-      _updateValidationData(model);
+      updateValidationData(model);
     }
-  }
-
-  /// Updates the fieldsValidationMessages on the FormViewModel
-  void _updateValidationData(FormViewModel model) =>
-      model.setValidationMessages({
-        JobTitleValueKey: _getValidationMessage(JobTitleValueKey),
-        CompanyValueKey: _getValidationMessage(CompanyValueKey),
-        StartDateValueKey: _getValidationMessage(StartDateValueKey),
-        EndDateValueKey: _getValidationMessage(EndDateValueKey),
-        JobCategoryNameValueKey: _getValidationMessage(JobCategoryNameValueKey),
-        LocationValueKey: _getValidationMessage(LocationValueKey),
-        DescriptionValueKey: _getValidationMessage(DescriptionValueKey),
-      });
-
-  /// Returns the validation message for the given key
-  String? _getValidationMessage(String key) {
-    final validatorForKey = _ProfileExperienceSheetTextValidations[key];
-    if (validatorForKey == null) return null;
-    String? validationMessageForKey = validatorForKey(
-        _ProfileExperienceSheetTextEditingControllers[key]!.text);
-    return validationMessageForKey;
   }
 
   /// Calls dispose on all the generated controllers and focus nodes
@@ -334,15 +319,6 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[LocationValueKey];
   String? get descriptionValidationMessage =>
       this.fieldsValidationMessages[DescriptionValueKey];
-  void clearForm() {
-    jobTitleValue = '';
-    companyValue = '';
-    startDateValue = '';
-    endDateValue = '';
-    jobCategoryNameValue = '';
-    locationValue = '';
-    descriptionValue = '';
-  }
 }
 
 extension Methods on FormViewModel {
@@ -361,4 +337,51 @@ extension Methods on FormViewModel {
       this.fieldsValidationMessages[LocationValueKey] = validationMessage;
   setDescriptionValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[DescriptionValueKey] = validationMessage;
+
+  /// Clears text input fields on the Form
+  void clearForm() {
+    jobTitleValue = '';
+    companyValue = '';
+    startDateValue = '';
+    endDateValue = '';
+    jobCategoryNameValue = '';
+    locationValue = '';
+    descriptionValue = '';
+  }
+
+  /// Validates text input fields on the Form
+  void validateForm() {
+    this.setValidationMessages({
+      JobTitleValueKey: getValidationMessage(JobTitleValueKey),
+      CompanyValueKey: getValidationMessage(CompanyValueKey),
+      StartDateValueKey: getValidationMessage(StartDateValueKey),
+      EndDateValueKey: getValidationMessage(EndDateValueKey),
+      JobCategoryNameValueKey: getValidationMessage(JobCategoryNameValueKey),
+      LocationValueKey: getValidationMessage(LocationValueKey),
+      DescriptionValueKey: getValidationMessage(DescriptionValueKey),
+    });
+  }
 }
+
+/// Returns the validation message for the given key
+String? getValidationMessage(String key) {
+  final validatorForKey = _ProfileExperienceSheetTextValidations[key];
+  if (validatorForKey == null) return null;
+
+  String? validationMessageForKey = validatorForKey(
+    _ProfileExperienceSheetTextEditingControllers[key]!.text,
+  );
+
+  return validationMessageForKey;
+}
+
+/// Updates the fieldsValidationMessages on the FormViewModel
+void updateValidationData(FormViewModel model) => model.setValidationMessages({
+      JobTitleValueKey: getValidationMessage(JobTitleValueKey),
+      CompanyValueKey: getValidationMessage(CompanyValueKey),
+      StartDateValueKey: getValidationMessage(StartDateValueKey),
+      EndDateValueKey: getValidationMessage(EndDateValueKey),
+      JobCategoryNameValueKey: getValidationMessage(JobCategoryNameValueKey),
+      LocationValueKey: getValidationMessage(LocationValueKey),
+      DescriptionValueKey: getValidationMessage(DescriptionValueKey),
+    });

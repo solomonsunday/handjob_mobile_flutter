@@ -454,6 +454,17 @@ class OnboardViewArguments {
   String toString() {
     return '{"key": "$key"}';
   }
+
+  @override
+  bool operator ==(covariant OnboardViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode;
+  }
 }
 
 class AuthViewArguments {
@@ -464,6 +475,17 @@ class AuthViewArguments {
   @override
   String toString() {
     return '{"key": "$key"}';
+  }
+
+  @override
+  bool operator ==(covariant AuthViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode;
   }
 }
 
@@ -476,6 +498,17 @@ class ArtisanSignupViewArguments {
   String toString() {
     return '{"key": "$key"}';
   }
+
+  @override
+  bool operator ==(covariant ArtisanSignupViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode;
+  }
 }
 
 class CustomerSignupViewArguments {
@@ -486,6 +519,17 @@ class CustomerSignupViewArguments {
   @override
   String toString() {
     return '{"key": "$key"}';
+  }
+
+  @override
+  bool operator ==(covariant CustomerSignupViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode;
   }
 }
 
@@ -506,6 +550,19 @@ class AccountCreatedDialogArguments {
   String toString() {
     return '{"key": "$key", "request": "$request", "completer": "$completer"}';
   }
+
+  @override
+  bool operator ==(covariant AccountCreatedDialogArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key &&
+        other.request == request &&
+        other.completer == completer;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ request.hashCode ^ completer.hashCode;
+  }
 }
 
 class VerifyEmailViewArguments {
@@ -522,6 +579,17 @@ class VerifyEmailViewArguments {
   String toString() {
     return '{"key": "$key", "email": "$email"}';
   }
+
+  @override
+  bool operator ==(covariant VerifyEmailViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.email == email;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ email.hashCode;
+  }
 }
 
 class ForgotPasswordViewArguments {
@@ -532,6 +600,17 @@ class ForgotPasswordViewArguments {
   @override
   String toString() {
     return '{"key": "$key"}';
+  }
+
+  @override
+  bool operator ==(covariant ForgotPasswordViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode;
   }
 }
 
@@ -548,6 +627,17 @@ class ResetPasswordViewArguments {
   @override
   String toString() {
     return '{"key": "$key", "email": "$email"}';
+  }
+
+  @override
+  bool operator ==(covariant ResetPasswordViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.email == email;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ email.hashCode;
   }
 }
 
@@ -568,6 +658,19 @@ class PostDetailViewArguments {
   String toString() {
     return '{"key": "$key", "post": "$post", "postIndex": "$postIndex"}';
   }
+
+  @override
+  bool operator ==(covariant PostDetailViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key &&
+        other.post == post &&
+        other.postIndex == postIndex;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ post.hashCode ^ postIndex.hashCode;
+  }
 }
 
 class ChatDetailViewArguments {
@@ -583,6 +686,17 @@ class ChatDetailViewArguments {
   @override
   String toString() {
     return '{"key": "$key", "contact": "$contact"}';
+  }
+
+  @override
+  bool operator ==(covariant ChatDetailViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.contact == contact;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ contact.hashCode;
   }
 }
 
@@ -600,6 +714,17 @@ class ContactViewArguments {
   String toString() {
     return '{"key": "$key", "activeTab": "$activeTab"}';
   }
+
+  @override
+  bool operator ==(covariant ContactViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.activeTab == activeTab;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ activeTab.hashCode;
+  }
 }
 
 class ChangePasswordViewArguments {
@@ -610,6 +735,17 @@ class ChangePasswordViewArguments {
   @override
   String toString() {
     return '{"key": "$key"}';
+  }
+
+  @override
+  bool operator ==(covariant ChangePasswordViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode;
   }
 }
 
@@ -626,6 +762,17 @@ class ApplicationViewArguments {
   @override
   String toString() {
     return '{"key": "$key", "instantJobId": "$instantJobId"}';
+  }
+
+  @override
+  bool operator ==(covariant ApplicationViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.instantJobId == instantJobId;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ instantJobId.hashCode;
   }
 }
 
@@ -646,6 +793,19 @@ class RateReviewViewArguments {
   String toString() {
     return '{"key": "$key", "instantJob": "$instantJob", "applicant": "$applicant"}';
   }
+
+  @override
+  bool operator ==(covariant RateReviewViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key &&
+        other.instantJob == instantJob &&
+        other.applicant == applicant;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ instantJob.hashCode ^ applicant.hashCode;
+  }
 }
 
 class ApplicantProfileViewArguments {
@@ -661,6 +821,17 @@ class ApplicantProfileViewArguments {
   @override
   String toString() {
     return '{"key": "$key", "applicantId": "$applicantId"}';
+  }
+
+  @override
+  bool operator ==(covariant ApplicantProfileViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.applicantId == applicantId;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ applicantId.hashCode;
   }
 }
 
@@ -684,6 +855,23 @@ class JobDetailViewArguments {
   String toString() {
     return '{"key": "$key", "instantJob": "$instantJob", "user": "$user", "isWaitingToBeAccepted": "$isWaitingToBeAccepted"}';
   }
+
+  @override
+  bool operator ==(covariant JobDetailViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key &&
+        other.instantJob == instantJob &&
+        other.user == user &&
+        other.isWaitingToBeAccepted == isWaitingToBeAccepted;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^
+        instantJob.hashCode ^
+        user.hashCode ^
+        isWaitingToBeAccepted.hashCode;
+  }
 }
 
 class NotificationJobDetailViewArguments {
@@ -702,6 +890,19 @@ class NotificationJobDetailViewArguments {
   @override
   String toString() {
     return '{"key": "$key", "instantJobId": "$instantJobId", "user": "$user"}';
+  }
+
+  @override
+  bool operator ==(covariant NotificationJobDetailViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key &&
+        other.instantJobId == instantJobId &&
+        other.user == user;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ instantJobId.hashCode ^ user.hashCode;
   }
 }
 

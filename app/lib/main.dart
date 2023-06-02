@@ -81,7 +81,7 @@ class MyApp extends StatelessWidget {
 }
 
 class AppViewModel extends BaseViewModel {
-  final _chatService = locator<ChatService>();
+  // final _chatService = locator<ChatService>();
 
   // IO.Socket get chatSocket => _chatService.chatSocket;
 

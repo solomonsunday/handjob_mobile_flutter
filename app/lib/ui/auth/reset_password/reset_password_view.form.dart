@@ -25,7 +25,7 @@ final Map<String, String? Function(String?)?>
   ConfirmPasswordValueKey: null,
 };
 
-mixin $ResetPasswordView on StatelessWidget {
+mixin $ResetPasswordView {
   TextEditingController get codeController =>
       _getFormTextEditingController(CodeValueKey);
   TextEditingController get passwordController =>
@@ -37,11 +37,14 @@ mixin $ResetPasswordView on StatelessWidget {
   FocusNode get confirmPasswordFocusNode =>
       _getFormFocusNode(ConfirmPasswordValueKey);
 
-  TextEditingController _getFormTextEditingController(String key,
-      {String? initialValue}) {
+  TextEditingController _getFormTextEditingController(
+    String key, {
+    String? initialValue,
+  }) {
     if (_ResetPasswordViewTextEditingControllers.containsKey(key)) {
       return _ResetPasswordViewTextEditingControllers[key]!;
     }
+
     _ResetPasswordViewTextEditingControllers[key] =
         TextEditingController(text: initialValue);
     return _ResetPasswordViewTextEditingControllers[key]!;
@@ -65,15 +68,17 @@ mixin $ResetPasswordView on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
-  @Deprecated('Use syncFormWithViewModel instead.'
-      'This feature was deprecated after 3.1.0.')
+  @Deprecated(
+    'Use syncFormWithViewModel instead.'
+    'This feature was deprecated after 3.1.0.',
+  )
   void listenToFormUpdated(FormViewModel model) {
     codeController.addListener(() => _updateFormData(model));
     passwordController.addListener(() => _updateFormData(model));
     confirmPasswordController.addListener(() => _updateFormData(model));
   }
 
-  final bool _autoTextFieldValidation = true;
+  static const bool _autoTextFieldValidation = true;
   bool validateFormFields(FormViewModel model) {
     _updateFormData(model, forceValidate: true);
     return model.isFormValid;
@@ -89,26 +94,10 @@ mixin $ResetPasswordView on StatelessWidget {
           ConfirmPasswordValueKey: confirmPasswordController.text,
         }),
     );
+
     if (_autoTextFieldValidation || forceValidate) {
-      _updateValidationData(model);
+      updateValidationData(model);
     }
-  }
-
-  /// Updates the fieldsValidationMessages on the FormViewModel
-  void _updateValidationData(FormViewModel model) =>
-      model.setValidationMessages({
-        CodeValueKey: _getValidationMessage(CodeValueKey),
-        PasswordValueKey: _getValidationMessage(PasswordValueKey),
-        ConfirmPasswordValueKey: _getValidationMessage(ConfirmPasswordValueKey),
-      });
-
-  /// Returns the validation message for the given key
-  String? _getValidationMessage(String key) {
-    final validatorForKey = _ResetPasswordViewTextValidations[key];
-    if (validatorForKey == null) return null;
-    String? validationMessageForKey =
-        validatorForKey(_ResetPasswordViewTextEditingControllers[key]!.text);
-    return validationMessageForKey;
   }
 
   /// Calls dispose on all the generated controllers and focus nodes
@@ -203,11 +192,6 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[PasswordValueKey];
   String? get confirmPasswordValidationMessage =>
       this.fieldsValidationMessages[ConfirmPasswordValueKey];
-  void clearForm() {
-    codeValue = '';
-    passwordValue = '';
-    confirmPasswordValue = '';
-  }
 }
 
 extension Methods on FormViewModel {
@@ -218,4 +202,39 @@ extension Methods on FormViewModel {
   setConfirmPasswordValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[ConfirmPasswordValueKey] =
           validationMessage;
+
+  /// Clears text input fields on the Form
+  void clearForm() {
+    codeValue = '';
+    passwordValue = '';
+    confirmPasswordValue = '';
+  }
+
+  /// Validates text input fields on the Form
+  void validateForm() {
+    this.setValidationMessages({
+      CodeValueKey: getValidationMessage(CodeValueKey),
+      PasswordValueKey: getValidationMessage(PasswordValueKey),
+      ConfirmPasswordValueKey: getValidationMessage(ConfirmPasswordValueKey),
+    });
+  }
 }
+
+/// Returns the validation message for the given key
+String? getValidationMessage(String key) {
+  final validatorForKey = _ResetPasswordViewTextValidations[key];
+  if (validatorForKey == null) return null;
+
+  String? validationMessageForKey = validatorForKey(
+    _ResetPasswordViewTextEditingControllers[key]!.text,
+  );
+
+  return validationMessageForKey;
+}
+
+/// Updates the fieldsValidationMessages on the FormViewModel
+void updateValidationData(FormViewModel model) => model.setValidationMessages({
+      CodeValueKey: getValidationMessage(CodeValueKey),
+      PasswordValueKey: getValidationMessage(PasswordValueKey),
+      ConfirmPasswordValueKey: getValidationMessage(ConfirmPasswordValueKey),
+    });

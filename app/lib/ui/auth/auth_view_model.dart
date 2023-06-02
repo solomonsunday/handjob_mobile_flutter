@@ -64,9 +64,9 @@ class AuthViewModel extends FormViewModel {
       );
       return;
     } on DioError catch (err) {
-      _errorMessage = "An error occured: please enter a valid credential";
+      _errorMessage = "please enter a valid credential";
       _dialogService.showDialog(
-        title: "An error occured",
+        title: "Invalid Credential",
         description: _errorMessage,
       );
       // throw HttpException("An error occured: please enter a valid credential");

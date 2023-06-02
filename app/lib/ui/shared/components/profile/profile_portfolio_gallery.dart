@@ -26,15 +26,98 @@ class ProfilePortfolioGallery extends StatelessWidget {
       padding: EdgeInsets.zero,
       children: (currentUser?.portfolios ?? [])
           .map(
-            (portfolio) => ClipRRect(
-              borderRadius: BorderRadius.circular(AppSize.s4),
-              child: CachedNetworkImage(
-                imageUrl: portfolio,
-                fit: BoxFit.cover,
+            (portfolio) => GestureDetector(
+              onTap: () async {
+                await showDialog(
+                  context: context,
+                  builder: (_) =>
+                      _showImageDialog('Portfolio', portfolio, context),
+                );
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppSize.s4),
+                child: CachedNetworkImage(
+                  imageUrl: portfolio,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           )
           .toList(),
+    );
+  }
+
+  Widget _showImageDialog(text, path, context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      // backgroundColor: Colors.transparent,
+      // elevation: 0,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 8.0),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Text(
+            //         '$text',
+            //         style: TextStyle(fontWeight: FontWeight.bold),
+            //       ),
+            //       IconButton(
+            //         onPressed: () {
+            //           Navigator.of(context).pop();
+            //         },
+            //         icon: Icon(Icons.close_rounded),
+            //         color: Colors.redAccent,
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            Container(
+              width: 400,
+              height: 600,
+              child: CachedNetworkImage(
+                placeholder: (context, url) => Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: AssetImage("assets/images/logo.jpeg"),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                errorWidget: (context, url, error) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: AssetImage("assets/images/logo.jpeg"),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                },
+                imageUrl: path,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

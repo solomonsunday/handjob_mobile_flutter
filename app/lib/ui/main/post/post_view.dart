@@ -270,7 +270,7 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text('${bodyController.text.length}/500'),
+              Text('${bodyController.text.length}/250'),
             ],
           ),
           const SizedBox(height: AppSize.s12),

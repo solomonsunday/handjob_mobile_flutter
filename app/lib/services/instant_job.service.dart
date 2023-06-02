@@ -123,7 +123,7 @@ class InstantJobService with ListenableServiceMixin {
 
   clearJobApplicants() {
     _applicants = [];
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<bool> acceptApplication(

@@ -187,11 +187,15 @@ class ProfileViewModel extends ReactiveViewModel {
         ),
       );
 
-  @override
-  List<ListenableServiceMixin> get listenableServices => [
-        _authenticationService,
-        _contactService,
-      ];
+  sendEmail(String? email) async {
+    await _sharedService.sendEmail(email ?? "");
+  }
 
-  sendEmail(String? email) {}
+  makePhoneCall(String? phone) async {
+    await _sharedService.makePhoneCall(phone ?? "");
+  }
+
+  @override
+  List<ListenableServiceMixin> get listenableServices =>
+      [_authenticationService, _contactService, _instantJobService];
 }

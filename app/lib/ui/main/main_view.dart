@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:handjob_mobile/dialogs/account_type.dialog.dart';
 import 'package:handjob_mobile/ui/main/chat/chat_view.dart';
 import 'package:handjob_mobile/ui/main/home/home_view.dart';
 import 'package:handjob_mobile/ui/main/instant_hire/instant_hire_view.dart';
@@ -9,6 +10,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
+import '../../utils/contants.dart';
 import 'main_view_model.dart';
 
 class MainView extends StatelessWidget {
@@ -17,7 +19,7 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainViewModel>.reactive(
-      onModelReady: (model) async {
+      onViewModelReady: (model) async {
         model.fetchPost();
         await model.fetchStates();
         await model.fetchLGA();
@@ -83,10 +85,10 @@ class MainView extends StatelessWidget {
               activeColor: ColorManager.kSecondaryColor,
               textAlign: TextAlign.center,
             ),
-            BottomNavBarItem(
+           BottomNavBarItem(
               icon: Icons.card_giftcard,
               title: Text(
-                'Jobs',
+                model.currentUser?.accountType == ACCOUNT_INSTANT_HIRE ? 'My Jobs' : 'Jobs',
                 style: getBoldStyle(
                   color: ColorManager.kWhiteColor,
                   fontSize: FontSize.s9,
@@ -241,7 +243,7 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                     ),
                   ),
                   Text(
-                    model.currentUser?.profession ?? "Customer",
+                    model.currentUser?.profession ?? model.currentUser?.accountType ?? "Customer",
                     style: getRegularStyle(
                       color: ColorManager.kDarkColor,
                       fontSize: FontSize.s12,

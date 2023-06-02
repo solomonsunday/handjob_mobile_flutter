@@ -23,7 +23,7 @@ class ApplicantProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ApplicantProfileViewModel>.reactive(
         viewModelBuilder: () => ApplicantProfileViewModel(),
-        onModelReady: (model) {
+        onViewModelReady: (model) {
           model.getAccount(applicantId);
           model.fetchContactsCount();
         },
@@ -67,24 +67,48 @@ class ApplicantProfileView extends StatelessWidget {
                         isView: true,
                       ),
                       const SizedBox(height: AppSize.s12),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: AppPadding.p20),
-                        child: DefaultButton(
-                          onPressed: () {},
-                          title: 'Message',
-                          leadingIcon: const Icon(
-                            Icons.message,
-                            size: 24,
+                      if (model.isContactExists(model.user?.email ?? "")?.id !=
+                          null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: AppPadding.p20),
+                          child: DefaultButton(
+                            onPressed: () => model.navigateToChat(model
+                                .isContactExists(model.user?.email ?? "")!),
+                            title: 'Message',
+                            leadingIcon: const Icon(
+                              Icons.message,
+                              size: 24,
+                            ),
+                            leadingIconColor: ColorManager.kWhiteColor,
+                            leadingIconSpace: 10,
+                            buttonBgColor: ColorManager.kDarkColor,
+                            buttonTextColor: ColorManager.kWhiteColor,
+                            paddingHeight: 8,
+                            paddingWidth: 8,
                           ),
-                          leadingIconColor: ColorManager.kWhiteColor,
-                          leadingIconSpace: 10,
-                          buttonBgColor: ColorManager.kDarkColor,
-                          buttonTextColor: ColorManager.kWhiteColor,
-                          paddingHeight: 8,
-                          paddingWidth: 8,
                         ),
-                      ),
+                      if (model.isContactExists(model.user?.email ?? "")?.id ==
+                          null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: AppPadding.p20),
+                          child: DefaultButton(
+                            onPressed: () =>
+                                model.handleSendConnectionRequest(),
+                            title: 'Send Connection Request',
+                            leadingIcon: const Icon(
+                              Icons.message,
+                              size: 24,
+                            ),
+                            leadingIconColor: ColorManager.kWhiteColor,
+                            leadingIconSpace: 10,
+                            buttonBgColor: ColorManager.kDarkColor,
+                            buttonTextColor: ColorManager.kWhiteColor,
+                            paddingHeight: 8,
+                            paddingWidth: 8,
+                          ),
+                        ),
                       const SizedBox(height: AppSize.s12),
                       ProfileServices(
                         currentUser: model.user,
@@ -100,6 +124,11 @@ class ApplicantProfileView extends StatelessWidget {
                       ),
                       ProfileContact(
                         currentUser: model.user,
+                        isLoggedInUser: model.user?.id == model.currentUser?.id,
+                        revealContactDetail: model
+                                .isContactExists(model.user?.email ?? "")
+                                ?.id !=
+                            null,
                         busy: false,
                       ),
                       const Divider(

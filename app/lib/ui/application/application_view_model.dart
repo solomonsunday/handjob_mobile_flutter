@@ -23,8 +23,8 @@ class ApplicationViewModel extends ReactiveViewModel {
   }
 
   getApplicantsRequest(String jobId) async {
-    _instantJobService.clearJobApplicants();
     setBusy(true);
+    _instantJobService.clearJobApplicants();
     try {
       await _instantJobService.getInstantJob(jobId);
       await _instantJobService.getApplicants(jobId);

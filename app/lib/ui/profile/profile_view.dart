@@ -82,6 +82,8 @@ class ProfileView extends StatelessWidget {
                     showContactSheet: () =>
                         model.showContactSheet(model.currentUser),
                     sendEmail: () => model.sendEmail(model.currentUser?.email),
+                    makePhoneCall: () =>
+                        model.makePhoneCall(model.currentUser?.phoneNumber),
                   )),
                   const SliverToBoxAdapter(
                       child: SizedBox(height: AppSize.s12)),

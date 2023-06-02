@@ -27,14 +27,14 @@ class EditInstantJobSheetView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<EditInstantJobSheetViewModel>.reactive(
       viewModelBuilder: () => EditInstantJobSheetViewModel(),
-      onModelReady: (model) async {
+      onViewModelReady: (model) async {
         // await model.fetchProfessionTypes();
         if (request?.data != null) {
           InstantJob job = request?.data as InstantJob;
 
           model.handleChangeIsNow(job.now ?? false);
           //  DateFormat formatter = DateFormat('dd-MMM-yyyy');
-
+          print('instant job edit: ${job.toJson()}');
           if (job.startDate != null) {
             model.handleStartDate(
                 fromDateTimeToDefaultFormat(fromIsoToDateTime(job.startDate!)));

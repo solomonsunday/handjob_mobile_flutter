@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/html_parser.dart';
+// import 'package:flutter_html/html_parser.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/ui/profile/profile_view_model.dart';
 import 'package:intl/intl.dart';

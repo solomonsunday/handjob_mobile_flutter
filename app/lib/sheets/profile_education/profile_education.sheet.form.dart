@@ -29,7 +29,7 @@ final Map<String, String? Function(String?)?>
   AddressValueKey: null,
 };
 
-mixin $ProfileEducationSheet on StatelessWidget {
+mixin $ProfileEducationSheet {
   TextEditingController get courseController =>
       _getFormTextEditingController(CourseValueKey);
   TextEditingController get yearOfGraduationController =>
@@ -47,11 +47,14 @@ mixin $ProfileEducationSheet on StatelessWidget {
   FocusNode get cityFocusNode => _getFormFocusNode(CityValueKey);
   FocusNode get addressFocusNode => _getFormFocusNode(AddressValueKey);
 
-  TextEditingController _getFormTextEditingController(String key,
-      {String? initialValue}) {
+  TextEditingController _getFormTextEditingController(
+    String key, {
+    String? initialValue,
+  }) {
     if (_ProfileEducationSheetTextEditingControllers.containsKey(key)) {
       return _ProfileEducationSheetTextEditingControllers[key]!;
     }
+
     _ProfileEducationSheetTextEditingControllers[key] =
         TextEditingController(text: initialValue);
     return _ProfileEducationSheetTextEditingControllers[key]!;
@@ -77,8 +80,10 @@ mixin $ProfileEducationSheet on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
-  @Deprecated('Use syncFormWithViewModel instead.'
-      'This feature was deprecated after 3.1.0.')
+  @Deprecated(
+    'Use syncFormWithViewModel instead.'
+    'This feature was deprecated after 3.1.0.',
+  )
   void listenToFormUpdated(FormViewModel model) {
     courseController.addListener(() => _updateFormData(model));
     yearOfGraduationController.addListener(() => _updateFormData(model));
@@ -87,7 +92,7 @@ mixin $ProfileEducationSheet on StatelessWidget {
     addressController.addListener(() => _updateFormData(model));
   }
 
-  final bool _autoTextFieldValidation = true;
+  static const bool _autoTextFieldValidation = true;
   bool validateFormFields(FormViewModel model) {
     _updateFormData(model, forceValidate: true);
     return model.isFormValid;
@@ -105,29 +110,10 @@ mixin $ProfileEducationSheet on StatelessWidget {
           AddressValueKey: addressController.text,
         }),
     );
+
     if (_autoTextFieldValidation || forceValidate) {
-      _updateValidationData(model);
+      updateValidationData(model);
     }
-  }
-
-  /// Updates the fieldsValidationMessages on the FormViewModel
-  void _updateValidationData(FormViewModel model) =>
-      model.setValidationMessages({
-        CourseValueKey: _getValidationMessage(CourseValueKey),
-        YearOfGraduationValueKey:
-            _getValidationMessage(YearOfGraduationValueKey),
-        InstitutionValueKey: _getValidationMessage(InstitutionValueKey),
-        CityValueKey: _getValidationMessage(CityValueKey),
-        AddressValueKey: _getValidationMessage(AddressValueKey),
-      });
-
-  /// Returns the validation message for the given key
-  String? _getValidationMessage(String key) {
-    final validatorForKey = _ProfileEducationSheetTextValidations[key];
-    if (validatorForKey == null) return null;
-    String? validationMessageForKey = validatorForKey(
-        _ProfileEducationSheetTextEditingControllers[key]!.text);
-    return validationMessageForKey;
   }
 
   /// Calls dispose on all the generated controllers and focus nodes
@@ -271,13 +257,6 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[CityValueKey];
   String? get addressValidationMessage =>
       this.fieldsValidationMessages[AddressValueKey];
-  void clearForm() {
-    courseValue = '';
-    yearOfGraduationValue = '';
-    institutionValue = '';
-    cityValue = '';
-    addressValue = '';
-  }
 }
 
 extension Methods on FormViewModel {
@@ -292,4 +271,45 @@ extension Methods on FormViewModel {
       this.fieldsValidationMessages[CityValueKey] = validationMessage;
   setAddressValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[AddressValueKey] = validationMessage;
+
+  /// Clears text input fields on the Form
+  void clearForm() {
+    courseValue = '';
+    yearOfGraduationValue = '';
+    institutionValue = '';
+    cityValue = '';
+    addressValue = '';
+  }
+
+  /// Validates text input fields on the Form
+  void validateForm() {
+    this.setValidationMessages({
+      CourseValueKey: getValidationMessage(CourseValueKey),
+      YearOfGraduationValueKey: getValidationMessage(YearOfGraduationValueKey),
+      InstitutionValueKey: getValidationMessage(InstitutionValueKey),
+      CityValueKey: getValidationMessage(CityValueKey),
+      AddressValueKey: getValidationMessage(AddressValueKey),
+    });
+  }
 }
+
+/// Returns the validation message for the given key
+String? getValidationMessage(String key) {
+  final validatorForKey = _ProfileEducationSheetTextValidations[key];
+  if (validatorForKey == null) return null;
+
+  String? validationMessageForKey = validatorForKey(
+    _ProfileEducationSheetTextEditingControllers[key]!.text,
+  );
+
+  return validationMessageForKey;
+}
+
+/// Updates the fieldsValidationMessages on the FormViewModel
+void updateValidationData(FormViewModel model) => model.setValidationMessages({
+      CourseValueKey: getValidationMessage(CourseValueKey),
+      YearOfGraduationValueKey: getValidationMessage(YearOfGraduationValueKey),
+      InstitutionValueKey: getValidationMessage(InstitutionValueKey),
+      CityValueKey: getValidationMessage(CityValueKey),
+      AddressValueKey: getValidationMessage(AddressValueKey),
+    });

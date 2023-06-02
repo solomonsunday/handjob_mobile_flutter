@@ -22,7 +22,8 @@ class ApplicationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ApplicationViewModel>.reactive(
         viewModelBuilder: () => ApplicationViewModel(),
-        onViewModelReady: (model) => model.getApplicants(instantJobId),
+        onViewModelReady: (model) async =>
+            await model.getApplicants(instantJobId),
         builder: (context, model, _) {
           print(
               'applicants: ${model.applicants?.map((e) => e.toJson()).toList()}');

@@ -25,7 +25,7 @@ final Map<String, String? Function(String?)?>
   AddressValueKey: null,
 };
 
-mixin $ProfileContactSheet on StatelessWidget {
+mixin $ProfileContactSheet {
   TextEditingController get emailController =>
       _getFormTextEditingController(EmailValueKey);
   TextEditingController get phoneController =>
@@ -36,11 +36,14 @@ mixin $ProfileContactSheet on StatelessWidget {
   FocusNode get phoneFocusNode => _getFormFocusNode(PhoneValueKey);
   FocusNode get addressFocusNode => _getFormFocusNode(AddressValueKey);
 
-  TextEditingController _getFormTextEditingController(String key,
-      {String? initialValue}) {
+  TextEditingController _getFormTextEditingController(
+    String key, {
+    String? initialValue,
+  }) {
     if (_ProfileContactSheetTextEditingControllers.containsKey(key)) {
       return _ProfileContactSheetTextEditingControllers[key]!;
     }
+
     _ProfileContactSheetTextEditingControllers[key] =
         TextEditingController(text: initialValue);
     return _ProfileContactSheetTextEditingControllers[key]!;
@@ -64,15 +67,17 @@ mixin $ProfileContactSheet on StatelessWidget {
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
-  @Deprecated('Use syncFormWithViewModel instead.'
-      'This feature was deprecated after 3.1.0.')
+  @Deprecated(
+    'Use syncFormWithViewModel instead.'
+    'This feature was deprecated after 3.1.0.',
+  )
   void listenToFormUpdated(FormViewModel model) {
     emailController.addListener(() => _updateFormData(model));
     phoneController.addListener(() => _updateFormData(model));
     addressController.addListener(() => _updateFormData(model));
   }
 
-  final bool _autoTextFieldValidation = true;
+  static const bool _autoTextFieldValidation = true;
   bool validateFormFields(FormViewModel model) {
     _updateFormData(model, forceValidate: true);
     return model.isFormValid;
@@ -88,26 +93,10 @@ mixin $ProfileContactSheet on StatelessWidget {
           AddressValueKey: addressController.text,
         }),
     );
+
     if (_autoTextFieldValidation || forceValidate) {
-      _updateValidationData(model);
+      updateValidationData(model);
     }
-  }
-
-  /// Updates the fieldsValidationMessages on the FormViewModel
-  void _updateValidationData(FormViewModel model) =>
-      model.setValidationMessages({
-        EmailValueKey: _getValidationMessage(EmailValueKey),
-        PhoneValueKey: _getValidationMessage(PhoneValueKey),
-        AddressValueKey: _getValidationMessage(AddressValueKey),
-      });
-
-  /// Returns the validation message for the given key
-  String? _getValidationMessage(String key) {
-    final validatorForKey = _ProfileContactSheetTextValidations[key];
-    if (validatorForKey == null) return null;
-    String? validationMessageForKey =
-        validatorForKey(_ProfileContactSheetTextEditingControllers[key]!.text);
-    return validationMessageForKey;
   }
 
   /// Calls dispose on all the generated controllers and focus nodes
@@ -199,11 +188,6 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[PhoneValueKey];
   String? get addressValidationMessage =>
       this.fieldsValidationMessages[AddressValueKey];
-  void clearForm() {
-    emailValue = '';
-    phoneValue = '';
-    addressValue = '';
-  }
 }
 
 extension Methods on FormViewModel {
@@ -213,4 +197,39 @@ extension Methods on FormViewModel {
       this.fieldsValidationMessages[PhoneValueKey] = validationMessage;
   setAddressValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[AddressValueKey] = validationMessage;
+
+  /// Clears text input fields on the Form
+  void clearForm() {
+    emailValue = '';
+    phoneValue = '';
+    addressValue = '';
+  }
+
+  /// Validates text input fields on the Form
+  void validateForm() {
+    this.setValidationMessages({
+      EmailValueKey: getValidationMessage(EmailValueKey),
+      PhoneValueKey: getValidationMessage(PhoneValueKey),
+      AddressValueKey: getValidationMessage(AddressValueKey),
+    });
+  }
 }
+
+/// Returns the validation message for the given key
+String? getValidationMessage(String key) {
+  final validatorForKey = _ProfileContactSheetTextValidations[key];
+  if (validatorForKey == null) return null;
+
+  String? validationMessageForKey = validatorForKey(
+    _ProfileContactSheetTextEditingControllers[key]!.text,
+  );
+
+  return validationMessageForKey;
+}
+
+/// Updates the fieldsValidationMessages on the FormViewModel
+void updateValidationData(FormViewModel model) => model.setValidationMessages({
+      EmailValueKey: getValidationMessage(EmailValueKey),
+      PhoneValueKey: getValidationMessage(PhoneValueKey),
+      AddressValueKey: getValidationMessage(AddressValueKey),
+    });

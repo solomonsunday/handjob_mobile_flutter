@@ -26,6 +26,7 @@ import '../../../utils/http_exception.dart';
 import '../../skeletons/post_view.skeleton.dart';
 
 const String VIEW_APPLICANTS = 'VIEW_APPLICANTS';
+const String EDIT = 'EDIT';
 
 class JobsView extends StatelessWidget {
   const JobsView({Key? key}) : super(key: key);
@@ -34,8 +35,15 @@ class JobsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<JobsViewModel>.reactive(
         viewModelBuilder: () => JobsViewModel(),
-        onModelReady: (model) async {
-          await model.getInstantJobs();
+        onViewModelReady: (model) async {
+          print('Job user account type: ${model.currentUser?.accountType}');
+          if (model.currentUser?.accountType == ACCOUNT_INSTANT_HIRE) {
+            print('fetching customer jobs');
+            await model.fetchInstantHires();
+          } else {
+            print('fetching all jobs');
+            await model.getInstantJobs();
+          }
         },
         builder: (context, model, child) {
           return Scaffold(
@@ -78,22 +86,46 @@ class JobsView extends StatelessWidget {
                     ),
                   const SizedBox(height: AppSize.s8),
                   if (model.isBusy) const Expanded(child: PostViewSkeleton()),
-                  if (model.jobs.isEmpty && !model.isBusy)
+                  if (model.jobs.isEmpty &&
+                      model.currentUser?.accountType == ACCOUNT_ARTISAN &&
+                      !model.isBusy)
+                    const Center(child: Text('There are no jobs yet!')),
+                  if (model.instantHires.isEmpty &&
+                      model.currentUser?.accountType == ACCOUNT_INSTANT_HIRE &&
+                      !model.isBusy)
                     const Center(child: Text('There are no jobs yet!')),
                   if (!model.isBusy)
-                    Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: model.jobs.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          InstantJob instantJob = model.jobs[index];
-                          return JobItem(
-                            instantJob: instantJob,
-                            user: model.currentUser!,
-                          );
-                        },
-                      ),
-                    )
+                    model.currentUser?.accountType == ACCOUNT_ARTISAN
+                        ? Expanded(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: model.jobs.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                InstantJob instantJob = model.jobs[index];
+                                return JobItem(
+                                  instantJob: instantJob,
+                                  user: model.currentUser!,
+                                );
+                              },
+                            ),
+                          )
+                        : model.currentUser?.accountType == ACCOUNT_INSTANT_HIRE
+                            ? Expanded(
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: model.instantHires.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    InstantJob instantJob =
+                                        model.instantHires[index];
+                                    return JobItem(
+                                      instantJob: instantJob,
+                                      user: model.currentUser!,
+                                    );
+                                  },
+                                ),
+                              )
+                            : Container()
                 ],
               ),
             ),
@@ -123,7 +155,7 @@ class JobItem extends StatelessWidget {
         builder: (context, model, child) {
           return GestureDetector(
             onTap: instantJob.company?.id == user.id
-                ? () => model.showEditInstantJob(instantJob)
+                ? null
                 : () => model.navigateToJobDetail(
                       instantJob,
                       model.isWaitingToBeAccepted,
@@ -188,8 +220,12 @@ class JobItem extends StatelessWidget {
                       ),
                       const SizedBox(width: AppSize.s8),
                       GestureDetector(
-                        onTap: () => model.navigateToAuthorProfile(
-                            instantJob.company?.id ?? ""),
+                        onTap:
+                            model.user?.accountType == ACCOUNT_INSTANT_HIRE ||
+                                    instantJob.company?.id == model.user?.id
+                                ? null
+                                : () => model.navigateToAuthorProfile(
+                                    instantJob.company?.id ?? ""),
                         child: Text(
                           '${instantJob.company?.firstName} ${instantJob.company?.lastName}',
                           style: getBoldStyle(
@@ -229,6 +265,9 @@ class JobItem extends StatelessWidget {
                               case VIEW_APPLICANTS:
                                 model.navigateToApplicants(instantJob.id!);
                                 break;
+                              case EDIT:
+                                model.showEditInstantJob(instantJob);
+                                break;
                               default:
                                 break;
                             }
@@ -236,15 +275,24 @@ class JobItem extends StatelessWidget {
                           itemBuilder: (BuildContext bc) {
                             return [
                               PopupMenuItem(
-                                height: 10,
                                 child: Text(
                                   'View Applicants',
                                   style: getSemiBoldStyle(
-                                    color: ColorManager.kRed,
+                                    color: ColorManager.kDarkColor,
                                     fontSize: 14,
                                   ),
                                 ),
                                 value: VIEW_APPLICANTS,
+                              ),
+                              PopupMenuItem(
+                                child: Text(
+                                  'Edit',
+                                  style: getSemiBoldStyle(
+                                    color: ColorManager.kDarkColor,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                value: EDIT,
                               )
                             ];
                           },
@@ -318,7 +366,10 @@ class JobItem extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSize.s8),
                   if (model.user?.accountType == ACCOUNT_INSTANT_HIRE)
-                    Text('${model.applicantCount} Applicants'),
+                    GestureDetector(
+                      onTap: () => model.navigateToApplicants(instantJob.id!),
+                      child: Text('${model.applicantCount} Applicants'),
+                    ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -357,20 +408,25 @@ class JobItem extends StatelessWidget {
                           ),
                         ),
 
-                      if (model.isJobApplied(instantJob.id!))
-                        DefaultButton(
-                          onPressed: null,
-                          title: 'Applied',
-                          trailingIcon: Icons.check,
-                          trailingIconColor: ColorManager.kWhiteColor,
-                          trailingIconSpace: 8,
-                          buttonType: ButtonType.fill,
-                          buttonBgColor: ColorManager.kGreen,
-                          buttonTextColor: ColorManager.kWhiteColor,
-                          paddingHeight: 20,
-                          paddingWidth: 40,
-                          borderRadius: 4,
-                        ),
+                      // if (model.isJobApplied(instantJob.id!) &&
+                      //     model.currentUser?.accountType ==
+                      //         ACCOUNT_INSTANT_HIRE)
+                      //   SizedBox(
+                      //     height: 8,
+                      //     child: DefaultButton(
+                      //       onPressed: null,
+                      //       title: 'Applied',
+                      //       trailingIcon: Icons.check,
+                      //       trailingIconColor: ColorManager.kWhiteColor,
+                      //       trailingIconSpace: 8,
+                      //       // buttonType: ButtonType.fill,
+                      //       buttonBgColor: ColorManager.kGreen,
+                      //       buttonTextColor: ColorManager.kWhiteColor,
+                      //       // paddingHeight: 4,
+                      //       // paddingWidth: 8,
+                      //       borderRadius: 4,
+                      //     ),
+                      //   ),
 
                       const SizedBox(width: AppSize.s8),
                       // Text(
@@ -474,7 +530,7 @@ class JobItemViewModel extends BaseViewModel {
     var response = await _bottomSheetService.showCustomSheet(
       variant: BottomSheetType.edit_instant_job,
       data: data,
-      // isScrollControlled: true,
+      isScrollControlled: false,
       ignoreSafeArea: true,
       enterBottomSheetDuration: const Duration(milliseconds: 400),
       exitBottomSheetDuration: const Duration(milliseconds: 200),

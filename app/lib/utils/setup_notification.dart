@@ -58,7 +58,7 @@ Future<void> setupNotification(FirebaseMessaging messaging) async {
 //     DarwinInitializationSettings(
 //         onDidReceiveLocalNotification: onDidReceiveLocalNotification);
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/launcher_icon');
+      AndroidInitializationSettings('@mipmap/ic_launcher');
   const InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
     // iOS: DarwinInitializationSettings(),
