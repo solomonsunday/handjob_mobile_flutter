@@ -30,13 +30,16 @@ class HomeView extends StatelessWidget {
                   color: ColorManager.kWhiteColor,
                 ),
               ),
-              // title: Text(
-              //   'HandJob',
-              //   style: getBoldStyle(color: ColorManager.kWhiteColor),
-              // ),
-              title: Image.asset(
-                'assets/images/HandJobs.png',
+              title: Text(
+                'HandWorker',
+                style: getBoldStyle(
+                  color: ColorManager.kWhiteColor,
+                  fontSize: 20,
+                ),
               ),
+              // title: Image.asset(
+              //   'assets/images/HandJobs.png',
+              // ),
               centerTitle: true,
               actions: [
                 NotificationIconWidget(),

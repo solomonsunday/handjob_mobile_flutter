@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:handjob_mobile/dialogs/account_type.dialog.dart';
 import 'package:handjob_mobile/ui/main/chat/chat_view.dart';
 import 'package:handjob_mobile/ui/main/home/home_view.dart';
 import 'package:handjob_mobile/ui/main/instant_hire/instant_hire_view.dart';
@@ -85,10 +84,12 @@ class MainView extends StatelessWidget {
               activeColor: ColorManager.kSecondaryColor,
               textAlign: TextAlign.center,
             ),
-           BottomNavBarItem(
+            BottomNavBarItem(
               icon: Icons.card_giftcard,
               title: Text(
-                model.currentUser?.accountType == ACCOUNT_INSTANT_HIRE ? 'My Jobs' : 'Jobs',
+                model.currentUser?.accountType == ACCOUNT_INSTANT_HIRE
+                    ? 'My Jobs'
+                    : 'Jobs',
                 style: getBoldStyle(
                   color: ColorManager.kWhiteColor,
                   fontSize: FontSize.s9,
@@ -184,21 +185,6 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: AppSize.s12),
-                  // model.currentUser?.imageUrl == null
-                  //     ? const CircleAvatar(
-                  //         backgroundColor: ColorManager.kDarkColor,
-                  //         radius: AppSize.s40,
-                  //         backgroundImage:
-                  //             AssetImage('assets/images/logo.jpeg'),
-                  //       )
-                  //     : const CircleAvatar(
-                  //         backgroundColor: ColorManager.kDarkColor,
-                  //         radius: AppSize.s40,
-                  //         backgroundImage: CachedNetworkImage(
-                  //           imageUrl: portfolio,
-                  //           fit: BoxFit.cover,
-                  //         ),
-                  //       ),
                   model.currentUser?.imageUrl == null
                       ? SizedBox(
                           width: AppSize.s56,
@@ -233,7 +219,6 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                             color: ColorManager.kRed,
                           ),
                         ),
-
                   const SizedBox(height: AppSize.s8),
                   Text(
                     '${model.currentUser?.firstName} ${model.currentUser?.lastName}',
@@ -243,7 +228,9 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                     ),
                   ),
                   Text(
-                    model.currentUser?.profession ?? model.currentUser?.accountType ?? "Customer",
+                    model.currentUser?.profession ??
+                        model.currentUser?.accountType ??
+                        "Customer",
                     style: getRegularStyle(
                       color: ColorManager.kDarkColor,
                       fontSize: FontSize.s12,
