@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/models/applicant.model.dart';
 import 'package:handjob_mobile/ui/application/applicant_profile/applicant_profile_view_model.dart';
+import 'package:handjob_mobile/utils/contants.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
@@ -15,15 +16,18 @@ class ApplicantProfileView extends StatelessWidget {
   const ApplicantProfileView({
     super.key,
     required this.applicantId,
+    this.isAcceptedApplicant = false,
   });
 
   final String applicantId;
+  final bool isAcceptedApplicant;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ApplicantProfileViewModel>.reactive(
         viewModelBuilder: () => ApplicantProfileViewModel(),
         onViewModelReady: (model) {
+          model.fetchConnectionRequests();
           model.getAccount(applicantId);
           model.fetchContactsCount();
         },
@@ -68,7 +72,8 @@ class ApplicantProfileView extends StatelessWidget {
                       ),
                       const SizedBox(height: AppSize.s12),
                       if (model.isContactExists(model.user?.email ?? "")?.id !=
-                          null)
+                              null ||
+                          model.accepted)
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: AppPadding.p20),
@@ -89,14 +94,26 @@ class ApplicantProfileView extends StatelessWidget {
                           ),
                         ),
                       if (model.isContactExists(model.user?.email ?? "")?.id ==
-                          null)
+                              null &&
+                          model
+                                  .isPendingAcceptConnection(
+                                      model.user?.email ?? "")
+                                  ?.id ==
+                              null &&
+                          !model.accepted)
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: AppPadding.p20),
                           child: DefaultButton(
-                            onPressed: () =>
-                                model.handleSendConnectionRequest(),
-                            title: 'Send Connection Request',
+                            onPressed: () => model.handleSendConnectionRequest(
+                                model.user?.id ?? ""),
+                            title: model.isRequestSent ||
+                                    model.pendingApprovalList
+                                        .where((element) =>
+                                            element == model.user?.id)
+                                        .isNotEmpty
+                                ? 'Pending Approval'
+                                : 'Send Connection Request',
                             leadingIcon: const Icon(
                               Icons.message,
                               size: 24,
@@ -107,6 +124,41 @@ class ApplicantProfileView extends StatelessWidget {
                             buttonTextColor: ColorManager.kWhiteColor,
                             paddingHeight: 8,
                             paddingWidth: 8,
+                            disabled: model.isRequestSent ||
+                                model.busy(SEND_PROFILE_CONNECTION_REQUEST) ||
+                                model.pendingApprovalList
+                                    .where(
+                                        (element) => element == model.user?.id)
+                                    .isNotEmpty,
+                            busy: model.busy(SEND_PROFILE_CONNECTION_REQUEST),
+                          ),
+                        ),
+                      if (model.isContactExists(model.user?.email ?? "")?.id ==
+                              null &&
+                          model
+                                  .isPendingAcceptConnection(
+                                      model.user?.email ?? "")
+                                  ?.id !=
+                              null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: AppPadding.p20),
+                          child: DefaultButton(
+                            onPressed: () =>
+                                model.acceptContact(model.user?.id ?? ""),
+                            title: 'Accept Connection Request',
+                            leadingIcon: const Icon(
+                              Icons.message,
+                              size: 24,
+                            ),
+                            leadingIconColor: ColorManager.kWhiteColor,
+                            leadingIconSpace: 10,
+                            buttonBgColor: ColorManager.kDarkColor,
+                            buttonTextColor: ColorManager.kWhiteColor,
+                            paddingHeight: 8,
+                            paddingWidth: 8,
+                            disabled: model.busy(ACCEPT_PROFILE_CONNECTION),
+                            busy: model.busy(ACCEPT_PROFILE_CONNECTION),
                           ),
                         ),
                       const SizedBox(height: AppSize.s12),
@@ -126,10 +178,15 @@ class ApplicantProfileView extends StatelessWidget {
                         currentUser: model.user,
                         isLoggedInUser: model.user?.id == model.currentUser?.id,
                         revealContactDetail: model
-                                .isContactExists(model.user?.email ?? "")
-                                ?.id !=
-                            null,
+                                    .isContactExists(model.user?.email ?? "")
+                                    ?.id !=
+                                null ||
+                            isAcceptedApplicant ||
+                            model.user?.accountType == ACCOUNT_ARTISAN,
                         busy: false,
+                        sendEmail: () => model.sendEmail(model.user?.email),
+                        makePhoneCall: () =>
+                            model.makePhoneCall(model.user?.phoneNumber),
                       ),
                       const Divider(
                         color: ColorManager.kPrimary100Color,

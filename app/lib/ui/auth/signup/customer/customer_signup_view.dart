@@ -17,6 +17,7 @@ const List<String> accountTypes = ["Job Seeker", "Employer"];
   FormTextField(name: 'email'),
   FormTextField(name: 'phone'),
   FormTextField(name: 'password'),
+  FormTextField(name: 'retypePassword'),
 ])
 class CustomerSignupView extends StatelessWidget with $CustomerSignupView {
   CustomerSignupView({Key? key}) : super(key: key);
@@ -25,8 +26,8 @@ class CustomerSignupView extends StatelessWidget with $CustomerSignupView {
   Widget build(BuildContext context) {
     return ViewModelBuilder<CustomerSignupViewModel>.reactive(
       viewModelBuilder: () => CustomerSignupViewModel(),
-      onModelReady: (model) {
-        listenToFormUpdated(model);
+      onViewModelReady: (model) {
+        syncFormWithViewModel(model);
       },
       onDispose: (_) => disposeForm(),
       builder: (context, model, child) {
@@ -97,6 +98,22 @@ class CustomerSignupView extends StatelessWidget with $CustomerSignupView {
                       ),
                     ),
                     const SizedBox(height: AppSize.s12),
+                    InputField(
+                      hintText: 'Re-type Password',
+                      controller: retypePasswordController,
+                      obscureText: model.retypePasswordVisibility,
+                      suffixIcon: GestureDetector(
+                        onTap: model.toggleRetypePasswordVisibility,
+                        child: Icon(
+                          model.retypePasswordVisibility
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          size: AppSize.s24,
+                          color: ColorManager.kDarkCharcoal,
+                        ),
+                      ),
+                      formError: model.retypePasswordValidationMessage,
+                    ),
                     // const SizedBox(height: AppSize.s24),
                     // DefaultCheckBox(
                     //   value: false,

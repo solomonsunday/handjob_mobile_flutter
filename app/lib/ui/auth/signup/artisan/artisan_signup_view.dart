@@ -20,6 +20,7 @@ const List<String> accountTypes = ["Job Seeker", "Employer"];
   FormTextField(name: 'email'),
   FormTextField(name: 'phone'),
   FormTextField(name: 'password'),
+  FormTextField(name: 'retypePassword'),
 ])
 class ArtisanSignupView extends StatelessWidget with $ArtisanSignupView {
   ArtisanSignupView({Key? key}) : super(key: key);
@@ -28,8 +29,8 @@ class ArtisanSignupView extends StatelessWidget with $ArtisanSignupView {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ArtisanSignupViewModel>.reactive(
       viewModelBuilder: () => ArtisanSignupViewModel(),
-      onModelReady: (model) async {
-        listenToFormUpdated(model);
+      onViewModelReady: (model) async {
+        syncFormWithViewModel(model);
         await model.fetchProfessionTypes();
       },
       onDispose: (_) => disposeForm(),
@@ -99,6 +100,23 @@ class ArtisanSignupView extends StatelessWidget with $ArtisanSignupView {
                       color: ColorManager.kDarkCharcoal,
                     ),
                   ),
+                ),
+                const SizedBox(height: AppSize.s12),
+                InputField(
+                  hintText: 'Re-type Password',
+                  controller: retypePasswordController,
+                  obscureText: model.retypePasswordVisibility,
+                  suffixIcon: GestureDetector(
+                    onTap: model.toggleRetypePasswordVisibility,
+                    child: Icon(
+                      model.retypePasswordVisibility
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      size: AppSize.s24,
+                      color: ColorManager.kDarkCharcoal,
+                    ),
+                  ),
+                  formError: model.retypePasswordValidationMessage,
                 ),
                 const SizedBox(height: AppSize.s12),
                 DefaultDropDownField(

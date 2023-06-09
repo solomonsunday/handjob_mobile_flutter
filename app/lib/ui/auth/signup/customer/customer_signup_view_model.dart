@@ -28,7 +28,7 @@ class CustomerSignupViewModel extends FormViewModel {
   bool _passwordVisibility = true;
   bool _confirmPasswordVisibility = true;
   bool _formIsValid = false;
-
+  bool _retypePasswordVisibility = true;
   // String? get username => _username;
   // String? get accountType => _accountType;
   // String? get email => _email;
@@ -38,9 +38,15 @@ class CustomerSignupViewModel extends FormViewModel {
   bool get passwordVisibility => _passwordVisibility;
   bool get confirmPasswordVisibility => _confirmPasswordVisibility;
   bool get formIsValid => _formIsValid;
+  bool get retypePasswordVisibility => _retypePasswordVisibility;
 
   togglePasswordVisibility() {
     _passwordVisibility = !_passwordVisibility;
+    notifyListeners();
+  }
+
+  toggleRetypePasswordVisibility() {
+    _retypePasswordVisibility = !_retypePasswordVisibility;
     notifyListeners();
   }
 
@@ -107,7 +113,11 @@ class CustomerSignupViewModel extends FormViewModel {
         toastLength: Toast.LENGTH_LONG,
       );
     } on DioError catch (error) {
-      throw Exception(error.response?.data["message"]);
+      // throw Exception(error.response?.data["message"]);
+      Fluttertoast.showToast(
+        msg: error.response?.data["message"],
+        toastLength: Toast.LENGTH_LONG,
+      );
     } finally {
       setBusyForObject(DEFAULT_AUTH, false);
       notifyListeners();
@@ -131,6 +141,14 @@ class CustomerSignupViewModel extends FormViewModel {
   @override
   void setFormStatus() {
     // print('isFormValid: $_isFormValid');
+
+    if (hasRetypePassword) {
+      if (passwordValue != retypePasswordValue) {
+        setRetypePasswordValidationMessage('Password mismatch');
+        _formIsValid = false;
+      }
+    }
+
     _formIsValid = false;
     if (firstnameValue!.isNotEmpty &&
         lastnameValue!.isNotEmpty &&

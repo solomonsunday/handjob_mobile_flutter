@@ -27,10 +27,15 @@ class PostService with ReactiveServiceMixin {
   Meta? _postMeta;
   Meta? get postMeta => _postMeta;
 
-  Future<List<Post>> getPosts({int page = 1, int limit = 10}) async {
+  Future<List<Post>> getPosts(
+      {int page = 1, int limit = 10, String? search}) async {
     _loadingPosts = true;
+    String url = '/post?page=$page&take=$limit';
+    if (search != null) {
+      url += '&search=$search';
+    }
     var response = await dioClient.get(
-      '/post?page=$page&take=$limit',
+      url,
     );
     _postMeta = Meta.fromJson(response.data["meta"]);
     List<Map> mappedPosts =

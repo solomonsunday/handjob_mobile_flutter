@@ -365,7 +365,8 @@ class JobItem extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: AppSize.s8),
-                  if (model.user?.accountType == ACCOUNT_INSTANT_HIRE)
+                  if (model.user?.accountType == ACCOUNT_INSTANT_HIRE ||
+                      instantJob.company?.id == model.currentUser?.id)
                     GestureDetector(
                       onTap: () => model.navigateToApplicants(instantJob.id!),
                       child: Text('${model.applicantCount} Applicants'),
@@ -559,8 +560,15 @@ class JobItemViewModel extends BaseViewModel {
         ),
       );
 
-  navigateToAuthorProfile(String id) =>
-      _navigationService.navigateToApplicantProfileView(applicantId: id);
+  navigateToAuthorProfile(String id) async {
+    bool isApplicantAccepted = (applicants ?? [])
+        .where((element) => element.applicationId == id && element.accepted!)
+        .isNotEmpty;
+    _navigationService.navigateToApplicantProfileView(
+      applicantId: id,
+      isAcceptedApplicant: isApplicantAccepted,
+    );
+  }
 
   void navigateToApplicants(String id) =>
       _navigationService.navigateToApplicationView(instantJobId: id);

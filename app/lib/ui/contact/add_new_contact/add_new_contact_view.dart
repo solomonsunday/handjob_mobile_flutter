@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/ui/contact/add_new_contact/add_new_contact_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -116,7 +117,7 @@ class AddNewContactListItem extends StatelessWidget {
         builder: (context, model, _) {
           return ListTile(
             onTap: () {
-              print('tapping');
+              model.navigateToProfileView(contact.id!);
             },
             leading: contact.imageUrl == null
                 ? const CircleAvatar(
@@ -212,5 +213,9 @@ class AddNewContactListItemViewModel extends BaseViewModel {
       setBusyForObject(SEND_CONNECTION_REQUEST, false);
       notifyListeners();
     }
+  }
+
+  void navigateToProfileView(String id) {
+    _navigationService.navigateToApplicantProfileView(applicantId: id);
   }
 }

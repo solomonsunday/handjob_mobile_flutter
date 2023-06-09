@@ -174,7 +174,7 @@ class AuthView extends StatelessWidget with $AuthView {
                       SizedBox(
                         child: DefaultButton(
                           paddingHeight: 22,
-                          onPressed: () {},
+                          onPressed: model.handleGoogleAuth,
                           title: 'Via Google',
                           fontSize: FontSize.s12,
                           leadingIcon: SvgPicture.asset(
@@ -188,6 +188,8 @@ class AuthView extends StatelessWidget with $AuthView {
                           ),
                           borderRadius: AppSize.s12,
                           buttonTextColor: ColorManager.kDarkColor,
+                          busy: model.busy(GOOGLE_AUTH),
+                          disabled: model.busy(GOOGLE_AUTH),
                         ),
                       ),
                     ],

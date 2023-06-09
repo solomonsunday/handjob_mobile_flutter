@@ -27,11 +27,13 @@ class ArtisanSignupViewModel extends FormViewModel {
 
   bool get tos => _tos;
   bool _passwordVisibility = true;
+  bool _retypePasswordVisibility = true;
   bool _confirmPasswordVisibility = true;
 
   String? _selectedProfession;
   String? get selectedProfession => _selectedProfession;
   bool get passwordVisibility => _passwordVisibility;
+  bool get retypePasswordVisibility => _retypePasswordVisibility;
   bool get confirmPasswordVisibility => _confirmPasswordVisibility;
 
   List<String> get professions {
@@ -43,6 +45,11 @@ class ArtisanSignupViewModel extends FormViewModel {
 
   togglePasswordVisibility() {
     _passwordVisibility = !_passwordVisibility;
+    notifyListeners();
+  }
+
+  toggleRetypePasswordVisibility() {
+    _retypePasswordVisibility = !_retypePasswordVisibility;
     notifyListeners();
   }
 
@@ -108,7 +115,11 @@ class ArtisanSignupViewModel extends FormViewModel {
         toastLength: Toast.LENGTH_LONG,
       );
     } on DioError catch (error) {
-      throw Exception(error.response?.data["message"]);
+      // throw Exception(error.response?.data["message"]);
+      Fluttertoast.showToast(
+        msg: error.response?.data["message"],
+        toastLength: Toast.LENGTH_LONG,
+      );
     } finally {
       setBusyForObject(DEFAULT_AUTH, false);
       notifyListeners();
@@ -137,6 +148,13 @@ class ArtisanSignupViewModel extends FormViewModel {
     String? validatePhone = validatePhoneNumber(phoneValue!);
     setPhoneValidationMessage(validatePhone);
     _formIsValid = false;
+
+    if (hasRetypePassword) {
+      if (passwordValue != retypePasswordValue) {
+        setRetypePasswordValidationMessage('Password mismatch');
+        _formIsValid = false;
+      }
+    }
 
     if (firstnameValue!.isNotEmpty &&
         lastnameValue!.isNotEmpty &&

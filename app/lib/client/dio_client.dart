@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/utils/contants.dart';
@@ -22,6 +23,7 @@ class BearerTokenInterceptor extends Interceptor {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
+    print('REquest: ${options.path}');
     options.headers['platform'] = "mobile";
     final sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString(AUTH_TOKEN_KEY) != null) {
@@ -33,6 +35,7 @@ class BearerTokenInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
+    print('Response: ${response.data}');
     final NavigationService navigationService = locator<NavigationService>();
     /**
          * // if token expires and app is unable to 
@@ -49,6 +52,7 @@ class BearerTokenInterceptor extends Interceptor {
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
+    print('error occured: ${err.response?.data} ');
     final DialogService dialogService = locator<DialogService>();
     if (err.response?.statusCode == 500) {
       dialogService.showDialog(

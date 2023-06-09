@@ -40,7 +40,13 @@ class SplashViewViewModel extends BaseViewModel {
       return authResponse;
     } on DioError catch (error) {
       _isLoggedIn = false;
-      throw Exception(error.response?.data["message"]);
+      // throw Exception(error.response?.data["message"]);
+      bool? isFirstTimeUser = preferences.getBool(IS_FIRST_TIME_USER);
+      if (isFirstTimeUser == null || isFirstTimeUser) {
+        navigateToOnboard();
+      } else {
+        navigateToLogin();
+      }
     } finally {
       // Future.delayed(const Duration(seconds: 2), () async {
 

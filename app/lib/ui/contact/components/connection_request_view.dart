@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/ui/contact/contact_view_model.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:stacked/stacked.dart';
@@ -120,24 +121,30 @@ class ConnectionRequestItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
-                        color: Color(0xffd9d9d9),
-                        image: const DecorationImage(
-                          fit: BoxFit.cover,
-                          image:
-                              AssetImage("assets/images/default-avatar.jpeg"),
+                    GestureDetector(
+                      onTap: () => model.navigateToProfileView(id),
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          color: Color(0xffd9d9d9),
+                          image: const DecorationImage(
+                            fit: BoxFit.cover,
+                            image:
+                                AssetImage("assets/images/default-avatar.jpeg"),
+                          ),
                         ),
                       ),
                     ),
-                    Text(
-                      name,
-                      style: getBoldStyle(
-                        color: ColorManager.kDarkColor,
-                        fontSize: FontSize.s12,
+                    GestureDetector(
+                      onTap: () => model.navigateToProfileView(id),
+                      child: Text(
+                        name,
+                        style: getBoldStyle(
+                          color: ColorManager.kDarkColor,
+                          fontSize: FontSize.s12,
+                        ),
                       ),
                     ),
                     Text(
@@ -238,6 +245,7 @@ const String REJECT_CONNECTION = "REJECT_CONNECTION";
 class ConnectionRequestItemViewModel extends BaseViewModel {
   final _contactService = locator<ContactService>();
   final _dialogService = locator<DialogService>();
+  final _navigationService = locator<NavigationService>();
 
   bool _accepted = false;
   bool get accepted => _accepted;
@@ -284,5 +292,9 @@ class ConnectionRequestItemViewModel extends BaseViewModel {
       setBusyForObject(CONNECTION_REQUEST, false);
       setBusyForObject(REJECT_CONNECTION, false);
     }
+  }
+
+  navigateToProfileView(String id) {
+    _navigationService.navigateToApplicantProfileView(applicantId: id);
   }
 }

@@ -50,7 +50,7 @@ class HomeView extends StatelessWidget {
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
-                    children: const [
+                    children: [
                       HomeSearchWidget(),
                       Expanded(child: HomePostWidget()),
                     ],
@@ -133,7 +133,7 @@ class HomeSearchWidget extends ViewModelWidget<HomeViewModel> {
             ),
           ),
           const SizedBox(width: AppSize.s8),
-          const Expanded(
+          Expanded(
             child: InputField(
               hintText: 'Search',
               paddingBottom: 0,
@@ -142,7 +142,7 @@ class HomeSearchWidget extends ViewModelWidget<HomeViewModel> {
                 Icons.search,
                 color: ColorManager.kGrey3,
               ),
-              // onChanged: model.handleSearch,
+              onChanged: (String value) => model.handleSearch(value),
             ),
           ),
         ],
@@ -156,24 +156,34 @@ class HomePostWidget extends ViewModelWidget<HomeViewModel> {
 
   @override
   Widget build(BuildContext context, HomeViewModel model) {
-    // print('post widget: ${model.posts}');
-    return ListView.builder(
-      controller: model.scrollController,
-      addAutomaticKeepAlives: false,
-      itemCount: model.posts.length,
-      itemBuilder: (BuildContext context, int index) {
-        return HomeCard(
-          onAuthorClick: (id) => model.navigateToAuthorProfile(id),
-          post: model.posts[index],
-          onImageClick: () {
-            model.onPostImageClick(model.posts[index], index);
-          },
-          inPosition: model.offet <= (320 * index) &&
-              model.offet >= (320 * index) - 140,
-          key: ObjectKey(index),
-        );
-      },
-    );
+    // print('search filter widget: ${model.filteredPosts}');
+    return model.busy(POST_BUSY)
+        ? Center(
+            child: CircularProgressIndicator.adaptive(),
+          )
+        : ListView.builder(
+            controller: model.scrollController,
+            addAutomaticKeepAlives: false,
+            itemCount: model.posts.length,
+            itemBuilder: (BuildContext context, int index) {
+              return HomeCard(
+                onAuthorClick: (id) {
+                  if (id == model.currentUser?.id) {
+                    model.navigateToProfile();
+                    return;
+                  }
+                  model.navigateToAuthorProfile(id);
+                },
+                post: model.posts[index],
+                onImageClick: () {
+                  model.onPostImageClick(model.posts[index], index);
+                },
+                inPosition: model.offet <= (320 * index) &&
+                    model.offet >= (320 * index) - 140,
+                key: ObjectKey(index),
+              );
+            },
+          );
   }
 }
 

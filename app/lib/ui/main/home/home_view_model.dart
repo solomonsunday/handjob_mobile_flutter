@@ -57,4 +57,14 @@ class HomeViewModel extends ReactiveViewModel {
 
   navigateToAuthorProfile(String id) =>
       _navigationService.navigateToApplicantProfileView(applicantId: id);
+
+  handleSearch(String value) async {
+    setBusyForObject(POST_BUSY, true);
+    try {
+      await _postService.getPosts(search: value);
+    } catch (e) {
+    } finally {
+      setBusyForObject(POST_BUSY, false);
+    }
+  }
 }

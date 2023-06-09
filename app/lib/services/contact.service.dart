@@ -17,6 +17,7 @@ class ContactService with ListenableServiceMixin {
       connectionRequestList,
       contactListCount,
       contactMeta,
+      pendingApprovalList
     ]);
   }
 
@@ -26,12 +27,14 @@ class ContactService with ListenableServiceMixin {
   final ReactiveValue<List<Contact>> _connectionRequestList = ReactiveValue([]);
   final ReactiveValue<List<Contact>> _allContactList = ReactiveValue([]);
   final ReactiveValue<int> _contactListCount = ReactiveValue<int>(0);
+  Set<String> _pendingApprovalList = <String>{};
 
   List<Contact> get contactList => _contactList.value;
   List<Contact> get allContactList => _allContactList.value;
   List<Contact> get topSuggestionContactList => _topSuggestionContactList.value;
   List<Contact> get connectionRequestList => _connectionRequestList.value;
   int get contactListCount => _contactListCount.value;
+  List<String> get pendingApprovalList => _pendingApprovalList.toList();
 
   Meta? _contactMeta;
   Meta? get contactMeta => _contactMeta;
@@ -140,5 +143,10 @@ class ContactService with ListenableServiceMixin {
     );
     print('response to delete ${response.data}');
     return true;
+  }
+
+  void addContactIdToPendingApprovalList(String userId) {
+    _pendingApprovalList = {..._pendingApprovalList, userId};
+    notifyListeners();
   }
 }

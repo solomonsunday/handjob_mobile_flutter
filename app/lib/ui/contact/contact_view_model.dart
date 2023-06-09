@@ -39,12 +39,11 @@ class ContactViewModel extends ReactiveViewModel {
       _contactService.topSuggestionContactList;
   List<Contact>? get connectionRequestList =>
       _contactService.connectionRequestList;
+  void goBack() => _navigationService.back();
 
   handleSearch(String value) {
     runBusyFuture(fetchContacts(search: value));
   }
-
-  void goBack() => _navigationService.back();
 
   Future<void> fetchContacts({String search = ''}) async {
     setBusyForObject(CONTACT_LIST_REQUEST, true);

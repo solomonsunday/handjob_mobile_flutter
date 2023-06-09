@@ -84,12 +84,26 @@ class AuthenticationService with ListenableServiceMixin {
     return auth;
   }
 
-  Future<User> createUser(Map<String, dynamic> formData) async {
+  Future<Auth> createUser(Map<String, dynamic> formData) async {
     var response = await dioClient.post(
       '/auth/signup',
       data: formData,
     );
-    return User.fromJson(response.data);
+    return Auth.fromJson(response.data);
+  }
+
+  Future<Auth> createSocialUser(Map<String, dynamic> formData) async {
+    final preferences = await SharedPreferences.getInstance();
+    var response = await dioClient.post(
+      '/auth/signin/social',
+      data: formData,
+    );
+    // print('login detail: ${response.data}');
+    Auth auth = Auth.fromJson(response.data);
+    /**Persist the access token into a shared preference */
+    await preferences.setString(AUTH_TOKEN_KEY, auth.accessToken.toString());
+    await preferences.setString(AUTH_REFRESH_KEY, auth.refreshToken.toString());
+    return auth;
   }
 
   Future<void> logout() async {

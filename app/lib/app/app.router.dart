@@ -413,7 +413,9 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<ApplicantProfileViewArguments>(nullOk: false);
       return _i1.buildAdaptivePageRoute<dynamic>(
         builder: (context) => _i24.ApplicantProfileView(
-            key: args.key, applicantId: args.applicantId),
+            key: args.key,
+            applicantId: args.applicantId,
+            isAcceptedApplicant: args.isAcceptedApplicant),
         settings: data,
       );
     },
@@ -812,26 +814,31 @@ class ApplicantProfileViewArguments {
   const ApplicantProfileViewArguments({
     this.key,
     required this.applicantId,
+    this.isAcceptedApplicant = false,
   });
 
   final _i27.Key? key;
 
   final String applicantId;
 
+  final bool isAcceptedApplicant;
+
   @override
   String toString() {
-    return '{"key": "$key", "applicantId": "$applicantId"}';
+    return '{"key": "$key", "applicantId": "$applicantId", "isAcceptedApplicant": "$isAcceptedApplicant"}';
   }
 
   @override
   bool operator ==(covariant ApplicantProfileViewArguments other) {
     if (identical(this, other)) return true;
-    return other.key == key && other.applicantId == applicantId;
+    return other.key == key &&
+        other.applicantId == applicantId &&
+        other.isAcceptedApplicant == isAcceptedApplicant;
   }
 
   @override
   int get hashCode {
-    return key.hashCode ^ applicantId.hashCode;
+    return key.hashCode ^ applicantId.hashCode ^ isAcceptedApplicant.hashCode;
   }
 }
 
@@ -1261,6 +1268,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   Future<dynamic> navigateToApplicantProfileView({
     _i27.Key? key,
     required String applicantId,
+    bool isAcceptedApplicant = false,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1268,8 +1276,10 @@ extension NavigatorStateExtension on _i28.NavigationService {
         transition,
   }) async {
     return navigateTo<dynamic>(Routes.applicantProfileView,
-        arguments:
-            ApplicantProfileViewArguments(key: key, applicantId: applicantId),
+        arguments: ApplicantProfileViewArguments(
+            key: key,
+            applicantId: applicantId,
+            isAcceptedApplicant: isAcceptedApplicant),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -1672,6 +1682,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   Future<dynamic> replaceWithApplicantProfileView({
     _i27.Key? key,
     required String applicantId,
+    bool isAcceptedApplicant = false,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1679,8 +1690,10 @@ extension NavigatorStateExtension on _i28.NavigationService {
         transition,
   }) async {
     return replaceWith<dynamic>(Routes.applicantProfileView,
-        arguments:
-            ApplicantProfileViewArguments(key: key, applicantId: applicantId),
+        arguments: ApplicantProfileViewArguments(
+            key: key,
+            applicantId: applicantId,
+            isAcceptedApplicant: isAcceptedApplicant),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

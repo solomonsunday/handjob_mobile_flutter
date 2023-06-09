@@ -146,16 +146,16 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
             ),
           ),
           const SizedBox(height: AppSize.s20),
-          InputField(
-            label: 'Title',
-            hintText: 'Enter a title...',
-            controller: titleController,
-            focusnode: titleFocusnode,
-            formError:
-                titleFocusnode.hasFocus && model.hasTitleValidationMessage
-                    ? model.titleValidationMessage
-                    : null,
-          ),
+          // InputField(
+          //   label: 'Title',
+          //   hintText: 'Enter a title...',
+          //   controller: titleController,
+          //   focusnode: titleFocusnode,
+          //   formError:
+          //       titleFocusnode.hasFocus && model.hasTitleValidationMessage
+          //           ? model.titleValidationMessage
+          //           : null,
+          // ),
           const SizedBox(height: AppSize.s24),
           Container(
             padding: const EdgeInsets.all(12),
@@ -185,7 +185,7 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
                   ),
                   controller: bodyController,
                   focusnode: bodyFocusnode,
-                  maxLength: 250,
+                  maxLength: 1500,
                   formError:
                       bodyFocusnode.hasFocus && model.hasBodyValidationMessage
                           ? model.bodyValidationMessage
@@ -270,7 +270,7 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text('${bodyController.text.length}/250'),
+              Text('${bodyController.text.length}/1500'),
             ],
           ),
           const SizedBox(height: AppSize.s12),

@@ -15,6 +15,7 @@ const String UsernameValueKey = 'username';
 const String EmailValueKey = 'email';
 const String PhoneValueKey = 'phone';
 const String PasswordValueKey = 'password';
+const String RetypePasswordValueKey = 'retypePassword';
 
 final Map<String, TextEditingController>
     _ArtisanSignupViewTextEditingControllers = {};
@@ -29,6 +30,7 @@ final Map<String, String? Function(String?)?>
   EmailValueKey: null,
   PhoneValueKey: null,
   PasswordValueKey: null,
+  RetypePasswordValueKey: null,
 };
 
 mixin $ArtisanSignupView {
@@ -44,12 +46,16 @@ mixin $ArtisanSignupView {
       _getFormTextEditingController(PhoneValueKey);
   TextEditingController get passwordController =>
       _getFormTextEditingController(PasswordValueKey);
+  TextEditingController get retypePasswordController =>
+      _getFormTextEditingController(RetypePasswordValueKey);
   FocusNode get firstnameFocusNode => _getFormFocusNode(FirstnameValueKey);
   FocusNode get lastnameFocusNode => _getFormFocusNode(LastnameValueKey);
   FocusNode get usernameFocusNode => _getFormFocusNode(UsernameValueKey);
   FocusNode get emailFocusNode => _getFormFocusNode(EmailValueKey);
   FocusNode get phoneFocusNode => _getFormFocusNode(PhoneValueKey);
   FocusNode get passwordFocusNode => _getFormFocusNode(PasswordValueKey);
+  FocusNode get retypePasswordFocusNode =>
+      _getFormFocusNode(RetypePasswordValueKey);
 
   TextEditingController _getFormTextEditingController(
     String key, {
@@ -81,6 +87,7 @@ mixin $ArtisanSignupView {
     emailController.addListener(() => _updateFormData(model));
     phoneController.addListener(() => _updateFormData(model));
     passwordController.addListener(() => _updateFormData(model));
+    retypePasswordController.addListener(() => _updateFormData(model));
   }
 
   /// Registers a listener on every generated controller that calls [model.setData()]
@@ -96,6 +103,7 @@ mixin $ArtisanSignupView {
     emailController.addListener(() => _updateFormData(model));
     phoneController.addListener(() => _updateFormData(model));
     passwordController.addListener(() => _updateFormData(model));
+    retypePasswordController.addListener(() => _updateFormData(model));
   }
 
   static const bool _autoTextFieldValidation = true;
@@ -115,6 +123,7 @@ mixin $ArtisanSignupView {
           EmailValueKey: emailController.text,
           PhoneValueKey: phoneController.text,
           PasswordValueKey: passwordController.text,
+          RetypePasswordValueKey: retypePasswordController.text,
         }),
     );
 
@@ -148,6 +157,8 @@ extension ValueProperties on FormViewModel {
   String? get emailValue => this.formValueMap[EmailValueKey] as String?;
   String? get phoneValue => this.formValueMap[PhoneValueKey] as String?;
   String? get passwordValue => this.formValueMap[PasswordValueKey] as String?;
+  String? get retypePasswordValue =>
+      this.formValueMap[RetypePasswordValueKey] as String?;
 
   set firstnameValue(String? value) {
     this.setData(
@@ -237,6 +248,21 @@ extension ValueProperties on FormViewModel {
     }
   }
 
+  set retypePasswordValue(String? value) {
+    this.setData(
+      this.formValueMap
+        ..addAll({
+          RetypePasswordValueKey: value,
+        }),
+    );
+
+    if (_ArtisanSignupViewTextEditingControllers.containsKey(
+        RetypePasswordValueKey)) {
+      _ArtisanSignupViewTextEditingControllers[RetypePasswordValueKey]?.text =
+          value ?? '';
+    }
+  }
+
   bool get hasFirstname =>
       this.formValueMap.containsKey(FirstnameValueKey) &&
       (firstnameValue?.isNotEmpty ?? false);
@@ -255,6 +281,9 @@ extension ValueProperties on FormViewModel {
   bool get hasPassword =>
       this.formValueMap.containsKey(PasswordValueKey) &&
       (passwordValue?.isNotEmpty ?? false);
+  bool get hasRetypePassword =>
+      this.formValueMap.containsKey(RetypePasswordValueKey) &&
+      (retypePasswordValue?.isNotEmpty ?? false);
 
   bool get hasFirstnameValidationMessage =>
       this.fieldsValidationMessages[FirstnameValueKey]?.isNotEmpty ?? false;
@@ -268,6 +297,9 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[PhoneValueKey]?.isNotEmpty ?? false;
   bool get hasPasswordValidationMessage =>
       this.fieldsValidationMessages[PasswordValueKey]?.isNotEmpty ?? false;
+  bool get hasRetypePasswordValidationMessage =>
+      this.fieldsValidationMessages[RetypePasswordValueKey]?.isNotEmpty ??
+      false;
 
   String? get firstnameValidationMessage =>
       this.fieldsValidationMessages[FirstnameValueKey];
@@ -281,6 +313,8 @@ extension ValueProperties on FormViewModel {
       this.fieldsValidationMessages[PhoneValueKey];
   String? get passwordValidationMessage =>
       this.fieldsValidationMessages[PasswordValueKey];
+  String? get retypePasswordValidationMessage =>
+      this.fieldsValidationMessages[RetypePasswordValueKey];
 }
 
 extension Methods on FormViewModel {
@@ -296,6 +330,8 @@ extension Methods on FormViewModel {
       this.fieldsValidationMessages[PhoneValueKey] = validationMessage;
   setPasswordValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[PasswordValueKey] = validationMessage;
+  setRetypePasswordValidationMessage(String? validationMessage) =>
+      this.fieldsValidationMessages[RetypePasswordValueKey] = validationMessage;
 
   /// Clears text input fields on the Form
   void clearForm() {
@@ -305,6 +341,7 @@ extension Methods on FormViewModel {
     emailValue = '';
     phoneValue = '';
     passwordValue = '';
+    retypePasswordValue = '';
   }
 
   /// Validates text input fields on the Form
@@ -316,6 +353,7 @@ extension Methods on FormViewModel {
       EmailValueKey: getValidationMessage(EmailValueKey),
       PhoneValueKey: getValidationMessage(PhoneValueKey),
       PasswordValueKey: getValidationMessage(PasswordValueKey),
+      RetypePasswordValueKey: getValidationMessage(RetypePasswordValueKey),
     });
   }
 }
@@ -340,4 +378,5 @@ void updateValidationData(FormViewModel model) => model.setValidationMessages({
       EmailValueKey: getValidationMessage(EmailValueKey),
       PhoneValueKey: getValidationMessage(PhoneValueKey),
       PasswordValueKey: getValidationMessage(PasswordValueKey),
+      RetypePasswordValueKey: getValidationMessage(RetypePasswordValueKey),
     });

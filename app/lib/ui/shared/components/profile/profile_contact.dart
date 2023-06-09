@@ -49,24 +49,44 @@ class ProfileContact extends StatelessWidget {
               fontSize: FontSize.s12,
             ),
           ),
-          GestureDetector(
-            onTap: !revealContactDetail ? null : sendEmail,
-            child: !revealContactDetail
-                ? Container(
-                    width: 80,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: ColorManager.kDarkColor,
-                    ),
-                  )
-                : Text(
-                    currentUser?.contactEmail ?? currentUser?.email ?? "",
-                    style: getRegularStyle(
-                      color: ColorManager.kDarkColor,
-                      fontSize: FontSize.s12,
-                    ),
+          !revealContactDetail
+              ? Container(
+                  width: 80,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    color: ColorManager.kDarkColor,
                   ),
-          ),
+                )
+              : Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        currentUser?.contactEmail ?? currentUser?.email ?? "",
+                        style: getRegularStyle(
+                          color: ColorManager.kDarkColor,
+                          fontSize: FontSize.s12,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 38,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: ColorManager.kSecondaryColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                            enableFeedback: true,
+                            color: ColorManager.kWhiteColor,
+                            onPressed: sendEmail,
+                            icon: Icon(
+                              Icons.email,
+                              size: 20,
+                            )),
+                      ),
+                    ),
+                  ],
+                ),
           const SizedBox(height: AppSize.s12),
           Row(
             children: [
@@ -124,45 +144,58 @@ class ProfileContact extends StatelessWidget {
                             ),
                     )
                   : Container(),
-              !isLoggedInUser && currentUser!.phoneNumberVerified!
-                  ? Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppPadding.p8,
-                        vertical: AppSize.s4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: ColorManager.kGreen,
-                        borderRadius: BorderRadius.circular(AppSize.s16),
-                      ),
-                      child: Text(
-                        'Verified',
-                        style: getRegularStyle(
-                          color: ColorManager.kWhiteColor,
-                          fontSize: FontSize.s12,
-                        ),
-                      ),
-                    )
-                  : Container()
             ],
           ),
-          GestureDetector(
-            onTap: !revealContactDetail ? null : makePhoneCall,
-            child: !revealContactDetail
-                ? Container(
-                    width: 80,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: ColorManager.kDarkColor,
-                    ),
-                  )
-                : Text(
-                    currentUser?.contactPhoneNumber ?? "",
-                    style: getRegularStyle(
-                      color: ColorManager.kDarkColor,
-                      fontSize: FontSize.s12,
-                    ),
+          !revealContactDetail
+              ? Container(
+                  width: 80,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    color: ColorManager.kDarkColor,
                   ),
-          ),
+                )
+              : Row(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Text(
+                            currentUser?.contactPhoneNumber ?? "",
+                            style: getRegularStyle(
+                              color: ColorManager.kDarkColor,
+                              fontSize: FontSize.s12,
+                            ),
+                          ),
+                          !isLoggedInUser && currentUser!.phoneNumberVerified!
+                              ? Icon(
+                                  Icons.verified,
+                                  color: ColorManager.kSecondaryColor,
+                                  size: 20,
+                                )
+                              : Container()
+                        ],
+                      ),
+                    ),
+                    if (currentUser?.contactPhoneNumber?.isNotEmpty ?? false)
+                      SizedBox(
+                        height: 38,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: ColorManager.kSecondaryColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: IconButton(
+                              enableFeedback: true,
+                              color: ColorManager.kWhiteColor,
+                              onPressed: makePhoneCall,
+                              icon: Icon(
+                                Icons.phone,
+                                size: 20,
+                              )),
+                        ),
+                      ),
+                  ],
+                ),
           const SizedBox(height: AppSize.s8),
           Text(
             'Location',
@@ -172,7 +205,7 @@ class ProfileContact extends StatelessWidget {
             ),
           ),
           Text(
-            '${currentUser?.address}',
+            currentUser?.address ?? "",
             style: getRegularStyle(
               color: ColorManager.kDarkColor,
               fontSize: FontSize.s12,

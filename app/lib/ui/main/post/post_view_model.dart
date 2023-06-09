@@ -98,11 +98,11 @@ class PostViewModel extends FormViewModel {
   @override
   void setFormStatus() {
     print('something change');
-    if ((titleValue ?? "").isEmpty) {
-      setTitleValidationMessage("Post title cannot be empty");
-      _isFormValid = false;
-      return;
-    }
+    // if ((titleValue ?? "").isEmpty) {
+    //   setTitleValidationMessage("Post title cannot be empty");
+    //   _isFormValid = false;
+    //   return;
+    // }
     if ((bodyValue ?? "").isEmpty) {
       setBodyValidationMessage("Post body is required");
       _isFormValid = false;
@@ -120,7 +120,7 @@ class PostViewModel extends FormViewModel {
   createPostRequest() async {
     if (errorMessage != null) return;
     Map<String, dynamic> formData = {
-      'title': titleValue,
+      'title': "Sample Title",
       'body': bodyValue,
       'mediaType': mediaType == 'none' ? '' : mediaType,
     };

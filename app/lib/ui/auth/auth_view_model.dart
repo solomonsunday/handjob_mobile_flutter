@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/main.dart';
@@ -16,6 +18,8 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../dialogs/account_type.dialog.dart';
 import '../../enums/dialog.enum.dart';
 import '../../models/user.model.dart';
+
+const String GOOGLE_AUTH = 'GOOGLE_AUTH';
 
 class AuthViewModel extends FormViewModel {
   final _authenticationService = locator<AuthenticationService>();
@@ -53,7 +57,7 @@ class AuthViewModel extends FormViewModel {
     notifyListeners();
 
     try {
-      Auth response = await _authenticationService.login(formData);
+      await _authenticationService.login(formData);
       await _authenticationService.getCurrentBaseUser();
       //subscribe to topics
 
@@ -73,6 +77,72 @@ class AuthViewModel extends FormViewModel {
     } finally {
       setBusy(false);
       notifyListeners();
+    }
+  }
+
+  handleGoogleAuth() async {
+    var dialogResponse =
+        await _dialogService.showCustomDialog(variant: DialogType.ACCOUNT_TYPE);
+    if (dialogResponse!.confirmed && dialogResponse.data != null) {
+      print(
+          'dialog response: ${dialogResponse.data} is confirmed: ${dialogResponse.confirmed}');
+      setBusyForObject(GOOGLE_AUTH, true);
+      String clientId =
+          "264830098872-1653an9basa7gp56vcdugttpkdeptgfn.apps.googleusercontent.com";
+      //google
+      GoogleSignIn _googleSignIn = GoogleSignIn(
+        clientId: clientId,
+        scopes: [
+          'email',
+          'https://www.googleapis.com/auth/contacts.readonly',
+        ],
+      );
+      print('Google auth is called');
+      try {
+        GoogleSignInAccount? account = await _googleSignIn.signIn();
+        print('about to confirm if account is ready');
+        if (account != null) {
+          var payload = {
+            "email": account.email,
+            "name": account.displayName,
+            "accountType": dialogResponse.data,
+            "imageUrl": account.photoUrl,
+            "type": "Mobile",
+            "socialType": "Google",
+            "socialId": account.id,
+            "firstName": account.displayName!.split(' ').isNotEmpty
+                ? account.displayName?.split(' ')[0]
+                : account.displayName,
+            "lastName": account.displayName!.split(' ').length > 0
+                ? account.displayName?.split(' ')[1]
+                : null,
+          };
+          print('google account payload: $payload');
+          await _authenticationService.createSocialUser(payload);
+          await _authenticationService.getCurrentBaseUser();
+          //subscribe to topics
+          print('everything should look good from here');
+          _navigationService.replaceWith(Routes.mainView);
+          Fluttertoast.showToast(
+            msg: 'Successfully authenticated!',
+            toastLength: Toast.LENGTH_LONG,
+          );
+          return;
+        }
+        print('something not cool with account being ready');
+      } on PlatformException catch (e) {
+//The following lines are never printed and nothing is being executed.
+        print('\n\n\n\n\n AN ERROR OCCURED \n\n\n\n\n');
+        print(e.code);
+        switch (e.code) {
+          case 'sign_in_canceled':
+            print('what was expected was printed');
+            return;
+        }
+      } finally {
+        setBusyForObject(GOOGLE_AUTH, false);
+        notifyListeners();
+      }
     }
   }
 
