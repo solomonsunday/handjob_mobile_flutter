@@ -88,7 +88,7 @@ class AuthViewModel extends FormViewModel {
           'dialog response: ${dialogResponse.data} is confirmed: ${dialogResponse.confirmed}');
       setBusyForObject(GOOGLE_AUTH, true);
       String clientId =
-          "264830098872-1653an9basa7gp56vcdugttpkdeptgfn.apps.googleusercontent.com";
+          "264830098872-9mejlefrr69e4k2p4ooaabkm75ti2gk6.apps.googleusercontent.com";
       //google
       GoogleSignIn _googleSignIn = GoogleSignIn(
         clientId: clientId,
@@ -133,6 +133,7 @@ class AuthViewModel extends FormViewModel {
       } on PlatformException catch (e) {
 //The following lines are never printed and nothing is being executed.
         print('\n\n\n\n\n AN ERROR OCCURED \n\n\n\n\n');
+        print('error message: ${e.message}');
         print(e.code);
         switch (e.code) {
           case 'sign_in_canceled':

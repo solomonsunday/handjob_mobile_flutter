@@ -48,6 +48,8 @@
       android:value="HANDJOB_NOTIFICATION_CHANNEL_ID"
       exported="true"
     />
-
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
     </application>
 </manifest>
