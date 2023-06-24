@@ -9,7 +9,7 @@ import '../client/dio_client.dart';
 import '../models/meta.model.dart';
 import '../models/post.model.dart';
 
-class NotificationService with ReactiveServiceMixin {
+class NotificationService with ListenableServiceMixin {
   Dio dioClient = locator<DioClient>().dio;
 
   NotificationService() {

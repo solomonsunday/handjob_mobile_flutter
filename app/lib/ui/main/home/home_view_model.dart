@@ -50,7 +50,7 @@ class HomeViewModel extends ReactiveViewModel {
   void navigateToProfile() => _navigationService.navigateToProfileView();
 
   @override
-  List<ReactiveServiceMixin> get reactiveServices => [
+  List<ListenableServiceMixin> get listenableServices => [
         _postService,
         _notificationService,
       ];

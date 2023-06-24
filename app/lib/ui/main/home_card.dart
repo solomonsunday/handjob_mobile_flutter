@@ -302,7 +302,7 @@ class HomeCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  model.isLiked || post.liked!
+                                  model.isLiked || (post.liked ?? false)
                                       ? Icons.favorite
                                       : Icons.favorite_outline,
                                   color: ColorManager.kDarkColor,

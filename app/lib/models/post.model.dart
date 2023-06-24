@@ -38,13 +38,13 @@ class Post {
     this.message,
     this.claps,
     this.views,
-    this.likes,
-    this.dislikes,
+    this.likes = 0,
+    this.dislikes = 0,
     this.author,
     this.comments,
     this.postMedia,
-    this.commentCount,
-    this.liked,
+    this.commentCount = 0,
+    this.liked = false,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);

@@ -8,7 +8,7 @@ import '../client/dio_client.dart';
 import '../models/meta.model.dart';
 import '../models/post.model.dart';
 
-class PostService with ReactiveServiceMixin {
+class PostService with ListenableServiceMixin {
   Dio dioClient = locator<DioClient>().dio;
 
   PostService() {
@@ -32,7 +32,26 @@ class PostService with ReactiveServiceMixin {
     _loadingPosts = true;
     String url = '/post?page=$page&take=$limit';
     if (search != null) {
-      url += '&search=$search';
+      var response = await dioClient.get(
+        '/post/search?page=$page&search=$search',
+      );
+
+      List<Map<String, dynamic>> newResponsePostMap =
+          (response.data as List).map((e) {
+        Map<String, dynamic> obj = {};
+        for (var k in e.keys) {
+          obj[k] = e[k];
+        }
+        return obj;
+      }).toList();
+
+      List<Post> posts =
+          newResponsePostMap.map((x) => Post.fromJson(x)).toList();
+      _posts = posts;
+      print('response search: ${posts.map((e) => e.toJson()).toList()}');
+      _loadingPosts = false;
+      notifyListeners();
+      return posts;
     }
     var response = await dioClient.get(
       url,
@@ -52,7 +71,7 @@ class PostService with ReactiveServiceMixin {
     _posts = posts;
     _loadingPosts = false;
     notifyListeners();
-    print('pststs: $_posts');
+    print('pststs: ${_posts.map((e) => e.toJson()).toList()}');
     return posts;
   }
 

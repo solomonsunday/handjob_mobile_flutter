@@ -24,7 +24,7 @@ class NotificationViewModel extends ReactiveViewModel {
   }
 
   @override
-  List<ReactiveServiceMixin> get reactiveServices => [_notificationService];
+  List<ListenableServiceMixin> get listenableServices => [_notificationService];
 
   void navigateBack() => _navigationService.back();
 }

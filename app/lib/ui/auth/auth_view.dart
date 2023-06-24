@@ -151,25 +151,25 @@ class AuthView extends StatelessWidget with $AuthView {
                   const SizedBox(height: AppSize.s40),
                   Column(
                     children: [
-                      SizedBox(
-                        child: DefaultButton(
-                          paddingHeight: AppPadding.p20,
-                          onPressed: () {},
-                          title: 'Via Facebook',
-                          fontSize: FontSize.s12,
-                          leadingIcon: SvgPicture.asset(
-                            'assets/images/facebook_icon.svg',
-                          ),
-                          leadingIconColor: ColorManager.kDarkColor,
-                          buttonBgColor: ColorManager.kWhiteColor,
-                          border: Border.all(
-                            width: 1,
-                            color: ColorManager.kDarkColor,
-                          ),
-                          borderRadius: AppSize.s12,
-                          buttonTextColor: ColorManager.kDarkColor,
-                        ),
-                      ),
+                      // SizedBox(
+                      //   child: DefaultButton(
+                      //     paddingHeight: AppPadding.p20,
+                      //     onPressed: model.handleFacebookAuth,
+                      //     title: 'Via Facebook',
+                      //     fontSize: FontSize.s12,
+                      //     leadingIcon: SvgPicture.asset(
+                      //       'assets/images/facebook_icon.svg',
+                      //     ),
+                      //     leadingIconColor: ColorManager.kDarkColor,
+                      //     buttonBgColor: ColorManager.kWhiteColor,
+                      //     border: Border.all(
+                      //       width: 1,
+                      //       color: ColorManager.kDarkColor,
+                      //     ),
+                      //     borderRadius: AppSize.s12,
+                      //     buttonTextColor: ColorManager.kDarkColor,
+                      //   ),
+                      // ),
                       const SizedBox(height: AppSize.s8),
                       SizedBox(
                         child: DefaultButton(

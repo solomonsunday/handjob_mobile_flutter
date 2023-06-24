@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:handjob_mobile/models/profession_type.model.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -111,6 +112,21 @@ class AuthenticationService with ListenableServiceMixin {
 
     await preferences.remove(AUTH_TOKEN_KEY);
     await preferences.remove(AUTH_REFRESH_KEY);
+
+    String clientId =
+        "264830098872-1653an9basa7gp56vcdugttpkdeptgfn.apps.googleusercontent.com";
+    //google
+    GoogleSignIn _googleSignIn = GoogleSignIn(
+      clientId: clientId,
+      scopes: [
+        'email',
+        'https://www.googleapis.com/auth/contacts.readonly',
+      ],
+    );
+    bool isGoogleSignedIn = await _googleSignIn.isSignedIn();
+    if (isGoogleSignedIn) {
+      await _googleSignIn.signOut();
+    }
   }
 
   Future<User> getCurrentBaseUser() async {

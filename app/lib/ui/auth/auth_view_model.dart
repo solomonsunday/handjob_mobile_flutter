@@ -14,7 +14,7 @@ import 'package:handjob_mobile/utils/contants.dart';
 import 'package:handjob_mobile/utils/http_exception.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../../dialogs/account_type.dialog.dart';
 import '../../enums/dialog.enum.dart';
 import '../../models/user.model.dart';
@@ -80,6 +80,19 @@ class AuthViewModel extends FormViewModel {
     }
   }
 
+  handleFacebookAuth() async {
+    final LoginResult result = await FacebookAuth.instance
+        .login(); // by default we request the email and the public profile
+    if (result.status == LoginStatus.success) {
+      // you are logged
+      final AccessToken accessToken = result.accessToken!;
+      print('access token: $accessToken');
+    } else {
+      print(result.status);
+      print(result.message);
+    }
+  }
+
   handleGoogleAuth() async {
     var dialogResponse =
         await _dialogService.showCustomDialog(variant: DialogType.ACCOUNT_TYPE);
@@ -87,8 +100,11 @@ class AuthViewModel extends FormViewModel {
       print(
           'dialog response: ${dialogResponse.data} is confirmed: ${dialogResponse.confirmed}');
       setBusyForObject(GOOGLE_AUTH, true);
+
+      // String clientId =
+      //     "264830098872-9mejlefrr69e4k2p4ooaabkm75ti2gk6.apps.googleusercontent.com";
       String clientId =
-          "264830098872-9mejlefrr69e4k2p4ooaabkm75ti2gk6.apps.googleusercontent.com";
+          "264830098872-1653an9basa7gp56vcdugttpkdeptgfn.apps.googleusercontent.com";
       //google
       GoogleSignIn _googleSignIn = GoogleSignIn(
         clientId: clientId,
@@ -99,6 +115,9 @@ class AuthViewModel extends FormViewModel {
       );
       print('Google auth is called');
       try {
+        if (await _googleSignIn.isSignedIn()) {
+          await _googleSignIn.signOut();
+        }
         GoogleSignInAccount? account = await _googleSignIn.signIn();
         print('about to confirm if account is ready');
         if (account != null) {

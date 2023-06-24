@@ -18,8 +18,8 @@ Post _$PostFromJson(Map<String, dynamic> json) => Post(
       message: json['message'] as String?,
       claps: json['claps'] as int?,
       views: json['views'] as int?,
-      likes: json['likes'] as int?,
-      dislikes: json['dislikes'] as int?,
+      likes: json['likes'] as int? ?? 0,
+      dislikes: json['dislikes'] as int? ?? 0,
       author: json['author'] == null
           ? null
           : Author.fromJson(json['author'] as Map<String, dynamic>),
@@ -27,8 +27,8 @@ Post _$PostFromJson(Map<String, dynamic> json) => Post(
           ?.map((e) => Comment.fromJson(e as Map<String, dynamic>))
           .toList(),
       postMedia: json['postMedia'] as List<dynamic>?,
-      commentCount: json['commentCount'] as int?,
-      liked: json['liked'] as bool?,
+      commentCount: json['commentCount'] as int? ?? 0,
+      liked: json['liked'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
