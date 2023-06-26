@@ -19,10 +19,14 @@ class SettingViewModel extends BaseViewModel {
         Setting(Icons.hardware, "Subscriptions"),
         Setting(Icons.notifications_none, "Notifications"),
         Setting(Icons.login, "Sign in and security"),
+        Setting(Icons.policy, "App Policy")
       ];
 
   goBack() => _navigationService.back();
 
   void navigateToChangePassword() =>
-      _navigationService.navigateTo(Routes.changePasswordView);
+      _navigationService.navigateToChangePasswordView();
+
+  void navigateToTermOfService() =>
+      _navigationService.navigateToTermOfServiceView();
 }

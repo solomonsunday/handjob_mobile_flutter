@@ -5,14 +5,14 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i27;
+import 'package:flutter/material.dart' as _i28;
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/dialogs/account_created.dialog.dart' as _i7;
-import 'package:handjob_mobile/models/applicant.model.dart' as _i32;
-import 'package:handjob_mobile/models/contact.model.dart' as _i30;
-import 'package:handjob_mobile/models/instant_job.model.dart' as _i31;
-import 'package:handjob_mobile/models/post.model.dart' as _i29;
-import 'package:handjob_mobile/models/user.model.dart' as _i33;
+import 'package:handjob_mobile/models/applicant.model.dart' as _i33;
+import 'package:handjob_mobile/models/contact.model.dart' as _i31;
+import 'package:handjob_mobile/models/instant_job.model.dart' as _i32;
+import 'package:handjob_mobile/models/post.model.dart' as _i30;
+import 'package:handjob_mobile/models/user.model.dart' as _i34;
 import 'package:handjob_mobile/ui/application/applicant_profile/applicant_profile_view.dart'
     as _i24;
 import 'package:handjob_mobile/ui/application/application_view.dart' as _i21;
@@ -50,9 +50,11 @@ import 'package:handjob_mobile/ui/profile/profile_view.dart' as _i12;
 import 'package:handjob_mobile/ui/settings/change_password/change_password_view.dart'
     as _i20;
 import 'package:handjob_mobile/ui/settings/setting_view.dart' as _i19;
+import 'package:handjob_mobile/ui/settings/term_of_service/term_of_service_view.dart'
+    as _i27;
 import 'package:handjob_mobile/ui/splash/splash_view.dart' as _i2;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i28;
+import 'package:stacked_services/stacked_services.dart' as _i29;
 
 class Routes {
   static const splashView = '/';
@@ -105,6 +107,8 @@ class Routes {
 
   static const notificationJobDetailView = '/notification-job-detail-view';
 
+  static const termOfServiceView = '/term-of-service-view';
+
   static const all = <String>{
     splashView,
     onboardView,
@@ -131,6 +135,7 @@ class Routes {
     applicantProfileView,
     jobDetailView,
     notificationJobDetailView,
+    termOfServiceView,
   };
 }
 
@@ -235,6 +240,10 @@ class StackedRouter extends _i1.RouterBase {
     _i1.RouteDef(
       Routes.notificationJobDetailView,
       page: _i26.NotificationJobDetailView,
+    ),
+    _i1.RouteDef(
+      Routes.termOfServiceView,
+      page: _i27.TermOfServiceView,
     ),
   ];
 
@@ -439,6 +448,12 @@ class StackedRouter extends _i1.RouterBase {
         settings: data,
       );
     },
+    _i27.TermOfServiceView: (data) {
+      return _i1.buildAdaptivePageRoute<dynamic>(
+        builder: (context) => const _i27.TermOfServiceView(),
+        settings: data,
+      );
+    },
   };
 
   @override
@@ -450,7 +465,7 @@ class StackedRouter extends _i1.RouterBase {
 class OnboardViewArguments {
   const OnboardViewArguments({this.key});
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -472,7 +487,7 @@ class OnboardViewArguments {
 class AuthViewArguments {
   const AuthViewArguments({this.key});
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -494,7 +509,7 @@ class AuthViewArguments {
 class ArtisanSignupViewArguments {
   const ArtisanSignupViewArguments({this.key});
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -516,7 +531,7 @@ class ArtisanSignupViewArguments {
 class CustomerSignupViewArguments {
   const CustomerSignupViewArguments({this.key});
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -542,11 +557,11 @@ class AccountCreatedDialogArguments {
     required this.completer,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i28.DialogRequest<dynamic> request;
+  final _i29.DialogRequest<dynamic> request;
 
-  final dynamic Function(_i28.DialogResponse<dynamic>) completer;
+  final dynamic Function(_i29.DialogResponse<dynamic>) completer;
 
   @override
   String toString() {
@@ -573,7 +588,7 @@ class VerifyEmailViewArguments {
     required this.email,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
   final String email;
 
@@ -597,7 +612,7 @@ class VerifyEmailViewArguments {
 class ForgotPasswordViewArguments {
   const ForgotPasswordViewArguments({this.key});
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -622,7 +637,7 @@ class ResetPasswordViewArguments {
     required this.email,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
   final String email;
 
@@ -650,9 +665,9 @@ class PostDetailViewArguments {
     required this.postIndex,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i29.Post post;
+  final _i30.Post post;
 
   final int postIndex;
 
@@ -681,9 +696,9 @@ class ChatDetailViewArguments {
     required this.contact,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i30.Contact contact;
+  final _i31.Contact contact;
 
   @override
   String toString() {
@@ -708,7 +723,7 @@ class ContactViewArguments {
     this.activeTab = 0,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
   final int activeTab;
 
@@ -732,7 +747,7 @@ class ContactViewArguments {
 class ChangePasswordViewArguments {
   const ChangePasswordViewArguments({this.key});
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -757,7 +772,7 @@ class ApplicationViewArguments {
     required this.instantJobId,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
   final String instantJobId;
 
@@ -785,11 +800,11 @@ class RateReviewViewArguments {
     required this.applicant,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i31.InstantJob instantJob;
+  final _i32.InstantJob instantJob;
 
-  final _i32.Applicant applicant;
+  final _i33.Applicant applicant;
 
   @override
   String toString() {
@@ -817,7 +832,7 @@ class ApplicantProfileViewArguments {
     this.isAcceptedApplicant = false,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
   final String applicantId;
 
@@ -850,11 +865,11 @@ class JobDetailViewArguments {
     required this.isWaitingToBeAccepted,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i31.InstantJob instantJob;
+  final _i32.InstantJob instantJob;
 
-  final _i33.User user;
+  final _i34.User user;
 
   final bool isWaitingToBeAccepted;
 
@@ -888,11 +903,11 @@ class NotificationJobDetailViewArguments {
     required this.user,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
   final String instantJobId;
 
-  final _i33.User user;
+  final _i34.User user;
 
   @override
   String toString() {
@@ -913,7 +928,7 @@ class NotificationJobDetailViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i28.NavigationService {
+extension NavigatorStateExtension on _i29.NavigationService {
   Future<dynamic> navigateToSplashView([
     int? routerId,
     bool preventDuplicates = true,
@@ -929,7 +944,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToOnboardView({
-    _i27.Key? key,
+    _i28.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -945,7 +960,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToAuthView({
-    _i27.Key? key,
+    _i28.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -961,7 +976,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToArtisanSignupView({
-    _i27.Key? key,
+    _i28.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -977,7 +992,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToCustomerSignupView({
-    _i27.Key? key,
+    _i28.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -993,9 +1008,9 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToAccountCreatedDialog({
-    _i27.Key? key,
-    required _i28.DialogRequest<dynamic> request,
-    required dynamic Function(_i28.DialogResponse<dynamic>) completer,
+    _i28.Key? key,
+    required _i29.DialogRequest<dynamic> request,
+    required dynamic Function(_i29.DialogResponse<dynamic>) completer,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1012,7 +1027,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToVerifyEmailView({
-    _i27.Key? key,
+    _i28.Key? key,
     required String email,
     int? routerId,
     bool preventDuplicates = true,
@@ -1029,7 +1044,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToForgotPasswordView({
-    _i27.Key? key,
+    _i28.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1045,7 +1060,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToResetPasswordView({
-    _i27.Key? key,
+    _i28.Key? key,
     required String email,
     int? routerId,
     bool preventDuplicates = true,
@@ -1090,8 +1105,8 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToPostDetailView({
-    _i27.Key? key,
-    required _i29.Post post,
+    _i28.Key? key,
+    required _i30.Post post,
     required int postIndex,
     int? routerId,
     bool preventDuplicates = true,
@@ -1123,8 +1138,8 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToChatDetailView({
-    _i27.Key? key,
-    required _i30.Contact contact,
+    _i28.Key? key,
+    required _i31.Contact contact,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1168,7 +1183,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToContactView({
-    _i27.Key? key,
+    _i28.Key? key,
     int activeTab = 0,
     int? routerId,
     bool preventDuplicates = true,
@@ -1199,7 +1214,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToChangePasswordView({
-    _i27.Key? key,
+    _i28.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1215,7 +1230,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToApplicationView({
-    _i27.Key? key,
+    _i28.Key? key,
     required String instantJobId,
     int? routerId,
     bool preventDuplicates = true,
@@ -1233,9 +1248,9 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToRateReviewView({
-    _i27.Key? key,
-    required _i31.InstantJob instantJob,
-    required _i32.Applicant applicant,
+    _i28.Key? key,
+    required _i32.InstantJob instantJob,
+    required _i33.Applicant applicant,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1266,7 +1281,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToApplicantProfileView({
-    _i27.Key? key,
+    _i28.Key? key,
     required String applicantId,
     bool isAcceptedApplicant = false,
     int? routerId,
@@ -1287,9 +1302,9 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToJobDetailView({
-    _i27.Key? key,
-    required _i31.InstantJob instantJob,
-    required _i33.User user,
+    _i28.Key? key,
+    required _i32.InstantJob instantJob,
+    required _i34.User user,
     required bool isWaitingToBeAccepted,
     int? routerId,
     bool preventDuplicates = true,
@@ -1310,9 +1325,9 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> navigateToNotificationJobDetailView({
-    _i27.Key? key,
+    _i28.Key? key,
     required String instantJobId,
-    required _i33.User user,
+    required _i34.User user,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1322,6 +1337,20 @@ extension NavigatorStateExtension on _i28.NavigationService {
     return navigateTo<dynamic>(Routes.notificationJobDetailView,
         arguments: NotificationJobDetailViewArguments(
             key: key, instantJobId: instantJobId, user: user),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToTermOfServiceView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.termOfServiceView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -1343,7 +1372,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithOnboardView({
-    _i27.Key? key,
+    _i28.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1359,7 +1388,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithAuthView({
-    _i27.Key? key,
+    _i28.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1375,7 +1404,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithArtisanSignupView({
-    _i27.Key? key,
+    _i28.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1391,7 +1420,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithCustomerSignupView({
-    _i27.Key? key,
+    _i28.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1407,9 +1436,9 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithAccountCreatedDialog({
-    _i27.Key? key,
-    required _i28.DialogRequest<dynamic> request,
-    required dynamic Function(_i28.DialogResponse<dynamic>) completer,
+    _i28.Key? key,
+    required _i29.DialogRequest<dynamic> request,
+    required dynamic Function(_i29.DialogResponse<dynamic>) completer,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1426,7 +1455,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithVerifyEmailView({
-    _i27.Key? key,
+    _i28.Key? key,
     required String email,
     int? routerId,
     bool preventDuplicates = true,
@@ -1443,7 +1472,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithForgotPasswordView({
-    _i27.Key? key,
+    _i28.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1459,7 +1488,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithResetPasswordView({
-    _i27.Key? key,
+    _i28.Key? key,
     required String email,
     int? routerId,
     bool preventDuplicates = true,
@@ -1504,8 +1533,8 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithPostDetailView({
-    _i27.Key? key,
-    required _i29.Post post,
+    _i28.Key? key,
+    required _i30.Post post,
     required int postIndex,
     int? routerId,
     bool preventDuplicates = true,
@@ -1537,8 +1566,8 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithChatDetailView({
-    _i27.Key? key,
-    required _i30.Contact contact,
+    _i28.Key? key,
+    required _i31.Contact contact,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1582,7 +1611,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithContactView({
-    _i27.Key? key,
+    _i28.Key? key,
     int activeTab = 0,
     int? routerId,
     bool preventDuplicates = true,
@@ -1613,7 +1642,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithChangePasswordView({
-    _i27.Key? key,
+    _i28.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1629,7 +1658,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithApplicationView({
-    _i27.Key? key,
+    _i28.Key? key,
     required String instantJobId,
     int? routerId,
     bool preventDuplicates = true,
@@ -1647,9 +1676,9 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithRateReviewView({
-    _i27.Key? key,
-    required _i31.InstantJob instantJob,
-    required _i32.Applicant applicant,
+    _i28.Key? key,
+    required _i32.InstantJob instantJob,
+    required _i33.Applicant applicant,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1680,7 +1709,7 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithApplicantProfileView({
-    _i27.Key? key,
+    _i28.Key? key,
     required String applicantId,
     bool isAcceptedApplicant = false,
     int? routerId,
@@ -1701,9 +1730,9 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithJobDetailView({
-    _i27.Key? key,
-    required _i31.InstantJob instantJob,
-    required _i33.User user,
+    _i28.Key? key,
+    required _i32.InstantJob instantJob,
+    required _i34.User user,
     required bool isWaitingToBeAccepted,
     int? routerId,
     bool preventDuplicates = true,
@@ -1724,9 +1753,9 @@ extension NavigatorStateExtension on _i28.NavigationService {
   }
 
   Future<dynamic> replaceWithNotificationJobDetailView({
-    _i27.Key? key,
+    _i28.Key? key,
     required String instantJobId,
-    required _i33.User user,
+    required _i34.User user,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1736,6 +1765,20 @@ extension NavigatorStateExtension on _i28.NavigationService {
     return replaceWith<dynamic>(Routes.notificationJobDetailView,
         arguments: NotificationJobDetailViewArguments(
             key: key, instantJobId: instantJobId, user: user),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithTermOfServiceView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.termOfServiceView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

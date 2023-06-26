@@ -281,6 +281,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.6"
+  docx_to_text:
+    dependency: "direct main"
+    description:
+      name: docx_to_text
+      sha256: "13c2539168902d319a42115bbcacabd064b08b359e7e9a1b92552125d457431b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   dotted_border:
     dependency: "direct main"
     description:

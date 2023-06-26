@@ -56,7 +56,7 @@ class NotificationView extends StatelessWidget {
                 ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: (model.notifications ?? []).length,
+                  itemCount: (model.notifications ?? []).take(10).length,
                   itemBuilder: (_, index) {
                     NotificationModel.Notification notification =
                         model.notifications![index];
@@ -85,13 +85,16 @@ class NotificationItem extends StatelessWidget {
       viewModelBuilder: () => NotificationItemViewModel(),
       onViewModelReady: (model) async {},
       builder: (context, model, child) => ListTile(
+        tileColor: (notification.seen ?? false)
+            ? ColorManager.kBackgroundolor
+            : ColorManager.kWhiteColor,
         onTap: () async {
           model.navigateNotification(notification);
           // print(
           //     'notification seen: ${notification.message} ${notification.id}');
-          if (!notification.seen!) {
-            await model.updateSeenNotification(notification.id!);
-          }
+          // if (!notification.seen!) {
+          //   await model.updateSeenNotification(notification.id!);
+          // }
         },
         contentPadding: const EdgeInsets.symmetric(
           vertical: AppPadding.p10,

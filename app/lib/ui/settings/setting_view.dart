@@ -67,6 +67,7 @@ class SettingView extends StatelessWidget {
                     if (index == 0) VideoCallPreferenceWidget(),
                     if (index == 1) NotificationPreferenceWidget(),
                     if (index == 2) SigninSecurityPreferenceWidget(),
+                    if (index == 3) PolicyPreferenceWidget(),
                   ],
                 );
               },
@@ -209,6 +210,31 @@ class SigninSecurityPreferenceWidget extends ViewModelWidget<SettingViewModel> {
       ),
       trailing: GestureDetector(
         onTap: () {},
+        child: const Icon(
+          Icons.arrow_forward,
+          size: AppSize.s24,
+        ),
+      ),
+    );
+  }
+}
+
+class PolicyPreferenceWidget extends ViewModelWidget<SettingViewModel> {
+  const PolicyPreferenceWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, SettingViewModel model) {
+    return ListTile(
+      onTap: model.navigateToTermOfService,
+      title: Text(
+        'Show Terms & Conditions',
+        style: getBoldStyle(
+          color: ColorManager.kDarkColor,
+          fontSize: FontSize.s12,
+        ),
+      ),
+      trailing: GestureDetector(
+        onTap: model.navigateToTermOfService,
         child: const Icon(
           Icons.arrow_forward,
           size: AppSize.s24,
