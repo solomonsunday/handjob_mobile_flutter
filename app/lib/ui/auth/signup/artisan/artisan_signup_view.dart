@@ -118,6 +118,12 @@ class ArtisanSignupView extends StatelessWidget with $ArtisanSignupView {
                   ),
                   formError: model.retypePasswordValidationMessage,
                 ),
+                if (model.tosError != null)
+                  Text(model.tosError ?? "",
+                      style: getRegularStyle(
+                        color: ColorManager.kRed,
+                        fontSize: 12.0,
+                      )),
                 const SizedBox(height: AppSize.s12),
                 DefaultDropDownField(
                   hint: 'Profession',
@@ -139,48 +145,47 @@ class ArtisanSignupView extends StatelessWidget with $ArtisanSignupView {
                   LinearProgressIndicator(
                     color: ColorManager.kPrimaryColor,
                   ),
-                // const SizedBox(height: AppSize.s24),
-                // DefaultCheckBox(
-                //   value: model.tos,
-                //   onChanged: model.handleTos,
-                //   richText: Expanded(
-                //     child: RichText(
-                //       textAlign: TextAlign.left,
-                //       text: TextSpan(
-                //         style: getRegularStyle(
-                //           color: ColorManager.kDarkCharcoal,
-                //           fontSize: FontSize.s9,
-                //         ),
-                //         text:
-                //             "By proceeding to create your account, you are agreeing to our  \n",
-                //         children: [
-                //           TextSpan(
-                //             text: 'Terms & Conditions',
-                //             style: getBoldStyle(
-                //               color: ColorManager.kDarkColor,
-                //               fontSize: FontSize.s9,
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //       softWrap: true,
-                //       maxLines: 10,
-                //     ),
-                //   ),
-                // ),
                 const SizedBox(height: AppSize.s24),
-
+                DefaultCheckBox(
+                  value: model.tos,
+                  onChanged: model.handleTos,
+                  richText: RichText(
+                    textAlign: TextAlign.left,
+                    text: TextSpan(
+                      style: getRegularStyle(
+                        color: ColorManager.kDarkCharcoal,
+                        fontSize: FontSize.s9,
+                      ),
+                      text:
+                          "By proceeding to create your account, you are agreeing to our  \n",
+                      children: [
+                        TextSpan(
+                          text: 'Terms & Conditions',
+                          style: getBoldStyle(
+                            color: ColorManager.kDarkColor,
+                            fontSize: FontSize.s9,
+                          ),
+                        ),
+                      ],
+                    ),
+                    softWrap: true,
+                    maxLines: 10,
+                  ),
+                ),
+                const SizedBox(height: AppSize.s24),
                 DefaultButton(
-                  onPressed: model.formIsValid ||
-                          !model.hasPhoneValidationMessage ||
-                          model.busy(DEFAULT_AUTH)
+                  onPressed: model.tos &&
+                          model.formIsValid &&
+                          !model.hasPhoneValidationMessage &&
+                          !model.busy(DEFAULT_AUTH)
                       ? model.register
                       : () {},
                   title: 'Sign Up',
                   busy: model.isBusy,
                   fontWeight: FontWeightManager.regular,
                   fontSize: FontSize.s12,
-                  disabled: !model.formIsValid ||
+                  disabled: !model.tos ||
+                      !model.formIsValid ||
                       model.hasPhoneValidationMessage ||
                       model.busy(DEFAULT_AUTH),
                 ),

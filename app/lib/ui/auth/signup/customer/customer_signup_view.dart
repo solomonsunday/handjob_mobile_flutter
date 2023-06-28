@@ -114,38 +114,42 @@ class CustomerSignupView extends StatelessWidget with $CustomerSignupView {
                       ),
                       formError: model.retypePasswordValidationMessage,
                     ),
-                    // const SizedBox(height: AppSize.s24),
-                    // DefaultCheckBox(
-                    //   value: false,
-                    //   onChanged: (value) {},
-                    //   richText: Expanded(
-                    //     child: RichText(
-                    //       textAlign: TextAlign.left,
-                    //       text: TextSpan(
-                    //         style: getRegularStyle(
-                    //           color: ColorManager.kDarkCharcoal,
-                    //           fontSize: FontSize.s9,
-                    //         ),
-                    //         text:
-                    //             "By proceeding to create your account, you are agreeing to our  \n",
-                    //         children: [
-                    //           TextSpan(
-                    //             text: 'Terms & Conditions',
-                    //             style: getBoldStyle(
-                    //               color: ColorManager.kDarkColor,
-                    //               fontSize: FontSize.s9,
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //       softWrap: true,
-                    //       maxLines: 10,
-                    //     ),
-                    //   ),
-                    // ),
+                    const SizedBox(height: AppSize.s24),
+                    DefaultCheckBox(
+                      value: model.tos,
+                      onChanged: model.setTos,
+                      richText: RichText(
+                        textAlign: TextAlign.left,
+                        text: TextSpan(
+                          style: getRegularStyle(
+                            color: ColorManager.kDarkCharcoal,
+                            fontSize: FontSize.s9,
+                          ),
+                          text:
+                              "By proceeding to create your account, you are agreeing to our  \n",
+                          children: [
+                            TextSpan(
+                              text: 'Terms & Conditions',
+                              style: getBoldStyle(
+                                color: ColorManager.kDarkColor,
+                                fontSize: FontSize.s9,
+                              ),
+                            ),
+                          ],
+                        ),
+                        softWrap: true,
+                        maxLines: 10,
+                      ),
+                    ),
+                    if (model.tosError != null)
+                      Text(model.tosError ?? "",
+                          style: getRegularStyle(
+                            color: ColorManager.kRed,
+                            fontSize: 12.0,
+                          )),
                     const SizedBox(height: AppSize.s24),
                     DefaultButton(
-                      onPressed: model.formIsValid
+                      onPressed: model.tos && model.formIsValid
                           ? model.register
                           : () {
                               print('not valid');
@@ -154,7 +158,7 @@ class CustomerSignupView extends StatelessWidget with $CustomerSignupView {
                       busy: model.busy(DEFAULT_AUTH),
                       fontWeight: FontWeightManager.regular,
                       fontSize: FontSize.s12,
-                      disabled: !model.formIsValid,
+                      disabled: !model.formIsValid || !model.tos,
                     ),
                     const SizedBox(height: AppSize.s24),
                     DefaultButton(

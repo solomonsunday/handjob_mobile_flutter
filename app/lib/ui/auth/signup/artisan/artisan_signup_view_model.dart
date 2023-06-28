@@ -20,6 +20,8 @@ class ArtisanSignupViewModel extends FormViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
 
+  String? _tosError;
+  String? get tosError => _tosError;
   bool _tos = false;
   List<ProfessionType>? get professionTypes => _sharedService.professionTypes;
   // List<String?> get professionTypesName =>
@@ -160,7 +162,8 @@ class ArtisanSignupViewModel extends FormViewModel {
         lastnameValue!.isNotEmpty &&
         emailValue!.isNotEmpty &&
         phoneValue!.isNotEmpty &&
-        passwordValue!.isNotEmpty) {
+        passwordValue!.isNotEmpty &&
+        tos) {
       _formIsValid = true;
     }
     print('tos: $tos');

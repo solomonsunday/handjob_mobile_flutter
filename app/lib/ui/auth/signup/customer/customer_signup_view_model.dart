@@ -17,8 +17,10 @@ class CustomerSignupViewModel extends FormViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
-  bool? _tos;
-  bool? get tos => _tos;
+  bool _tos = false;
+  bool get tos => _tos;
+  String? _tosError;
+  String? get tosError => _tosError;
   // String? _username;
   // String? _accountType;
   // String? _email;
@@ -55,7 +57,7 @@ class CustomerSignupViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  setTos(bool? value) {
+  setTos(bool value) {
     _tos = value;
     notifyListeners();
   }
