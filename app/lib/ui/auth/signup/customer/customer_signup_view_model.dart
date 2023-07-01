@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:handjob_mobile/app/app.dialogs.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/models/auth.model.dart';
 import 'package:handjob_mobile/services/authentication.service.dart';
@@ -16,6 +17,7 @@ const String DEFAULT_AUTH = 'default_auth';
 class CustomerSignupViewModel extends FormViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  final _dialogService = locator<DialogService>();
 
   bool _tos = false;
   bool get tos => _tos;
@@ -108,8 +110,8 @@ class CustomerSignupViewModel extends FormViewModel {
       };
       // print('form data customer: $formData');
       await _authenticationService.createUser(formData);
-      _navigationService.navigateTo(Routes.verifyEmailView,
-          arguments: VerifyEmailViewArguments(email: emailValue!));
+
+      _navigationService.navigateToVerifyEmailView(email: emailValue!);
       Fluttertoast.showToast(
         msg: 'Account created!',
         toastLength: Toast.LENGTH_LONG,
@@ -143,7 +145,7 @@ class CustomerSignupViewModel extends FormViewModel {
   @override
   void setFormStatus() {
     // print('isFormValid: $_isFormValid');
-
+    _formIsValid = false;
     if (hasRetypePassword) {
       if (passwordValue != retypePasswordValue) {
         setRetypePasswordValidationMessage('Password mismatch');
@@ -151,15 +153,24 @@ class CustomerSignupViewModel extends FormViewModel {
       }
     }
 
-    _formIsValid = false;
     if (firstnameValue!.isNotEmpty &&
         lastnameValue!.isNotEmpty &&
         emailValue!.isNotEmpty &&
         phoneValue!.isNotEmpty &&
-        passwordValue!.isNotEmpty) {
+        passwordValue!.isNotEmpty &&
+        (passwordValue == retypePasswordValue)) {
       _formIsValid = true;
+      return;
     }
 
     print('form is valid: $isFormValid');
+  }
+
+  showTermOfServiceDialog() async {
+    print('hello');
+    _dialogService.showCustomDialog(
+      variant: DialogType.termOfService,
+      mainButtonTitle: 'Close',
+    );
   }
 }

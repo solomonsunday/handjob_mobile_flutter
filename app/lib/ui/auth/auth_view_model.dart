@@ -15,6 +15,7 @@ import 'package:handjob_mobile/utils/http_exception.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import '../../app/app.dialogs.dart';
 import '../../dialogs/account_type.dialog.dart';
 import '../../enums/dialog.enum.dart';
 import '../../models/user.model.dart';
@@ -95,7 +96,7 @@ class AuthViewModel extends FormViewModel {
 
   handleGoogleAuth() async {
     var dialogResponse =
-        await _dialogService.showCustomDialog(variant: DialogType.ACCOUNT_TYPE);
+        await _dialogService.showCustomDialog(variant: DialogType.accountType);
     if (dialogResponse!.confirmed && dialogResponse.data != null) {
       print(
           'dialog response: ${dialogResponse.data} is confirmed: ${dialogResponse.confirmed}');
@@ -169,7 +170,7 @@ class AuthViewModel extends FormViewModel {
   //show dialog
   showDialog() async {
     var response =
-        await _dialogService.showCustomDialog(variant: DialogType.ACCOUNT_TYPE);
+        await _dialogService.showCustomDialog(variant: DialogType.accountType);
     if (response!.confirmed) {
       switch (response.data) {
         case CUSTOMER:

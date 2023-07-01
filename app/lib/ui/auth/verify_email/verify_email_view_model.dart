@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:handjob_mobile/app/app.dialogs.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/enums/dialog.enum.dart';
 import 'package:handjob_mobile/ui/auth/verify_email/verify_email_view.form.dart';
@@ -22,7 +23,7 @@ class VerifyEmailViewModel extends FormViewModel {
 
   showSuccessDialog() async {
     var response = await _dialogService.showCustomDialog(
-        variant: DialogType.ACCOUNT_CREATED);
+        variant: DialogType.accountCreated);
     if (response!.confirmed) {
       _navigationService.navigateTo(Routes.mainView);
       await _authenticationService.getCurrentBaseUser();
@@ -49,7 +50,8 @@ class VerifyEmailViewModel extends FormViewModel {
       await _authenticationService.verifyOTP(otpCodeValue!);
       showSuccessDialog();
     } on DioError catch (error) {
-      _dialogService.showDialog(description: error.response?.data['message'] ?? "");
+      _dialogService.showDialog(
+          description: error.response?.data['message'] ?? "");
       // throw HttpException(error.response!.data['message']);
     } finally {
       setBusy(false);

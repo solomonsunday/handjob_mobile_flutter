@@ -1,3 +1,4 @@
+import 'package:handjob_mobile/app/app.dialogs.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/dialogs/account_type.dialog.dart';
 import 'package:handjob_mobile/enums/dialog.enum.dart';
@@ -20,7 +21,7 @@ class OnboardingViewModel extends BaseViewModel {
 
   showDialog() async {
     var response =
-        await _dialogService.showCustomDialog(variant: DialogType.ACCOUNT_TYPE);
+        await _dialogService.showCustomDialog(variant: DialogType.accountType);
     if (response!.confirmed) {
       switch (response.data) {
         case CUSTOMER:

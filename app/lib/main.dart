@@ -4,6 +4,7 @@ import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'app/app.dialogs.dart';
 import 'services/chat.service.dart';
 import 'utils/setup_bottom_sheet_ui.dart';
 import 'utils/setup_dialog_ui.dart';

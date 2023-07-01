@@ -36,17 +36,6 @@ class BearerTokenInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     print('Response: ${response.data}');
-    final NavigationService navigationService = locator<NavigationService>();
-    /**
-         * // if token expires and app is unable to 
-         * authorize the user's request.
-         * It globally logs you out of the app
-         */
-    if (response.statusCode == 401) {
-      navigationService.navigateToAuthView();
-    }
-    // This is intended to intercept all 500 (internal server) related errors
-
     return super.onResponse(response, handler);
   }
 
@@ -54,6 +43,17 @@ class BearerTokenInterceptor extends Interceptor {
   void onError(DioError err, ErrorInterceptorHandler handler) {
     print('error occured: ${err.response?.data} ');
     final DialogService dialogService = locator<DialogService>();
+    final NavigationService navigationService = locator<NavigationService>();
+    /**
+         * // if token expires and app is unable to 
+         * authorize the user's request.
+         * It globally logs you out of the app
+         */
+    if (err.response?.statusCode == 401) {
+      navigationService.navigateToAuthView();
+    }
+    // This is intended to intercept all 500 (internal server) related errors
+
     if (err.response?.statusCode == 500) {
       dialogService.showDialog(
           title: 'An error occured',

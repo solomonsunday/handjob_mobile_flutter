@@ -27,7 +27,10 @@ class VerifyEmailView extends StatelessWidget with $VerifyEmailView {
       viewModelBuilder: () => VerifyEmailViewModel(),
       onViewModelReady: (model) {
         syncFormWithViewModel(model);
-        otpCodeController.clear();
+        Future.delayed(Duration.zero, () {
+          otpCodeController.clear();
+          //your code goes here
+        });
       },
       onDispose: (_) => disposeForm(),
       builder: (context, model, _) => Scaffold(

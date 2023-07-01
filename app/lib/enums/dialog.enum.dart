@@ -1,1 +1,4 @@
-enum DialogType { ACCOUNT_TYPE, ACCOUNT_CREATED }
+// enum DialogType {
+//   ACCOUNT_TYPE,
+//   ACCOUNT_CREATED,
+// }

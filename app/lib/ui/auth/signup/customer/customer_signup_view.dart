@@ -1,4 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -59,6 +60,8 @@ class CustomerSignupView extends StatelessWidget with $CustomerSignupView {
                       controller: firstnameController,
                       fillColor: ColorManager.kWhiteColor,
                       keyBoardType: TextInputType.emailAddress,
+                      formError: model.firstnameValidationMessage,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                     ),
                     const SizedBox(height: AppSize.s12),
                     InputField(
@@ -66,6 +69,8 @@ class CustomerSignupView extends StatelessWidget with $CustomerSignupView {
                       controller: lastnameController,
                       fillColor: ColorManager.kWhiteColor,
                       keyBoardType: TextInputType.emailAddress,
+                      formError: model.lastnameValidationMessage,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                     ),
                     const SizedBox(height: AppSize.s12),
                     InputField(
@@ -73,6 +78,8 @@ class CustomerSignupView extends StatelessWidget with $CustomerSignupView {
                       controller: emailController,
                       fillColor: ColorManager.kWhiteColor,
                       keyBoardType: TextInputType.emailAddress,
+                      formError: model.emailValidationMessage,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                     ),
                     const SizedBox(height: AppSize.s12),
                     InputField(
@@ -80,6 +87,8 @@ class CustomerSignupView extends StatelessWidget with $CustomerSignupView {
                       controller: phoneController,
                       fillColor: ColorManager.kWhiteColor,
                       keyBoardType: TextInputType.phone,
+                      formError: model.phoneValidationMessage,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                     ),
                     const SizedBox(height: AppSize.s12),
                     InputField(
@@ -96,6 +105,8 @@ class CustomerSignupView extends StatelessWidget with $CustomerSignupView {
                           color: ColorManager.kDarkCharcoal,
                         ),
                       ),
+                      formError: model.passwordValidationMessage,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                     ),
                     const SizedBox(height: AppSize.s12),
                     InputField(
@@ -134,6 +145,8 @@ class CustomerSignupView extends StatelessWidget with $CustomerSignupView {
                                 color: ColorManager.kDarkColor,
                                 fontSize: FontSize.s9,
                               ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () => model.showTermOfServiceDialog(),
                             ),
                           ],
                         ),
@@ -160,6 +173,7 @@ class CustomerSignupView extends StatelessWidget with $CustomerSignupView {
                       fontSize: FontSize.s12,
                       disabled: !model.formIsValid || !model.tos,
                     ),
+                    // Text('form valid: ${model.formIsValid} tos: ${model.tos}'),
                     const SizedBox(height: AppSize.s24),
                     DefaultButton(
                       onPressed: () async {

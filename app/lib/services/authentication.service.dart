@@ -85,12 +85,14 @@ class AuthenticationService with ListenableServiceMixin {
     return auth;
   }
 
-  Future<Auth> createUser(Map<String, dynamic> formData) async {
+  Future<bool> createUser(Map<String, dynamic> formData) async {
     var response = await dioClient.post(
       '/auth/signup',
       data: formData,
     );
-    return Auth.fromJson(response.data);
+    return true;
+    // print('response from sign up: ${response.data}');
+    // return Auth.fromJson(response.data);
   }
 
   Future<Auth> createSocialUser(Map<String, dynamic> formData) async {
@@ -145,7 +147,7 @@ class AuthenticationService with ListenableServiceMixin {
     var response = await dioClient.get(
       '/verification/signup/${code.toUpperCase()}',
     );
-    // print('login detail: ${response.data}');
+    print('login detail: ${response.data}');
     Auth auth = Auth.fromJson(response.data);
     /**Persist the access token into a shared preference */
     await preferences.setString(AUTH_TOKEN_KEY, auth.accessToken.toString());

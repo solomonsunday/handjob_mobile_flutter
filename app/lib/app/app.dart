@@ -34,6 +34,8 @@ import 'package:handjob_mobile/ui/splash/splash_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../dialogs/account_type.dialog.dart';
+import '../dialogs/term_of_service.dialog.dart';
 import '../services/location.service.dart';
 import '../services/account.service.dart';
 import '../ui/application/application_view.dart';
@@ -97,8 +99,11 @@ import '../ui/settings/term_of_service/term_of_service_view.dart';
   // bottomsheets: [
   //   // @stacked-bottom-sheet
   // ],
-  // dialogs: [
-  //   // @stacked-dialog
-  // ],
+  dialogs: [
+    // @stacked-dialog
+    StackedDialog(classType: TermOfServiceDialog),
+    StackedDialog(classType: AccountCreatedDialog),
+    StackedDialog(classType: AccountTypeDialog),
+  ],
 )
 class App {}

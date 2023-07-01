@@ -56,7 +56,7 @@ class NotificationView extends StatelessWidget {
                 ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: (model.notifications ?? []).take(10).length,
+                  itemCount: (model.notifications ?? []).length,
                   itemBuilder: (_, index) {
                     NotificationModel.Notification notification =
                         model.notifications![index];

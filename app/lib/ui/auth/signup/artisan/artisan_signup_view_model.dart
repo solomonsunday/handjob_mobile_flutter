@@ -9,6 +9,7 @@ import 'package:handjob_mobile/ui/auth/signup/customer/customer_signup_view.form
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../../../app/app.dialogs.dart';
 import '../../../../app/app.router.dart';
 import '../../../../services/shared.service.dart';
 import '../../../../utils/contants.dart';
@@ -150,7 +151,6 @@ class ArtisanSignupViewModel extends FormViewModel {
     String? validatePhone = validatePhoneNumber(phoneValue!);
     setPhoneValidationMessage(validatePhone);
     _formIsValid = false;
-
     if (hasRetypePassword) {
       if (passwordValue != retypePasswordValue) {
         setRetypePasswordValidationMessage('Password mismatch');
@@ -163,11 +163,16 @@ class ArtisanSignupViewModel extends FormViewModel {
         emailValue!.isNotEmpty &&
         phoneValue!.isNotEmpty &&
         passwordValue!.isNotEmpty &&
-        tos) {
+        (passwordValue == retypePasswordValue)) {
       _formIsValid = true;
+      return;
     }
-    print('tos: $tos');
+  }
 
-    print('form is valid: $isFormValid');
+  showTermOfServiceDialog() async {
+    _dialogService.showCustomDialog(
+      variant: DialogType.termOfService,
+      mainButtonTitle: 'Close',
+    );
   }
 }

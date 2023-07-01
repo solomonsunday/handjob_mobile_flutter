@@ -1,4 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:handjob_mobile/ui/auth/signup/artisan/artisan_signup_view.form.dart';
@@ -165,6 +166,8 @@ class ArtisanSignupView extends StatelessWidget with $ArtisanSignupView {
                             color: ColorManager.kDarkColor,
                             fontSize: FontSize.s9,
                           ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => model.showTermOfServiceDialog(),
                         ),
                       ],
                     ),
@@ -175,6 +178,7 @@ class ArtisanSignupView extends StatelessWidget with $ArtisanSignupView {
                 const SizedBox(height: AppSize.s24),
                 DefaultButton(
                   onPressed: model.tos &&
+                          model.selectedProfession != null &&
                           model.formIsValid &&
                           !model.hasPhoneValidationMessage &&
                           !model.busy(DEFAULT_AUTH)
@@ -187,8 +191,10 @@ class ArtisanSignupView extends StatelessWidget with $ArtisanSignupView {
                   disabled: !model.tos ||
                       !model.formIsValid ||
                       model.hasPhoneValidationMessage ||
+                      model.selectedProfession == null ||
                       model.busy(DEFAULT_AUTH),
                 ),
+                // Text('form valid: ${model.formIsValid}, tos: ${model.tos}'),
                 const SizedBox(height: AppSize.s48),
                 DefaultButton(
                   onPressed: () {},
