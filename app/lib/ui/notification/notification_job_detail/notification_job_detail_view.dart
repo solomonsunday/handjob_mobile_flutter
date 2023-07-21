@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:handjob_mobile/ui/main/jobs/job_detail/job_detail_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
@@ -132,7 +131,7 @@ class NotificationJobDetailView extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: AppSize.s12),
+                        const SizedBox(height: AppSize.s12),
                         Text(
                           '${instantJob?.service}',
                           style: getBoldStyle(
@@ -147,7 +146,7 @@ class NotificationJobDetailView extends StatelessWidget {
                             fontSize: FontSize.s12,
                           ),
                         ),
-                        SizedBox(height: AppSize.s20),
+                        const SizedBox(height: AppSize.s20),
                         Wrap(
                           children: [
                             Text(

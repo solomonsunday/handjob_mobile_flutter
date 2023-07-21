@@ -1,7 +1,6 @@
 import 'package:handjob_mobile/app/app.dialogs.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/dialogs/account_type.dialog.dart';
-import 'package:handjob_mobile/enums/dialog.enum.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';

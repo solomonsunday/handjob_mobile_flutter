@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.router.dart';
@@ -12,7 +11,6 @@ import '../../../app/app.locator.dart';
 import '../../../models/experience.model.dart';
 import '../../../services/contact.service.dart';
 import '../../shared/components/rating/rating.dart';
-import '../contact_view.dart';
 
 class ConnnectionRequestView extends StatelessWidget {
   const ConnnectionRequestView({
@@ -128,7 +126,7 @@ class ConnectionRequestItem extends StatelessWidget {
                         height: 36,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(24),
-                          color: Color(0xffd9d9d9),
+                          color: const Color(0xffd9d9d9),
                           image: const DecorationImage(
                             fit: BoxFit.cover,
                             image:
@@ -161,7 +159,7 @@ class ConnectionRequestItem extends StatelessWidget {
                         value: double.parse(rating),
                       ),
                     ),
-                    SizedBox(height: AppSize.s12),
+                    const SizedBox(height: AppSize.s12),
                     if (!model.accepted)
                       ContactButton(
                         onPressed: () => model.acceptContact(id),
@@ -268,7 +266,6 @@ class ConnectionRequestItemViewModel extends BaseViewModel {
       await _contactService.getConnectionRequests();
       await _contactService.getContacts();
       await _contactService.getContactsCount();
-    } on DioError catch (e) {
     } finally {
       setBusyForObject(ACCEPT_CONNECTION, false);
 
@@ -287,7 +284,6 @@ class ConnectionRequestItemViewModel extends BaseViewModel {
         msg: 'Connection rejected!',
         toastLength: Toast.LENGTH_LONG,
       );
-    } on DioError catch (e) {
     } finally {
       setBusyForObject(CONNECTION_REQUEST, false);
       setBusyForObject(REJECT_CONNECTION, false);

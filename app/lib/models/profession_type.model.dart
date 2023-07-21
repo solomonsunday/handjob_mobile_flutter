@@ -7,6 +7,7 @@ part 'profession_type.model.g.dart';
 class ProfessionType extends HasNameField {
   int? id;
 
+  @override
   @JsonKey(name: "name")
   String name;
 

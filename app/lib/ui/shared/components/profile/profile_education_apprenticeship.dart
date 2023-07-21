@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/services/education.service.dart';
-import 'package:handjob_mobile/ui/profile/profile_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -188,8 +187,8 @@ class ProfileEducationItemViewModel extends BaseViewModel {
         data: data,
         isScrollControlled: true,
         ignoreSafeArea: true,
-        enterBottomSheetDuration: Duration(milliseconds: 400),
-        exitBottomSheetDuration: Duration(milliseconds: 200),
+        enterBottomSheetDuration: const Duration(milliseconds: 400),
+        exitBottomSheetDuration: const Duration(milliseconds: 200),
         enableDrag: true,
       );
 
@@ -209,7 +208,7 @@ class ProfileEducationItemViewModel extends BaseViewModel {
     try {
       await _educationService.deleteEducation(id!);
       await _authenticationService.getCurrentBaseUser();
-    } on DioError catch (error) {
+    } on DioError {
       throw HttpException("An error occured");
     } finally {
       setBusyForObject(DELETE_EDUCATION, false);

@@ -12,7 +12,6 @@ import '../../../models/contact.model.dart';
 import '../../../models/experience.model.dart';
 import '../../../services/contact.service.dart';
 import '../../shared/components/rating/rating.dart';
-import '../contact_view_model.dart';
 
 class AddNewContactView extends StatelessWidget {
   const AddNewContactView({Key? key}) : super(key: key);
@@ -50,28 +49,28 @@ class AddNewContactView extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  SizedBox(height: AppSize.s8),
+                  const SizedBox(height: AppSize.s8),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       // horizontal: AppSize.s24,
                       vertical: AppSize.s8,
                     ),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: ColorManager.kWhiteColor,
                     ),
                     child: SearchInput(
                       hintText: 'Search',
                       paddingBottom: AppPadding.p8,
                       paddingTop: AppPadding.p8,
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.search,
                         color: ColorManager.kGrey,
                       ),
                       onChanged: model.handleSearch,
                     ),
                   ),
-                  SizedBox(height: AppSize.s8),
-                  Expanded(child: AddNewContactListView()),
+                  const SizedBox(height: AppSize.s8),
+                  const Expanded(child: AddNewContactListView()),
                 ],
               ),
             ),
@@ -207,7 +206,7 @@ class AddNewContactListItemViewModel extends BaseViewModel {
         msg: 'Connection request sent!',
         toastLength: Toast.LENGTH_LONG,
       );
-    } on DioError catch (e) {
+    } on DioError {
       _isRequestSent = false;
     } finally {
       setBusyForObject(SEND_CONNECTION_REQUEST, false);

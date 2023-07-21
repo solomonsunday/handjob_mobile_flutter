@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -21,7 +20,6 @@ class AddNewContactViewModel extends ReactiveViewModel {
     setBusyForObject(ALL_CONTACT_LIST_REQUEST, true);
     try {
       await _contactService.getAllContacts(search: search);
-    } on DioError catch (e) {
     } finally {
       setBusyForObject(ALL_CONTACT_LIST_REQUEST, false);
     }

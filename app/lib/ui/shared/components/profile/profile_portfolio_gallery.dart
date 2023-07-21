@@ -1,13 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
-import 'package:ui_package/utils/colors.dart';
-import 'package:ui_package/utils/font_styles.dart';
-import 'package:ui_package/utils/text_styles.dart';
 import 'package:ui_package/utils/values_manager.dart';
 
 import '../../../../models/user.model.dart';
-import '../../../profile/profile_view_model.dart';
 
 class ProfilePortfolioGallery extends StatelessWidget {
   const ProfilePortfolioGallery({
@@ -79,7 +74,7 @@ class ProfilePortfolioGallery extends StatelessWidget {
             //     ],
             //   ),
             // ),
-            Container(
+            SizedBox(
               width: 400,
               height: 600,
               child: CachedNetworkImage(

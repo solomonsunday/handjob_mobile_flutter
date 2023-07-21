@@ -9,7 +9,6 @@ import 'package:handjob_mobile/utils/helpers.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:ui_package/utils/font_styles.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../models/lga.model.dart';
@@ -73,7 +72,7 @@ class InstantHireViewModel extends BaseViewModel {
     if (professionTypes == null) {
       return [];
     }
-    return professionTypes!.map((e) => e.name!).toList();
+    return professionTypes!.map((e) => e.name).toList();
   }
 
   List<Suggestion> _suggestions = [];
@@ -234,7 +233,7 @@ class InstantHireViewModel extends BaseViewModel {
       Place place = await _locationService.getPlaceDetailFromId(placeId);
       _lat = place.lat;
       _lon = place.lon;
-    } on DioError catch (e) {
+    } on DioError {
       // print(e.response!.data);
     }
   }
@@ -242,6 +241,6 @@ class InstantHireViewModel extends BaseViewModel {
   void fetchState() async {
     try {
       await _sharedService.getStates();
-    } on DioError catch (error) {}
+    } on DioError {}
   }
 }

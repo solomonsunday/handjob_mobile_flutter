@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
@@ -37,19 +36,19 @@ class ChatDetailView extends StatelessWidget {
               backgroundColor: Colors.white,
               flexibleSpace: SafeArea(
                 child: Container(
-                  padding: EdgeInsets.only(right: 16),
+                  padding: const EdgeInsets.only(right: 16),
                   child: Row(
                     children: <Widget>[
                       IconButton(
                         onPressed: () {
                           model.navigateBack();
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_back,
                           color: Colors.black,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 2,
                       ),
                       SizedBox(
@@ -94,7 +93,7 @@ class ChatDetailView extends StatelessWidget {
                                 ),
                               ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 12,
                       ),
                       Expanded(
@@ -104,10 +103,10 @@ class ChatDetailView extends StatelessWidget {
                           children: <Widget>[
                             Text(
                               "${contact.firstName} ${contact.lastName}",
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 6,
                             ),
                             Text(
@@ -119,7 +118,7 @@ class ChatDetailView extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Icon(
+                      const Icon(
                         Icons.settings,
                         color: Colors.black54,
                       ),
@@ -130,27 +129,27 @@ class ChatDetailView extends StatelessWidget {
               actions: [
                 GestureDetector(
                   onTap: () => model.handleVideoCall(contact),
-                  child: Icon(
+                  child: const Icon(
                     Icons.videocam,
                     size: AppSize.s24,
                     color: ColorManager.kDarkColor,
                   ),
                 ),
-                SizedBox(width: AppSize.s16),
+                const SizedBox(width: AppSize.s16),
                 GestureDetector(
                   onTap: () => model.handleAudioCall(contact),
-                  child: Icon(
+                  child: const Icon(
                     Icons.call,
                     size: AppSize.s24,
                     color: ColorManager.kDarkColor,
                   ),
                 ),
-                SizedBox(width: AppSize.s16),
+                const SizedBox(width: AppSize.s16),
                 PopupMenuButton(
                   onSelected: (String item) {},
                   itemBuilder: (BuildContext context) =>
                       <PopupMenuEntry<String>>[
-                    PopupMenuItem<String>(
+                    const PopupMenuItem<String>(
                       value: ARCHIVE,
                       child: Row(children: [
                         Icon(
@@ -161,7 +160,7 @@ class ChatDetailView extends StatelessWidget {
                         Text('Archive')
                       ]),
                     ),
-                    PopupMenuItem<String>(
+                    const PopupMenuItem<String>(
                       value: DELETE,
                       child: Row(children: [
                         Icon(
@@ -172,7 +171,7 @@ class ChatDetailView extends StatelessWidget {
                         Text('Delete')
                       ]),
                     ),
-                    PopupMenuItem<String>(
+                    const PopupMenuItem<String>(
                       value: MUTE,
                       child: Row(children: [
                         Icon(
@@ -183,7 +182,7 @@ class ChatDetailView extends StatelessWidget {
                         Text('Mute')
                       ]),
                     ),
-                    PopupMenuItem<String>(
+                    const PopupMenuItem<String>(
                       value: REPORT,
                       child: Row(children: [
                         Icon(
@@ -194,7 +193,7 @@ class ChatDetailView extends StatelessWidget {
                         Text('Report')
                       ]),
                     ),
-                    PopupMenuItem<String>(
+                    const PopupMenuItem<String>(
                       value: BLOCK,
                       child: Row(children: [
                         Icon(
@@ -206,13 +205,13 @@ class ChatDetailView extends StatelessWidget {
                       ]),
                     ),
                   ],
-                  child: Icon(
+                  child: const Icon(
                     Icons.more_vert,
                     size: AppSize.s18,
                     color: ColorManager.kDarkCharcoal,
                   ),
                 ),
-                SizedBox(width: AppSize.s16),
+                const SizedBox(width: AppSize.s16),
               ],
             ),
             body: Column(
@@ -242,7 +241,7 @@ class ChatDetailView extends StatelessWidget {
                     height: 65,
                     width: double.infinity,
                     padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: ColorManager.kWhiteColor,
                     ),
                     child: Row(
@@ -253,26 +252,26 @@ class ChatDetailView extends StatelessWidget {
                             fillColor: ColorManager.kWhiteColor,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(AppSize.s12),
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: ColorManager.kGrey1,
                               ),
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(AppSize.s12),
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: ColorManager.kGrey1,
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(AppSize.s12),
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: ColorManager.kGrey1,
                               ),
                             ),
                             controller: model.chatMessageController,
                           ),
                         ),
-                        SizedBox(width: 4),
+                        const SizedBox(width: 4),
                         GestureDetector(
                           onTap: model.busy(CREATE_CHAT)
                               ? () {}
@@ -317,7 +316,7 @@ class ReceiverChatWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              constraints: BoxConstraints(
+              constraints: const BoxConstraints(
                 maxWidth: 200,
               ),
               margin: const EdgeInsets.symmetric(
@@ -325,7 +324,7 @@ class ReceiverChatWidget extends StatelessWidget {
                 vertical: AppSize.s4,
               ),
               padding: const EdgeInsets.all(AppPadding.p10),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: ColorManager.kSecondaryColor,
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(12.0),
@@ -376,7 +375,7 @@ class SenderChatWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
-              constraints: BoxConstraints(
+              constraints: const BoxConstraints(
                 maxWidth: 200,
               ),
               margin: const EdgeInsets.symmetric(

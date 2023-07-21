@@ -7,7 +7,7 @@ import 'package:ui_package/ui_package.dart';
 import 'onboarding_view_model.dart';
 
 class OnboardView extends StatefulWidget {
-  OnboardView({Key? key}) : super(key: key);
+  const OnboardView({Key? key}) : super(key: key);
 
   @override
   State<OnboardView> createState() => _OnboardViewState();
@@ -51,7 +51,7 @@ class _OnboardViewState extends State<OnboardView> {
             body: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(),
+              decoration: const BoxDecoration(),
               child: PageView(
                 children: [
                   OnboardingViewOne(

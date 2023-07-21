@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:handjob_mobile/models/notification.model.dart';
@@ -7,7 +6,6 @@ import 'package:stacked/stacked.dart';
 import '../app/app.locator.dart';
 import '../client/dio_client.dart';
 import '../models/meta.model.dart';
-import '../models/post.model.dart';
 
 class NotificationService with ListenableServiceMixin {
   Dio dioClient = locator<DioClient>().dio;

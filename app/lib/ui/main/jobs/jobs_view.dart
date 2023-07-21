@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.router.dart';
-import 'package:handjob_mobile/ui/auth/signup/artisan/artisan_signup_view.dart';
 import 'package:handjob_mobile/ui/main/jobs/jobs_view_model.dart';
 import 'package:handjob_mobile/utils/contants.dart';
 import 'package:handjob_mobile/utils/helpers.dart';
@@ -14,7 +13,6 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 
 import '../../../app/app.locator.dart';
-import '../../../dialogs/account_type.dialog.dart';
 import '../../../enums/bottom_sheet_type.dart';
 import '../../../models/applicant.model.dart';
 import '../../../models/applied_job.model.dart';
@@ -22,7 +20,6 @@ import '../../../models/instant_job.model.dart';
 import '../../../models/user.model.dart';
 import '../../../services/authentication.service.dart';
 import '../../../services/instant_job.service.dart';
-import '../../../utils/http_exception.dart';
 import '../../skeletons/post_view.skeleton.dart';
 
 const String VIEW_APPLICANTS = 'VIEW_APPLICANTS';
@@ -57,7 +54,7 @@ class JobsView extends StatelessWidget {
             ),
             body: Container(
               // height: MediaQuery.of(context).si,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: ColorManager.kSecondary100Color,
               ),
               child: Column(
@@ -65,7 +62,7 @@ class JobsView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  SizedBox(height: AppSize.s8),
+                  const SizedBox(height: AppSize.s8),
                   if (model.jobs.isNotEmpty)
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -166,8 +163,8 @@ class JobItem extends StatelessWidget {
                 vertical: AppPadding.p16,
                 horizontal: AppPadding.p24,
               ),
-              margin: EdgeInsets.only(bottom: AppPadding.p2),
-              decoration: BoxDecoration(
+              margin: const EdgeInsets.only(bottom: AppPadding.p2),
+              decoration: const BoxDecoration(
                 color: ColorManager.kWhiteColor,
               ),
               child: Column(
@@ -180,7 +177,7 @@ class JobItem extends StatelessWidget {
                         height: AppSize.s40,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(24),
-                          color: Color(0xffd9d9d9),
+                          color: const Color(0xffd9d9d9),
                         ),
                         child: instantJob.company?.imageUrl == null
                             ? Image.asset('assets/images/logo.jpeg')
@@ -303,7 +300,7 @@ class JobItem extends StatelessWidget {
                         ),
                     ],
                   ),
-                  SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s12),
                   Text(
                     '${instantJob.service}',
                     style: getBoldStyle(
@@ -318,7 +315,7 @@ class JobItem extends StatelessWidget {
                       fontSize: FontSize.s12,
                     ),
                   ),
-                  SizedBox(height: AppSize.s20),
+                  const SizedBox(height: AppSize.s20),
                   Wrap(
                     children: [
                       Text(
@@ -389,7 +386,7 @@ class JobItem extends StatelessWidget {
                         DefaultButton(
                           onPressed: model.busy(APPLY_JOB)
                               ? null
-                              : () => model.applyInstantJob(instantJob!.id!),
+                              : () => model.applyInstantJob(instantJob.id!),
                           disabled: model.busy(APPLY_JOB),
                           busy: model.busy(APPLY_JOB),
                           title: 'Apply',

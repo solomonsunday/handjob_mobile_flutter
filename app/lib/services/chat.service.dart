@@ -1,6 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:handjob_mobile/models/chat-payload.model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:stacked/stacked.dart';
 
@@ -74,7 +72,6 @@ class ChatService with ReactiveServiceMixin {
         .toList();
     notifyListeners();
     return _conversationList;
-    ;
   }
 
   Future<Chat> getChatsWithPartner(String partnerId) async {

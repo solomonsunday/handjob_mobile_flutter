@@ -1,8 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:handjob_mobile/ui/auth/auth_view_model.dart';
 import 'package:handjob_mobile/ui/auth/forgot_password/forgot_password_view.form.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:ui_package/ui_package.dart';
@@ -17,7 +15,7 @@ class ForgotPasswordView extends StatelessWidget with $ForgotPasswordView {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ForgotPasswordViewModel>.reactive(
       viewModelBuilder: () => ForgotPasswordViewModel(),
-      onModelReady: listenToFormUpdated,
+      onViewModelReady: syncFormWithViewModel,
       onDispose: (_) => disposeForm(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: ColorManager.kWhiteColor,
@@ -66,11 +64,12 @@ class ForgotPasswordView extends StatelessWidget with $ForgotPasswordView {
                       ),
                     ),
                   DefaultButton(
-                    onPressed: model.recoverPassword,
+                    onPressed: model.isBusy ? null : model.recoverPassword,
                     title: 'Recover password',
                     busy: model.isBusy,
-                    buttonBgColor: ColorManager.kDarkColor,
+                    buttonBgColor: const Color.fromRGBO(0, 0, 0, 1),
                     fontWeight: FontWeight.w400,
+                    disabled: model.isBusy,
                   ),
                   const SizedBox(height: AppSize.s12),
 

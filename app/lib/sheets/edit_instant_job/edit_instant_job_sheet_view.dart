@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:handjob_mobile/models/instant_job.model.dart';
 import 'package:handjob_mobile/sheets/edit_instant_job/edit_instant_job_sheet_view_model.dart';
 import 'package:stacked/stacked.dart';
@@ -68,7 +67,7 @@ class EditInstantJobSheetView extends StatelessWidget {
       },
       builder: (context, model, child) {
         return BottomSheetContainer(
-          padding: EdgeInsets.all(AppPadding.p8),
+          padding: const EdgeInsets.all(AppPadding.p8),
           onClose: () => completer!(SheetResponse(confirmed: false)),
           child: ListView(
             children: [
@@ -78,7 +77,7 @@ class EditInstantJobSheetView extends StatelessWidget {
                   right: AppPadding.p16,
                   top: AppPadding.p16,
                 ),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: ColorManager.kWhiteColor,
                 ),
                 child: Column(
@@ -161,7 +160,7 @@ class EditInstantJobSheetView extends StatelessWidget {
                                 fillColor: ColorManager.kWhiteColor,
                               );
                             }),
-                    SizedBox(height: AppSize.s12),
+                    const SizedBox(height: AppSize.s12),
                     Row(
                       children: [
                         Expanded(
@@ -369,7 +368,7 @@ class EditInstantJobSheetView extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: AppSize.s8),
+                    const SizedBox(height: AppSize.s8),
                     Row(
                       children: [
                         Expanded(
@@ -380,17 +379,17 @@ class EditInstantJobSheetView extends StatelessWidget {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(AppSize.s8),
                               borderSide:
-                                  BorderSide(color: ColorManager.kDarkColor),
+                                  const BorderSide(color: ColorManager.kDarkColor),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(AppSize.s8),
                               borderSide:
-                                  BorderSide(color: ColorManager.kNavDarkColor),
+                                  const BorderSide(color: ColorManager.kNavDarkColor),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(AppSize.s8),
                               borderSide:
-                                  BorderSide(color: ColorManager.kNavDarkColor),
+                                  const BorderSide(color: ColorManager.kNavDarkColor),
                             ),
                             fillColor: ColorManager.kWhiteColor,
                           ),
@@ -401,8 +400,8 @@ class EditInstantJobSheetView extends StatelessWidget {
                     if (model.errorMessage.isNotEmpty)
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.all(AppSize.s8),
-                        margin: EdgeInsets.only(bottom: AppSize.s12),
+                        padding: const EdgeInsets.all(AppSize.s8),
+                        margin: const EdgeInsets.only(bottom: AppSize.s12),
                         decoration: BoxDecoration(
                           border: Border.all(
                             width: 1,
@@ -420,8 +419,8 @@ class EditInstantJobSheetView extends StatelessWidget {
                     if (model.hasError)
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.all(AppSize.s8),
-                        margin: EdgeInsets.only(bottom: AppSize.s12),
+                        padding: const EdgeInsets.all(AppSize.s8),
+                        margin: const EdgeInsets.only(bottom: AppSize.s12),
                         decoration: BoxDecoration(
                           border: Border.all(
                             width: 1,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:handjob_mobile/ui/application/application_view_model.dart';
 import 'package:handjob_mobile/ui/application/rate_review/rate_review_view.form.dart';
 import 'package:handjob_mobile/ui/application/rate_review/rate_review_view_model.dart';
 import 'package:handjob_mobile/ui/shared/components/rating/rating.dart';
@@ -85,7 +84,7 @@ class RateReviewView extends StatelessWidget with $RateReviewView {
                               fontSize: FontSize.s16,
                             ),
                           ),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 4),
                           Text(
                             DateFormat.yMEd()
                                 .format(DateTime.parse(instantJob.endDate!)),
@@ -105,7 +104,7 @@ class RateReviewView extends StatelessWidget with $RateReviewView {
                               fontSize: FontSize.s16,
                             ),
                           ),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 4),
                           Text(
                             applicant.name ?? '',
                             style: getRegularStyle(
@@ -123,7 +122,7 @@ class RateReviewView extends StatelessWidget with $RateReviewView {
                           fontSize: FontSize.s14,
                         ),
                       ),
-                      SizedBox(height: AppSize.s24),
+                      const SizedBox(height: AppSize.s24),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -207,7 +206,7 @@ class RateReviewFormView extends ViewModelWidget<RateReviewViewModel> {
           controller: descriptionController,
           maxLines: 5,
           enabled: true,
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 width: 1,
                 color: ColorManager.kDarkColor,
@@ -227,7 +226,7 @@ class RateReviewFormView extends ViewModelWidget<RateReviewViewModel> {
               width: 1,
               color: ColorManager.kDarkColor,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(12)),
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
         ),
         const SizedBox(height: AppSize.s40),

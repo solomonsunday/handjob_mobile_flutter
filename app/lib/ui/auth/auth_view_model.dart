@@ -1,24 +1,17 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
-import 'package:handjob_mobile/main.dart';
-import 'package:handjob_mobile/models/auth.model.dart';
 import 'package:handjob_mobile/services/authentication.service.dart';
 import 'package:handjob_mobile/ui/auth/forgot_password/forgot_password_view.form.dart';
 import 'package:handjob_mobile/ui/auth/reset_password/reset_password_view.form.dart';
-import 'package:handjob_mobile/utils/contants.dart';
-import 'package:handjob_mobile/utils/http_exception.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../../app/app.dialogs.dart';
 import '../../dialogs/account_type.dialog.dart';
-import '../../enums/dialog.enum.dart';
-import '../../models/user.model.dart';
 
 const String GOOGLE_AUTH = 'GOOGLE_AUTH';
 
@@ -68,7 +61,7 @@ class AuthViewModel extends FormViewModel {
         toastLength: Toast.LENGTH_LONG,
       );
       return;
-    } on DioError catch (err) {
+    } on DioError {
       _errorMessage = "please enter a valid credential";
       _dialogService.showDialog(
         title: "Invalid Credential",
@@ -133,7 +126,7 @@ class AuthViewModel extends FormViewModel {
             "firstName": account.displayName!.split(' ').isNotEmpty
                 ? account.displayName?.split(' ')[0]
                 : account.displayName,
-            "lastName": account.displayName!.split(' ').length > 0
+            "lastName": account.displayName!.split(' ').isNotEmpty
                 ? account.displayName?.split(' ')[1]
                 : null,
           };

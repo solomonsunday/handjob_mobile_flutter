@@ -135,7 +135,7 @@ class JobDetailView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s12),
                   Text(
                     '${instantJob.service}',
                     style: getBoldStyle(
@@ -150,7 +150,7 @@ class JobDetailView extends StatelessWidget {
                       fontSize: FontSize.s12,
                     ),
                   ),
-                  SizedBox(height: AppSize.s20),
+                  const SizedBox(height: AppSize.s20),
                   Wrap(
                     children: [
                       Text(
@@ -226,7 +226,7 @@ class JobDetailView extends StatelessWidget {
                         DefaultButton(
                           onPressed: model.busy(APPLY_JOB)
                               ? null
-                              : () => model.applyInstantJob(instantJob!.id!),
+                              : () => model.applyInstantJob(instantJob.id!),
                           disabled: model.busy(APPLY_JOB),
                           busy: model.busy(APPLY_JOB),
                           title: 'Apply',

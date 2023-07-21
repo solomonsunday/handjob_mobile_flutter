@@ -31,7 +31,7 @@ class EditInstantJobSheetViewModel extends BaseViewModel {
   final TextEditingController serviceNeedController = TextEditingController();
   final TextEditingController serviceLocationController =
       TextEditingController();
-  TextEditingValue serviceLocationValue = TextEditingValue(text: '');
+  TextEditingValue serviceLocationValue = const TextEditingValue(text: '');
   final TextEditingController meetupLocationController =
       TextEditingController();
   final TextEditingController startDateController = TextEditingController();
@@ -256,7 +256,7 @@ class EditInstantJobSheetViewModel extends BaseViewModel {
       _lat = place.lat;
       _lon = place.lon;
       print('place detail: ${place.toJson()}');
-    } on DioError catch (e) {
+    } on DioError {
       // print(e.response!.data);
     } finally {
       notifyListeners();
@@ -266,7 +266,7 @@ class EditInstantJobSheetViewModel extends BaseViewModel {
   void fetchState() async {
     try {
       await _sharedService.getStates();
-    } on DioError catch (error) {}
+    } on DioError {}
   }
 
   void updateId(id) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/ui/faq/faq_view_model.dart';
-import 'package:handjob_mobile/ui/help_and_support/help_and_support_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
@@ -15,7 +14,7 @@ class FAQsView extends StatelessWidget {
         appBar: AppBar(
           leading: GestureDetector(
             onTap: model.goBack,
-            child: Icon(
+            child: const Icon(
               Icons.arrow_back,
               color: ColorManager.kDarkColor,
             ),

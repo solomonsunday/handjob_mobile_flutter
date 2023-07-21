@@ -23,7 +23,6 @@ class CommentItemViewModel extends ReactiveViewModel {
     setBusyForObject(LIKE_COMMENT, true);
     try {
       await _commentService.likeComment(comment.id!);
-    } catch (e) {
     } finally {
       setBusyForObject(LIKE_COMMENT, false);
     }

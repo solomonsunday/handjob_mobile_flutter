@@ -66,6 +66,11 @@ dependencies:
   flutter_facebook_auth: 
   docx_to_text: ^1.0.0
   webview_flutter: ^4.2.2
+  # zego_express_engine: ^3.6.1
+  # zego_zim: ^2.8.0+4
+  encrypt: ^5.0.1
+  zego_uikit_prebuilt_call: 
+  zego_uikit_signaling_plugin: 
   # permission_handler: ^10.2.0
   # agora_rtc_engine: ^6.1.0
 
@@ -99,6 +104,8 @@ flutter:
     - assets/
     - assets/images/
     - assets/images/gallery/
+    - assets/ringtones/incoming.mp3
+    - assets/ringtones/outgoing.mp3
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

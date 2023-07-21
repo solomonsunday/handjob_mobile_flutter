@@ -193,7 +193,7 @@ class AppliedJobTabItem extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  SizedBox(width: AppSize.s4),
+                  const SizedBox(width: AppSize.s4),
                   Text(
                     humanizeDate(DateTime.parse(appliedJob.createdAt!)),
                     style: getRegularStyle(
@@ -205,7 +205,7 @@ class AppliedJobTabItem extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: AppSize.s12),
+          const SizedBox(height: AppSize.s12),
           Text(
             appliedJob.description ?? "",
             style: getBoldStyle(
@@ -220,7 +220,7 @@ class AppliedJobTabItem extends StatelessWidget {
               fontSize: FontSize.s12,
             ),
           ),
-          SizedBox(height: AppSize.s20),
+          const SizedBox(height: AppSize.s20),
           Text(
             'MEET UP LOCATION: ${appliedJob.location}',
             style: getBoldStyle(
@@ -228,7 +228,7 @@ class AppliedJobTabItem extends StatelessWidget {
               fontSize: FontSize.s12,
             ),
           ),
-          SizedBox(height: AppSize.s12),
+          const SizedBox(height: AppSize.s12),
           Row(
             children: [
               DefaultButton(

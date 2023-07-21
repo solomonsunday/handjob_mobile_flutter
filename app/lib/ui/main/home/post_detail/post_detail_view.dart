@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:handjob_mobile/models/post.model.dart';
 import 'package:handjob_mobile/ui/main/home/post_detail/post_detail_view_model.dart';
 import 'package:skeletons/skeletons.dart';
@@ -7,7 +6,6 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:ui_package/ui_package.dart';
 
-import '../../../../models/comment.model.dart';
 import '../../home_card.dart';
 import 'comment_item/comment_item_view.dart';
 
@@ -46,7 +44,7 @@ class PostDetailView extends StatelessWidget {
                 post: post,
                 postIndex: postIndex,
               ),
-              Positioned(
+              const Positioned(
                 bottom: 0,
                 left: 0,
                 right: 0,
@@ -78,8 +76,8 @@ class CommentView extends ViewModelWidget<PostDetailViewModel> {
           HomeCard(
             post: post,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppPadding.p30),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: AppPadding.p30),
             child: Divider(
               thickness: 1,
               color: ColorManager.kGrey1,

@@ -17,7 +17,7 @@ class InstantHireView extends StatelessWidget {
       builder: (context, model, child) {
         return Scaffold(
           appBar: Navbar(
-            leadingIcon: Icon(
+            leadingIcon: const Icon(
               Icons.arrow_back,
               color: ColorManager.kDarkColor,
             ),
@@ -30,10 +30,10 @@ class InstantHireView extends StatelessWidget {
               decoration: const BoxDecoration(
                 color: Colors.white,
               ),
-              child: Column(
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   SizedBox(height: AppSize.s8),
                   RequestInstantHireFormView(),
                   SizedBox(height: AppSize.s40),
@@ -61,7 +61,7 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
         right: AppPadding.p16,
         top: AppPadding.p16,
       ),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: ColorManager.kWhiteColor,
       ),
       child: Column(
@@ -127,7 +127,7 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
               fillColor: ColorManager.kWhiteColor,
             ),
           ),
-          SizedBox(height: AppSize.s12),
+          const SizedBox(height: AppSize.s12),
           Row(
             children: [
               Expanded(
@@ -306,7 +306,7 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
               ),
             ],
           ),
-          SizedBox(height: AppSize.s8),
+          const SizedBox(height: AppSize.s8),
           // SizedBox(height: AppSize.s8),
           // Text(
           //   'Describe service needed *',
@@ -324,15 +324,15 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
                   controller: model.describeServiceController,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppSize.s8),
-                    borderSide: BorderSide(color: ColorManager.kDarkColor),
+                    borderSide: const BorderSide(color: ColorManager.kDarkColor),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppSize.s8),
-                    borderSide: BorderSide(color: ColorManager.kNavDarkColor),
+                    borderSide: const BorderSide(color: ColorManager.kNavDarkColor),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppSize.s8),
-                    borderSide: BorderSide(color: ColorManager.kNavDarkColor),
+                    borderSide: const BorderSide(color: ColorManager.kNavDarkColor),
                   ),
                   fillColor: ColorManager.kWhiteColor,
                 ),
@@ -343,8 +343,8 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
           if (model.errorMessage.isNotEmpty)
             Container(
               width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.all(AppSize.s8),
-              margin: EdgeInsets.only(bottom: AppSize.s12),
+              padding: const EdgeInsets.all(AppSize.s8),
+              margin: const EdgeInsets.only(bottom: AppSize.s12),
               decoration: BoxDecoration(
                 border: Border.all(
                   width: 1,
@@ -362,8 +362,8 @@ class RequestInstantHireFormView extends ViewModelWidget<InstantHireViewModel> {
           if (model.hasError)
             Container(
               width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.all(AppSize.s8),
-              margin: EdgeInsets.only(bottom: AppSize.s12),
+              padding: const EdgeInsets.all(AppSize.s8),
+              margin: const EdgeInsets.only(bottom: AppSize.s12),
               decoration: BoxDecoration(
                 border: Border.all(
                   width: 1,

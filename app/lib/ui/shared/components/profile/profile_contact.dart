@@ -53,7 +53,7 @@ class ProfileContact extends StatelessWidget {
               ? Container(
                   width: 80,
                   height: 10,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: ColorManager.kDarkColor,
                   ),
                 )
@@ -71,7 +71,7 @@ class ProfileContact extends StatelessWidget {
                     SizedBox(
                       height: 38,
                       child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: ColorManager.kSecondaryColor,
                           shape: BoxShape.circle,
                         ),
@@ -79,7 +79,7 @@ class ProfileContact extends StatelessWidget {
                             enableFeedback: true,
                             color: ColorManager.kWhiteColor,
                             onPressed: sendEmail,
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.email,
                               size: 20,
                             )),
@@ -150,7 +150,7 @@ class ProfileContact extends StatelessWidget {
               ? Container(
                   width: 80,
                   height: 10,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: ColorManager.kDarkColor,
                   ),
                 )
@@ -167,7 +167,7 @@ class ProfileContact extends StatelessWidget {
                             ),
                           ),
                           !isLoggedInUser && currentUser!.phoneNumberVerified!
-                              ? Icon(
+                              ? const Icon(
                                   Icons.verified,
                                   color: ColorManager.kSecondaryColor,
                                   size: 20,
@@ -180,7 +180,7 @@ class ProfileContact extends StatelessWidget {
                       SizedBox(
                         height: 38,
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: ColorManager.kSecondaryColor,
                             shape: BoxShape.circle,
                           ),
@@ -188,7 +188,7 @@ class ProfileContact extends StatelessWidget {
                               enableFeedback: true,
                               color: ColorManager.kWhiteColor,
                               onPressed: makePhoneCall,
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.phone,
                                 size: 20,
                               )),

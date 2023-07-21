@@ -1,11 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:handjob_mobile/models/experience.model.dart';
 import 'package:stacked/stacked.dart';
 
 import '../app/app.locator.dart';
 import '../client/dio_client.dart';
 import '../models/education.model.dart';
-import '../models/user.model.dart';
 
 class EducationService with ReactiveServiceMixin {
   Dio dioClient = locator<DioClient>().dio;

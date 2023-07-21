@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.dialogs.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
-import 'package:handjob_mobile/models/auth.model.dart';
 import 'package:handjob_mobile/services/authentication.service.dart';
 import 'package:handjob_mobile/ui/auth/signup/customer/customer_signup_view.form.dart';
 import 'package:stacked/stacked.dart';

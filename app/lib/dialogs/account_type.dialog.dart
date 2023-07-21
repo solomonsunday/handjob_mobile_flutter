@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/app/app.router.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/utils/colors.dart';
 import 'package:ui_package/utils/font_styles.dart';
@@ -44,7 +43,7 @@ class _AccountTypeDialogState extends State<AccountTypeDialog> {
                 onTap: () {
                   widget.completer(DialogResponse(confirmed: true));
                 },
-                child: Icon(Icons.close),
+                child: const Icon(Icons.close),
               ),
             ),
             Column(
@@ -79,7 +78,7 @@ class _AccountTypeDialogState extends State<AccountTypeDialog> {
                           });
                         },
                         child: Container(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 24),
                           decoration: BoxDecoration(
                             border: Border.all(
@@ -122,7 +121,7 @@ class _AccountTypeDialogState extends State<AccountTypeDialog> {
                           });
                         },
                         child: Container(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 24),
                           decoration: BoxDecoration(
                             border: Border.all(
@@ -237,7 +236,7 @@ class _AccountTypeDialogState extends State<AccountTypeDialog> {
                   disabled: _selectedAccountType == null,
                 ),
                 const SizedBox(height: AppSize.s12),
-                Divider(
+                const Divider(
                   color: ColorManager.kDarkCharcoal,
                 ),
                 const SizedBox(height: AppSize.s12),
@@ -265,7 +264,7 @@ class _AccountTypeDialogState extends State<AccountTypeDialog> {
                               _navigationService.replaceWithAuthView();
                             },
                         ),
-                        TextSpan(text: ' here')
+                        const TextSpan(text: ' here')
                       ]),
                 ),
                 // Text('Already have an account?'),

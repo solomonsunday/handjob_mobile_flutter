@@ -7,7 +7,6 @@ import 'package:handjob_mobile/enums/bottom_sheet_type.dart';
 import 'package:handjob_mobile/models/experience.model.dart';
 import 'package:handjob_mobile/models/user.model.dart';
 import 'package:handjob_mobile/services/account.service.dart';
-import 'package:handjob_mobile/services/experience.service.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:handjob_mobile/utils/http_exception.dart';
 import 'package:image_picker/image_picker.dart';
@@ -46,8 +45,8 @@ class ProfileViewModel extends ReactiveViewModel {
         variant: BottomSheetType.profile_service,
         isScrollControlled: true,
         ignoreSafeArea: true,
-        enterBottomSheetDuration: Duration(milliseconds: 400),
-        exitBottomSheetDuration: Duration(milliseconds: 200),
+        enterBottomSheetDuration: const Duration(milliseconds: 400),
+        exitBottomSheetDuration: const Duration(milliseconds: 200),
         enableDrag: true,
       );
 
@@ -56,8 +55,8 @@ class ProfileViewModel extends ReactiveViewModel {
         data: data,
         isScrollControlled: true,
         ignoreSafeArea: true,
-        enterBottomSheetDuration: Duration(milliseconds: 400),
-        exitBottomSheetDuration: Duration(milliseconds: 200),
+        enterBottomSheetDuration: const Duration(milliseconds: 400),
+        exitBottomSheetDuration: const Duration(milliseconds: 200),
         enableDrag: true,
       );
 
@@ -65,8 +64,8 @@ class ProfileViewModel extends ReactiveViewModel {
         variant: BottomSheetType.profile_education,
         isScrollControlled: true,
         ignoreSafeArea: true,
-        enterBottomSheetDuration: Duration(milliseconds: 400),
-        exitBottomSheetDuration: Duration(milliseconds: 200),
+        enterBottomSheetDuration: const Duration(milliseconds: 400),
+        exitBottomSheetDuration: const Duration(milliseconds: 200),
         enableDrag: true,
       );
 
@@ -75,8 +74,8 @@ class ProfileViewModel extends ReactiveViewModel {
         data: data,
         isScrollControlled: true,
         ignoreSafeArea: true,
-        enterBottomSheetDuration: Duration(milliseconds: 400),
-        exitBottomSheetDuration: Duration(milliseconds: 200),
+        enterBottomSheetDuration: const Duration(milliseconds: 400),
+        exitBottomSheetDuration: const Duration(milliseconds: 200),
         enableDrag: true,
       );
 
@@ -86,8 +85,8 @@ class ProfileViewModel extends ReactiveViewModel {
         data: data,
         isScrollControlled: true,
         ignoreSafeArea: true,
-        enterBottomSheetDuration: Duration(milliseconds: 400),
-        exitBottomSheetDuration: Duration(milliseconds: 200),
+        enterBottomSheetDuration: const Duration(milliseconds: 400),
+        exitBottomSheetDuration: const Duration(milliseconds: 200),
         enableDrag: true,
       );
 
@@ -95,8 +94,8 @@ class ProfileViewModel extends ReactiveViewModel {
         variant: BottomSheetType.profile_portfolio,
         isScrollControlled: true,
         ignoreSafeArea: true,
-        enterBottomSheetDuration: Duration(milliseconds: 400),
-        exitBottomSheetDuration: Duration(milliseconds: 200),
+        enterBottomSheetDuration: const Duration(milliseconds: 400),
+        exitBottomSheetDuration: const Duration(milliseconds: 200),
         enableDrag: true,
       );
 
@@ -134,7 +133,6 @@ class ProfileViewModel extends ReactiveViewModel {
   Future<void> fetchContactsCount() async {
     try {
       await _contactService.getContactsCount();
-    } on DioError catch (e) {
     } finally {}
   }
 
@@ -172,7 +170,6 @@ class ProfileViewModel extends ReactiveViewModel {
       File file = File(xfile.path);
       await _accountService.uploadProfilePicture(file);
       await _authenticationService.getCurrentBaseUser();
-    } on DioError catch (error) {
     } finally {
       setBusyForObject(PROFILE_AVATAR_UPLOAD, false);
       notifyListeners();

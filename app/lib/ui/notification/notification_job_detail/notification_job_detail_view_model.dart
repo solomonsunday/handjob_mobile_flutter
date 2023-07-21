@@ -76,7 +76,6 @@ class NotificationJobDetailViewModel extends BaseViewModel {
       _instantJob = await _instantJobService.getInstantJob(id);
       print('instnat job: ${_instantJob?.toJson()}');
       notifyListeners();
-    } catch (e) {
     } finally {
       setBusyForObject(GET_INSTANT_JOB, false);
     }

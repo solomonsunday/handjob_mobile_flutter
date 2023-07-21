@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/utils/colors.dart';
-import 'package:ui_package/utils/font_styles.dart';
-import 'package:ui_package/utils/text_styles.dart';
 import 'package:ui_package/utils/values_manager.dart';
 import 'package:ui_package/widgets/button/button.dart';
 
@@ -26,7 +23,7 @@ class TermOfServiceDialog extends StatelessWidget {
         return Dialog(
           child: Padding(
             padding: const EdgeInsets.all(AppSize.s24),
-            child: Container(
+            child: SizedBox(
               height: 500,
               child: Column(
                 children: [

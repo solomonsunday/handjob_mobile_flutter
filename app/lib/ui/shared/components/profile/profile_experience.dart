@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_html/html_parser.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:handjob_mobile/ui/profile/profile_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -14,7 +13,6 @@ import '../../../../models/experience.model.dart';
 import '../../../../models/user.model.dart';
 import '../../../../services/authentication.service.dart';
 import '../../../../services/experience.service.dart';
-import '../../../../utils/http_exception.dart';
 
 class ProfileExperience extends StatelessWidget {
   const ProfileExperience({
@@ -130,7 +128,7 @@ class ProfileExperienceItem extends StatelessWidget {
                             size: AppSize.s24,
                           ),
                         ),
-                        SizedBox(width: AppSize.s4),
+                        const SizedBox(width: AppSize.s4),
                         GestureDetector(
                           onTap: () => model.deleteExperience(experience.id),
                           child: model.busy(DELETE_EXPERIENCE)
@@ -166,8 +164,8 @@ class ProfileExperienceItemViewModel extends BaseViewModel {
         data: data,
         isScrollControlled: true,
         ignoreSafeArea: true,
-        enterBottomSheetDuration: Duration(milliseconds: 400),
-        exitBottomSheetDuration: Duration(milliseconds: 200),
+        enterBottomSheetDuration: const Duration(milliseconds: 400),
+        exitBottomSheetDuration: const Duration(milliseconds: 200),
         enableDrag: true,
       );
   editExperience(Experience experience) {
@@ -188,7 +186,7 @@ class ProfileExperienceItemViewModel extends BaseViewModel {
         msg: 'Experience deleted successfully!',
         toastLength: Toast.LENGTH_LONG,
       );
-    } on DioError catch (error) {
+    } on DioError {
       Fluttertoast.showToast(
         msg: 'An error occured, Unable to delete experience',
         toastLength: Toast.LENGTH_LONG,

@@ -13,6 +13,7 @@ class Qualification extends HasNameField {
   bool? isDeleted;
   bool? disabled;
   bool? isSystemDefined;
+  @override
   String name;
   String? description;
 

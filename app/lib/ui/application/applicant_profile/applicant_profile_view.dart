@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:handjob_mobile/models/applicant.model.dart';
 import 'package:handjob_mobile/ui/application/applicant_profile/applicant_profile_view_model.dart';
 import 'package:handjob_mobile/utils/contants.dart';
 import 'package:stacked/stacked.dart';

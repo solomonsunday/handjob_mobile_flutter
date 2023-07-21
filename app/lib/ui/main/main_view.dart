@@ -1,3 +1,4 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/ui/main/chat/chat_view.dart';
@@ -15,10 +16,13 @@ import 'main_view_model.dart';
 class MainView extends StatelessWidget {
   const MainView({Key? key}) : super(key: key);
 
+  
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainViewModel>.reactive(
       onViewModelReady: (model) async {
+        model.onZegoUserConnect();
         model.fetchPost();
         await model.fetchStates();
         await model.fetchLGA();
@@ -32,6 +36,8 @@ class MainView extends StatelessWidget {
       viewModelBuilder: () => MainViewModel(),
       onDispose: (model) {
         model.dispose();
+        // model.disconnectZegoCloudSdk();
+        model.onZegoUserDisconnect();
       },
       builder: (context, model, child) => Scaffold(
         body: getView(model.currentIndex),
@@ -127,15 +133,15 @@ class MainView extends StatelessWidget {
   getView(int currentIndex) {
     switch (currentIndex) {
       case HOME_VIEW:
-        return HomeView();
+        return const HomeView();
       case POST_VIEW:
         return PostView();
       case INSTANT_HIRE_VIEW:
-        return InstantHireView();
+        return const InstantHireView();
       case JOB_VIEW:
-        return JobsView();
+        return const JobsView();
       case CHAT_VIEW:
-        return ChatView();
+        return const ChatView();
       default:
         return Container();
     }

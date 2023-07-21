@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/ui/application/rate_review/rate_review_view.form.dart';
-import 'package:handjob_mobile/utils/http_exception.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 

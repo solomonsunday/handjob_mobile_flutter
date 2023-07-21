@@ -1,8 +1,5 @@
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:handjob_mobile/app/app.router.dart';
-import 'package:handjob_mobile/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -38,7 +35,7 @@ class SplashViewViewModel extends BaseViewModel {
       }
 
       return authResponse;
-    } on DioError catch (error) {
+    } on DioError {
       _isLoggedIn = false;
       // throw Exception(error.response?.data["message"]);
       bool? isFirstTimeUser = preferences.getBool(IS_FIRST_TIME_USER);
@@ -57,6 +54,7 @@ class SplashViewViewModel extends BaseViewModel {
 
           _navigationService.replaceWith(Routes.mainView);
         } catch (e) {
+          navigateToLogin();
           print(
             'An error occured: $e',
           );
@@ -70,6 +68,7 @@ class SplashViewViewModel extends BaseViewModel {
         }
       }
     }
+    return null;
   }
 
   Future<void> getCurrentUser() async {

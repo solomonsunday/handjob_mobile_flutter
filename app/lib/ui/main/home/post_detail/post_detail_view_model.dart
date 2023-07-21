@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -39,7 +38,7 @@ class PostDetailViewModel extends ReactiveViewModel {
     try {
       await _commentService.getComments(_post!.id!);
     } on DioError catch (e) {
-      print('error commenting: ${e}');
+      print('error commenting: $e');
     } finally {
       setBusy(false);
     }
@@ -58,7 +57,6 @@ class PostDetailViewModel extends ReactiveViewModel {
       messageController.clear();
       _post!.commentCount = _post!.commentCount! + 1;
       notifyListeners();
-    } on DioError catch (e) {
     } finally {
       setBusyForObject(CREATE_COMMENT_BUSY, false);
       await _commentService.getComments(_post!.id!);

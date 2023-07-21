@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/app/app.router.dart';
-import 'package:handjob_mobile/models/chat-payload.model.dart';
 import 'package:handjob_mobile/services/chat.service.dart';
 import 'package:handjob_mobile/ui/main/main_view.dart';
 import 'package:stacked/stacked.dart';
@@ -32,7 +31,7 @@ class ChatDetailViewModel extends ReactiveViewModel {
   // List<Conversation> _chatList = [];
   Set<Conversation> get chatList => _chatService.chats.toSet();
 
-  bool _isSendText = false;
+  final bool _isSendText = false;
   bool get isSendText => _isSendText;
   String _chatMessage = "";
   String get chatMessage => _chatMessage;
@@ -67,7 +66,6 @@ class ChatDetailViewModel extends ReactiveViewModel {
       _chatService.clearChatWithPartner();
       await _chatService.markAsRead(contact.id!);
       await _chatService.getChatsWithPartner(contact.id!);
-    } on DioError catch (e) {
     } finally {
       notifyListeners();
     }
@@ -94,7 +92,7 @@ class ChatDetailViewModel extends ReactiveViewModel {
       // await _chatService.getChatsWithPartner(contact.id!);
 
     } on DioError catch (e) {
-      print('error: ${e}');
+      print('error: $e');
     } finally {
       chatMessageController.clear();
       setBusyForObject(CREATE_CHAT, false);

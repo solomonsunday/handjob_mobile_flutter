@@ -33,10 +33,10 @@ class ProfileServiceSheet extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
+              const Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Icon(
                     Icons.tag,
                     color: ColorManager.kSecondaryColor,
@@ -45,9 +45,9 @@ class ProfileServiceSheet extends StatelessWidget {
                   Text('Services'),
                 ],
               ),
-              SizedBox(height: AppSize.s24),
-              Text('Add up to five services'),
-              SizedBox(height: AppSize.s24),
+              const SizedBox(height: AppSize.s24),
+              const Text('Add up to five services'),
+              const SizedBox(height: AppSize.s24),
               DefaultDropDownField(
                 hint: 'Select service',
                 value: model.selectedProfession,
@@ -64,7 +64,7 @@ class ProfileServiceSheet extends StatelessWidget {
                 dropdownWidth: MediaQuery.of(context).size.width,
               ),
               if (model.busy(PROFESSION_TYPES))
-                LinearProgressIndicator(
+                const LinearProgressIndicator(
                   color: ColorManager.kPrimaryColor,
                 ),
               Wrap(
@@ -125,7 +125,7 @@ class ProfileServiceSheetViewModel extends BaseViewModel {
     if (professionTypes == null) {
       return [];
     }
-    return professionTypes!.map((e) => e.name!).toList();
+    return professionTypes!.map((e) => e.name).toList();
   }
 
   User? get currentUser => _authenticationService.currentUser;

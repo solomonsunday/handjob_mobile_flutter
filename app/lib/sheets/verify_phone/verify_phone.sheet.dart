@@ -44,10 +44,10 @@ class VerifyPhoneSheet extends StatelessWidget with $VerifyPhoneSheet {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
+              const Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Text('Verify phone number'),
                 ],
               ),
@@ -61,14 +61,14 @@ class VerifyPhoneSheet extends StatelessWidget with $VerifyPhoneSheet {
                 focusnode: codeFocusNode,
                 keyBoardType: TextInputType.text,
               ),
-              SizedBox(height: AppSize.s24),
+              const SizedBox(height: AppSize.s24),
               DefaultButton(
                 onPressed: () => model.verifyOTP(completer),
                 title: 'Verify',
                 busy: model.isBusy,
                 disabled: model.isBusy || !model.isFormValid,
               ),
-              SizedBox(height: AppSize.s16),
+              const SizedBox(height: AppSize.s16),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,

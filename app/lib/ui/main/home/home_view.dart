@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:handjob_mobile/ui/skeletons/post_view.skeleton.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
-import 'package:ui_package/utils/colors.dart';
-import 'package:ui_package/utils/text_styles.dart';
 
 import '../home_card.dart';
 import 'home_view_model.dart';
@@ -14,7 +12,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<HomeViewModel>.nonReactive(
+    return ViewModelBuilder<HomeViewModel>.reactive(
         viewModelBuilder: () => HomeViewModel(),
         builder: (_, model, child) {
           return Scaffold(
@@ -41,13 +39,13 @@ class HomeView extends StatelessWidget {
               //   'assets/images/HandJobs.png',
               // ),
               centerTitle: true,
-              actions: [
+              actions: const [
                 NotificationIconWidget(),
               ],
             ),
             body: model.loadingPosts
                 ? const PostViewSkeleton()
-                : Column(
+                : const Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -91,7 +89,7 @@ class HomeSearchWidget extends ViewModelWidget<HomeViewModel> {
               height: 36,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                color: Color(0xffd9d9d9),
+                color: const Color(0xffd9d9d9),
               ),
               child: model.currentUser?.imageUrl == null
                   ? Image.asset(
@@ -138,7 +136,7 @@ class HomeSearchWidget extends ViewModelWidget<HomeViewModel> {
               hintText: 'Search',
               paddingBottom: 0,
               paddingTop: 0,
-              prefixIcon: Icon(
+              prefixIcon: const Icon(
                 Icons.search,
                 color: ColorManager.kGrey3,
               ),
@@ -158,7 +156,7 @@ class HomePostWidget extends ViewModelWidget<HomeViewModel> {
   Widget build(BuildContext context, HomeViewModel model) {
     // print('search filter widget: ${model.filteredPosts}');
     return model.busy(POST_BUSY)
-        ? Center(
+        ? const Center(
             child: CircularProgressIndicator.adaptive(),
           )
         : ListView.builder(
@@ -199,7 +197,7 @@ class NotificationIconWidget extends ViewModelWidget<HomeViewModel> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Icon(Icons.notifications),
+            const Icon(Icons.notifications),
             if ((model.notifications ?? []).isNotEmpty)
               Positioned(
                 child: Container(

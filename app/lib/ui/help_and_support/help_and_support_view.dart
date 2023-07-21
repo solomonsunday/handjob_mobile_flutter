@@ -15,7 +15,7 @@ class HelpAndSupportView extends StatelessWidget {
           title: 'Help and support',
           leadingIcon: GestureDetector(
             onTap: model.goBack,
-            child: Icon(
+            child: const Icon(
               Icons.arrow_back,
               color: ColorManager.kDarkColor,
             ),
@@ -39,7 +39,7 @@ class HelpAndSupportView extends StatelessWidget {
                     fontSize: FontSize.s16,
                   ),
                 ),
-                SizedBox(height: AppSize.s32),
+                const SizedBox(height: AppSize.s32),
                 Text(
                   'This feature is optimized to help you with any issue you might be having. You will be redirected to send an email  to our supports team when you click the button below.',
                   style: getRegularStyle(
@@ -47,13 +47,13 @@ class HelpAndSupportView extends StatelessWidget {
                     fontSize: FontSize.s12,
                   ),
                 ),
-                SizedBox(height: AppSize.s24),
-                InputField(
+                const SizedBox(height: AppSize.s24),
+                const InputField(
                   label: 'Enter email',
                   hintText: 'e.g example@gmail.com',
                   keyBoardType: TextInputType.emailAddress,
                 ),
-                SizedBox(height: AppSize.s40),
+                const SizedBox(height: AppSize.s40),
                 DefaultButton(
                   onPressed: () {},
                   title: 'Proceed to email',

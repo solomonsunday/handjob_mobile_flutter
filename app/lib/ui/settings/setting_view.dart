@@ -48,7 +48,7 @@ class SettingView extends StatelessWidget {
                   leading: Icon(
                     setting.icon,
                     size: AppSize.s24,
-                    color: Color.fromRGBO(0, 0, 0, 1),
+                    color: const Color.fromRGBO(0, 0, 0, 1),
                   ),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -64,10 +64,10 @@ class SettingView extends StatelessWidget {
                     ],
                   ),
                   children: [
-                    if (index == 0) VideoCallPreferenceWidget(),
-                    if (index == 1) NotificationPreferenceWidget(),
-                    if (index == 2) SigninSecurityPreferenceWidget(),
-                    if (index == 3) PolicyPreferenceWidget(),
+                    if (index == 0) const VideoCallPreferenceWidget(),
+                    if (index == 1) const NotificationPreferenceWidget(),
+                    if (index == 2) const SigninSecurityPreferenceWidget(),
+                    if (index == 3) const PolicyPreferenceWidget(),
                   ],
                 );
               },

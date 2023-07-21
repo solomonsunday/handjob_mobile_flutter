@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/services/experience.service.dart';
-import 'package:handjob_mobile/sheets/profile_contact/profile_contact.sheet.dart';
 import 'package:handjob_mobile/sheets/profile_experience/profile_experience.sheet.form.dart';
 import 'package:handjob_mobile/utils/helpers.dart';
 import 'package:intl/intl.dart';
@@ -15,7 +14,6 @@ import '../../app/app.locator.dart';
 import '../../models/experience.model.dart';
 import '../../models/profession_type.model.dart';
 import '../../models/suggestion.model.dart';
-import '../../models/user.model.dart';
 import '../../services/authentication.service.dart';
 import '../../services/location.service.dart';
 import '../../services/shared.service.dart';
@@ -81,10 +79,10 @@ class ProfileExperienceSheet extends StatelessWidget
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
+                  const Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(
                         Icons.tag,
                         color: ColorManager.kSecondaryColor,
@@ -93,21 +91,21 @@ class ProfileExperienceSheet extends StatelessWidget
                       Text('Experience'),
                     ],
                   ),
-                  SizedBox(height: AppSize.s24),
+                  const SizedBox(height: AppSize.s24),
                   InputField(
                     label: "Job title",
                     hintText: 'Enter job title',
                     fillColor: ColorManager.kWhiteColor,
                     controller: jobTitleController,
                   ),
-                  SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s12),
                   InputField(
                     label: 'Business name', //please change to company
                     hintText: 'Enter business name',
                     fillColor: ColorManager.kWhiteColor,
                     controller: companyController,
                   ),
-                  SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s12),
                   Row(
                     children: [
                       Expanded(
@@ -131,14 +129,14 @@ class ProfileExperienceSheet extends StatelessWidget
                               disable: startDateController.text.isEmpty,
                               firstDate: startDateController.text.isEmpty
                                   ? DateTime.now().subtract(
-                                      Duration(days: 200000),
+                                      const Duration(days: 200000),
                                     )
                                   : toDefaultDtFormat(startDateController.text,
                                       format: DEFAULT_DATE_TIME_FORMAT)),
                         ),
                     ],
                   ),
-                  SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s12),
                   // InputField(
                   //   label: 'Job category',
                   //   hintText: 'Enter',
@@ -163,7 +161,7 @@ class ProfileExperienceSheet extends StatelessWidget
                     dropdownWidth: MediaQuery.of(context).size.width,
                     buttonHeight: AppSize.s48,
                   ),
-                  SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s12),
                   Autocomplete<Suggestion>(
                     displayStringForOption: _displayStringForOption,
                     optionsBuilder: (TextEditingValue textEditingValue) async {
@@ -194,7 +192,7 @@ class ProfileExperienceSheet extends StatelessWidget
                       fillColor: ColorManager.kWhiteColor,
                     ),
                   ),
-                  SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s12),
                   Textarea(
                     label: 'Describe the nature of work',
                     hintText: 'Enter',
@@ -204,7 +202,7 @@ class ProfileExperienceSheet extends StatelessWidget
                     ),
                     controller: descriptionController,
                   ),
-                  SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s12),
                   DefaultCheckBox(
                     value: model.current,
                     onChanged: (value) => model.updateCurrent(value),

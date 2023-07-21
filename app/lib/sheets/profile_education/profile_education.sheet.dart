@@ -4,7 +4,6 @@ import 'package:handjob_mobile/models/qualification.model.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:handjob_mobile/sheets/profile_education/profile_education.sheet.form.dart';
 import 'package:handjob_mobile/utils/helpers.dart';
-import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -14,7 +13,6 @@ import '../../app/app.locator.dart';
 import '../../models/education.model.dart';
 import '../../services/authentication.service.dart';
 import '../../services/education.service.dart';
-import '../../utils/http_exception.dart';
 
 @FormView(fields: [
   FormTextField(name: 'course'),
@@ -79,10 +77,10 @@ class ProfileEducationSheet extends StatelessWidget
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
+                  const Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(
                         Icons.tag,
                         color: ColorManager.kSecondaryColor,
@@ -91,7 +89,7 @@ class ProfileEducationSheet extends StatelessWidget
                       Text('Education'),
                     ],
                   ),
-                  SizedBox(height: AppSize.s24),
+                  const SizedBox(height: AppSize.s24),
                   GenericDropDownField<Qualification>(
                     label: "Qualifications",
                     hint: 'Enter qualification',
@@ -109,7 +107,7 @@ class ProfileEducationSheet extends StatelessWidget
                     ),
                     dropdownWidth: MediaQuery.of(context).size.width,
                   ),
-                  SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s12),
                   InputField(
                     label: 'Course',
                     hintText: 'Enter course name',
@@ -117,7 +115,7 @@ class ProfileEducationSheet extends StatelessWidget
                     controller: courseController,
                     focusnode: courseFocusNode,
                   ),
-                  SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s12),
                   DatePicker(
                     label: 'Year of graduation',
                     hintText: 'Enter ',
@@ -125,7 +123,7 @@ class ProfileEducationSheet extends StatelessWidget
                     onSelected: (p0) {},
                     dateFormat: DEFAULT_DATE_TIME_FORMAT,
                   ),
-                  SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s12),
                   InputField(
                     label: 'Institution name',
                     hintText: 'Enter ',
@@ -133,7 +131,7 @@ class ProfileEducationSheet extends StatelessWidget
                     controller: institutionController,
                     focusnode: institutionFocusNode,
                   ),
-                  SizedBox(height: AppSize.s12),
+                  const SizedBox(height: AppSize.s12),
                   Row(
                     children: [
                       Expanded(
@@ -144,7 +142,7 @@ class ProfileEducationSheet extends StatelessWidget
                           focusnode: cityFocusNode,
                         ),
                       ),
-                      SizedBox(width: AppSize.s12),
+                      const SizedBox(width: AppSize.s12),
                       Expanded(
                         child: DefaultDropDownField(
                           label: "Country",

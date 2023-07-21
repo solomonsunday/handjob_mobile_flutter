@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
-import 'package:handjob_mobile/models/auth.model.dart';
 import 'package:handjob_mobile/models/profession_type.model.dart';
 import 'package:handjob_mobile/services/authentication.service.dart';
 import 'package:handjob_mobile/ui/auth/signup/customer/customer_signup_view.form.dart';
@@ -43,7 +41,7 @@ class ArtisanSignupViewModel extends FormViewModel {
     if (professionTypes == null) {
       return [];
     }
-    return professionTypes!.map((e) => e.name!).toList();
+    return professionTypes!.map((e) => e.name).toList();
   }
 
   togglePasswordVisibility() {
@@ -140,6 +138,7 @@ class ArtisanSignupViewModel extends FormViewModel {
       bool mobileValid = RegExp(r'(^(?:[+0]9)?[0-9]{11}$)').hasMatch(value);
       return mobileValid ? null : "Invalid mobile";
     }
+    return null;
   }
 
   bool _formIsValid = false;

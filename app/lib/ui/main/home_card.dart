@@ -13,10 +13,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
-import 'package:ui_package/utils/colors.dart';
 import 'package:ui_package/utils/font_styles.dart' as FontSize;
-import 'package:ui_package/utils/text_styles.dart';
-import 'package:ui_package/utils/values_manager.dart';
 
 import '../../models/post.model.dart';
 import '../../models/user.model.dart';
@@ -65,7 +62,7 @@ class HomeCard extends StatelessWidget {
                         height: 48,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(24),
-                          color: Color(0xffd9d9d9),
+                          color: const Color(0xffd9d9d9),
                         ),
                         child: post.author?.imageUrl == null
                             ? Image.asset(
@@ -121,11 +118,11 @@ class HomeCard extends StatelessWidget {
                                 '${post.author?.firstName} ${post.author?.otherName ?? ""} ${post.author?.lastName}',
                                 style: getMediumStyle(
                                   fontSize: 14,
-                                  color: Color(0xff000000),
+                                  color: const Color(0xff000000),
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 1,
                             ),
                             Wrap(
@@ -139,13 +136,13 @@ class HomeCard extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                     style: getMediumStyle(
                                       fontSize: 11,
-                                      color: Color(0xff555555),
+                                      color: const Color(0xff555555),
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 1,
                             ),
                           ],
@@ -224,7 +221,7 @@ class HomeCard extends StatelessWidget {
                       humanizeDate(fromIsoToDateTime(post.createdAt!)),
                       style: getMediumStyle(
                         fontSize: 10,
-                        color: Color(0xff000000),
+                        color: const Color(0xff000000),
                       ),
                     ),
                     const SizedBox(width: AppSize.s12),
@@ -441,7 +438,6 @@ class HomeCardViewModel extends BaseViewModel {
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
       );
-    } catch (e) {
     } finally {
       notifyListeners();
     }

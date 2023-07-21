@@ -8,7 +8,7 @@ class SocketUser {
   String? email;
   String? socketId;
 
-  SocketUser(this.userId, this.email, this.socketId) {}
+  SocketUser(this.userId, this.email, this.socketId);
 
   factory SocketUser.fromJson(Map<String, dynamic> json) =>
       _$SocketUserFromJson(json);

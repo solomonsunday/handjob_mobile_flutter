@@ -28,14 +28,14 @@ class ContactListView extends StatelessWidget {
                       // horizontal: AppSize.s24,
                       vertical: AppSize.s8,
                     ),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: ColorManager.kWhiteColor,
                     ),
                     child: InputField(
                       hintText: 'Search',
                       paddingBottom: AppPadding.p8,
                       paddingTop: AppPadding.p8,
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.search,
                         color: ColorManager.kGrey,
                       ),
@@ -73,7 +73,7 @@ class ContactListView extends StatelessWidget {
                         return ContactListItem(
                           contact: contact,
                           onAudioCall: model.handleAudioCall,
-                          onVideoCall: model.handleVideoCall,
+                          onVideoCall: (Contact contact) => model.handleVideoCall(contact),
                           onChat: model.handleChat,
                           onDeleteContact: model.handleDeleteContact,
                           onViewContactProfile: model.handleViewContactProfile,
@@ -115,7 +115,7 @@ class ContactListItem extends StatelessWidget {
     return ListTile(
       onTap: () => onViewContactProfile(contact),
       leading: contact.imageUrl == null
-          ? CircleAvatar(
+          ? const CircleAvatar(
               backgroundImage: AssetImage("assets/images/default-avatar.jpeg"),
             )
           : CircleAvatar(
@@ -147,106 +147,125 @@ class ContactListItem extends StatelessWidget {
                 fontSize: FontSize.s11,
               ),
             ),
-          Rating(),
+          const Rating(),
           Text(
             'Email: ${contact.email}',
             style: getRegularStyle(
               color: ColorManager.kDarkColor,
               fontSize: FontSize.s10,
             ),
-          )
+          ),
+        //   ZegoSendCallInvitationButton(
+        //     isVideoCall: true,
+        //     //  resourceID: "zegouikit_call",    // For offline call notification
+        //     invitees: [
+        //         ZegoUIKitUser(
+        //           id: contact.id ?? "",
+        //           name: '${contact.firstName} ${contact.lastName}',
+        //         ),
+        //     ],
+        //     text: 'Call',
+        //     buttonSize: const Size(50, 70),
+        //      iconSize: const Size(24, 24),
+
+        //  onPressed: (code, message, p2) {
+        //    print( 'code: $code, message:$message');
+        //  },
+        //   ),
         ],
       ),
       minVerticalPadding: AppPadding.p20,
-      trailing: PopupMenuButton<String>(
-        onSelected: (value) {
-          print('value selected: $value');
-          switch (value) {
-            case AUDIO_CALL:
-              onAudioCall(contact);
-              break;
-            case VIDEO_CALL:
-              onVideoCall(contact);
-              break;
-            case CHAT:
-              onChat(contact);
-              break;
-            case DELETE:
-              onDeleteContact(contact.id!);
-              break;
-            default:
-              break;
-          }
-        },
-        itemBuilder: (BuildContext bc) {
-          return [
-            PopupMenuItem(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.phone,
-                    color: ColorManager.kDarkColor,
+      trailing: 
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              print('value selected: $value');
+              switch (value) {
+                case AUDIO_CALL:
+                  onAudioCall(contact);
+                  break;
+                case VIDEO_CALL:
+                  onVideoCall(contact);
+                  break;
+                case CHAT:
+                  onChat(contact);
+                  break;
+                case DELETE:
+                  onDeleteContact(contact.id!);
+                  break;
+                default:
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext bc) {
+              return [
+                const PopupMenuItem(
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.phone,
+                        color: ColorManager.kDarkColor,
+                      ),
+                      SizedBox(
+                        width: AppSize.s16,
+                      ),
+                      Text('Audio Call')
+                    ],
                   ),
-                  SizedBox(
-                    width: AppSize.s16,
+                  value: AUDIO_CALL,
+                ),
+                const PopupMenuItem(
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.videocam,
+                        color: ColorManager.kDarkColor,
+                      ),
+                      SizedBox(
+                        width: AppSize.s16,
+                      ),
+                      Text('Video Call')
+                    ],
                   ),
-                  Text('Audio Call')
-                ],
-              ),
-              value: AUDIO_CALL,
+                  value: VIDEO_CALL,
+                ),
+                const PopupMenuItem(
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.chat,
+                        color: ColorManager.kDarkColor,
+                      ),
+                      SizedBox(
+                        width: AppSize.s16,
+                      ),
+                      Text('Chat')
+                    ],
+                  ),
+                  value: CHAT,
+                ),
+                const PopupMenuItem(
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.delete,
+                        color: ColorManager.kDarkColor,
+                      ),
+                      SizedBox(
+                        width: AppSize.s16,
+                      ),
+                      Text('Delete')
+                    ],
+                  ),
+                  value: DELETE,
+                )
+              ];
+            },
+            child: const Icon(
+              Icons.more_vert,
+              size: AppSize.s24,
             ),
-            PopupMenuItem(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.videocam,
-                    color: ColorManager.kDarkColor,
-                  ),
-                  SizedBox(
-                    width: AppSize.s16,
-                  ),
-                  Text('Video Call')
-                ],
-              ),
-              value: VIDEO_CALL,
-            ),
-            PopupMenuItem(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.chat,
-                    color: ColorManager.kDarkColor,
-                  ),
-                  SizedBox(
-                    width: AppSize.s16,
-                  ),
-                  Text('Chat')
-                ],
-              ),
-              value: CHAT,
-            ),
-            PopupMenuItem(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.delete,
-                    color: ColorManager.kDarkColor,
-                  ),
-                  SizedBox(
-                    width: AppSize.s16,
-                  ),
-                  Text('Delete')
-                ],
-              ),
-              value: DELETE,
-            )
-          ];
-        },
-        child: Icon(
-          Icons.more_vert,
-          size: AppSize.s24,
-        ),
-      ),
+          ),
+       
     );
   }
 }

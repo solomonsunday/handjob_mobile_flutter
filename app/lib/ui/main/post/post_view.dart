@@ -32,7 +32,7 @@ class PostView extends StatelessWidget with $PostView {
         ),
         body: SingleChildScrollView(
           child: Container(
-            decoration: BoxDecoration(),
+            decoration: const BoxDecoration(),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +71,7 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
   @override
   Widget build(BuildContext context, PostViewModel model) {
     return Container(
-      padding: EdgeInsets.all(AppSize.s24),
+      padding: const EdgeInsets.all(AppSize.s24),
       child: Column(
         children: [
           Container(
@@ -115,7 +115,7 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
                           ),
                         ),
                 ),
-                SizedBox(width: AppSize.s12),
+                const SizedBox(width: AppSize.s12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -266,7 +266,7 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
               ],
             ),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

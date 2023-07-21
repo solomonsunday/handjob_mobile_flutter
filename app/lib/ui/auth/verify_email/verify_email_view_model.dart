@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:handjob_mobile/app/app.dialogs.dart';
 import 'package:handjob_mobile/app/app.router.dart';
-import 'package:handjob_mobile/enums/dialog.enum.dart';
 import 'package:handjob_mobile/ui/auth/verify_email/verify_email_view.form.dart';
 import 'package:handjob_mobile/utils/http_exception.dart';
 import 'package:stacked/stacked.dart';

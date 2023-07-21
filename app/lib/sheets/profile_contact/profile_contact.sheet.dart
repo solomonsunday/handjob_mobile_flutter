@@ -2,8 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
-import 'package:handjob_mobile/models/contact.model.dart';
-import 'package:handjob_mobile/models/state.model.dart' as HandjobState;
 import 'package:handjob_mobile/models/user.model.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:handjob_mobile/sheets/profile_contact/profile_contact.sheet.form.dart';
@@ -73,10 +71,10 @@ class ProfileContactSheet extends StatelessWidget with $ProfileContactSheet {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
+                  const Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(
                         Icons.phone,
                         color: ColorManager.kSecondaryColor,
@@ -266,6 +264,7 @@ class ProfileContactSheetViewModel extends FormViewModel {
       bool mobileValid = RegExp(r'(^(?:[+0]9)?[0-9]{11}$)').hasMatch(value);
       return mobileValid ? null : "Invalid mobile";
     }
+    return null;
   }
 
   updateContact(Function(SheetResponse<dynamic>)? completer) {

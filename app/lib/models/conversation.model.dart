@@ -67,8 +67,8 @@ class Partner {
   bool? emailNotificationActive;
   int? rating;
   String? postalCode;
-  dynamic? hobbies;
-  dynamic? interests;
+  dynamic hobbies;
+  dynamic interests;
   String? locations;
   String? address;
   String? website;

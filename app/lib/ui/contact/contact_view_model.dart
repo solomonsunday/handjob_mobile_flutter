@@ -1,11 +1,11 @@
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.router.dart';
-import 'package:handjob_mobile/enums/bottom_sheet_type.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:ui_package/utils/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 import '../../app/app.locator.dart';
 import '../../models/contact.model.dart';
@@ -49,7 +49,6 @@ class ContactViewModel extends ReactiveViewModel {
     setBusyForObject(CONTACT_LIST_REQUEST, true);
     try {
       await _contactService.getContacts(search: search);
-    } on DioError catch (e) {
     } finally {
       setBusyForObject(CONTACT_LIST_REQUEST, false);
     }
@@ -59,7 +58,6 @@ class ContactViewModel extends ReactiveViewModel {
     setBusyForObject(CONTACT_COUNT_REQUEST, true);
     try {
       await _contactService.getContactsCount();
-    } on DioError catch (e) {
     } finally {
       setBusyForObject(CONTACT_COUNT_REQUEST, false);
     }
@@ -69,7 +67,6 @@ class ContactViewModel extends ReactiveViewModel {
     setBusyForObject(TOP_SUGGESTION_CONTACT_LIST_REQUEST, true);
     try {
       await _contactService.getTopSuggestions();
-    } on DioError catch (e) {
     } finally {
       setBusyForObject(TOP_SUGGESTION_CONTACT_LIST_REQUEST, false);
     }
@@ -79,7 +76,6 @@ class ContactViewModel extends ReactiveViewModel {
     setBusyForObject(CONNECTION_REQUEST, true);
     try {
       await _contactService.getConnectionRequests();
-    } on DioError catch (e) {
     } finally {
       setBusyForObject(CONNECTION_REQUEST, false);
     }
@@ -103,7 +99,6 @@ class ContactViewModel extends ReactiveViewModel {
         msg: 'Contact removed successfully!',
         toastLength: Toast.LENGTH_LONG,
       );
-    } on DioError catch (e) {
     } finally {
       setBusyForObject(DELETE_CONTACT, false);
     }
@@ -134,19 +129,35 @@ class ContactViewModel extends ReactiveViewModel {
     );
   }
 
-  //handle video call
-  handleVideoCall(Contact contact) async {
-    print('contact ${contact.toJson()}');
-    //call
-    _videoCallService.callUser(contact.id);
-    try {} catch (e) {}
-    // _bottomSheetService.showCustomSheet(
-    //   variant: BottomSheetType.outgoing_call,
-    //   title: "Outgoing Video Call",
-    //   data: {"type": "video", "contact": contact},
-    //   isScrollControlled: true,
-    // );
+  handleVideoCall(Contact contact) async  {
+    try {
+       await _videoCallService.callController?.sendCallInvitation(invitees: [
+        ZegoCallUser(contact.id!, '${contact.firstName} ${contact.lastName}'),
+    ], isVideoCall: true,
+    
+    );
+    } catch (e) {
+      // print('Error: ' + e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: ColorManager.kDarkColor,
+        textColor: ColorManager.kWhiteColor,
+      );
+    }
   }
+
+  //handle video call
+  // handleVideoCall(BuildContext context, Contact contact, {required String id, required String name}) async {
+  //   await startCall(ZegoCallType.video, context: context, id: id, name: name);
+  //   // _bottomSheetService.showCustomSheet(
+  //   //   variant: BottomSheetType.outgoing_call,
+  //   //   title: "Outgoing Video Call",
+  //   //   data: {"type": "video", "contact": contact},
+  //   //   isScrollControlled: true,
+  //   // );
+  // }
 
   int _activeTab = 0;
   int get activeTab => _activeTab;
@@ -167,4 +178,50 @@ class ContactViewModel extends ReactiveViewModel {
 
   handleViewContactProfile(Contact contact) => _navigationService
       .navigateToApplicantProfileView(applicantId: contact.id!);
+
+
+//Zego cloud
+
+//  Future<void> startCall(ZegoCallType callType, {required BuildContext context, required String id, required String name}) async {
+//     final extendedData = jsonEncode({
+//       'type': callType.index,
+//       'inviterName': name,
+//     });
+
+//     final ZegoSendInvitationResult result = await ZEGOSDKManager.instance.zimService.sendInvitation(
+//       invitees: [id],
+//       callType: callType,
+//       extendedData: extendedData,
+//     );
+
+//     if (result.error == null || result.error?.code == '0') {
+//       if (result.errorInvitees.containsKey(id)) {
+//         ZegoCallStateManager.instance.clearCallData();
+//         ScaffoldMessenger.of(context).showSnackBar(
+//           SnackBar(content: Text('user is not online: $result')),
+//         );
+//       } else {
+//         pushToCallWaitingPage();
+//       }
+//     } else {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(content: Text('send call invitation failed: $result')),
+//       );
+//     }
+//   }
+
+  //   void pushToCallWaitingPage() {
+  //     print('ZegoCallStateManager.instance.callData: ${ZegoCallStateManager.instance.callData}');
+  //     _bottomSheetService.showCustomSheet(variant: BottomSheetType.outgoing_call, data: ZegoCallStateManager.instance.callData,
+  //       ignoreSafeArea: true,
+  //       isScrollControlled: true,
+  //     );
+  //   // Navigator.push(
+  //   //   context,
+  //   //   MaterialPageRoute(
+  //   //     fullscreenDialog: true,
+  //   //     builder: (context) => CallWaitingPage(callData: ZegoCallStateManager.instance.callData!),
+  //   //   ),
+  //   // );
+  // }
 }

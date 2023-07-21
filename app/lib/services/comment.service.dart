@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:stacked/stacked.dart';
@@ -7,7 +6,6 @@ import '../app/app.locator.dart';
 import '../client/dio_client.dart';
 import '../models/comment.model.dart';
 import '../models/meta.model.dart';
-import '../models/post.model.dart';
 
 class CommentService with ListenableServiceMixin {
   Dio dioClient = locator<DioClient>().dio;

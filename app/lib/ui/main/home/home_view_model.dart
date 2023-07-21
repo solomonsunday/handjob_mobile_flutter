@@ -1,6 +1,4 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/services/notification.service.dart';
@@ -62,7 +60,6 @@ class HomeViewModel extends ReactiveViewModel {
     setBusyForObject(POST_BUSY, true);
     try {
       await _postService.getPosts(search: value);
-    } catch (e) {
     } finally {
       setBusyForObject(POST_BUSY, false);
     }

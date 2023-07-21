@@ -1,4 +1,3 @@
-import 'package:handjob_mobile/models/user.model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'education.model.g.dart';

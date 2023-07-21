@@ -47,10 +47,10 @@ class ChangePasswordView extends StatelessWidget with $ChangePasswordView {
             body: Padding(
               padding: const EdgeInsets.all(AppSize.s16),
               child: ListView(children: [
-                SizedBox(height: AppSize.s40),
-                Text(
+                const SizedBox(height: AppSize.s40),
+                const Text(
                     'Create a new password that is at least 8 characters long'),
-                SizedBox(height: AppSize.s40),
+                const SizedBox(height: AppSize.s40),
                 InputField(
                   label: 'Enter your current password',
                   hintText: 'Current password',

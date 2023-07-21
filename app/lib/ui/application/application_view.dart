@@ -70,7 +70,7 @@ class ApplicationView extends StatelessWidget {
                           ),
                           const SizedBox(height: AppSize.s24),
                           model.isBusy
-                              ? SkeletonLine()
+                              ? const SkeletonLine()
                               : Text(
                                   '${model.instantJob?.service} ${model.instantJob?.location == null ? "" : "at ${model.instantJob?.location}"}',
                                   style: getBoldStyle(
@@ -79,7 +79,7 @@ class ApplicationView extends StatelessWidget {
                                   ),
                                 ),
                           model.isBusy
-                              ? SkeletonLine()
+                              ? const SkeletonLine()
                               : Text(
                                   model.instantJob?.description ?? "",
                                   style: getRegularStyle(
@@ -89,7 +89,7 @@ class ApplicationView extends StatelessWidget {
                                 ),
                           const SizedBox(height: AppSize.s20),
                           model.isBusy
-                              ? SkeletonLine()
+                              ? const SkeletonLine()
                               : Text(
                                   'MEET UP LOCATION: ${model.instantJob?.meetupLocation ?? model.instantJob?.location}',
                                   style: getMediumStyle(
@@ -99,7 +99,7 @@ class ApplicationView extends StatelessWidget {
                                 ),
                           const SizedBox(height: AppSize.s12),
                           model.isBusy
-                              ? SkeletonLine()
+                              ? const SkeletonLine()
                               : Row(
                                   children: [
                                     DefaultButton(
@@ -181,7 +181,7 @@ class ApplicantItem extends StatelessWidget {
         viewModelBuilder: () => ApplicantItemViewModel(),
         builder: (context, model, _) {
           return Container(
-            margin: EdgeInsets.only(bottom: 10),
+            margin: const EdgeInsets.only(bottom: 10),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -196,14 +196,14 @@ class ApplicantItem extends StatelessWidget {
                           width: AppSize.s32,
                           child: Image.asset('assets/images/logo.jpeg'),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: AppSize.s14,
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: AppSize.s8),
+                            const SizedBox(height: AppSize.s8),
                             Text(
                               applicant.name!,
                               style: getBoldStyle(
@@ -211,7 +211,7 @@ class ApplicantItem extends StatelessWidget {
                                 fontSize: FontSize.s14,
                               ),
                             ),
-                            SizedBox(height: AppSize.s2),
+                            const SizedBox(height: AppSize.s2),
                             Text(
                               '${applicant.occupation ?? ""} at ${applicant.location ?? ""}',
                               style: getRegularStyle(

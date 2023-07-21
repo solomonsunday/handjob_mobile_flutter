@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:stacked/stacked.dart';

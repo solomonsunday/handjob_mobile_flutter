@@ -7,7 +7,7 @@ import '../../../../../utils/helpers.dart';
 import 'comment_item_view_model.dart';
 
 class CommentItemView extends StatelessWidget {
-  CommentItemView({
+  const CommentItemView({
     Key? key,
     required this.comment,
     this.replyComment,
@@ -28,12 +28,12 @@ class CommentItemView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                CustomAvatar(
+                const CustomAvatar(
                   // imgUrl: "",
                   width: 40,
                   height: 40,
                 ),
-                SizedBox(width: AppSize.s14),
+                const SizedBox(width: AppSize.s14),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,9 +43,9 @@ class CommentItemView extends StatelessWidget {
                               '${model.currentUser?.firstName} ${model.currentUser?.lastName}')
                           : Text(
                               '${comment?.author?.firstName} ${comment?.author?.lastName}'),
-                      SizedBox(height: AppSize.s2),
+                      const SizedBox(height: AppSize.s2),
                       Text('${comment?.message}'),
-                      SizedBox(height: AppSize.s2),
+                      const SizedBox(height: AppSize.s2),
                       Row(children: [
                         Text(
                           getTimeDiff(comment!.createdAt!),
@@ -74,7 +74,7 @@ class CommentItemView extends StatelessWidget {
                           ),
                         )
                       ]),
-                      SizedBox(height: AppSize.s8),
+                      const SizedBox(height: AppSize.s8),
                       _buildCommentReplies(count: 0),
                     ],
                   ),
@@ -100,7 +100,7 @@ class CommentItemView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buildDash(),
-            SizedBox(width: AppSize.s12),
+            const SizedBox(width: AppSize.s12),
             Text(
               'View $count more replies',
               style: getRegularStyle(
@@ -108,7 +108,7 @@ class CommentItemView extends StatelessWidget {
                 fontSize: 8,
               ),
             ),
-            SizedBox(width: AppSize.s12),
+            const SizedBox(width: AppSize.s12),
             _buildDash(),
           ]),
     );
@@ -118,7 +118,7 @@ class CommentItemView extends StatelessWidget {
     return Container(
       width: width ?? 24,
       height: 1,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: ColorManager.kGrey3,
       ),
     );

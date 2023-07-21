@@ -11,7 +11,6 @@ import '../../../models/contact.model.dart';
 import '../../../services/authentication.service.dart';
 import '../../../services/contact.service.dart';
 import '../../../services/shared.service.dart';
-import '../../main/main_view.dart';
 
 const String SEND_PROFILE_CONNECTION_REQUEST =
     'SEND_PROFILE_CONNECTION_REQUEST';
@@ -45,7 +44,6 @@ class ApplicantProfileViewModel extends ReactiveViewModel {
     try {
       _user = await _accountService.getAccount(id);
       print('applicant profile: ${user?.toJson()}');
-    } catch (e) {
     } finally {
       notifyListeners();
     }
@@ -55,7 +53,6 @@ class ApplicantProfileViewModel extends ReactiveViewModel {
     try {
       await _contactService.getContactsCount();
       await _contactService.getAllContacts();
-    } on DioError catch (e) {
     } finally {}
   }
 
@@ -63,7 +60,6 @@ class ApplicantProfileViewModel extends ReactiveViewModel {
     setBusyForObject(CONNECTION_REQUEST, true);
     try {
       await _contactService.getConnectionRequests();
-    } on DioError catch (e) {
     } finally {
       setBusyForObject(CONNECTION_REQUEST, false);
     }
@@ -147,7 +143,6 @@ class ApplicantProfileViewModel extends ReactiveViewModel {
       await _contactService.getConnectionRequests();
       await _contactService.getContacts();
       await _contactService.getContactsCount();
-    } on DioError catch (e) {
     } finally {
       setBusyForObject(ACCEPT_PROFILE_CONNECTION, false);
 

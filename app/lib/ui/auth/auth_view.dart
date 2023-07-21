@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:handjob_mobile/ui/auth/auth_view.form.dart';
 import 'package:handjob_mobile/ui/auth/auth_view_model.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:ui_package/ui_package.dart';
@@ -76,7 +75,7 @@ class AuthView extends StatelessWidget with $AuthView {
                         checkColor: ColorManager.kWhiteColor,
                         activeColor: ColorManager.kDarkColor,
                         richText: Container(
-                          margin: EdgeInsets.only(top: 4),
+                          margin: const EdgeInsets.only(top: 4),
                           child: Text(
                             'keep me logged in',
                             style: getRegularStyle(
@@ -127,7 +126,7 @@ class AuthView extends StatelessWidget with $AuthView {
                           ),
                         ),
                       ),
-                      SizedBox(width: AppSize.s12),
+                      const SizedBox(width: AppSize.s12),
                       Text(
                         'OR',
                         style: getRegularStyle(
@@ -135,7 +134,7 @@ class AuthView extends StatelessWidget with $AuthView {
                           fontSize: FontSize.s16,
                         ),
                       ),
-                      SizedBox(width: AppSize.s12),
+                      const SizedBox(width: AppSize.s12),
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
@@ -211,7 +210,7 @@ class AuthView extends StatelessWidget with $AuthView {
                             recognizer: TapGestureRecognizer()
                               ..onTap = () => model.showDialog(),
                           ),
-                          TextSpan(text: ' here')
+                          const TextSpan(text: ' here')
                         ]),
                   ),
                   // Expanded(child: Container()),

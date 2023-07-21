@@ -22,8 +22,9 @@ class ForgotPasswordViewModel extends FormViewModel {
     setBusy(true);
     try {
       var formData = {
-        "email": emailValue!,
+        "email": emailValue?.toString(),
       };
+      print('form data: $formData');
       await _authenticationService.requestForgotPassword(formData);
       Fluttertoast.showToast(
         msg: "A code has been sent to your mail to reset your password.",
@@ -36,6 +37,11 @@ class ForgotPasswordViewModel extends FormViewModel {
       );
       _navigationService.navigateToResetPasswordView(email: emailValue!);
     } on DioError catch (error) {
+      if(error.response!.statusCode! >= 500){
+        setError("An unexpected error has occurred");
+        return;
+      }
+      print("dio error: ${error.response?.statusCode}");
       throw HttpException(error.response!.data["message"]);
     } finally {
       setBusy(false);

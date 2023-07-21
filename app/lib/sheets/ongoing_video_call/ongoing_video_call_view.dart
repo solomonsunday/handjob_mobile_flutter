@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:handjob_mobile/sheets/incoming_call/incoming_call_view_model.dart';
 import 'package:handjob_mobile/sheets/ongoing_video_call/ongoing_video_call_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
-import 'package:ui_package/utils/colors.dart';
-import 'package:ui_package/utils/font_styles.dart';
-import 'package:ui_package/utils/text_styles.dart';
-import 'package:ui_package/utils/values_manager.dart';
 
 class OngoingVideoCallView extends StatelessWidget {
   const OngoingVideoCallView({
@@ -40,7 +35,7 @@ class OngoingVideoCallView extends StatelessWidget {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                child: Container(
+                child: SizedBox(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: Image.asset(
@@ -52,11 +47,11 @@ class OngoingVideoCallView extends StatelessWidget {
               Positioned(
                 top: AppSize.s60,
                 right: AppSize.s16,
-                child: Container(
+                child: SizedBox(
                   height: 104,
                   width: 75,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.all(
+                    borderRadius: const BorderRadius.all(
                       Radius.circular(AppSize.s4),
                     ),
                     child: Image.asset(

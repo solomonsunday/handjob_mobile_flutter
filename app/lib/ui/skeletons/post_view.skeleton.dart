@@ -7,23 +7,23 @@ class PostViewSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: 5,
       itemBuilder: (context, index) => Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
           padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(color: Colors.white),
+          decoration: const BoxDecoration(color: Colors.white),
           child: SkeletonItem(
               child: Column(
             children: [
               Row(
                 children: [
-                  SkeletonAvatar(
+                  const SkeletonAvatar(
                     style: SkeletonAvatarStyle(
                         shape: BoxShape.circle, width: 50, height: 50),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: SkeletonParagraph(
                       style: SkeletonParagraphStyle(
@@ -40,7 +40,7 @@ class PostViewSkeleton extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               SkeletonParagraph(
                 style: SkeletonParagraphStyle(
                     lines: 3,
@@ -52,7 +52,7 @@ class PostViewSkeleton extends StatelessWidget {
                       minLength: MediaQuery.of(context).size.width / 2,
                     )),
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               SkeletonAvatar(
                 style: SkeletonAvatarStyle(
                   width: double.infinity,
@@ -60,11 +60,11 @@ class PostViewSkeleton extends StatelessWidget {
                   maxHeight: MediaQuery.of(context).size.height / 3,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  const Row(
                     children: [
                       SkeletonAvatar(
                           style: SkeletonAvatarStyle(width: 20, height: 20)),

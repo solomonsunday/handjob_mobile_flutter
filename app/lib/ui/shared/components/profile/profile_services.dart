@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:handjob_mobile/ui/profile/profile_view_model.dart';
-import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
 import '../../../../models/user.model.dart';

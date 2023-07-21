@@ -3,10 +3,6 @@ import 'package:handjob_mobile/sheets/outgoing_call/outgoing_call_view_model.dar
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
-import 'package:ui_package/utils/colors.dart';
-import 'package:ui_package/utils/font_styles.dart';
-import 'package:ui_package/utils/text_styles.dart';
-import 'package:ui_package/utils/values_manager.dart';
 
 class OutgoingCallView extends StatelessWidget {
   const OutgoingCallView({
@@ -91,8 +87,8 @@ class OutgoingCallView extends StatelessWidget {
                     GestureDetector(
                       onTap: model.toggleMic,
                       child: Container(
-                        padding: EdgeInsets.all(AppPadding.p16),
-                        decoration: BoxDecoration(
+                        padding: const EdgeInsets.all(AppPadding.p16),
+                        decoration: const BoxDecoration(
                           color: ColorManager.kBackgroundolor,
                           shape: BoxShape.circle,
                         ),
@@ -105,7 +101,7 @@ class OutgoingCallView extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: AppSize.s80)
+                const SizedBox(height: AppSize.s80)
               ],
             ),
           );

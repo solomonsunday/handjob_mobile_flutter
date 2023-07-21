@@ -3,7 +3,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:handjob_mobile/ui/settings/term_of_service/term_of_service_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class TermOfServiceView extends StatelessWidget {
   const TermOfServiceView({super.key});
@@ -19,7 +18,7 @@ class TermOfServiceView extends StatelessWidget {
             title: 'Terms & Condition',
             leadingIcon: GestureDetector(
               onTap: model.goBack,
-              child: Icon(
+              child: const Icon(
                 Icons.arrow_back,
                 color: Colors.black,
               ),

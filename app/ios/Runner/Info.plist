@@ -56,5 +56,9 @@
 	<string>App requires access to your phone’s camera.</string>
 	<key>Privacy - Microphone Usage Description</key>
 	<string>App requires access to your phone’s microphone.</string>
+	<key>NSCameraUsageDescription</key>
+    <string>We require camera access to connect</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>We require microphone access to connect</string>
 </dict>
 </plist>

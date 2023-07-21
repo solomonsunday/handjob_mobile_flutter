@@ -6,8 +6,6 @@ import 'package:skeletons/skeletons.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
-import '../../../models/contact.model.dart';
-import '../../../models/instant_job.model.dart';
 import 'chat_view_model.dart';
 
 class ChatView extends StatelessWidget {
@@ -25,7 +23,7 @@ class ChatView extends StatelessWidget {
           return Scaffold(
             backgroundColor: ColorManager.kWhiteColor,
             appBar: Navbar(
-              leadingIcon: Icon(
+              leadingIcon: const Icon(
                 Icons.arrow_back,
                 color: ColorManager.kDarkColor,
               ),
@@ -42,18 +40,18 @@ class ChatView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  SizedBox(height: AppSize.s8),
+                  const SizedBox(height: AppSize.s8),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppSize.s12,
                       vertical: AppSize.s12,
                     ),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: ColorManager.kWhiteColor,
                     ),
                     child: SearchInput(
                       hintText: 'Search',
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.search,
                         color: ColorManager.kGrey3,
                       ),
@@ -61,7 +59,7 @@ class ChatView extends StatelessWidget {
                     ),
                   ),
                   const Divider(thickness: 2),
-                  SizedBox(height: AppSize.s4),
+                  const SizedBox(height: AppSize.s4),
                   if (model.isBusy) Expanded(child: SkeletonListView()),
                   if (!model.isBusy)
                     Expanded(
@@ -133,7 +131,7 @@ class ChatItem extends StatelessWidget {
               height: AppSize.s40,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                color: Color(0xffd9d9d9),
+                color: const Color(0xffd9d9d9),
               ),
               child: imgUrl == null
                   ? Image.asset(
@@ -174,12 +172,12 @@ class ChatItem extends StatelessWidget {
                       ),
                     ),
             ),
-            SizedBox(width: AppSize.s8),
+            const SizedBox(width: AppSize.s8),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(width: AppSize.s8),
+                  const SizedBox(width: AppSize.s8),
                   Text(
                     '$firstName $lastName',
                     style: getBoldStyle(
@@ -188,7 +186,7 @@ class ChatItem extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '$message',
+                    message,
                     style: getRegularStyle(
                       color: ColorManager.kDarkCharcoal,
                       fontSize: FontSize.s12,
@@ -197,7 +195,7 @@ class ChatItem extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: AppSize.s12),
+            const SizedBox(height: AppSize.s12),
             Column(
               children: [
                 Text(
@@ -209,8 +207,8 @@ class ChatItem extends StatelessWidget {
                 ),
                 if (unReadCount > 0)
                   Container(
-                    padding: EdgeInsets.all(AppSize.s6),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.all(AppSize.s6),
+                    decoration: const BoxDecoration(
                       color: ColorManager.kSecondaryColor,
                       shape: BoxShape.circle,
                     ),

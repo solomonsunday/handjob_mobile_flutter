@@ -1,13 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:handjob_mobile/models/profession_type.model.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 
 import '../app/app.locator.dart';
 import '../client/dio_client.dart';
-import '../enums/auth_type.dart';
 import '../models/auth.model.dart';
 import '../models/user.model.dart';
 import '../utils/contants.dart';
@@ -48,7 +46,7 @@ class AuthenticationService with ListenableServiceMixin {
       try {
         await requestAccessTokenFromRefreshToken(refreshToken);
         return true;
-      } on DioError catch (error) {
+      } on DioError {
         return false;
       }
     }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
 class ProfileBio extends StatelessWidget {

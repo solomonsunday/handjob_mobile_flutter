@@ -53,7 +53,6 @@ class ChatViewModel extends ReactiveViewModel {
     setBusy(true);
     try {
       await _chatService.getConversationList();
-    } catch (e) {
     } finally {
       setBusy(false);
     }

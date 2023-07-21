@@ -43,7 +43,7 @@ class ContactView extends StatelessWidget {
               centerTitle: false,
               titleSpacing: 0,
             ),
-            body: Column(
+            body: const Column(
               mainAxisSize: MainAxisSize.max,
               children: [
                 SizedBox(height: AppSize.s8),
@@ -78,10 +78,10 @@ class TabHeader extends ViewModelWidget<ContactViewModel> {
                   fontSize: FontSize.s12,
                 ),
               ),
-              SizedBox(width: AppSize.s8),
+              const SizedBox(width: AppSize.s8),
               Container(
-                padding: EdgeInsets.all(AppSize.s8),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(AppSize.s8),
+                decoration: const BoxDecoration(
                   color: ColorManager.kGreen,
                   shape: BoxShape.circle,
                 ),
@@ -107,7 +107,7 @@ class TabHeader extends ViewModelWidget<ContactViewModel> {
               ),
               const SizedBox(width: AppSize.s8),
               Container(
-                padding: EdgeInsets.all(AppSize.s8),
+                padding: const EdgeInsets.all(AppSize.s8),
                 decoration: const BoxDecoration(
                   color: ColorManager.kGreen,
                   shape: BoxShape.circle,
@@ -128,7 +128,7 @@ class TabHeader extends ViewModelWidget<ContactViewModel> {
 }
 
 class CustomTabView extends StatefulWidget {
-  CustomTabView({
+  const CustomTabView({
     Key? key,
     required this.tabs,
     this.activeTab = 0,
