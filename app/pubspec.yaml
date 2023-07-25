@@ -44,7 +44,7 @@ dependencies:
     path: ../ui_package
   cached_network_image: ^3.2.1
   uuid: ^3.0.7
-  intl: ^0.18.0
+  intl: ^0.17.0
   dotted_border: ^2.0.0+3
   jwt_decode: ^0.3.1
   flutter_countdown_timer: ^4.1.0
@@ -68,9 +68,14 @@ dependencies:
   webview_flutter: ^4.2.2
   # zego_express_engine: ^3.6.1
   # zego_zim: ^2.8.0+4
-  encrypt: ^5.0.1
-  zego_uikit_prebuilt_call: 
-  zego_uikit_signaling_plugin: 
+  # encrypt: ^5.0.1
+  # zego_uikit_prebuilt_call: 
+  # zego_uikit_signaling_plugin: 
+  connectycube_sdk: ^2.5.3
+  flutter_background: ^1.2.0
+  connectycube_flutter_call_kit: ^2.3.0
+  web_browser_detect: ^2.0.3
+  permission_handler: ^10.4.3
   # permission_handler: ^10.2.0
   # agora_rtc_engine: ^6.1.0
 

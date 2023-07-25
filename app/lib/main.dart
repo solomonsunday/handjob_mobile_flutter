@@ -1,17 +1,25 @@
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'app/app.dialogs.dart';
+import 'managers/call_manager.dart';
+import 'services/authentication.service.dart';
+import 'utils/platform_utils.dart';
 import 'utils/setup_bottom_sheet_ui.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'utils/setup_notification.dart';
 import '../../utils/contants.dart';
+
+import 'package:connectycube_sdk/connectycube_sdk.dart';
+
+String appId = "7221";
+String authKey = "xJhUtyzKwfVrNzu";
+String authSecret = "23EubUj5jJdXKFb";
+P2PSession? callSession;
 
 FirebaseMessaging messaging = FirebaseMessaging.instance;
 
@@ -36,8 +44,10 @@ void main() async {
   //  /// 1.1.1 define a navigator key
   // final navigatorKey = GlobalKey<NavigatorState>();
 
+  CubeSettings.instance.isDebugEnabled =
+      true; // to enable ConnectyCube SDK logs;
   // /// 1.1.2: set navigator key to ZegoUIKitPrebuiltCallInvitationService
-  ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(StackedService.navigatorKey!);
+  // ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(StackedService.navigatorKey!);
   runApp(const MyApp());
 }
 
@@ -53,19 +63,26 @@ void setupSubscription() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
-
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AppViewModel>.nonReactive(
       viewModelBuilder: () => AppViewModel(),
       onViewModelReady: (model) {
-        // model.initializeView();
+        // initializeCallSession();
+
+        initForegroundService();
+
+        checkSystemAlertWindowPermission(context);
+
+        requestNotificationsPermission();
+        // PushNotificationsManager.instance.init();
+        init(appId, authKey, authSecret, onSessionRestore: restoreSession);
       },
       onDispose: (model) {
         // model.dispose();
       },
       builder: (context, model, _) {
+        CallManager.instance.init(context);
         return MaterialApp(
           title: 'Handyworker Mobile',
           debugShowCheckedModeBanner: false,
@@ -78,116 +95,28 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+
+  Future<CubeSession> restoreSession() {
+  // CubeUser savedUser; //some CubeUser, which was saved before
+  if(currentUser != null) {
+    var name = '${currentUser?.firstName} ${currentUser?.lastName}';
+    return createSession(CubeUser(
+        // isGuest: true,
+        // id: 123,
+        login: currentUser?.id,
+        fullName: name,
+        email: currentUser?.email,
+        avatar: currentUser?.imageUrl,
+        password: "DEFAULT_PASS",
+        
+      ));
+  }
+  return createSession();
+}
 }
 
 class AppViewModel extends BaseViewModel {
   // final _chatService = locator<ChatService>();
-
-  // IO.Socket get chatSocket => _chatService.chatSocket;
-  // List<StreamSubscription> subscriptions = [];
-  
-  initializeView() async {
-    // await _chatService.initSocket();
-    // subscriptions.addAll([
-    //   ZEGOSDKManager.instance.zimService.incomingCallInvitationReceivedStreamCtrl.stream.listen(
-    //     onIncomingCallInvitationReceived,
-    //   ),
-    //   ZEGOSDKManager.instance.zimService.incomingCallInvitationCanceledStreamCtrl.stream.listen(
-    //     onIncomingCallInvitationCanceled,
-    //   ),
-    //   ZEGOSDKManager.instance.zimService.incomingCallInvitationTimeoutStreamCtrl.stream.listen(
-    //     onIncomingCallInvitationTimeout,
-    //   )
-    // ]);
-  }
-
-  //  void onIncomingCallInvitationReceived(IncomingCallInvitationReveivedEvent event) {
-  //   print('onIncomingCallInvitationReceived');
-  //   print(event);
-    // dialogIsShowing = true;
-    // showTopModalSheet(
-    //   context,
-    //   GestureDetector(
-    //     onTap: onIncomingCallDialogClicked,
-    //     child: ZegoCallInvitationDialog(
-    //       invitationData: ZegoCallStateManager.instance.callData!,
-    //       onAcceptCallback: acceptCall,
-    //       onRejectCallback: rejectCall,
-    //     ),
-    //   ),
-    //   barrierDismissible: false,
-    // );
-  // }
-
-  void hideIncomingCallDialog() {
-    print('hideIncomingCallDialog');
-    // if (dialogIsShowing) {
-    //   dialogIsShowing = false;
-    //   Navigator.of(context).pop();
-    // }
-  }
-
-  // void onIncomingCallInvitationCanceled(IncomingCallInvitationCanceledEvent event) {
-  //   hideIncomingCallDialog();
-  // }
-
-  //   void onIncomingCallInvitationTimeout(IncomingCallInvitationTimeoutEvent event) {
-  //   hideIncomingCallDialog();
-  // }
-
-void pushToCallWaitingPage() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     fullscreenDialog: true,
-    //     builder: (context) => CallWaitingPage(callData: ZegoCallStateManager.instance.callData!),
-    //   ),
-    // );
-  }
-
-  void pushToCallingPage() {
-    // if (ZegoCallStateManager.instance.callData != null) {
-    //   ZegoUserInfo otherUser;
-    //   if (ZegoCallStateManager.instance.callData!.inviter.userID != ZEGOSDKManager.instance.localUser.userID) {
-    //     otherUser = ZegoCallStateManager.instance.callData!.inviter;
-    //   } else {
-    //     otherUser = ZegoCallStateManager.instance.callData!.invitee;
-    //   }
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       fullscreenDialog: true,
-    //       builder: (context) =>
-    //           CallingPage(callData: ZegoCallStateManager.instance.callData!, otherUserInfo: otherUser),
-    //     ),
-    //   );
-    // }
-  }
-
-  Future<T?> showTopModalSheet<T>(BuildContext context, Widget widget, {bool barrierDismissible = true}) {
-    return showGeneralDialog<T?>(
-      context: context,
-      barrierDismissible: barrierDismissible,
-      transitionDuration: const Duration(milliseconds: 250),
-      barrierLabel: MaterialLocalizations.of(context).dialogLabel,
-      barrierColor: Colors.black.withOpacity(0.5),
-      pageBuilder: (context, _, __) => SafeArea(
-          child: Column(
-        children: [
-          const SizedBox(height: 16),
-          widget,
-        ],
-      )),
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        return SlideTransition(
-          position: CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)
-              .drive(Tween<Offset>(begin: const Offset(0, -1.0), end: Offset.zero)),
-          child: child,
-        );
-      },
-    );
-  }
-
 
   @override
   void dispose() {

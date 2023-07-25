@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:connectycube_sdk/connectycube_sdk.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/main.dart';
+import 'package:handjob_mobile/managers/call_manager.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -184,13 +186,51 @@ class MainViewModel extends ReactiveViewModel {
     // }
   }
 
-  void onZegoUserConnect() {
-    _videoCallService.onZegoUserConnect(currentUser);
+  // void onZegoUserConnect() {
+  //   _videoCallService.onZegoUserConnect(currentUser);
+  // }
+
+  // void onZegoUserDisconnect() {
+  //   _videoCallService.onZegoUserDisconnect();
+  // }
+  void onConnectCubeUser(User currentUser) async {
+    log('onConnectCubeUser: $currentUser', 'ConnectCube');
+    var name = "${currentUser.firstName} ${currentUser.lastName}";
+    print('session state: ${CubeSessionManager.instance.activeSession}');
+    // if(CubeSessionManager.instance.isActiveSessionValid()) return;
+    try {
+      var response = await createSession();
+// CubeSessionManager.instance.setToken(response.token!);
+var foundCubeUser = await getUserByLogin(currentUser.id!);
+      CubeUser cubeUser = CubeUser(
+        // isGuest: true,
+        // id: 123,
+        login: currentUser.id,
+        fullName: name,
+        email: currentUser.email,
+        avatar: currentUser.imageUrl,
+
+        customData: currentUser.id,
+        password: "DEFAULT_PASS",
+        
+      );
+      if (foundCubeUser != null) {
+        await signIn(cubeUser);
+      } else {
+        await signUp(cubeUser);
+      }
+      print('logged in cubeuser: $foundCubeUser');
+    } catch (e) {
+      
+      print('exception: $e');
+    }
   }
 
-  void onZegoUserDisconnect() {
-    _videoCallService.onZegoUserDisconnect();
+  void onDisconnectCubeUser() async {
+    try {
+      await signOut();
+    } catch (e) {
+      print('error destroying session: $e');
+    }
   }
-
-  
 }

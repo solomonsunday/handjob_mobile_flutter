@@ -1,13 +1,15 @@
 
+import 'package:connectycube_sdk/connectycube_sdk.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.router.dart';
+import 'package:handjob_mobile/managers/call_manager.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/utils/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 import '../../app/app.locator.dart';
+import '../../main.dart';
 import '../../models/contact.model.dart';
 import '../../services/contact.service.dart';
 import '../../services/video-call.service.dart';
@@ -129,24 +131,20 @@ class ContactViewModel extends ReactiveViewModel {
     );
   }
 
-  handleVideoCall(Contact contact) async  {
-    try {
-       await _videoCallService.callController?.sendCallInvitation(invitees: [
-        ZegoCallUser(contact.id!, '${contact.firstName} ${contact.lastName}'),
-    ], isVideoCall: true,
-    
-    );
-    } catch (e) {
-      // print('Error: ' + e.toString());
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: ColorManager.kDarkColor,
-        textColor: ColorManager.kWhiteColor,
-      );
-    }
-  }
+  // handleVideoCall(Contact contact) async  {
+  //   try {
+
+  //   } catch (e) {
+  //     // print('Error: ' + e.toString());
+  //     Fluttertoast.showToast(
+  //       msg: e.toString(),
+  //       toastLength: Toast.LENGTH_LONG,
+  //       gravity: ToastGravity.BOTTOM,
+  //       backgroundColor: ColorManager.kDarkColor,
+  //       textColor: ColorManager.kWhiteColor,
+  //     );
+  //   }
+  // }
 
   //handle video call
   // handleVideoCall(BuildContext context, Contact contact, {required String id, required String name}) async {
@@ -178,6 +176,13 @@ class ContactViewModel extends ReactiveViewModel {
 
   handleViewContactProfile(Contact contact) => _navigationService
       .navigateToApplicantProfileView(applicantId: contact.id!);
+
+  void showUserNotAvailableDialog(Contact contact) {
+    _dialogService.showDialog(
+      title: "User not available",
+      description: "${contact.firstName} ${contact.lastName} is not online at the moment",
+    );
+  }
 
 
 //Zego cloud

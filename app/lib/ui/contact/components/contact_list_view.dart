@@ -1,9 +1,11 @@
+import 'package:connectycube_sdk/connectycube_calls.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/models/experience.model.dart';
 import 'package:handjob_mobile/ui/contact/contact_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
+import '../../../managers/call_manager.dart';
 import '../../../models/contact.model.dart';
 import '../../shared/components/rating/rating.dart';
 
@@ -73,7 +75,20 @@ class ContactListView extends StatelessWidget {
                         return ContactListItem(
                           contact: contact,
                           onAudioCall: model.handleAudioCall,
-                          onVideoCall: (Contact contact) => model.handleVideoCall(contact),
+                          onVideoCall: (Contact contact)  async {
+                            Set<int> callIds = {};
+                           try {
+                              var name = "${contact.firstName} ${contact.lastName}";
+                            var found = await getUserByLogin(contact.id!);
+                            print('cc found: $found callId: ${found?.id}');
+                            callIds.add(found!.id!);
+                            CallManager.instance.startNewCall(
+                        context, CallType.VIDEO_CALL, callIds);
+                           } catch (e) {
+                             model.showUserNotAvailableDialog(contact);
+                           }
+                            
+                        },
                           onChat: model.handleChat,
                           onDeleteContact: model.handleDeleteContact,
                           onViewContactProfile: model.handleViewContactProfile,
@@ -155,26 +170,10 @@ class ContactListItem extends StatelessWidget {
               fontSize: FontSize.s10,
             ),
           ),
-        //   ZegoSendCallInvitationButton(
-        //     isVideoCall: true,
-        //     //  resourceID: "zegouikit_call",    // For offline call notification
-        //     invitees: [
-        //         ZegoUIKitUser(
-        //           id: contact.id ?? "",
-        //           name: '${contact.firstName} ${contact.lastName}',
-        //         ),
-        //     ],
-        //     text: 'Call',
-        //     buttonSize: const Size(50, 70),
-        //      iconSize: const Size(24, 24),
-
-        //  onPressed: (code, message, p2) {
-        //    print( 'code: $code, message:$message');
-        //  },
-        //   ),
+         
         ],
       ),
-      minVerticalPadding: AppPadding.p20,
+      minVerticalPadding: AppPadding.p20, 
       trailing: 
           PopupMenuButton<String>(
             onSelected: (value) {
