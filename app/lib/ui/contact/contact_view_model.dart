@@ -184,6 +184,21 @@ class ContactViewModel extends ReactiveViewModel {
     );
   }
 
+  Future<void> initiateVideoCall(Set<int> callIds) async {
+    P2PClient callClient = P2PClient.instance;
+    // callClient.init(); // starts listening of incoming calls
+    // callClient.destroy(); // stops listening incoming calls and clears callbacks
+
+    int callType = CallType.VIDEO_CALL; // or CallType.AUDIO_CALL
+    P2PSession callSession = callClient.createCallSession(callType, callIds);
+    try {
+      await callSession.startCall();
+      print('call initiated');
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
 
 //Zego cloud
 

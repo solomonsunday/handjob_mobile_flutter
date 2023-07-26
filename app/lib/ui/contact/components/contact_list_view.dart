@@ -75,20 +75,21 @@ class ContactListView extends StatelessWidget {
                         return ContactListItem(
                           contact: contact,
                           onAudioCall: model.handleAudioCall,
-                          onVideoCall: (Contact contact)  async {
+                          onVideoCall: (Contact contact) async {
                             Set<int> callIds = {};
-                           try {
-                              var name = "${contact.firstName} ${contact.lastName}";
-                            var found = await getUserByLogin(contact.id!);
-                            print('cc found: $found callId: ${found?.id}');
-                            callIds.add(found!.id!);
-                            CallManager.instance.startNewCall(
-                        context, CallType.VIDEO_CALL, callIds);
-                           } catch (e) {
-                             model.showUserNotAvailableDialog(contact);
-                           }
-                            
-                        },
+                            try {
+                              var name =
+                                  "${contact.firstName} ${contact.lastName}";
+                              var found = await getUserByLogin(contact.id!);
+                              print('cc found: $found callId: ${found?.id}');
+                              callIds.add(found!.id!);
+                              await model.initiateVideoCall(callIds);
+                              //     CallManager.instance.startNewCall(
+                              // context, CallType.VIDEO_CALL, callIds);
+                            } catch (e) {
+                              model.showUserNotAvailableDialog(contact);
+                            }
+                          },
                           onChat: model.handleChat,
                           onDeleteContact: model.handleDeleteContact,
                           onViewContactProfile: model.handleViewContactProfile,
@@ -170,101 +171,98 @@ class ContactListItem extends StatelessWidget {
               fontSize: FontSize.s10,
             ),
           ),
-         
         ],
       ),
-      minVerticalPadding: AppPadding.p20, 
-      trailing: 
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              print('value selected: $value');
-              switch (value) {
-                case AUDIO_CALL:
-                  onAudioCall(contact);
-                  break;
-                case VIDEO_CALL:
-                  onVideoCall(contact);
-                  break;
-                case CHAT:
-                  onChat(contact);
-                  break;
-                case DELETE:
-                  onDeleteContact(contact.id!);
-                  break;
-                default:
-                  break;
-              }
-            },
-            itemBuilder: (BuildContext bc) {
-              return [
-                const PopupMenuItem(
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.phone,
-                        color: ColorManager.kDarkColor,
-                      ),
-                      SizedBox(
-                        width: AppSize.s16,
-                      ),
-                      Text('Audio Call')
-                    ],
+      minVerticalPadding: AppPadding.p20,
+      trailing: PopupMenuButton<String>(
+        onSelected: (value) {
+          print('value selected: $value');
+          switch (value) {
+            case AUDIO_CALL:
+              onAudioCall(contact);
+              break;
+            case VIDEO_CALL:
+              onVideoCall(contact);
+              break;
+            case CHAT:
+              onChat(contact);
+              break;
+            case DELETE:
+              onDeleteContact(contact.id!);
+              break;
+            default:
+              break;
+          }
+        },
+        itemBuilder: (BuildContext bc) {
+          return [
+            const PopupMenuItem(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.phone,
+                    color: ColorManager.kDarkColor,
                   ),
-                  value: AUDIO_CALL,
-                ),
-                const PopupMenuItem(
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.videocam,
-                        color: ColorManager.kDarkColor,
-                      ),
-                      SizedBox(
-                        width: AppSize.s16,
-                      ),
-                      Text('Video Call')
-                    ],
+                  SizedBox(
+                    width: AppSize.s16,
                   ),
-                  value: VIDEO_CALL,
-                ),
-                const PopupMenuItem(
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.chat,
-                        color: ColorManager.kDarkColor,
-                      ),
-                      SizedBox(
-                        width: AppSize.s16,
-                      ),
-                      Text('Chat')
-                    ],
-                  ),
-                  value: CHAT,
-                ),
-                const PopupMenuItem(
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.delete,
-                        color: ColorManager.kDarkColor,
-                      ),
-                      SizedBox(
-                        width: AppSize.s16,
-                      ),
-                      Text('Delete')
-                    ],
-                  ),
-                  value: DELETE,
-                )
-              ];
-            },
-            child: const Icon(
-              Icons.more_vert,
-              size: AppSize.s24,
+                  Text('Audio Call')
+                ],
+              ),
+              value: AUDIO_CALL,
             ),
-          ),
-       
+            const PopupMenuItem(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.videocam,
+                    color: ColorManager.kDarkColor,
+                  ),
+                  SizedBox(
+                    width: AppSize.s16,
+                  ),
+                  Text('Video Call')
+                ],
+              ),
+              value: VIDEO_CALL,
+            ),
+            const PopupMenuItem(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.chat,
+                    color: ColorManager.kDarkColor,
+                  ),
+                  SizedBox(
+                    width: AppSize.s16,
+                  ),
+                  Text('Chat')
+                ],
+              ),
+              value: CHAT,
+            ),
+            const PopupMenuItem(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.delete,
+                    color: ColorManager.kDarkColor,
+                  ),
+                  SizedBox(
+                    width: AppSize.s16,
+                  ),
+                  Text('Delete')
+                ],
+              ),
+              value: DELETE,
+            )
+          ];
+        },
+        child: const Icon(
+          Icons.more_vert,
+          size: AppSize.s24,
+        ),
+      ),
     );
   }
 }

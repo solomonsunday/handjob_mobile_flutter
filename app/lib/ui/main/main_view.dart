@@ -174,7 +174,7 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'HandJobs',
+                    'HandWorker',
                     style: getSemiBoldStyle(
                       color: ColorManager.kPrimaryColor,
                       fontSize: FontSize.s24,

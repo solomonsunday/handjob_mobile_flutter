@@ -198,10 +198,6 @@ class MainViewModel extends ReactiveViewModel {
     var name = "${currentUser.firstName} ${currentUser.lastName}";
     print('session state: ${CubeSessionManager.instance.activeSession}');
     // if(CubeSessionManager.instance.isActiveSessionValid()) return;
-    try {
-      var response = await createSession();
-// CubeSessionManager.instance.setToken(response.token!);
-var foundCubeUser = await getUserByLogin(currentUser.id!);
       CubeUser cubeUser = CubeUser(
         // isGuest: true,
         // id: 123,
@@ -214,6 +210,10 @@ var foundCubeUser = await getUserByLogin(currentUser.id!);
         password: "DEFAULT_PASS",
         
       );
+    try {
+      var response = await createSession();
+// CubeSessionManager.instance.setToken(response.token!);
+var foundCubeUser = await getUserByLogin(currentUser.id!);
       if (foundCubeUser != null) {
         await signIn(cubeUser);
       } else {
@@ -221,7 +221,9 @@ var foundCubeUser = await getUserByLogin(currentUser.id!);
       }
       print('logged in cubeuser: $foundCubeUser');
     } catch (e) {
-      
+      //if user is not found, sign up
+      print('sign up user in exception');
+      await signUp(cubeUser);
       print('exception: $e');
     }
   }

@@ -95,11 +95,11 @@ class CallManager {
         localMediaStream = localStream;
       };
 
-      _currentCall?.onRemoteStreamReceived = (session, userId, stream){
+      _currentCall?.onRemoteStreamReceived = (session, userId, stream) {
         remoteStreams[userId] = stream;
       };
 
-      _currentCall?.onRemoteStreamRemoved = (session, userId, stream){
+      _currentCall?.onRemoteStreamRemoved = (session, userId, stream) {
         remoteStreams.remove(userId);
       };
     };
@@ -118,7 +118,10 @@ class CallManager {
   void startNewCall(
       BuildContext context, int callType, Set<int> opponents) async {
     if (opponents.isEmpty) return;
+    // if (_callClient == null) return;
+    CallManager.instance.init(context);
 
+    print('callclient: $_callClient');
     P2PSession callSession =
         _callClient!.createCallSession(callType, opponents);
     _currentCall = callSession;

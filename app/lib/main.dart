@@ -65,6 +65,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+         init(appId, authKey, authSecret, onSessionRestore: restoreSession);
+        CallManager.instance.init(context);
     return ViewModelBuilder<AppViewModel>.nonReactive(
       viewModelBuilder: () => AppViewModel(),
       onViewModelReady: (model) {
@@ -76,7 +78,7 @@ class MyApp extends StatelessWidget {
 
         requestNotificationsPermission();
         // PushNotificationsManager.instance.init();
-        init(appId, authKey, authSecret, onSessionRestore: restoreSession);
+   
       },
       onDispose: (model) {
         // model.dispose();
