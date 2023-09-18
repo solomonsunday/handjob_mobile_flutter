@@ -56,7 +56,7 @@ class ChatDetailView extends StatelessWidget {
                         height: 36,
                         child: contact.imageUrl == null
                             ? Image.asset(
-                                'assets/images/logo.jpeg',
+                                'assets/images/logo.png',
                                 fit: BoxFit.cover,
                               )
                             : CachedNetworkImage(
@@ -64,7 +64,7 @@ class ChatDetailView extends StatelessWidget {
                                   decoration: const BoxDecoration(
                                     image: DecorationImage(
                                       image:
-                                          AssetImage("assets/images/logo.jpeg"),
+                                          AssetImage("assets/images/logo.png"),
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -74,7 +74,7 @@ class ChatDetailView extends StatelessWidget {
                                     decoration: const BoxDecoration(
                                       image: DecorationImage(
                                         image: AssetImage(
-                                            "assets/images/logo.jpeg"),
+                                            "assets/images/logo.png"),
                                         fit: BoxFit.cover,
                                       ),
                                     ),

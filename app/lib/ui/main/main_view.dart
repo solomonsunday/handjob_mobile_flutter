@@ -9,8 +9,6 @@ import 'package:handjob_mobile/ui/main/post/post_view.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
-
-import '../../managers/call_manager.dart';
 import '../../utils/contants.dart';
 import 'main_view_model.dart';
 
@@ -23,8 +21,6 @@ class MainView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainViewModel>.reactive(
       onViewModelReady: (model) async {
-        // model.onZegoUserConnect();
-        model.onConnectCubeUser(model.currentUser!);
         model.fetchPost();
         await model.fetchStates();
         await model.fetchLGA();
@@ -39,9 +35,6 @@ class MainView extends StatelessWidget {
       viewModelBuilder: () => MainViewModel(),
       onDispose: (model) {
         model.dispose();
-        model.onDisconnectCubeUser();
-        // model.disconnectZegoCloudSdk();
-        // model.onZegoUserDisconnect();
       },
       builder: (context, model, child) => Scaffold(
         body: getView(model.currentIndex),
@@ -173,13 +166,14 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'HandWorker',
-                    style: getSemiBoldStyle(
-                      color: ColorManager.kPrimaryColor,
-                      fontSize: FontSize.s24,
-                    ),
-                  ),
+                  // Text(
+                  //   'HandWorker',
+                  //   style: getSemiBoldStyle(
+                  //     color: ColorManager.kPrimaryColor,
+                  //     fontSize: FontSize.s24,
+                  //   ),
+                  // ),
+                  SizedBox(height: 70, width: 240, child: Image.asset('assets/images/1.png')),
                   GestureDetector(
                     onTap: model.navigateBack,
                     child: const Icon(
@@ -200,7 +194,7 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                           width: AppSize.s56,
                           height: AppSize.s56,
                           child: Image.asset(
-                            'assets/images/logo.jpeg',
+                            'assets/images/logo.png',
                             fit: BoxFit.cover,
                           ),
                         )

@@ -72,7 +72,7 @@ class TabItem extends StatelessWidget {
             Row(
               children: [
                 const CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/logo.jpeg'),
+                  backgroundImage: AssetImage('assets/images/logo.png'),
                   radius: 16,
                 ),
                 const SizedBox(width: AppSize.s8),
@@ -171,7 +171,7 @@ class AppliedJobTabItem extends StatelessWidget {
           Row(
             children: [
               const CircleAvatar(
-                backgroundImage: AssetImage('assets/images/logo.jpeg'),
+                backgroundImage: AssetImage('assets/images/logo.png'),
                 radius: 16,
               ),
               const SizedBox(width: AppSize.s8),

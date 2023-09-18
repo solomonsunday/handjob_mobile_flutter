@@ -46,7 +46,7 @@ class ProfileServiceSheet extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: AppSize.s24),
-              const Text('Add up to five services'),
+              const Text('You can add up to five services'),
               const SizedBox(height: AppSize.s24),
               DefaultDropDownField(
                 hint: 'Select service',

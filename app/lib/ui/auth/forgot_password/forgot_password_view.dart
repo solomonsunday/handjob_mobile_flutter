@@ -29,7 +29,7 @@ class ForgotPasswordView extends StatelessWidget with $ForgotPasswordView {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   const SizedBox(height: AppSize.s12),
-                  Image.asset('assets/images/favicon.png'),
+                  Image.asset('assets/images/1.png'),
                   const SizedBox(height: AppSize.s12),
                   Text(
                     'Forgot Password?',

@@ -1,15 +1,11 @@
-
-import 'package:connectycube_sdk/connectycube_sdk.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.router.dart';
-import 'package:handjob_mobile/managers/call_manager.dart';
+import 'package:handjob_mobile/enums/bottom_sheet_type.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:ui_package/utils/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../app/app.locator.dart';
-import '../../main.dart';
 import '../../models/contact.model.dart';
 import '../../services/contact.service.dart';
 import '../../services/video-call.service.dart';
@@ -131,6 +127,35 @@ class ContactViewModel extends ReactiveViewModel {
     );
   }
 
+  handleVoiceCall(Contact contact) {
+    // if (contact.phoneNumber == null) {
+    //   _dialogService.showDialog(
+    //       title: "No phone number",
+    //       description: "Please update your phone number");
+    //   return;
+    // }
+    // _makePhoneCall(contact.phoneNumber!);
+    _bottomSheetService.showCustomSheet(
+      variant: BottomSheetType.ongoing_voice_call,
+      isScrollControlled: true,
+      data: {
+        'contact': contact,
+        'call_role': 'anchor',
+      },
+    );
+  }
+
+  handleVideoCall(Contact contact) {
+    _bottomSheetService.showCustomSheet(
+      variant: BottomSheetType.ongoing_video_call,
+      isScrollControlled: true,
+      data: {
+        'contact': contact,
+        'call_role': 'anchor',
+      },
+    );
+  }
+
   // handleVideoCall(Contact contact) async  {
   //   try {
 
@@ -180,25 +205,10 @@ class ContactViewModel extends ReactiveViewModel {
   void showUserNotAvailableDialog(Contact contact) {
     _dialogService.showDialog(
       title: "User not available",
-      description: "${contact.firstName} ${contact.lastName} is not online at the moment",
+      description:
+          "${contact.firstName} ${contact.lastName} is not online at the moment",
     );
   }
-
-  Future<void> initiateVideoCall(Set<int> callIds) async {
-    P2PClient callClient = P2PClient.instance;
-    // callClient.init(); // starts listening of incoming calls
-    // callClient.destroy(); // stops listening incoming calls and clears callbacks
-
-    int callType = CallType.VIDEO_CALL; // or CallType.AUDIO_CALL
-    P2PSession callSession = callClient.createCallSession(callType, callIds);
-    try {
-      await callSession.startCall();
-      print('call initiated');
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
-
 
 //Zego cloud
 

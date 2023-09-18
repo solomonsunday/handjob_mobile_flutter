@@ -51,7 +51,7 @@ class ProfileHeader extends StatelessWidget {
                             currentUser?.imageUrl == "" ||
                             currentUser?.imageUrl == null
                         ? Image.asset(
-                            'assets/images/logo.jpeg',
+                            'assets/images/logo.png',
                             fit: BoxFit.cover,
                           )
                         : CachedNetworkImage(
@@ -68,7 +68,7 @@ class ProfileHeader extends StatelessWidget {
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                     image:
-                                        AssetImage("assets/images/logo.jpeg"),
+                                        AssetImage("assets/images/logo.png"),
                                     fit: BoxFit.cover,
                                   ),
                                 ),

@@ -66,7 +66,7 @@ class HomeCard extends StatelessWidget {
                         ),
                         child: post.author?.imageUrl == null
                             ? Image.asset(
-                                'assets/images/logo.jpeg',
+                                'assets/images/logo.png',
                                 fit: BoxFit.cover,
                               )
                             : CachedNetworkImage(
@@ -75,7 +75,7 @@ class HomeCard extends StatelessWidget {
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
                                       image:
-                                          AssetImage("assets/images/logo.jpeg"),
+                                          AssetImage("assets/images/logo.png"),
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -86,7 +86,7 @@ class HomeCard extends StatelessWidget {
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
                                         image: AssetImage(
-                                            "assets/images/logo.jpeg"),
+                                            "assets/images/logo.png"),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -192,18 +192,6 @@ class HomeCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Container(
-                      //   padding: const EdgeInsets.symmetric(
-                      //     horizontal: AppPadding.p16,
-                      //   ),
-                      //   child: Text(
-                      //     post.title ?? "",
-                      //     style: getSemiBoldStyle(
-                      //       color: ColorManager.kDarkColor,
-                      //       fontSize: FontSize.FontSize.s14,
-                      //     ),
-                      //   ),
-                      // ),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppPadding.p8,
@@ -255,7 +243,7 @@ class HomeCard extends StatelessWidget {
                                       decoration: const BoxDecoration(
                                         image: DecorationImage(
                                           image: AssetImage(
-                                              "assets/images/logo.jpeg"),
+                                              "assets/images/logo.png"),
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -265,7 +253,7 @@ class HomeCard extends StatelessWidget {
                                         decoration: const BoxDecoration(
                                           image: DecorationImage(
                                             image: AssetImage(
-                                                "assets/images/logo.jpeg"),
+                                                "assets/images/logo.png"),
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -355,14 +343,7 @@ class HomeCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    // model.busy(LIKE_POST)
-                    //     ? const LinearProgressIndicator(
-                    //         valueColor: AlwaysStoppedAnimation(
-                    //           ColorManager.kDarkColor,
-                    //         ),
-                    //         backgroundColor: ColorManager.kBackgroundolor,
-                    //       )
-                    //     : Container(),
+              
                     const Divider()
                   ],
                 ),

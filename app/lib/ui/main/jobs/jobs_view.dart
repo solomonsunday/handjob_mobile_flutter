@@ -180,13 +180,13 @@ class JobItem extends StatelessWidget {
                           color: const Color(0xffd9d9d9),
                         ),
                         child: instantJob.company?.imageUrl == null
-                            ? Image.asset('assets/images/logo.jpeg')
+                            ? Image.asset('assets/images/logo.png')
                             : CachedNetworkImage(
                                 placeholder: (context, url) => Container(
                                   decoration: const BoxDecoration(
                                     image: DecorationImage(
                                       image:
-                                          AssetImage("assets/images/logo.jpeg"),
+                                          AssetImage("assets/images/logo.png"),
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -196,7 +196,7 @@ class JobItem extends StatelessWidget {
                                     decoration: const BoxDecoration(
                                       image: DecorationImage(
                                         image: AssetImage(
-                                            "assets/images/logo.jpeg"),
+                                            "assets/images/logo.png"),
                                         fit: BoxFit.cover,
                                       ),
                                     ),

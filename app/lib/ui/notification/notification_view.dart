@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/app/app.router.dart';
+import 'package:handjob_mobile/dialogs/account_type.dialog.dart';
 import 'package:handjob_mobile/models/notification.model.dart'
     as NotificationModel;
 import 'package:handjob_mobile/ui/contact/contact_view_model.dart';
+import 'package:handjob_mobile/utils/contants.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
@@ -160,11 +162,23 @@ class NotificationItemViewModel extends BaseViewModel {
     switch (notification.notificationType) {
       case 'instant_services':
         print('instant job type of noticiation  ');
-
-        _navigationService.navigateToApplicationView(
-          instantJobId: notification.entityId!,
-          // user: currentUser!,
-        );
+        print('current user role: ${currentUser?.accountType}');
+        if (currentUser?.accountType == ACCOUNT_ARTISAN) {
+          print('i am an artisan');
+          _navigationService.navigateToNotificationJobDetailView(
+            instantJobId: notification.entityId!,
+            user: currentUser!,
+          );
+        } else {
+          print('i am a customer');
+          _navigationService.navigateToApplicationView(
+            instantJobId: notification.entityId!,
+          );
+        }
+        // _navigationService.navigateToApplicationView(
+        //   instantJobId: notification.entityId!,
+        //   // user: currentUser!,
+        // );
 
         break;
       case 'post':

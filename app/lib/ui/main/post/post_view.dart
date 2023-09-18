@@ -84,7 +84,7 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
                       ? const CircleAvatar(
                           radius: AppSize.s24,
                           backgroundImage:
-                              AssetImage('assets/images/logo.jpeg'))
+                              AssetImage('assets/images/logo.png'))
                       : CachedNetworkImage(
                           placeholder: (context, url) => const SizedBox(
                             width: 24,
@@ -96,7 +96,7 @@ class PostFormView extends ViewModelWidget<PostViewModel> {
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                  image: AssetImage("assets/images/logo.jpeg"),
+                                  image: AssetImage("assets/images/logo.png"),
                                   fit: BoxFit.cover,
                                 ),
                               ),

@@ -27,15 +27,15 @@ class ProfileAvatar extends StatelessWidget {
               width: 1,
               color: ColorManager.kBackgroundolor,
             ),
+            color: ColorManager.kPrimaryColor,
           ),
           width: AppSize.s100,
           height: AppSize.s100,
           child: imgUrl == null
-              ? const CircleAvatar(
-                  backgroundImage: AssetImage(
-                    'assets/images/logo.jpeg',
-                  ),
-                )
+              ? Image.asset(
+                            'assets/images/logo.png',
+                            fit: BoxFit.cover,
+                          )
               : CachedNetworkImage(
                   placeholder: (context, url) => const SizedBox(
                     width: 24,
@@ -47,7 +47,7 @@ class ProfileAvatar extends StatelessWidget {
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: AssetImage("assets/images/logo.jpeg"),
+                          image: AssetImage("assets/images/logo.png"),
                           fit: BoxFit.cover,
                         ),
                       ),

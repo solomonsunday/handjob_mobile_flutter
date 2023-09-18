@@ -1,11 +1,9 @@
-import 'package:connectycube_sdk/connectycube_calls.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/models/experience.model.dart';
 import 'package:handjob_mobile/ui/contact/contact_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
-import '../../../managers/call_manager.dart';
 import '../../../models/contact.model.dart';
 import '../../shared/components/rating/rating.dart';
 
@@ -74,22 +72,8 @@ class ContactListView extends StatelessWidget {
                         Contact contact = model.contactList![index];
                         return ContactListItem(
                           contact: contact,
-                          onAudioCall: model.handleAudioCall,
-                          onVideoCall: (Contact contact) async {
-                            Set<int> callIds = {};
-                            try {
-                              var name =
-                                  "${contact.firstName} ${contact.lastName}";
-                              var found = await getUserByLogin(contact.id!);
-                              print('cc found: $found callId: ${found?.id}');
-                              callIds.add(found!.id!);
-                              await model.initiateVideoCall(callIds);
-                              //     CallManager.instance.startNewCall(
-                              // context, CallType.VIDEO_CALL, callIds);
-                            } catch (e) {
-                              model.showUserNotAvailableDialog(contact);
-                            }
-                          },
+                          onAudioCall: model.handleVoiceCall,
+                          onVideoCall: model.handleVideoCall,
                           onChat: model.handleChat,
                           onDeleteContact: model.handleDeleteContact,
                           onViewContactProfile: model.handleViewContactProfile,

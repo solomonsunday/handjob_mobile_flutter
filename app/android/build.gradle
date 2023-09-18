@@ -31,4 +31,7 @@ subprojects {
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
+    // gradleVersion = '7.5'
 }
+// task wrapper(type: Wrapper){
+// }

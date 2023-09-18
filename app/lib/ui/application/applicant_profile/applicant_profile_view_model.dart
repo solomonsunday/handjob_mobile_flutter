@@ -128,7 +128,7 @@ class ApplicantProfileViewModel extends ReactiveViewModel {
   Future<void> acceptContact(String contactId) async {
     var response = await _dialogService.showConfirmationDialog(
       title: "Confirmation",
-      description: "Do you really want accept the connection?",
+      description: "Do you want to accept the connection?",
     );
     if (!response!.confirmed) return;
     var formData = {"contactId": contactId};

@@ -11,8 +11,8 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 
-import '../models/user.model.dart';
-import '../ui/shared/components/profile/profile_portfolio_gallery.dart';
+import '../../models/user.model.dart';
+import '../../ui/shared/components/profile/profile_portfolio_gallery.dart';
 
 class ProfilePortfolioSheet extends StatelessWidget {
   const ProfilePortfolioSheet({
@@ -185,7 +185,6 @@ class ProfilePortfolioSheetViewModel extends BaseViewModel {
       return;
     }
     try {
-      await _accountService.uploadPortfolio(File(images[0].path));
       await _accountService.uploadPortfolios(
         images.map((e) => File(e.path)).toList(),
       );

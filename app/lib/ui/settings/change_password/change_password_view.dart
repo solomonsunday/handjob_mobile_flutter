@@ -76,6 +76,17 @@ class ChangePasswordView extends StatelessWidget with $ChangePasswordView {
                   controller: confirmPasswordController,
                   focusnode: confirmPasswordFocusNode,
                   requiredField: true,
+                  // obscureText: model.retypePasswordVisibility,
+                  // suffixIcon: GestureDetector(
+                  //   onTap: model.toggleRetypePasswordVisibility,
+                  //   child: Icon(
+                  //     model.retypePasswordVisibility
+                  //         ? Icons.visibility
+                  //         : Icons.visibility_off,
+                  //     size: AppSize.s24,
+                  //     color: ColorManager.kDarkCharcoal,
+                  //   ),
+                  // ),
                 ),
                 const SizedBox(height: AppSize.s40),
                 DefaultButton(
@@ -83,7 +94,7 @@ class ChangePasswordView extends StatelessWidget with $ChangePasswordView {
                       ? null
                       : model.changePassword,
                   title: 'Change password',
-                  disabled: !model.isFormValid,
+                  disabled: !model.isFormValid || model.isBusy,
                   busy: model.isBusy,
                 ),
               ]),

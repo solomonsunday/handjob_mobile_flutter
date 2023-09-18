@@ -10,7 +10,7 @@ class SplashView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<SplashViewViewModel>.reactive(
       viewModelBuilder: () => SplashViewViewModel(),
-      onModelReady: (model) async {
+      onViewModelReady: (model) async {
         await model.getCurrentUser();
       },
       builder: (context, viewModel, child) {
@@ -34,9 +34,12 @@ class SplashView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Image.asset(
-                            'assets/images/logo.jpeg',
+                            'assets/images/logo.png',
                             fit: BoxFit.cover,
                           ),
+                          const Center(
+                            child: CircularProgressIndicator(),
+                          )
                         ],
                       ),
                     ),

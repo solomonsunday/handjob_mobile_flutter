@@ -32,7 +32,7 @@ class AuthView extends StatelessWidget with $AuthView {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   const SizedBox(height: AppSize.s24),
-                  Image.asset('assets/images/favicon.png'),
+                  SizedBox(width: 250, child: Image.asset('assets/images/1.png')),
                   const SizedBox(height: AppSize.s24),
                   Text(
                     'Login to your account',

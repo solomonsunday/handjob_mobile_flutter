@@ -172,8 +172,9 @@ class ConnectionRequestItem extends StatelessWidget {
                   top: AppSize.s4,
                   right: AppSize.s8,
                   child: GestureDetector(
-                    onTap: () => model.rejectContact(id),
-                    child: const Icon(Icons.close, size: AppSize.s24),
+                    onTap:model.busy(REJECT_CONNECTION) ? (){} : () => model.rejectContact(id) ,
+                    child: model.busy(REJECT_CONNECTION) ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()): const Icon(Icons.close, size: AppSize.s24),
+                  
                   ),
                 ),
               ],
@@ -251,7 +252,7 @@ class ConnectionRequestItemViewModel extends BaseViewModel {
   Future<void> acceptContact(String contactId) async {
     var response = await _dialogService.showConfirmationDialog(
       title: "Confirmation",
-      description: "Do you really want accept the connection?",
+      description: "Do you want to accept the connection?",
     );
     if (!response!.confirmed) return;
     var formData = {"contactId": contactId};
@@ -274,6 +275,11 @@ class ConnectionRequestItemViewModel extends BaseViewModel {
   }
 
   Future<void> rejectContact(String accountId) async {
+     var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Do you want to reject the connection?",
+    );
+    if (!response!.confirmed) return;
     setBusyForObject(REJECT_CONNECTION, true);
     try {
       await _contactService.rejectContact(accountId);

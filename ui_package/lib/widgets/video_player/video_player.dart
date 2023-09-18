@@ -79,9 +79,9 @@ class _DefaultVideoPlayerState extends State<DefaultVideoPlayer> {
               });
             },
             child: _videoPlayerController.value.volume > 0
-                ? const Icon(Icons.campaign)
+                ? const Icon(Icons.volume_up)
                 : const Icon(
-                    Icons.not_accessible,
+                    Icons.volume_off,
                   ),
           ),
         )

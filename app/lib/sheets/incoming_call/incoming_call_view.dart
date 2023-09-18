@@ -4,6 +4,8 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 
+import '../../models/contact.model.dart';
+
 class IncomingCallView extends StatelessWidget {
   const IncomingCallView({
     super.key,
@@ -18,6 +20,12 @@ class IncomingCallView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<IncomingCallViewModel>.reactive(
       viewModelBuilder: () => IncomingCallViewModel(),
+      onViewModelReady: (model) {
+        if (request?.data != null) {
+          Contact contact = request?.data['contact'];
+          model.updateContact(contact);
+        }
+      },
       builder: (context, model, _) {
         return BottomSheetContainer(
           showClose: false,
@@ -32,11 +40,11 @@ class IncomingCallView extends StatelessWidget {
                   request?.data['type'] == "video"
                       ? const Icon(
                           Icons.videocam,
-                          size: AppSize.s24,
+                          size: AppSize.s60,
                         )
                       : const Icon(
                           Icons.phone,
-                          size: AppSize.s24,
+                          size: AppSize.s60,
                         ),
                   const SizedBox(width: AppSize.s12),
                   Text(
@@ -49,22 +57,22 @@ class IncomingCallView extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: AppSize.s120),
-              Container(
-                width: 140,
-                height: 140,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: Image.asset(
-                  'assets/images/call_avatar.png',
-                  fit: BoxFit.cover,
-                  // width: AppSize.s120,
-                  // height: AppSize.s120,
-                ),
-              ),
+              // Container(
+              //   width: 140,
+              //   height: 140,
+              //   decoration: const BoxDecoration(
+              //     shape: BoxShape.circle,
+              //   ),
+              //   child: Image.asset(
+              //     'assets/images/call_avatar.png',
+              //     fit: BoxFit.cover,
+              //     // width: AppSize.s120,
+              //     // height: AppSize.s120,
+              //   ),
+              // ),
               const SizedBox(height: AppSize.s12),
               Text(
-                'Steve Okoro',
+                '${model.contact?.firstName} ${model.contact?.lastName}',
                 style: getBoldStyle(
                   color: ColorManager.kDarkColor,
                   fontSize: FontSize.s16,
@@ -76,7 +84,7 @@ class IncomingCallView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   FloatingActionButton(
-                    onPressed: () {},
+                    onPressed: () => model.rejectCall(completer),
                     child: const Icon(
                       Icons.call_end,
                       size: AppSize.s24,
@@ -85,7 +93,7 @@ class IncomingCallView extends StatelessWidget {
                     backgroundColor: ColorManager.kRed,
                   ),
                   FloatingActionButton(
-                    onPressed: () {},
+                    onPressed: () => model.acceptCall(completer),
                     child: const Icon(
                       Icons.call,
                       size: AppSize.s24,

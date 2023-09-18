@@ -28,16 +28,20 @@ class HomeView extends StatelessWidget {
                   color: ColorManager.kWhiteColor,
                 ),
               ),
-              title: Text(
-                'HandWorker',
-                style: getBoldStyle(
-                  color: ColorManager.kWhiteColor,
-                  fontSize: 20,
+              // title: Text(
+              //   'HandWorker',
+              //   style: getBoldStyle(
+              //     color: ColorManager.kWhiteColor,
+              //     fontSize: 20,
+              //   ),
+              // ),
+              title: SizedBox(
+                height: 50,
+                width: 240,
+                child: Image.asset(
+                  'assets/images/2.png',
                 ),
               ),
-              // title: Image.asset(
-              //   'assets/images/HandJobs.png',
-              // ),
               centerTitle: true,
               actions: const [
                 NotificationIconWidget(),
@@ -93,7 +97,7 @@ class HomeSearchWidget extends ViewModelWidget<HomeViewModel> {
               ),
               child: model.currentUser?.imageUrl == null
                   ? Image.asset(
-                      'assets/images/logo.jpeg',
+                      'assets/images/logo.png',
                       fit: BoxFit.cover,
                     )
                   : CachedNetworkImage(
@@ -101,7 +105,7 @@ class HomeSearchWidget extends ViewModelWidget<HomeViewModel> {
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                            image: AssetImage("assets/images/logo.jpeg"),
+                            image: AssetImage("assets/images/logo.png"),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -111,7 +115,7 @@ class HomeSearchWidget extends ViewModelWidget<HomeViewModel> {
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                              image: AssetImage("assets/images/logo.jpeg"),
+                              image: AssetImage("assets/images/logo.png"),
                               fit: BoxFit.cover,
                             ),
                           ),

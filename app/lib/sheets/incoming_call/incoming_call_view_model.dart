@@ -2,6 +2,9 @@ import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../models/contact.model.dart';
+import '../../utils/contants.dart';
+
 class IncomingCallViewModel extends ReactiveViewModel {
   final _bottomSheetService = locator<BottomSheetService>();
   @override
@@ -10,9 +13,25 @@ class IncomingCallViewModel extends ReactiveViewModel {
   bool _micOn = true;
   bool get micOn => _micOn;
 
+  Contact? _contact;
+  Contact? get contact => _contact;
+
   void toggleMic() {
     _micOn = !_micOn;
     notifyListeners();
+  }
+
+  void updateContact(Contact contact) {
+    _contact = contact;
+    notifyListeners();
+  }
+
+  void rejectCall(Function(SheetResponse)? completer) {
+    completer!(SheetResponse(confirmed: true, data: REJECT_CALL));
+  }
+
+  void acceptCall(Function(SheetResponse)? completer) {
+    completer!(SheetResponse(confirmed: true, data: ACCEPT_CALL));
   }
 
   // Future<void> acceptCall() async {

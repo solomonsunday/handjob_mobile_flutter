@@ -135,7 +135,7 @@ class ChatItem extends StatelessWidget {
               ),
               child: imgUrl == null
                   ? Image.asset(
-                      'assets/images/logo.jpeg',
+                      'assets/images/logo.png',
                       fit: BoxFit.cover,
                     )
                   : CachedNetworkImage(
@@ -154,7 +154,7 @@ class ChatItem extends StatelessWidget {
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                              image: AssetImage("assets/images/logo.jpeg"),
+                              image: AssetImage("assets/images/logo.png"),
                               fit: BoxFit.cover,
                             ),
                           ),

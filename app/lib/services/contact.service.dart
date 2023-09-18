@@ -129,12 +129,12 @@ class ContactService with ListenableServiceMixin {
     return true;
   }
 
-  Future<Contact> rejectContact(String accountId) async {
+  Future<bool> rejectContact(String accountId) async {
     var response = await dioClient.delete(
       '/contact/cancel-request/$accountId',
     );
 
-    return Contact.fromJson(response.data);
+    return true;
   }
 
   Future deleteContact(String contactId) async {

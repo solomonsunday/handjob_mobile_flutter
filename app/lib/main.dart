@@ -5,29 +5,32 @@ import 'package:handjob_mobile/app/app.router.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'app/app.dialogs.dart';
-import 'managers/call_manager.dart';
-import 'services/authentication.service.dart';
-import 'utils/platform_utils.dart';
 import 'utils/setup_bottom_sheet_ui.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'utils/setup_notification.dart';
 import '../../utils/contants.dart';
 
-import 'package:connectycube_sdk/connectycube_sdk.dart';
-
-String appId = "7221";
-String authKey = "xJhUtyzKwfVrNzu";
-String authSecret = "23EubUj5jJdXKFb";
-P2PSession? callSession;
-
+const String CHANNEL_CALL = "CHANNEL_CALL";
 FirebaseMessaging messaging = FirebaseMessaging.instance;
 
+@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print('messsage receive background: ${message.data}');
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
   setupNotification(messaging);
+}
+
+Future firebaseNotificationInit() async {
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // if (Platform.isAndroid) {
+  //   FlutterLocalNotificationsPlugin()
+  //       .resolvePlatformSpecificImplementation<
+  //           AndroidFlutterLocalNotificationsPlugin>()!
+  //       .createNotificationChannel(androidChannelCall);
+  // }
 }
 
 void main() async {
@@ -38,17 +41,13 @@ void main() async {
   setupLocator();
   setupBottomSheetUi();
   setupDialogUi();
-  //subscribe for push notification...
-  setupSubscription();
-  setupNotification(messaging);
-  //  /// 1.1.1 define a navigator key
-  // final navigatorKey = GlobalKey<NavigatorState>();
 
-  CubeSettings.instance.isDebugEnabled =
-      true; // to enable ConnectyCube SDK logs;
-  // /// 1.1.2: set navigator key to ZegoUIKitPrebuiltCallInvitationService
-  // ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(StackedService.navigatorKey!);
+  //subscribe for push notification...
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  setupNotification(messaging);
+  setupSubscription();
 }
 
 void setupSubscription() async {
@@ -65,26 +64,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-         init(appId, authKey, authSecret, onSessionRestore: restoreSession);
-        CallManager.instance.init(context);
     return ViewModelBuilder<AppViewModel>.nonReactive(
       viewModelBuilder: () => AppViewModel(),
-      onViewModelReady: (model) {
-        // initializeCallSession();
-
-        initForegroundService();
-
-        checkSystemAlertWindowPermission(context);
-
-        requestNotificationsPermission();
-        // PushNotificationsManager.instance.init();
-   
-      },
-      onDispose: (model) {
-        // model.dispose();
-      },
       builder: (context, model, _) {
-        CallManager.instance.init(context);
         return MaterialApp(
           title: 'Handyworker Mobile',
           debugShowCheckedModeBanner: false,
@@ -97,33 +79,6 @@ class MyApp extends StatelessWidget {
       },
     );
   }
-
-  Future<CubeSession> restoreSession() {
-  // CubeUser savedUser; //some CubeUser, which was saved before
-  if(currentUser != null) {
-    var name = '${currentUser?.firstName} ${currentUser?.lastName}';
-    return createSession(CubeUser(
-        // isGuest: true,
-        // id: 123,
-        login: currentUser?.id,
-        fullName: name,
-        email: currentUser?.email,
-        avatar: currentUser?.imageUrl,
-        password: "DEFAULT_PASS",
-        
-      ));
-  }
-  return createSession();
-}
 }
 
-class AppViewModel extends BaseViewModel {
-  // final _chatService = locator<ChatService>();
-
-  @override
-  void dispose() {
-    // chatSocket.disconnect();
-    // chatSocket.dispose();
-    super.dispose();
-  }
-}
+class AppViewModel extends BaseViewModel {}

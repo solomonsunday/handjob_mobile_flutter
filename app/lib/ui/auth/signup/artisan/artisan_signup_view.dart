@@ -45,7 +45,7 @@ class ArtisanSignupView extends StatelessWidget with $ArtisanSignupView {
               mainAxisSize: MainAxisSize.max,
               children: [
                 const SizedBox(height: AppSize.s24),
-                Image.asset('assets/images/favicon.png'),
+                Image.asset('assets/images/1.png'),
                 const SizedBox(height: AppSize.s12),
                 Text(
                   "Create a secure account",

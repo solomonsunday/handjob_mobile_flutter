@@ -38,7 +38,7 @@ class ProfileContact extends StatelessWidget {
         children: [
           ProfileActionHeader(
             icon: Icons.phone,
-            title: 'Contact Us',
+            title: 'Contact Info',
             onTap: showContactSheet,
           ),
           const SizedBox(height: AppSize.s24),
@@ -82,6 +82,7 @@ class ProfileContact extends StatelessWidget {
                             icon: const Icon(
                               Icons.email,
                               size: 20,
+                              color: ColorManager.kWhiteColor,
                             )),
                       ),
                     ),
@@ -102,10 +103,9 @@ class ProfileContact extends StatelessWidget {
               isLoggedInUser
                   ? Container(
                       child: !busy &&
-                              currentUser != null &&
-                              currentUser?.phoneNumber != null
+                              currentUser != null 
                           ? InkWell(
-                              onTap: requestOTP,
+                              onTap: currentUser?.contactPhoneNumber != null ? requestOTP : () {},
                               child: Row(
                                 children: [
                                   currentUser!.phoneNumberVerified!
@@ -130,7 +130,7 @@ class ProfileContact extends StatelessWidget {
                                       : Text(
                                           'Verify',
                                           style: getRegularStyle(
-                                            color: const Color(0xffFFC107),
+                                            color: ColorManager.kDarkCharcoal,
                                             fontSize: FontSize.s12,
                                           ),
                                         ),
@@ -191,6 +191,7 @@ class ProfileContact extends StatelessWidget {
                               icon: const Icon(
                                 Icons.phone,
                                 size: 20,
+                                color: ColorManager.kWhiteColor,
                               )),
                         ),
                       ),

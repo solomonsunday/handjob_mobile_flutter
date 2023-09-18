@@ -82,7 +82,7 @@ class ProfilePortfolioGallery extends StatelessWidget {
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: AssetImage("assets/images/logo.jpeg"),
+                      image: AssetImage("assets/images/logo.png"),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -92,7 +92,7 @@ class ProfilePortfolioGallery extends StatelessWidget {
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                        image: AssetImage("assets/images/logo.jpeg"),
+                        image: AssetImage("assets/images/logo.png"),
                         fit: BoxFit.cover,
                       ),
                     ),

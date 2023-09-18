@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:intl/intl.dart';
+import 'package:crypto/crypto.dart';
 
 const String DEFAULT_DATE_TIME_FORMAT = 'MMM dd, yyyy';
 
@@ -81,4 +83,8 @@ String getTimeAgoDiff(String dt) {
   }
 
   return 'just now';
+}
+
+String generateMd5(String input) {
+  return md5.convert(utf8.encode(input)).toString();
 }

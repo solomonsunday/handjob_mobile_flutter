@@ -6,8 +6,8 @@ const String PROFESSION_TYPES = "PROFESSION_TYPES";
 
 const String LOCATION_SUGGESTION_REQUEST = 'LOCATION_SUGGESTION_REQUEST';
 
-const String HANDJOB_NOTIFICATION_CHANNEL_ID =
-    "HANDJOB_NOTIFICATION_CHANNEL_ID";
+const String HANDJOB_NOTIFICATION_MESSAGE_CHANNEL_ID =
+    'com.handjobs.mobile.app.message';
 
 // TOPICS
 const String JOBS = 'job';
@@ -21,9 +21,21 @@ const String CHAT = 'chat';
 const String ACCOUNT_INSTANT_HIRE = 'Instant Hire';
 const String ACCOUNT_ARTISAN = 'Artisan';
 
-//VIDEO CALLERS
-const int ZEGO_APP_ID = 2086177997;
-const String ZEGO_APP_SIGNATURE = "de7be8b4d0a4e8179f4121736a6ef300b7ba9edc31ccadb49d735ee5dc4e4fd9";
-const String ZEGO_TEMPORARY_TOKEN="04AAAAAGS0XF4AEHh0NjZ5YXZiZ2h4eWMyYXYAwNDAdyhUm8JCcCwOt24Noy90tz9Axiub97SESo+VomgOWlT3L+R3+MNDDgdPM65L2lj+RyLUJjKNxThm9PNQr8qFw5+1RhuKXFQdmxR4uylzhafcr0Y1A8hkONWgHV60zj+gq2ch2rjjHqG2hfqvB4zfo4lomQcomYeZdw5Sov26phbFEwaineNQ6GOTMet9rulbL3Q5m73xGQA8Y4kswqCCAxiLjmG6gyKmLwQhjfXo+HmWqMCUoL3DJNb0Y3O6SA==";
-const String ZEGO_USER_ID= "42b354bf-9607-4ac8-afed-bd2aa94d6ceb";
-const String ZEGO_SERVER_SECRET_KEY= "20eb38b811726491c454ee3b98935959";
+//CALLS
+const String VOICE_CALL = "voice";
+const String VIDEO_CALL = "video";
+
+const _failedToStartVideoEngine = 'Failed to start video engine';
+const _failedToJoinCall = 'Failed to join call';
+
+const String JOIN_CHANNEL = "join_channel";
+const String LEAVE_CHANNEL = "leave_channel";
+
+const String ACCEPT_CALL = 'ACCEPT_CALL';
+const String REJECT_CALL = 'REJECT_CALL';
+
+//AGORA
+const String appId = "cb93d8ca5f51429793b221b8e0c7e1d3";
+const String APP_TOKEN =
+    "007eJxTYPgQ4uGjcF6Mp/DwIrU4w3gLl+MFL5qe2+3g3L0h5vKdgPkKDMlJlsYpFsmJpmmmhiZGluaWxklGRoZJFqkGyeaphinGEYLsqQ2BjAzr/WyZGBkgEMTnZEjOSCwpqdRNSWJgAACPOR9/";
+const String APP_CHANNEL_ID = "chatty-db";
