@@ -36,8 +36,8 @@ void setupBottomSheetUi() {
         OutgoingCallView(request: sheetRequest, completer: completer),
     BottomSheetType.ongoing_voice_call: (context, sheetRequest, completer) =>
         OngoingVoiceCallView(request: sheetRequest, completer: completer),
-    BottomSheetType.ongoing_video_call: (context, sheetRequest, completer) =>
-        OngoingVideoCallView(request: sheetRequest, completer: completer),
+    // BottomSheetType.ongoing_video_call: (context, sheetRequest, completer) =>
+    //     OngoingVideoCallView(request: sheetRequest, completer: completer),
     BottomSheetType.edit_instant_job: (context, sheetRequest, completer) =>
         EditInstantJobSheetView(request: sheetRequest, completer: completer),
   };

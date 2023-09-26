@@ -2,36 +2,26 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
+import 'package:handjob_mobile/utils/setup_awesome_notification.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'app/app.dialogs.dart';
 import 'utils/setup_bottom_sheet_ui.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'utils/setup_notification.dart';
 import '../../utils/contants.dart';
 
 const String CHANNEL_CALL = "CHANNEL_CALL";
 FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('messsage receive background: ${message.data}');
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
-  setupNotification(messaging);
-}
-
-Future firebaseNotificationInit() async {
-  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  // if (Platform.isAndroid) {
-  //   FlutterLocalNotificationsPlugin()
-  //       .resolvePlatformSpecificImplementation<
-  //           AndroidFlutterLocalNotificationsPlugin>()!
-  //       .createNotificationChannel(androidChannelCall);
-  // }
-}
+// @pragma('vm:entry-point')
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   print('messsage receive background: ${message.data}');
+//   // If you're going to use other Firebase services in the background, such as Firestore,
+//   // make sure you call `initializeApp` before using other Firebase services.
+//   await Firebase.initializeApp();
+//   // setupNotification(messaging);
+// }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,12 +31,11 @@ void main() async {
   setupLocator();
   setupBottomSheetUi();
   setupDialogUi();
-
+  await NotificationService.initializeNotification();
   //subscribe for push notification...
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  setupNotification(messaging);
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   setupSubscription();
 }
 

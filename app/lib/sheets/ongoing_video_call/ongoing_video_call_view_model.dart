@@ -13,6 +13,7 @@ import '../../models/contact.model.dart';
 import '../../models/user.model.dart';
 import '../../services/authentication.service.dart';
 import '../../services/video-call.service.dart';
+import '../../utils/helpers.dart';
 
 const _failedToStartVideoEngine = 'Failed to start video engine';
 const _failedToJoinCall = 'Failed to join call';
@@ -60,12 +61,12 @@ class OngoingVideoCallViewModel extends ReactiveViewModel {
   AudioPlayer player = AudioPlayer();
 
   Future<String?> getToken() async {
-    // if (callRole == 'anchor') {
-    //   _channelId = generateMd5("${currentUser?.id}_${contact?.id}");
-    // } else {
-    //   _channelId = generateMd5("${contact?.id}_${currentUser?.id}");
-    // }
-    _channelId = APP_CHANNEL_ID;
+    if (callRole == 'anchor') {
+      _channelId = generateMd5("${currentUser?.id}_${contact?.id}");
+    } else {
+      _channelId = generateMd5("${contact?.id}_${currentUser?.id}");
+    }
+    // _channelId = APP_CHANNEL_ID;
 
     var formData = {
       "channelName": channelId,
@@ -88,6 +89,7 @@ class OngoingVideoCallViewModel extends ReactiveViewModel {
       appId: appId,
     ));
 
+    _videoCallService.setAgoraEngine(agoraEngine); // set the service instance
     // Register the event handler
     agoraEngine.registerEventHandler(
       RtcEngineEventHandler(
@@ -129,6 +131,7 @@ class OngoingVideoCallViewModel extends ReactiveViewModel {
     );
 
     await agoraEngine.enableVideo();
+    await agoraEngine.enableAudio();
 
     await agoraEngine.setVideoEncoderConfiguration(
       const VideoEncoderConfiguration(
@@ -136,6 +139,12 @@ class OngoingVideoCallViewModel extends ReactiveViewModel {
         frameRate: 15,
         bitrate: 0,
       ),
+    );
+
+    await agoraEngine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+    await agoraEngine.setAudioProfile(
+      profile: AudioProfileType.audioProfileDefault,
+      scenario: AudioScenarioType.audioScenarioGameStreaming,
     );
 
     await agoraEngine.startPreview();
@@ -170,12 +179,17 @@ class OngoingVideoCallViewModel extends ReactiveViewModel {
 
   Future<void> joinChannel() async {
     // retrieve or request microphone permission
-    await [Permission.microphone, Permission.camera].request();
+    await [Permission.microphone, Permission.camera, Permission.audio]
+        .request();
     setBusyForObject(JOIN_CHANNEL, true);
-    // String? token = await generateToken();
+    String? token = await getToken();
+    if (token == null) {
+      log("a valid token was not generated");
+      return;
+    }
     await agoraEngine.joinChannel(
-      token: APP_TOKEN,
-      channelId: APP_CHANNEL_ID,
+      token: token,
+      channelId: channelId,
       uid: uid,
       options: ChannelMediaOptions(
         channelProfile: channelProfileType,
@@ -189,15 +203,15 @@ class OngoingVideoCallViewModel extends ReactiveViewModel {
     setBusyForObject(JOIN_CHANNEL, false);
   }
 
-  void leaveChannel(Function(SheetResponse<dynamic>)? completer) async {
+  void leaveChannel() async {
     setBusyForObject(LEAVE_CHANNEL, true);
     await player.pause();
     _isJoined = false;
     switchCameras = true;
-    sendNotification("cancel");
+    sendNotification("end_call");
     _dispose();
     setBusyForObject(LEAVE_CHANNEL, false);
-    completer!(SheetResponse(confirmed: true));
+    _navigationService.back();
   }
 
   Future<void> _dispose() async {

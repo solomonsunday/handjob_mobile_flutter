@@ -146,13 +146,17 @@ class ContactViewModel extends ReactiveViewModel {
   }
 
   handleVideoCall(Contact contact) {
-    _bottomSheetService.showCustomSheet(
-      variant: BottomSheetType.ongoing_video_call,
-      isScrollControlled: true,
-      data: {
-        'contact': contact,
-        'call_role': 'anchor',
-      },
+    // _bottomSheetService.showCustomSheet(
+    //   variant: BottomSheetType.ongoing_video_call,
+    //   isScrollControlled: true,
+    //   data: {
+    //     'contact': contact,
+    //     'call_role': 'anchor',
+    //   },
+    // );
+    _navigationService.navigateToOngoingVideoCallView(
+      contact: contact,
+      callRole: 'anchor',
     );
   }
 
