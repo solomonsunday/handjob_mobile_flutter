@@ -35,6 +35,12 @@ void showNotification() {
             await NotificationService.showNotification(
                 title: 'Incoming call ',
                 body: '${contact.firstName} ${contact.lastName} is calling...',
+                payload: {
+                  'callType': message.data["callType"],
+                  'entityId': message.data["entityId"],
+                  "notificationType": message.data["notificationType"],
+                  "callerId": message.data["callerId"],
+                },
                 actionButtons: [
                   NotificationActionButton(
                     key: 'reject',

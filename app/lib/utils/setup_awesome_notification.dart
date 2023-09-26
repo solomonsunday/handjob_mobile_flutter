@@ -1,5 +1,33 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:handjob_mobile/app/app.router.dart';
+import 'package:stacked_services/stacked_services.dart';
+
+import '../app/app.locator.dart';
+import '../models/contact.model.dart';
+import '../models/instant_job.model.dart';
+import '../models/post.model.dart';
+import '../models/user.model.dart';
+import '../services/authentication.service.dart';
+import '../services/contact.service.dart';
+import '../services/instant_job.service.dart';
+import '../services/post.service.dart';
+import '../services/video-call.service.dart';
+import 'contants.dart';
+
+final _notificationService = locator<NotificationService>();
+final _navigationService = locator<NavigationService>();
+final _authenticationService = locator<AuthenticationService>();
+final _postService = locator<PostService>();
+final _instantJobService = locator<InstantJobService>();
+final _bottomSheetService = locator<BottomSheetService>();
+final _contactService = locator<ContactService>();
+final _videoCallService = locator<VideoCallService>();
+
+User? get currentUser => _authenticationService.currentUser;
+List<InstantJob> get jobs => _instantJobService.instantJobs;
+List<Post> get posts => _postService.posts;
+List<Contact> get contacts => _contactService.contactList;
 
 class NotificationService {
   static Future<void> initializeNotification() async {
@@ -66,62 +94,88 @@ class NotificationService {
   /// Use this method to detect when the user taps on a notification or action button
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
-    debugPrint('onActionReceivedMethod');
+    debugPrint('onActionReceivedMethod: $receivedAction');
+    String buttonKeyPressed = receivedAction.buttonKeyPressed;
     final message = receivedAction.payload;
 
     print('message: $message');
     print('message data: ${message!['data']}');
     print('message notification: ${message['notification']}');
 
-    // String entityId = message['data']['entityId'];
-    // print('NOTIFICATION TYPE: ${message.data['notificationType']}');
-    // switch (message.data['notificationType']) {
-    //   case 'instant_services':
-    //     if (currentUser?.accountType == ACCOUNT_ARTISAN) {
-    //       _navigationService.navigateToApplicationView(instantJobId: entityId);
-    //     } else {
-    //       _navigationService.navigateToNotificationJobDetailView(
-    //         instantJobId: entityId,
-    //         user: currentUser!,
-    //       );
-    //     }
-    //     break;
-    //   case 'post':
-    //     try {
-    //       Post post = posts.where((element) => element.id == entityId).first;
+    String entityId = message['entityId']!;
+    print('NOTIFICATION TYPE: ${message['notificationType']}');
+    switch (message['notificationType']) {
+      case 'instant_services':
+        if (currentUser?.accountType == ACCOUNT_ARTISAN) {
+          _navigationService.navigateToApplicationView(instantJobId: entityId);
+        } else {
+          _navigationService.navigateToNotificationJobDetailView(
+            instantJobId: entityId,
+            user: currentUser!,
+          );
+        }
+        break;
+      case 'post':
+        try {
+          Post post = posts.where((element) => element.id == entityId).first;
 
-    //       _navigationService.navigateToPostDetailView(post: post, postIndex: 0);
-    //     } catch (e) {
-    //       print('error: $e');
-    //     }
-    //     break;
-    //   case 'voice':
-    //   case 'video':
-    //     print('this is voice/video call');
-    //     List<Contact> contacts = await _contactService.getContacts();
-    //     List<Contact> list = contacts
-    //         .where((element) => element.id == message.data['callerId'])
-    //         .toList();
-    //     if (list.isEmpty) {
-    //       print('no contact found');
-    //       return;
-    //     }
-    //     Contact contact = list.first;
-    //     print('contact found: ${contact.toJson()}');
-    //     _bottomSheetService.showCustomSheet(
-    //       variant: BottomSheetType.ongoing_video_call,
-    //       isScrollControlled: true,
-    //       data: {
-    //         'contact': contact.toJson(),
-    //         'call_role': 'audience',
-    //       },
-    //     );
+          _navigationService.navigateToPostDetailView(post: post, postIndex: 0);
+        } catch (e) {
+          print('error: $e');
+        }
+        break;
+      case 'voice':
+      case 'video':
+        print('this is voice/video call');
 
-    //     break;
-    //   default:
-    //     print("default notification");
-    //     return;
-    // }
+        List<Contact> contacts = await _contactService.getContacts();
+        List<Contact> list = contacts
+            .where((element) => element.id == message['callerId'])
+            .toList();
+        if (list.isEmpty) {
+          print('no contact found');
+          return;
+        }
+        Contact contact = list.first;
+        print('contact found: ${contact.toJson()}');
+        if (message['callType'] == "end_call") {
+          print('end caller call');
+          _videoCallService.agoraEngine.leaveChannel();
+          _navigationService.back();
+        }
+        if (buttonKeyPressed == 'reject') {
+          await _videoCallService.sendNotification({
+            "callType": "end_call",
+            "callId": contact.id,
+            "callName": '${contact.firstName} ${contact.lastName}',
+            "callerId": '${currentUser?.id}',
+            "callerName": '${currentUser?.firstName} ${currentUser?.lastName}',
+            "callRole": "audience",
+            "notificationType": 'video'
+          });
+          await AwesomeNotifications().cancelAll();
+          print('reject call');
+        } else {
+          print('call accepted and nanvigate');
+          _navigationService.navigateToOngoingVideoCallView(
+            contact: contact,
+            callRole: 'audience',
+          );
+          // _bottomSheetService.showCustomSheet(
+          //   variant: BottomSheetType.ongoing_video_call,
+          //   isScrollControlled: true,
+          //   data: {
+          //     'contact': contact.toJson(),
+          //     'call_role': 'audience',
+          //   },
+          // );
+        }
+
+        break;
+      default:
+        print("default notification");
+        return;
+    }
   }
 
   static Future<void> showNotification({

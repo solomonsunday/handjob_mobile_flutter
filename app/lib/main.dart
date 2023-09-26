@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/utils/setup_awesome_notification.dart';
+import 'package:handjob_mobile/utils/setup_notification.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'app/app.dialogs.dart';
@@ -33,8 +34,9 @@ void main() async {
   setupDialogUi();
   await NotificationService.initializeNotification();
   //subscribe for push notification...
-  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  showNotification();
   runApp(const MyApp());
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   setupSubscription();
 }
