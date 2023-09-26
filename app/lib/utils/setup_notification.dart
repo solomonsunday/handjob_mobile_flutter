@@ -26,16 +26,16 @@ void showNotification() {
       List<Contact> list = contacts
           .where((element) => element.id == message.data['callerId'])
           .toList();
-      print(
-          'caller id: ${message.data["callerId"]} user id: ${currentUser?.id}');
-      if (message.data['callType'] == "end_call") {
-        print('end caller call');
-        if (message.data['callerId'] == currentUser?.id) {
-          await _videoCallService.endCall();
-          print('all caller end');
-          _navigationService.back();
-        }
-      }
+      // print(
+      //     'caller id: ${message.data["callerId"]} user id: ${currentUser?.id}');
+      // if (message.data['callType'] == "end_call") {
+      //   print('end caller call');
+      //   if (message.data['callerId'] == currentUser?.id) {
+      //     await _videoCallService.endCall();
+      //     print('all caller end');
+      //     _navigationService.back();
+      //   }
+      // }
       if (list.isNotEmpty) {
         if (message.data["callType"] == VOICE_CALL ||
             message.data["callType"] == VIDEO_CALL) {

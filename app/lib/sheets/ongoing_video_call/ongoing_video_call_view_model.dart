@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/utils/contants.dart';
 import 'package:just_audio/just_audio.dart';
@@ -23,6 +24,7 @@ class OngoingVideoCallViewModel extends ReactiveViewModel {
   final _videoCallService = locator<VideoCallService>();
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
+  StreamSubscription<RemoteMessage>? streamSubscriptionRemoteMessage;
 
   late RtcEngine agoraEngine; // Agora engine instance
   // RtcEngine? get agoraEngine => _agoraEngine;

@@ -1,4 +1,5 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/sheets/ongoing_video_call/ongoing_video_call_view_model.dart';
 import 'package:stacked/stacked.dart';
@@ -23,12 +24,23 @@ class OngoingVideoCallView extends StatelessWidget {
     return ViewModelBuilder<OngoingVideoCallViewModel>.reactive(
       viewModelBuilder: () => OngoingVideoCallViewModel(),
       onViewModelReady: (model) async {
-        
-          model.updateContact(contact);
-          model.updateCallRole(callRole);
-          model.initEngine();
+        model.streamSubscriptionRemoteMessage =
+            FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+          print('remote message inside the call app ${message.data}');
+          if (message.data['callType'] == "end_call") {
+            print('end caller call');
+            if (message.data['callerId'] == model.currentUser?.id) {
+              print('Call ended');
+              model.leaveChannel();
+            }
+          }
+        });
+        model.updateContact(contact);
+        model.updateCallRole(callRole);
+        model.initEngine();
       },
-      onDispose: (model) {
+      onDispose: (model) async {
+        await model.streamSubscriptionRemoteMessage?.cancel();
         model.dispose();
       },
       builder: (context, model, _) {
@@ -52,13 +64,14 @@ class OngoingVideoCallView extends StatelessWidget {
                                 // onPressed: model.isJoined
                                 //     ? () => model.leaveChannel(completer)
                                 //     : model.joinChannel,
-                                child: model.busy(JOIN_CHANNEL) && !model.isJoined
-                                    ? const CircularProgressIndicator()
-                                    : const Icon(
-                                        Icons.call_end,
-                                        size: AppSize.s24,
-                                        color: ColorManager.kWhiteColor,
-                                      ),
+                                child:
+                                    model.busy(JOIN_CHANNEL) && !model.isJoined
+                                        ? const CircularProgressIndicator()
+                                        : const Icon(
+                                            Icons.call_end,
+                                            size: AppSize.s24,
+                                            color: ColorManager.kWhiteColor,
+                                          ),
                                 backgroundColor: model.isJoined
                                     ? ColorManager.kRed
                                     : ColorManager.kTransparent,
