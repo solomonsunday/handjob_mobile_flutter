@@ -30,7 +30,7 @@ void showNotification() {
           'caller id: ${message.data["callerId"]} user id: ${currentUser?.id}');
       if (message.data['callType'] == "end_call") {
         print('end caller call');
-        if (message.data['callerId'] == currentUser?.id) {
+        if (message.data['callerId'] != currentUser?.id) {
           await _videoCallService.agoraEngine.leaveChannel();
           print('all caller end');
           _navigationService.back();
