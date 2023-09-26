@@ -26,11 +26,15 @@ void showNotification() {
       List<Contact> list = contacts
           .where((element) => element.id == message.data['callerId'])
           .toList();
-      print('caller id: ${message.data["callerId"]}');
+      print(
+          'caller id: ${message.data["callerId"]} user id: ${currentUser?.id}');
       if (message.data['callType'] == "end_call") {
         print('end caller call');
-        await _videoCallService.agoraEngine.leaveChannel();
-        _navigationService.back();
+        if (message.data['callerId'] == currentUser?.id) {
+          await _videoCallService.agoraEngine.leaveChannel();
+          print('all caller end');
+          _navigationService.back();
+        }
       }
       if (list.isNotEmpty) {
         if (message.data["callType"] == VOICE_CALL ||
