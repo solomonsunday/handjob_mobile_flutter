@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/material.dart';
 import 'package:handjob_mobile/utils/contants.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -81,82 +82,87 @@ class OngoingVideoCallViewModel extends ReactiveViewModel {
   }
 
   Future<void> initEngine() async {
-    await player.setAsset('assets/ringtones/outgoing.mp3');
+    try {
+      await player.setAsset('assets/ringtones/outgoing.mp3');
 
-    //create an instance of the Agora engine
-    agoraEngine = createAgoraRtcEngine();
-    await agoraEngine.initialize(const RtcEngineContext(
-      appId: appId,
-    ));
+      //create an instance of the Agora engine
+      agoraEngine = createAgoraRtcEngine();
+      await agoraEngine.initialize(const RtcEngineContext(
+        appId: appId,
+      ));
 
-    _videoCallService.setAgoraEngine(agoraEngine); // set the service instance
-    // Register the event handler
-    agoraEngine.registerEventHandler(
-      RtcEngineEventHandler(
-        onError: (err, msg) {
-          log("[VIDEO CALL] [onError] err: $err, msg: $msg");
-        },
-        onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
-          log("[VIDEO CALL] ...onConnection: ${connection.toJson()}");
-          _isJoined = true;
-          notifyListeners();
-        },
-        onUserJoined:
-            (RtcConnection connection, int remoteUid, int elapsed) async {
-          log("[VIDEO CALL] Remote user uid:$remoteUid joined the channel");
-          await player.pause();
-          _remoteUid = remoteUid;
-          if (callRole == "anchor") {
-            callTime();
-            is_calltimer = true;
-          }
-          notifyListeners();
-        },
-        onUserOffline: (RtcConnection connection, int remoteUid,
-            UserOfflineReasonType reason) {
-          log("[VIDEO CALL] Remote user uid:$remoteUid left the channel");
-          _remoteUid = null;
-          notifyListeners();
-        },
-        onRtcStats: (connection, stats) {
-          log("[VIDEO CALL] Connection $connection, stats: $stats");
+      _videoCallService.setAgoraEngine(agoraEngine); // set the service instance
+      // Register the event handler
+      agoraEngine.registerEventHandler(
+        RtcEngineEventHandler(
+          onError: (err, msg) {
+            log("[VIDEO CALL] [onError] err: $err, msg: $msg");
+          },
+          onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+            log("[VIDEO CALL] ...onConnection: ${connection.toJson()}");
+            _isJoined = true;
+            notifyListeners();
+          },
+          onUserJoined:
+              (RtcConnection connection, int remoteUid, int elapsed) async {
+            log("[VIDEO CALL] Remote user uid:$remoteUid joined the channel");
+            await player.pause();
+            _remoteUid = remoteUid;
+            if (callRole == "anchor") {
+              callTime();
+              is_calltimer = true;
+            }
+            notifyListeners();
+          },
+          onUserOffline: (RtcConnection connection, int remoteUid,
+              UserOfflineReasonType reason) {
+            log("[VIDEO CALL] Remote user uid:$remoteUid left the channel");
+            _remoteUid = null;
+            notifyListeners();
+          },
+          onRtcStats: (connection, stats) {
+            log("[VIDEO CALL] Connection $connection, stats: $stats");
 
-          notifyListeners();
-        },
-        //       onLeaveChannel: (connection, stats) {
-        //         print("...user left the call stats: ${stats.toJson()}");
-        // _isJoined = false;
-        //       },
-      ),
-    );
+            notifyListeners();
+          },
+          //       onLeaveChannel: (connection, stats) {
+          //         print("...user left the call stats: ${stats.toJson()}");
+          // _isJoined = false;
+          //       },
+        ),
+      );
 
-    await agoraEngine.enableVideo();
-    await agoraEngine.enableAudio();
+      await agoraEngine.enableVideo();
+      await agoraEngine.enableAudio();
 
-    await agoraEngine.setVideoEncoderConfiguration(
-      const VideoEncoderConfiguration(
-        dimensions: VideoDimensions(width: 640, height: 360),
-        frameRate: 15,
-        bitrate: 0,
-      ),
-    );
+      await agoraEngine.setVideoEncoderConfiguration(
+        const VideoEncoderConfiguration(
+          dimensions: VideoDimensions(width: 640, height: 360),
+          frameRate: 15,
+          bitrate: 0,
+        ),
+      );
 
-    await agoraEngine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
-    await agoraEngine.setAudioProfile(
-      profile: AudioProfileType.audioProfileDefault,
-      scenario: AudioScenarioType.audioScenarioGameStreaming,
-    );
+      await agoraEngine.setClientRole(
+          role: ClientRoleType.clientRoleBroadcaster);
+      await agoraEngine.setAudioProfile(
+        profile: AudioProfileType.audioProfileDefault,
+        scenario: AudioScenarioType.audioScenarioGameStreaming,
+      );
 
-    await agoraEngine.startPreview();
-    isReadyPreview = true;
-    await joinChannel();
-    print('[VIDEO CALL] callRole: $callRole');
-    if (callRole == 'anchor') {
-      await sendNotification("video");
-      await player.setLoopMode(LoopMode.all);
-      await player.play();
+      await agoraEngine.startPreview();
+      isReadyPreview = true;
+      await joinChannel();
+      print('[VIDEO CALL] callRole: $callRole');
+      if (callRole == 'anchor') {
+        await sendNotification("video");
+        await player.setLoopMode(LoopMode.all);
+        await player.play();
+      }
+      notifyListeners();
+    } catch (e) {
+      debugPrint('agora exception to manager $e');
     }
-    notifyListeners();
   }
 
   Future<void> sendNotification(String callType) async {
