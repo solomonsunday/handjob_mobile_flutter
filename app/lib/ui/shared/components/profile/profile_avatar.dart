@@ -10,11 +10,12 @@ class ProfileAvatar extends StatelessWidget {
     this.imgUrl,
     this.busy,
     this.isView = false,
+    this.uploadProfileAvatar,
   }) : super(key: key);
   final String? imgUrl;
   final bool? busy;
   final bool isView;
-
+  final VoidCallback? uploadProfileAvatar;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -33,9 +34,9 @@ class ProfileAvatar extends StatelessWidget {
           height: AppSize.s100,
           child: imgUrl == null
               ? Image.asset(
-                            'assets/images/logo.png',
-                            fit: BoxFit.cover,
-                          )
+                  'assets/images/logo.png',
+                  fit: BoxFit.cover,
+                )
               : CachedNetworkImage(
                   placeholder: (context, url) => const SizedBox(
                     width: 24,
@@ -67,10 +68,13 @@ class ProfileAvatar extends StatelessWidget {
                 ),
         ),
         if (!isView)
-          const Positioned(
+          Positioned(
             right: -4,
             bottom: 8,
-            child: ProfileEditIcon(),
+            child: ProfileEditIcon(
+              padding: 10,
+              onTap: uploadProfileAvatar,
+            ),
           ),
       ],
     );

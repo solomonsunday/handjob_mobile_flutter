@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/ui/main/chat/chat_view.dart';
@@ -15,8 +14,6 @@ import 'main_view_model.dart';
 class MainView extends StatelessWidget {
   const MainView({Key? key}) : super(key: key);
 
-  
-
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainViewModel>.reactive(
@@ -30,7 +27,6 @@ class MainView extends StatelessWidget {
         await model.fetchNotification();
 
         model.initializeView();
-         
       },
       viewModelBuilder: () => MainViewModel(),
       onDispose: (model) {
@@ -103,6 +99,8 @@ class MainView extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             BottomNavBarItem(
+              isIconBadge: true,
+              badgeCounter: '8',
               icon: Icons.chat_bubble,
               title: Text(
                 'Chats',
@@ -173,7 +171,10 @@ class MainDrawerWidget extends ViewModelWidget<MainViewModel> {
                   //     fontSize: FontSize.s24,
                   //   ),
                   // ),
-                  SizedBox(height: 70, width: 240, child: Image.asset('assets/images/1.png')),
+                  SizedBox(
+                      height: 70,
+                      width: 240,
+                      child: Image.asset('assets/images/1.png')),
                   GestureDetector(
                     onTap: model.navigateBack,
                     child: const Icon(

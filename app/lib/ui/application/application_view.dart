@@ -192,9 +192,13 @@ class ApplicantItem extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        SizedBox(
-                          width: AppSize.s32,
-                          child: Image.asset('assets/images/logo.png'),
+                        GestureDetector(
+                          onTap: () =>
+                              model.navigateToApplicantProfile(applicant),
+                          child: SizedBox(
+                            width: AppSize.s32,
+                            child: Image.asset('assets/images/logo.png'),
+                          ),
                         ),
                         const SizedBox(
                           width: AppSize.s14,

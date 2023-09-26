@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:ui_package/utils/colors.dart';
+import 'package:ui_package/utils/font_styles.dart';
 
 class CustomBottomBar extends StatelessWidget {
-  CustomBottomBar({
+  const CustomBottomBar({
     Key? key,
     this.selectedIndex = 0,
     this.showElevation = true,
@@ -100,7 +101,7 @@ class _ItemWidget extends StatelessWidget {
       container: true,
       selected: isSelected,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -111,17 +112,30 @@ class _ItemWidget extends StatelessWidget {
                 size: iconSize,
                 color: isSelected
                     ? item.activeColor.withOpacity(1)
-                    : item.inactiveColor == null
-                        ? item.activeColor
-                        : item.inactiveColor,
+                    : item.inactiveColor ?? item.activeColor,
               ),
-              child: Icon(
-                item.icon,
-                color: isSelected ? item.activeColor : item.inactiveColor,
-              ),
+              child: item.isIconBadge && item.badgeCounter.isNotEmpty
+                  ? Badge(
+                      label: Text(
+                        item.badgeCounter,
+                        style: const TextStyle(
+                          fontSize: FontSize.s10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      backgroundColor: ColorManager.kSecondaryColor,
+                      textColor: Colors.white,
+                      child: Icon(
+                        item.icon,
+                      ),
+                    )
+                  : Icon(
+                      item.icon,
+                      color: isSelected ? item.activeColor : item.inactiveColor,
+                    ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 4),
               child: DefaultTextStyle.merge(
                 style: TextStyle(
                   color: isSelected ? item.activeColor : item.inactiveColor,
@@ -146,8 +160,12 @@ class BottomNavBarItem {
     this.activeColor = Colors.blue,
     this.textAlign,
     this.inactiveColor,
+    this.isIconBadge = false,
+    this.badgeCounter = '',
   });
 
+  final String badgeCounter;
+  final bool isIconBadge;
   final IconData icon;
   final Widget title;
   final Color activeColor;

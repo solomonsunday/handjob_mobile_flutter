@@ -22,6 +22,7 @@ class MainViewModel extends ReactiveViewModel {
   final _sharedService = locator<SharedService>();
   final _postService = locator<PostService>();
   final _videoCallService = locator<VideoCallService>();
+  final _dialogService = locator<DialogService>();
   final _notificationService = locator<NotificationService>();
   final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
@@ -131,6 +132,12 @@ class MainViewModel extends ReactiveViewModel {
   void navigateBack() => _navigationService.back();
 
   Future<void> logout() async {
+    var response = await _dialogService.showConfirmationDialog(
+        title: "Signing out",
+        description: "Do you really want to logout?",
+        confirmationTitle: 'Yes',
+        cancelTitle: 'No');
+    if (!response!.confirmed) return;
     await _authenticationService.logout();
     _navigationService.replaceWith(Routes.authView);
   }
@@ -177,5 +184,4 @@ class MainViewModel extends ReactiveViewModel {
     //   }),
     // ]);
   }
-
 }

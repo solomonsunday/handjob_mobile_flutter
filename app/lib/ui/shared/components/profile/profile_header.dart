@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_package/ui_package.dart';
@@ -67,8 +69,7 @@ class ProfileHeader extends StatelessWidget {
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
-                                    image:
-                                        AssetImage("assets/images/logo.png"),
+                                    image: AssetImage("assets/images/logo.png"),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -89,11 +90,8 @@ class ProfileHeader extends StatelessWidget {
                     Positioned(
                       top: AppSize.s12,
                       right: AppSize.s20,
-                      child: GestureDetector(
-                        onTap: uploadProfileCover == null
-                            ? null
-                            : () => uploadProfileCover!(),
-                        child: const ProfileEditIcon(),
+                      child: ProfileEditIcon(
+                        onTap: uploadProfileCover,
                       ),
                     )
                 ],
@@ -102,19 +100,14 @@ class ProfileHeader extends StatelessWidget {
             Positioned(
               bottom: -40,
               left: 10,
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: uploadProfileAvatar == null
-                        ? null
-                        : () => uploadProfileAvatar!(),
-                    child: ProfileAvatar(
-                      imgUrl: currentUser?.imageUrl,
-                      busy: busy,
-                      isView: isView,
-                    ),
-                  ),
-                ],
+              child: GestureDetector(
+                onTap: uploadProfileAvatar,
+                child: ProfileAvatar(
+                  imgUrl: currentUser?.imageUrl,
+                  busy: busy,
+                  isView: isView,
+                  uploadProfileAvatar: uploadProfileAvatar
+                ),
               ),
             ),
             Positioned(

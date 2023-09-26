@@ -142,10 +142,10 @@ class NotificationService {
         if (buttonKeyPressed == 'reject') {
           await _videoCallService.sendNotification({
             "callType": "end_call",
-            "callId": contact.id,
-            "callName": '${contact.firstName} ${contact.lastName}',
-            "callerId": '${currentUser?.id}',
-            "callerName": '${currentUser?.firstName} ${currentUser?.lastName}',
+            "callId": currentUser?.id,
+            "callName": '${currentUser?.firstName} ${currentUser?.lastName}',
+            "callerId": contact.id,
+            "callerName": '${contact.firstName} ${contact.lastName}',
             "callRole": "audience",
             "notificationType": 'video'
           });
