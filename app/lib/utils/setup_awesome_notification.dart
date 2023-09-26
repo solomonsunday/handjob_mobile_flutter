@@ -138,11 +138,7 @@ class NotificationService {
         }
         Contact contact = list.first;
         print('contact found: ${contact.toJson()}');
-        if (message['callType'] == "end_call") {
-          print('end caller call');
-          _videoCallService.agoraEngine.leaveChannel();
-          _navigationService.back();
-        }
+     
         if (buttonKeyPressed == 'reject') {
           await _videoCallService.sendNotification({
             "callType": "end_call",

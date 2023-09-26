@@ -1,20 +1,25 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:handjob_mobile/utils/setup_awesome_notification.dart';
+import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/utils/colors.dart';
 
 import '../app/app.locator.dart';
 import '../models/contact.model.dart';
 import '../services/contact.service.dart';
+import '../services/video-call.service.dart';
 import 'contants.dart';
 
 final _contactService = locator<ContactService>();
+final _videoCallService = locator<VideoCallService>();
+final _navigationService = locator<NavigationService>();
 
 void showNotification() {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     print('Just show awesome notification');
     print('Message data: ${message.data}');
     if (message.notification == null) return;
+
     if (message.data["callType"] != null) {
       List<Contact> contacts = await _contactService.getContacts();
       print('contacts: ${contacts.map((e) => e.toJson()).toList()}');
@@ -22,41 +27,41 @@ void showNotification() {
           .where((element) => element.id == message.data['callerId'])
           .toList();
       print('caller id: ${message.data["callerId"]}');
-
+      if (message.data['callType'] == "end_call") {
+        print('end caller call');
+        await _videoCallService.agoraEngine.leaveChannel();
+        _navigationService.back();
+      }
       if (list.isNotEmpty) {
         if (message.data["callType"] == VOICE_CALL ||
             message.data["callType"] == VIDEO_CALL) {
           //show any type of notification ...
           Contact contact = list.first;
           print('contact found: ${contact.toJson()}');
-
-          if (message.data["callType"] == VOICE_CALL ||
-              message.data["callType"] == VIDEO_CALL) {
-            await NotificationService.showNotification(
-                title: 'Incoming call ',
-                body: '${contact.firstName} ${contact.lastName} is calling...',
-                payload: {
-                  'callType': message.data["callType"],
-                  'entityId': message.data["entityId"],
-                  "notificationType": message.data["notificationType"],
-                  "callerId": message.data["callerId"],
-                },
-                actionButtons: [
-                  NotificationActionButton(
-                    key: 'reject',
-                    label: 'Reject',
-                    color: ColorManager.kRed,
-                    actionType: ActionType.SilentAction,
-                  ),
-                  NotificationActionButton(
-                    key: 'accept',
-                    label: 'Accept',
-                    color: ColorManager.kGreen,
-                    actionType: ActionType.Default,
-                  ),
-                ]);
-            return;
-          }
+          await NotificationService.showNotification(
+              title: 'Incoming call ',
+              body: '${contact.firstName} ${contact.lastName} is calling...',
+              payload: {
+                'callType': message.data["callType"],
+                'entityId': message.data["entityId"],
+                "notificationType": message.data["notificationType"],
+                "callerId": message.data["callerId"],
+              },
+              actionButtons: [
+                NotificationActionButton(
+                  key: 'reject',
+                  label: 'Reject',
+                  color: ColorManager.kRed,
+                  actionType: ActionType.SilentAction,
+                ),
+                NotificationActionButton(
+                  key: 'accept',
+                  label: 'Accept',
+                  color: ColorManager.kGreen,
+                  actionType: ActionType.Default,
+                ),
+              ]);
+          return;
         }
       }
     } else {
