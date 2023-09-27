@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_package/ui_package.dart';
@@ -16,7 +14,8 @@ class ProfileHeader extends StatelessWidget {
     required this.currentUser,
     this.uploadProfileAvatar,
     this.uploadProfileCover,
-    required this.busy,
+    required this.isUploadingAvatar,
+    required this.isUploadingCover,
     required this.connectionCount,
     required this.rating,
     this.isView = false,
@@ -24,7 +23,8 @@ class ProfileHeader extends StatelessWidget {
   final User? currentUser;
   final VoidCallback? uploadProfileAvatar;
   final VoidCallback? uploadProfileCover;
-  final bool busy;
+  final bool isUploadingAvatar;
+  final bool isUploadingCover;
   final int connectionCount;
   final double rating;
   final bool isView;
@@ -90,9 +90,15 @@ class ProfileHeader extends StatelessWidget {
                     Positioned(
                       top: AppSize.s12,
                       right: AppSize.s20,
-                      child: ProfileEditIcon(
-                        onTap: uploadProfileCover,
-                      ),
+                      child: isUploadingCover
+                          ? const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(),
+                            )
+                          : ProfileEditIcon(
+                              onTap: uploadProfileCover,
+                            ),
                     )
                 ],
               ),
@@ -103,11 +109,10 @@ class ProfileHeader extends StatelessWidget {
               child: GestureDetector(
                 onTap: uploadProfileAvatar,
                 child: ProfileAvatar(
-                  imgUrl: currentUser?.imageUrl,
-                  busy: busy,
-                  isView: isView,
-                  uploadProfileAvatar: uploadProfileAvatar
-                ),
+                    imgUrl: currentUser?.imageUrl,
+                    busy: isUploadingAvatar,
+                    isView: isView,
+                    uploadProfileAvatar: uploadProfileAvatar),
               ),
             ),
             Positioned(

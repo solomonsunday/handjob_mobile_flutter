@@ -70,9 +70,14 @@ void showNotification() {
       }
     } else {
       //any notification other than call...
+      String entityId = message.data['entityId'];
       await NotificationService.showNotification(
         title: message.notification?.title ?? "",
         body: message.notification?.body ?? "",
+        payload: {
+          'entityId': entityId,
+          "notificationType": message.data["notificationType"],
+        },
       );
     }
   });

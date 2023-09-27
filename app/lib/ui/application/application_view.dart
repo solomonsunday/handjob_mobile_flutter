@@ -208,11 +208,15 @@ class ApplicantItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: AppSize.s8),
-                            Text(
-                              applicant.name!,
-                              style: getBoldStyle(
-                                color: ColorManager.kDarkColor,
-                                fontSize: FontSize.s14,
+                            GestureDetector(
+                              onTap: () =>
+                                  model.navigateToApplicantProfile(applicant),
+                              child: Text(
+                                applicant.name!,
+                                style: getBoldStyle(
+                                  color: ColorManager.kDarkColor,
+                                  fontSize: FontSize.s14,
+                                ),
                               ),
                             ),
                             const SizedBox(height: AppSize.s2),

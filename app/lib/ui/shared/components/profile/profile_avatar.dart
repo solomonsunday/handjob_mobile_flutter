@@ -8,12 +8,12 @@ class ProfileAvatar extends StatelessWidget {
   const ProfileAvatar({
     Key? key,
     this.imgUrl,
-    this.busy,
+    this.busy = false,
     this.isView = false,
     this.uploadProfileAvatar,
   }) : super(key: key);
   final String? imgUrl;
-  final bool? busy;
+  final bool busy;
   final bool isView;
   final VoidCallback? uploadProfileAvatar;
   @override
@@ -71,10 +71,16 @@ class ProfileAvatar extends StatelessWidget {
           Positioned(
             right: -4,
             bottom: 8,
-            child: ProfileEditIcon(
-              padding: 10,
-              onTap: uploadProfileAvatar,
-            ),
+            child: busy
+                ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(),
+                  )
+                : ProfileEditIcon(
+                    padding: 10,
+                    onTap: uploadProfileAvatar,
+                  ),
           ),
       ],
     );

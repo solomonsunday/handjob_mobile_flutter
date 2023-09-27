@@ -21,6 +21,7 @@ import '../../services/authentication.service.dart';
 
 String REQUEST_OTP = "REQUEST_OTP";
 String PROFILE_AVATAR_UPLOAD = "PROFILE_AVATAR_UPLOAD";
+String PROFILE_COVER_UPLOAD = 'PROFILE_COVER_UPLOAD';
 
 class ProfileViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
@@ -172,6 +173,26 @@ class ProfileViewModel extends ReactiveViewModel {
       await _authenticationService.getCurrentBaseUser();
     } finally {
       setBusyForObject(PROFILE_AVATAR_UPLOAD, false);
+      notifyListeners();
+    }
+  }
+  Future<void> uploadProfileCover() async {
+    XFile? xfile = await _picker.pickImage(source: ImageSource.gallery);
+    if (xfile == null) return;
+
+    var response = await _dialogService.showConfirmationDialog(
+      title: "Confirmation",
+      description: "Do you really want to use this photo as your avatar?",
+    );
+    if (!response!.confirmed) return;
+
+    setBusyForObject(PROFILE_COVER_UPLOAD, true);
+    try {
+      File file = File(xfile.path);
+      await _accountService.uploadProfilePicture(file);
+      await _authenticationService.getCurrentBaseUser();
+    } finally {
+      setBusyForObject(PROFILE_COVER_UPLOAD, false);
       notifyListeners();
     }
   }

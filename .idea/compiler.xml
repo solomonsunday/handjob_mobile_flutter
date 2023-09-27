@@ -6,7 +6,6 @@
       <module name="android.flutter_local_notifications" target="11" />
       <module name="android.flutter_secure_storage" target="11" />
       <module name="android.flutter_webrtc" target="11" />
-      <module name="com.cloudwebrtc.webrtc.android.flutter_webrtc" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

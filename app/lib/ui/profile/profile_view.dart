@@ -58,8 +58,9 @@ class ProfileView extends StatelessWidget {
                       uploadProfileAvatar: () async =>
                           await model.uploadProfileAvatar(),
                       uploadProfileCover: () async =>
-                          await model.uploadProfileAvatar(),
-                      busy: model.busy(PROFILE_AVATAR_UPLOAD),
+                          await model.uploadProfileCover(),
+                      isUploadingAvatar: model.busy(PROFILE_AVATAR_UPLOAD),
+                      isUploadingCover: model.busy(PROFILE_COVER_UPLOAD),
                       connectionCount: model.contactListCount ?? 0,
                       rating: 3,
                     ),

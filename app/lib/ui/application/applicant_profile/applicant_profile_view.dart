@@ -64,7 +64,9 @@ class ApplicantProfileView extends StatelessWidget {
                       ProfileHeader(
                         currentUser: model.user,
                         uploadProfileAvatar: () {},
-                        busy: false,
+                        uploadProfileCover: () {},
+                        isUploadingAvatar: false,
+                        isUploadingCover: false,
                         connectionCount: model.contactListCount ?? 0,
                         rating: 3,
                         isView: true,
