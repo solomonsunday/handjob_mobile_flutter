@@ -100,7 +100,7 @@ class OngoingVideoCallViewModel extends ReactiveViewModel {
           onError: (err, msg) {
             log("[VIDEO CALL] [onError] err: $err, msg: $msg");
           },
-          onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+          onJoinChannelSuccess: (RtcConnection connection, int elapsed) async {
             log("[VIDEO CALL] ...onConnection: ${connection.toJson()}");
             _isJoined = true;
             notifyListeners();

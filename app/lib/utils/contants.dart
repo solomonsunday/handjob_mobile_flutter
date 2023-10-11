@@ -36,6 +36,6 @@ const String REJECT_CALL = 'REJECT_CALL';
 
 //AGORA
 const String appId = "cb93d8ca5f51429793b221b8e0c7e1d3";
-const String APP_TOKEN =
-    "007eJxTYPgQ4uGjcF6Mp/DwIrU4w3gLl+MFL5qe2+3g3L0h5vKdgPkKDMlJlsYpFsmJpmmmhiZGluaWxklGRoZJFqkGyeaphinGEYLsqQ2BjAzr/WyZGBkgEMTnZEjOSCwpqdRNSWJgAACPOR9/";
-const String APP_CHANNEL_ID = "chatty-db";
+// const String APP_TOKEN =
+//     "007eJxTYPgQ4uGjcF6Mp/DwIrU4w3gLl+MFL5qe2+3g3L0h5vKdgPkKDMlJlsYpFsmJpmmmhiZGluaWxklGRoZJFqkGyeaphinGEYLsqQ2BjAzr/WyZGBkgEMTnZEjOSCwpqdRNSWJgAACPOR9/";
+// const String APP_CHANNEL_ID = "chatty-db";

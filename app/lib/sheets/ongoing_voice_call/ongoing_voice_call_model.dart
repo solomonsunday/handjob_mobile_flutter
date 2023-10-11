@@ -161,10 +161,10 @@ class OngoingVoiceCallModel extends ReactiveViewModel {
     // retrieve or request microphone permission
     await [Permission.microphone].request();
     setBusyForObject(JOIN_CHANNEL, true);
-    // String? token = await generateToken();
+    String? token = await getToken();
     await _agoraEngine?.joinChannel(
-      token: APP_TOKEN,
-      channelId: APP_CHANNEL_ID,
+      token: token ?? "",
+      channelId: channelId,
       uid: uid,
       options: ChannelMediaOptions(
         channelProfile: channelProfileType,

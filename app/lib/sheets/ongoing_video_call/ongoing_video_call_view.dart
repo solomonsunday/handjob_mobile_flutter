@@ -29,9 +29,9 @@ class OngoingVideoCallView extends StatelessWidget {
           print('remote message inside the call app ${message.data}');
           if (message.data['callType'] == "end_call") {
             print('end caller call');
-            // if (message.data['callerId'] == model.currentUser?.id) {
-            print('Call ended');
             model.leaveChannel();
+            // if (message.data['callerId'] == model.currentUser?.id) {
+            // print('Call ended');
             // }
           }
         });
