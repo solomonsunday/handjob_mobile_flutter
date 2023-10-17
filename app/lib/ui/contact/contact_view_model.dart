@@ -19,6 +19,7 @@ const String TOP_SUGGESTION_CONTACT_LIST_REQUEST =
 const String CONNECTION_REQUEST = "CONNECTION_REQUEST";
 const String DELETE_CONTACT = "DELETE_CONTACT";
 
+const String VIDEO_CALL = "VIDEO_CALL";
 const String AUDIO_CALL = "AUDIO_CALL";
 const String CHAT = "CHAT";
 const String DELETE = "DELETE";
@@ -153,10 +154,10 @@ class ContactViewModel extends ReactiveViewModel {
     //     'call_role': 'anchor',
     //   },
     // );
-    // _navigationService.navigateToOngoingVideoCallView(
-    //   contact: contact,
-    //   callRole: 'anchor',
-    // );
+    _navigationService.navigateToOngoingVideoCallView(
+      contact: contact,
+      callRole: 'anchor',
+    );
   }
 
   // handleVideoCall(Contact contact) async  {

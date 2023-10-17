@@ -153,10 +153,10 @@ class NotificationService {
           print('reject call');
         } else {
           print('call accepted and nanvigate');
-          // _navigationService.navigateToOngoingVideoCallView(
-          //   contact: contact,
-          //   callRole: 'audience',
-          // );
+          _navigationService.navigateToOngoingVideoCallView(
+            contact: contact,
+            callRole: 'audience',
+          );
           // _bottomSheetService.showCustomSheet(
           //   variant: BottomSheetType.ongoing_video_call,
           //   isScrollControlled: true,
