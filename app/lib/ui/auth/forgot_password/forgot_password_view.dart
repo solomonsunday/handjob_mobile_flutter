@@ -55,21 +55,21 @@ class ForgotPasswordView extends StatelessWidget with $ForgotPasswordView {
                   ),
 
                   const SizedBox(height: AppSize.s40),
-                  if (model.hasError)
-                    Text(
-                      '${model.modelError}',
-                      style: getMediumStyle(
-                        color: ColorManager.kRed,
-                        fontSize: FontSize.s14,
-                      ),
-                    ),
+                  // if (model.hasError)
+                  //   Text(
+                  //     '${model.modelError}',
+                  //     style: getMediumStyle(
+                  //       color: ColorManager.kRed,
+                  //       fontSize: FontSize.s14,
+                  //     ),
+                  //   ),
                   DefaultButton(
                     onPressed: model.isBusy ? null : model.recoverPassword,
                     title: 'Recover password',
                     busy: model.isBusy,
                     buttonBgColor: const Color.fromRGBO(0, 0, 0, 1),
                     fontWeight: FontWeight.w400,
-                    disabled: model.isBusy,
+                    disabled: model.isBusy || model.formValid,
                   ),
                   const SizedBox(height: AppSize.s12),
 

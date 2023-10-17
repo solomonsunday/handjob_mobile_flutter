@@ -23,7 +23,6 @@ const String ACCOUNT_ARTISAN = 'Artisan';
 
 //CALLS
 const String VOICE_CALL = "voice";
-const String VIDEO_CALL = "video";
 
 const _failedToStartVideoEngine = 'Failed to start video engine';
 const _failedToJoinCall = 'Failed to join call';

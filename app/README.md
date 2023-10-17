@@ -16,3 +16,6 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 
 flutter run build_runner build --delete-conflicting-outputs
+
+- To build a flutter apk
+- flutter build apk --no-tree-shake-icons

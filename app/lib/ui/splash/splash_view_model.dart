@@ -23,9 +23,25 @@ class SplashViewViewModel extends BaseViewModel {
   bool _isLoggedIn = true;
   bool get isLoggedIn => _isLoggedIn;
 
-  Future<bool?> getCurrentUserRequest() async {
+  Future<void> getCurrentUserRequest() async {
     log.i('initializing...');
     SharedPreferences preferences = await SharedPreferences.getInstance();
+    bool? isFirstTimeUser = preferences.getBool(IS_FIRST_TIME_USER);
+    if (isFirstTimeUser == null || isFirstTimeUser) {
+      navigateToOnboard();
+      return;
+    }
+
+    bool authResponse = await _authenticationService.isAuthenticated();
+    if (authResponse) {
+      await _authenticationService.getCurrentBaseUser();
+      _navigationService.replaceWith(Routes.mainView);
+      return;
+    }
+
+    navigateToLogin();
+
+    return;
     try {
       bool authResponse = await _authenticationService.isAuthenticated();
       if (authResponse) {
@@ -34,7 +50,7 @@ class SplashViewViewModel extends BaseViewModel {
         _isLoggedIn = false;
       }
 
-      return authResponse;
+      // return authResponse;
     } on DioError {
       _isLoggedIn = false;
       // throw Exception(error.response?.data["message"]);
@@ -68,7 +84,7 @@ class SplashViewViewModel extends BaseViewModel {
         }
       }
     }
-    return null;
+    return;
   }
 
   Future<void> getCurrentUser() async {

@@ -5,7 +5,6 @@ import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/services/authentication.service.dart';
 import 'package:handjob_mobile/ui/auth/forgot_password/forgot_password_view.form.dart';
-import 'package:handjob_mobile/utils/http_exception.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
@@ -37,12 +36,24 @@ class ForgotPasswordViewModel extends FormViewModel {
       );
       _navigationService.navigateToResetPasswordView(email: emailValue!);
     } on DioError catch (error) {
-      if(error.response!.statusCode! >= 500){
-        setError("An unexpected error has occurred");
-        return;
-      }
-      print("dio error: ${error.response?.statusCode}");
-      throw HttpException(error.response!.data["message"]);
+      print('error: $error');
+      Fluttertoast.showToast(
+        msg: error.response!.statusCode! >= 500
+            ? "An unexpected error has occurred"
+            : error.response!.data["message"],
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: ColorManager.kDarkCharcoal,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+      // if(error.response!.statusCode! >= 500){
+      //   setError("An unexpected error has occurred");
+      //   return;
+      // }
+      // print("dio error: ${error.response?.statusCode}");
+      // throw HttpException(error.response!.data["message"]);
     } finally {
       setBusy(false);
       notifyListeners();
@@ -51,8 +62,14 @@ class ForgotPasswordViewModel extends FormViewModel {
 
   void navigateToLogin() => _navigationService.navigateTo(Routes.authView);
 
+  bool _formValid = true;
+  bool get formValid => _formValid;
+
   @override
   void setFormStatus() {
     // TODO: implement setFormStatus
+    if (emailValue!.isEmpty) {
+      _formValid = false;
+    }
   }
 }

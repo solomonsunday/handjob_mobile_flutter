@@ -165,9 +165,9 @@ class ContactListItem extends StatelessWidget {
             case AUDIO_CALL:
               onAudioCall(contact);
               break;
-            case VIDEO_CALL:
-              onVideoCall(contact);
-              break;
+            // case VIDEO_CALL:
+            //   onVideoCall(contact);
+            //   break;
             case CHAT:
               onChat(contact);
               break;
@@ -195,21 +195,21 @@ class ContactListItem extends StatelessWidget {
               ),
               value: AUDIO_CALL,
             ),
-            const PopupMenuItem(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.videocam,
-                    color: ColorManager.kDarkColor,
-                  ),
-                  SizedBox(
-                    width: AppSize.s16,
-                  ),
-                  Text('Video Call')
-                ],
-              ),
-              value: VIDEO_CALL,
-            ),
+            // const PopupMenuItem(
+            //   child: Row(
+            //     children: [
+            //       Icon(
+            //         Icons.videocam,
+            //         color: ColorManager.kDarkColor,
+            //       ),
+            //       SizedBox(
+            //         width: AppSize.s16,
+            //       ),
+            //       Text('Video Call')
+            //     ],
+            //   ),
+            //   value: VIDEO_CALL,
+            // ),
             const PopupMenuItem(
               child: Row(
                 children: [

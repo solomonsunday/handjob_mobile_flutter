@@ -11,7 +11,6 @@ import 'package:handjob_mobile/services/notification.service.dart';
 import 'package:handjob_mobile/services/post.service.dart';
 import 'package:handjob_mobile/services/shared.service.dart';
 import 'package:handjob_mobile/services/video-call.service.dart';
-import 'package:handjob_mobile/sheets/ongoing_video_call/ongoing_video_call_view.dart';
 import 'package:handjob_mobile/ui/application/applicant_profile/applicant_profile_view.dart';
 import 'package:handjob_mobile/ui/application/rate_review/rate_review_view.dart';
 import 'package:handjob_mobile/ui/auth/auth_view.dart';
@@ -74,7 +73,6 @@ import '../ui/settings/term_of_service/term_of_service_view.dart';
     AdaptiveRoute(page: JobDetailView),
     AdaptiveRoute(page: NotificationJobDetailView),
     AdaptiveRoute(page: TermOfServiceView),
-    AdaptiveRoute(page: OngoingVideoCallView),
     // @stacked-route
   ],
   dependencies: [

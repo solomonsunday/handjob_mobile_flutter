@@ -166,6 +166,7 @@ class AuthenticationService with ListenableServiceMixin {
       '/auth/send-forget-password-email',
       data: formData,
     );
+    print('response: ' + response.data);
     return true;
   }
 

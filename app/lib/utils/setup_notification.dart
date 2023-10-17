@@ -37,36 +37,36 @@ void showNotification() {
       //   }
       // }
       if (list.isNotEmpty) {
-        if (message.data["callType"] == VOICE_CALL ||
-            message.data["callType"] == VIDEO_CALL) {
-          //show any type of notification ...
-          Contact contact = list.first;
-          print('contact found: ${contact.toJson()}');
-          await NotificationService.showNotification(
-              title: 'Incoming call ',
-              body: '${contact.firstName} ${contact.lastName} is calling...',
-              payload: {
-                'callType': message.data["callType"],
-                'entityId': message.data["entityId"],
-                "notificationType": message.data["notificationType"],
-                "callerId": message.data["callerId"],
-              },
-              actionButtons: [
-                NotificationActionButton(
-                  key: 'reject',
-                  label: 'Reject',
-                  color: ColorManager.kRed,
-                  actionType: ActionType.SilentAction,
-                ),
-                NotificationActionButton(
-                  key: 'accept',
-                  label: 'Accept',
-                  color: ColorManager.kGreen,
-                  actionType: ActionType.Default,
-                ),
-              ]);
-          return;
-        }
+        // if (message.data["callType"] == VOICE_CALL ||
+        //     message.data["callType"] == VIDEO_CALL) {
+        //   //show any type of notification ...
+        //   Contact contact = list.first;
+        //   print('contact found: ${contact.toJson()}');
+        //   await NotificationService.showNotification(
+        //       title: 'Incoming call ',
+        //       body: '${contact.firstName} ${contact.lastName} is calling...',
+        //       payload: {
+        //         'callType': message.data["callType"],
+        //         'entityId': message.data["entityId"],
+        //         "notificationType": message.data["notificationType"],
+        //         "callerId": message.data["callerId"],
+        //       },
+        //       actionButtons: [
+        //         NotificationActionButton(
+        //           key: 'reject',
+        //           label: 'Reject',
+        //           color: ColorManager.kRed,
+        //           actionType: ActionType.SilentAction,
+        //         ),
+        //         NotificationActionButton(
+        //           key: 'accept',
+        //           label: 'Accept',
+        //           color: ColorManager.kGreen,
+        //           actionType: ActionType.Default,
+        //         ),
+        //       ]);
+        //   return;
+        // }
       }
     } else {
       //any notification other than call...

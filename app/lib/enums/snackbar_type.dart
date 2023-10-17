@@ -1,1 +1,1 @@
-enum SnackbarType { voice_call, video_call }
+enum SnackbarType { voice_call }

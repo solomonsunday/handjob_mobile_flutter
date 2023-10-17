@@ -1,8 +1,4 @@
 import 'package:handjob_mobile/sheets/edit_instant_job/edit_instant_job_sheet_view.dart';
-import 'package:handjob_mobile/sheets/incoming_call/incoming_call_view.dart';
-import 'package:handjob_mobile/sheets/ongoing_video_call/ongoing_video_call_view.dart';
-import 'package:handjob_mobile/sheets/ongoing_voice_call/ongoing_voice_call_view.dart';
-import 'package:handjob_mobile/sheets/outgoing_call/outgoing_call_view.dart';
 import 'package:handjob_mobile/sheets/profile_contact/profile_contact.sheet.dart';
 import 'package:handjob_mobile/sheets/profile_education/profile_education.sheet.dart';
 import 'package:handjob_mobile/sheets/profile_experience/profile_experience.sheet.dart';
@@ -30,14 +26,6 @@ void setupBottomSheetUi() {
         VerifyPhoneSheet(request: sheetRequest, completer: completer),
     BottomSheetType.profile_portfolio: (context, sheetRequest, completer) =>
         ProfilePortfolioSheet(request: sheetRequest, completer: completer),
-    BottomSheetType.incoming_call: (context, sheetRequest, completer) =>
-        IncomingCallView(request: sheetRequest, completer: completer),
-    BottomSheetType.outgoing_call: (context, sheetRequest, completer) =>
-        OutgoingCallView(request: sheetRequest, completer: completer),
-    BottomSheetType.ongoing_voice_call: (context, sheetRequest, completer) =>
-        OngoingVoiceCallView(request: sheetRequest, completer: completer),
-    // BottomSheetType.ongoing_video_call: (context, sheetRequest, completer) =>
-    //     OngoingVideoCallView(request: sheetRequest, completer: completer),
     BottomSheetType.edit_instant_job: (context, sheetRequest, completer) =>
         EditInstantJobSheetView(request: sheetRequest, completer: completer),
   };

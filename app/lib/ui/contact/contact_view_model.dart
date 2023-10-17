@@ -20,7 +20,6 @@ const String CONNECTION_REQUEST = "CONNECTION_REQUEST";
 const String DELETE_CONTACT = "DELETE_CONTACT";
 
 const String AUDIO_CALL = "AUDIO_CALL";
-const String VIDEO_CALL = "VIDEO_CALL";
 const String CHAT = "CHAT";
 const String DELETE = "DELETE";
 
@@ -128,21 +127,21 @@ class ContactViewModel extends ReactiveViewModel {
   }
 
   handleVoiceCall(Contact contact) {
-    // if (contact.phoneNumber == null) {
-    //   _dialogService.showDialog(
-    //       title: "No phone number",
-    //       description: "Please update your phone number");
-    //   return;
-    // }
-    // _makePhoneCall(contact.phoneNumber!);
-    _bottomSheetService.showCustomSheet(
-      variant: BottomSheetType.ongoing_voice_call,
-      isScrollControlled: true,
-      data: {
-        'contact': contact,
-        'call_role': 'anchor',
-      },
-    );
+    if (contact.phoneNumber == null) {
+      _dialogService.showDialog(
+          title: "No phone number",
+          description: "Please update your phone number");
+      return;
+    }
+    _makePhoneCall(contact.phoneNumber!);
+    // _bottomSheetService.showCustomSheet(
+    //   variant: BottomSheetType.ongoing_voice_call,
+    //   isScrollControlled: true,
+    //   data: {
+    //     'contact': contact,
+    //     'call_role': 'anchor',
+    //   },
+    // );
   }
 
   handleVideoCall(Contact contact) {
@@ -154,10 +153,10 @@ class ContactViewModel extends ReactiveViewModel {
     //     'call_role': 'anchor',
     //   },
     // );
-    _navigationService.navigateToOngoingVideoCallView(
-      contact: contact,
-      callRole: 'anchor',
-    );
+    // _navigationService.navigateToOngoingVideoCallView(
+    //   contact: contact,
+    //   callRole: 'anchor',
+    // );
   }
 
   // handleVideoCall(Contact contact) async  {
