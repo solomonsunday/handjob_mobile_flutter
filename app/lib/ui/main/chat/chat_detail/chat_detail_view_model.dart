@@ -115,11 +115,11 @@ class ChatDetailViewModel extends ReactiveViewModel {
 
   //handle video call
   handleVideoCall(Contact p1) {
-    _bottomSheetService.showCustomSheet(
-      variant: BottomSheetType.outgoing_call,
-      title: "Outgoing Video Call",
-      data: {"type": "video"},
-      isScrollControlled: true,
-    );
+    // _bottomSheetService.showCustomSheet(
+    //   variant: BottomSheetType.outgoing_call,
+    //   title: "Outgoing Video Call",
+    //   data: {"type": "video"},
+    //   isScrollControlled: true,
+    // );
   }
 }

@@ -1,4 +1,3 @@
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:dio/dio.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/models/rtc.model.dart';
@@ -27,25 +26,6 @@ import '../client/dio_client.dart';
 class VideoCallService with ListenableServiceMixin {
   Dio dioClient = locator<DioClient>().dio;
   final _navigationService = locator<NavigationService>();
-
-  late RtcEngine agoraEngine; // Agora engine instance
-
-  VideoCallService() {
-    listenToReactiveValues([]);
-  }
-
-  setAgoraEngine(RtcEngine engine) {
-    agoraEngine = engine;
-  }
-
-  endCall() async {
-    try {
-      await agoraEngine.leaveChannel();
-      await agoraEngine.release();
-    } catch (e) {
-      print('erorr while trying to release agora from service');
-    }
-  }
 
   Future<RtcToken> generateToken(Map formData) async {
     var response = await dioClient.post(

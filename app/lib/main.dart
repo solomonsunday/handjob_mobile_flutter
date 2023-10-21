@@ -2,7 +2,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
-import 'package:handjob_mobile/utils/setup_awesome_notification.dart';
 import 'package:handjob_mobile/utils/setup_notification.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -12,33 +11,31 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import '../../utils/contants.dart';
 
-const String CHANNEL_CALL = "CHANNEL_CALL";
 FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-// @pragma('vm:entry-point')
-// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   print('messsage receive background: ${message.data}');
-//   // If you're going to use other Firebase services in the background, such as Firestore,
-//   // make sure you call `initializeApp` before using other Firebase services.
-//   await Firebase.initializeApp();
-//   // setupNotification(messaging);
-// }
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print('messsage receive background: ${message.data}');
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+  setupNotification(messaging);
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   setupLocator();
   setupBottomSheetUi();
   setupDialogUi();
-  await NotificationService.initializeNotification();
   //subscribe for push notification...
-  showNotification();
   runApp(const MyApp());
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   setupSubscription();
+  setupNotification(messaging);
 }
 
 void setupSubscription() async {

@@ -10,7 +10,6 @@
         <option name="gradleJvm" value="11" />
         <option name="modules">
           <set>
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/agora_rtc_engine-6.2.2/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/audio_session-0.1.16/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/awesome_notifications-0.7.4+1/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/device_info_plus-8.2.2/android" />
@@ -22,7 +21,6 @@
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/fluttertoast-8.2.2/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/google_sign_in_android-6.1.18/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/image_picker_android-0.8.7+3/android" />
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/iris_method_channel-1.2.0/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/just_audio-0.9.34/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/path_provider_android-2.0.27/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/permission_handler_android-10.3.6/android" />

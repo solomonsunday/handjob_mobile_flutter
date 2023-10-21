@@ -19,14 +19,14 @@ class MainView extends StatelessWidget {
     return ViewModelBuilder<MainViewModel>.reactive(
       onViewModelReady: (model) async {
         model.fetchPost();
+        await model.fetchNotification();
+        model.initializeView();
         await model.fetchStates();
         await model.fetchLGA();
         await model.fetchCountries();
         await model.fetchQualification();
         await model.fetchProfessionTypes();
-        await model.fetchNotification();
 
-        model.initializeView();
       },
       viewModelBuilder: () => MainViewModel(),
       onDispose: (model) {
