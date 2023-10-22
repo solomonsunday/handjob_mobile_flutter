@@ -343,7 +343,6 @@ class HomeCard extends StatelessWidget {
                         ],
                       ),
                     ),
-              
                     const Divider()
                   ],
                 ),
@@ -375,8 +374,15 @@ class HomeCardViewModel extends BaseViewModel {
 
   Future onLikePost(Post post) async {
     _isLiked = !_isLiked;
-
-    post.likes = _isLiked ? (post.likes ?? 0) + 1 : (post.likes ?? 0) - 1;
+    if (post.likes != null) {
+      // if (_isLiked && post.likes! > 0) {
+      //   // if already liked, check if the value is greater than 0 and remove 1..
+      //   post.likes = post.likes! - 1;
+      // } else if (!_isLiked && post.likes! > 0) {
+      //   post.likes = post.likes! + 1;
+      // }
+       post.likes = _isLiked && post.likes! > 0 ? (post.likes ?? 0) + 1 : (post.likes ?? 0) - 1;
+    }
     notifyListeners();
     setBusyForObject(LIKE_POST, true);
 
