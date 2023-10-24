@@ -18,71 +18,74 @@ class ContactListView extends StatelessWidget {
         builder: (context, model, _) {
           print(
               'data contacts: ${model.contactList} loading ${model.busy(CONTACT_LIST_REQUEST)}');
-          return Container(
-            child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      // horizontal: AppSize.s24,
-                      vertical: AppSize.s8,
-                    ),
-                    decoration: const BoxDecoration(
-                      color: ColorManager.kWhiteColor,
-                    ),
-                    child: InputField(
-                      hintText: 'Search',
-                      paddingBottom: AppPadding.p8,
-                      paddingTop: AppPadding.p8,
-                      prefixIcon: const Icon(
-                        Icons.search,
-                        color: ColorManager.kGrey,
-                      ),
-                      onChanged: model.handleSearch,
-                    ),
-                  ),
-                  // const SizedBox(height: AppSize.s16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '${model.contactList?.length ?? 0} results',
-                        style: getRegularStyle(
-                          color: ColorManager.kGrey5,
-                          fontSize: FontSize.s11,
+          return model.busy(CONTACT_LIST_REQUEST)
+              ? ContactListViewSkeleton()
+              : Container(
+                  child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            // horizontal: AppSize.s24,
+                            vertical: AppSize.s8,
+                          ),
+                          decoration: const BoxDecoration(
+                            color: ColorManager.kWhiteColor,
+                          ),
+                          child: InputField(
+                            hintText: 'Search',
+                            paddingBottom: AppPadding.p8,
+                            paddingTop: AppPadding.p8,
+                            prefixIcon: const Icon(
+                              Icons.search,
+                              color: ColorManager.kGrey,
+                            ),
+                            onChanged: model.handleSearch,
+                          ),
                         ),
-                      ),
-                      DefaultButton(
-                        onPressed: model.navigateToAddNewContact,
-                        title: 'Add New Contact',
-                        fontSize: FontSize.s11,
-                        paddingHeight: 10,
-                        buttonType: ButtonType.text,
-                        buttonTextColor: ColorManager.kSecondaryColor,
-                        fontWeight: FontWeight.bold,
-                      )
-                    ],
-                  ),
-                  // const SizedBox(height: AppSize.s16),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: (model.contactList ?? []).length,
-                      itemBuilder: (BuildContext context, int index) {
-                        Contact contact = model.contactList![index];
-                        return ContactListItem(
-                          contact: contact,
-                          onAudioCall: model.handleVoiceCall,
-                          onVideoCall: model.handleVideoCall,
-                          onChat: model.handleChat,
-                          onDeleteContact: model.handleDeleteContact,
-                          onViewContactProfile: model.handleViewContactProfile,
-                        );
-                      },
-                    ),
-                  )
-                ]),
-          );
+                        // const SizedBox(height: AppSize.s16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${model.contactList?.length ?? 0} results',
+                              style: getRegularStyle(
+                                color: ColorManager.kGrey5,
+                                fontSize: FontSize.s11,
+                              ),
+                            ),
+                            DefaultButton(
+                              onPressed: model.navigateToAddNewContact,
+                              title: 'Add New Contact',
+                              fontSize: FontSize.s11,
+                              paddingHeight: 10,
+                              buttonType: ButtonType.text,
+                              buttonTextColor: ColorManager.kSecondaryColor,
+                              fontWeight: FontWeight.bold,
+                            )
+                          ],
+                        ),
+                        // const SizedBox(height: AppSize.s16),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: (model.contactList ?? []).length,
+                            itemBuilder: (BuildContext context, int index) {
+                              Contact contact = model.contactList![index];
+                              return ContactListItem(
+                                contact: contact,
+                                onAudioCall: model.handleVoiceCall,
+                                onVideoCall: model.handleVideoCall,
+                                onChat: model.handleChat,
+                                onDeleteContact: model.handleDeleteContact,
+                                onViewContactProfile:
+                                    model.handleViewContactProfile,
+                              );
+                            },
+                          ),
+                        )
+                      ]),
+                );
         });
   }
 }
@@ -248,5 +251,14 @@ class ContactListItem extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ContactListViewSkeleton extends StatelessWidget {
+  const ContactListViewSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: CircularProgressIndicator());
   }
 }

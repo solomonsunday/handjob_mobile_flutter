@@ -17,7 +17,7 @@ class SettingViewModel extends BaseViewModel {
 
   List<Setting> get settingMenu => [
         Setting(Icons.hardware, "Subscriptions"),
-        Setting(Icons.notifications_none, "Notifications"),
+        // Setting(Icons.notifications_none, "Notifications"),
         Setting(Icons.login, "Sign in and security"),
         Setting(Icons.policy, "App Policy")
       ];

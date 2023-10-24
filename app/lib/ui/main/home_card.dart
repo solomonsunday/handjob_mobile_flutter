@@ -287,7 +287,7 @@ class HomeCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  model.isLiked || (post.liked ?? false)
+                                  post.liked!
                                       ? Icons.favorite
                                       : Icons.favorite_outline,
                                   color: ColorManager.kDarkColor,
@@ -373,17 +373,14 @@ class HomeCardViewModel extends BaseViewModel {
   bool get isLiked => _isLiked;
 
   Future onLikePost(Post post) async {
-    _isLiked = !_isLiked;
-    if (post.likes != null) {
-      // if (_isLiked && post.likes! > 0) {
-      //   // if already liked, check if the value is greater than 0 and remove 1..
-      //   post.likes = post.likes! - 1;
-      // } else if (!_isLiked && post.likes! > 0) {
-      //   post.likes = post.likes! + 1;
-      // }
-       post.likes = _isLiked && post.likes! > 0 ? (post.likes ?? 0) + 1 : (post.likes ?? 0) - 1;
+    post.liked = !post.liked!;
+    if (post.liked!) {
+      post.likes = post.likes! + 1;
+    } else {
+      post.likes = post.likes! - 1;
     }
     notifyListeners();
+
     setBusyForObject(LIKE_POST, true);
 
     try {
@@ -393,14 +390,14 @@ class HomeCardViewModel extends BaseViewModel {
         await _postService.disLikePost(post.id!);
       }
       post = await _postService.getPost(post.id!);
-      Fluttertoast.showToast(
-          msg: 'You just ${_isLiked ? 'liked' : 'unliked'} a post');
+      // Fluttertoast.showToast(
+      //     msg: 'You just ${_isLiked ? 'liked' : 'unliked'} a post');
     } on DioError catch (e) {
       print('error liking: ${e.response?.data ?? "error unknown"}');
       post.likes = (post.likes ?? 0) - 1;
       _isLiked = false;
-      Fluttertoast.showToast(
-          msg: 'Unable to like post. please try again later');
+      // Fluttertoast.showToast(
+      //     msg: 'Unable to like post. please try again later');
     } finally {
       setBusyForObject(LIKE_POST, false);
       notifyListeners();

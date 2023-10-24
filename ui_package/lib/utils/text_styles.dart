@@ -7,7 +7,7 @@ import '../ui_package.dart';
 
 TextStyle _getTextStyle(
     double fontSize, String fontFamily, FontWeight fontWeight, Color color) {
-  return TextStyle(
+  return GoogleFonts.redHatDisplay(
       fontSize: fontSize, fontWeight: fontWeight, color: color);
 }
 
