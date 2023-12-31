@@ -17,7 +17,7 @@ class PostView extends StatelessWidget with $PostView {
   Widget build(BuildContext context) {
     return ViewModelBuilder<PostViewModel>.nonReactive(
       viewModelBuilder: () => PostViewModel(),
-      onModelReady: (model) => listenToFormUpdated(model),
+      onViewModelReady: (model) => listenToFormUpdated(model),
       onDispose: (model) => disposeForm(),
       builder: (_, model, child) => Scaffold(
         appBar: Navbar(

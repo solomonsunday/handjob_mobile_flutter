@@ -59,5 +59,5 @@ class ChatViewModel extends ReactiveViewModel {
   }
 
   @override
-  List<ReactiveServiceMixin> get reactiveServices => [_chatService];
+  List<ListenableServiceMixin> get listenableServices => [_chatService];
 }

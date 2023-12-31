@@ -15,6 +15,22 @@ class ResetPasswordViewModel extends FormViewModel {
   final _navigationService = locator<NavigationService>();
   final _authenticationService = locator<AuthenticationService>();
 
+  bool _passwordVisibility = true;
+  bool _confirmPasswordVisibility = true;
+
+  bool get passwordVisibility => _passwordVisibility;
+  bool get confirmPasswordVisibility => _confirmPasswordVisibility;
+
+  togglePasswordVisibility() {
+    _passwordVisibility = !_passwordVisibility;
+    notifyListeners();
+  }
+
+  toggleConfirmPasswordVisibility() {
+    _confirmPasswordVisibility = !_confirmPasswordVisibility;
+    notifyListeners();
+  }
+
   String _email = "";
   String get email => _email;
   void setEmail(String value) {

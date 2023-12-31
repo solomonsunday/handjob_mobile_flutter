@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/ui/help_and_support/help_and_support_view.form.dart';
 import 'package:stacked/stacked.dart';
@@ -37,6 +38,11 @@ class HelpAndSupportViewModel extends FormViewModel {
       );
 
       await FlutterEmailSender.send(email);
+      Fluttertoast.showToast(
+        msg: 'Message was sent!',
+        toastLength: Toast.LENGTH_LONG,
+      );
+      _navigationService.back();
     } on DioError catch (e) {
       _dialogService.showDialog(
         description: 'Email error: ${e.message}',

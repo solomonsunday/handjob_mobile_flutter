@@ -11,7 +11,7 @@ import '../models/country.model.dart';
 import '../models/profession_type.model.dart';
 import '../models/state.model.dart';
 
-class SharedService with ReactiveServiceMixin {
+class SharedService with ListenableServiceMixin {
   int _currentIndex = MainView.HOME_VIEW;
 
   Dio dioClient = locator<DioClient>().dio;

@@ -222,7 +222,7 @@ class AppliedJobTabItem extends StatelessWidget {
           ),
           const SizedBox(height: AppSize.s20),
           Text(
-            'MEET UP LOCATION: ${appliedJob.location}',
+            'MEET UP LOCATION: ${appliedJob.address}',
             style: getBoldStyle(
               color: ColorManager.kDarkColor,
               fontSize: FontSize.s12,

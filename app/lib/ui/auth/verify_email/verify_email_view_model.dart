@@ -47,6 +47,7 @@ class VerifyEmailViewModel extends FormViewModel {
     try {
       setBusy(true);
       await _authenticationService.verifyOTP(otpCodeValue!);
+      await _authenticationService.getCurrentBaseUser();
       showSuccessDialog();
     } on DioError catch (error) {
       _dialogService.showDialog(

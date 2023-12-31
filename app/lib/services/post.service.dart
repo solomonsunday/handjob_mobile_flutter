@@ -110,7 +110,7 @@ class PostService with ListenableServiceMixin {
     var response = await dioClient.delete("/post/$postId");
 
     Post post = Post.fromJson(response.data);
-    _posts.removeWhere((element) => element.id == post.id);
+    _posts = _posts.where((element) => element.id != postId).toList();
     notifyListeners();
     return post;
   }

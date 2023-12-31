@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:handjob_mobile/services/comment.service.dart';
 import 'package:stacked/stacked.dart';
 
@@ -16,7 +18,19 @@ class CommentItemViewModel extends ReactiveViewModel {
   bool _isLiked = false;
   bool get isLiked => _isLiked;
 
+  Timer? _debounce;
+
+// change debouce duration accordingly
+  Duration _debouceDuration = const Duration(milliseconds: 500);
+
   Future<void> likeComment(Comment comment) async {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(_debouceDuration, () async {
+      await handleLikeComment(comment);
+    });
+  }
+
+  Future<void> handleLikeComment(Comment comment) async {
     _isLiked = !_isLiked;
     comment.likes = (comment.likes ?? 0) + 1;
     notifyListeners();

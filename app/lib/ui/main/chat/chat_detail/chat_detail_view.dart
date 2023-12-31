@@ -274,7 +274,7 @@ class ChatDetailView extends StatelessWidget {
                         const SizedBox(width: 4),
                         GestureDetector(
                           onTap: model.busy(CREATE_CHAT)
-                              ? () {}
+                              ? null
                               : () => model.createChat(contact),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),

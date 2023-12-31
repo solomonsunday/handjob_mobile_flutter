@@ -10,8 +10,10 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app.locator.dart';
+import '../../models/conversation.model.dart';
 import '../../models/user.model.dart';
 import '../../services/authentication.service.dart';
+import '../../services/chat.service.dart';
 import '../../services/notification.service.dart';
 import '../../services/post.service.dart';
 import '../../services/video-call.service.dart';
@@ -21,16 +23,19 @@ class MainViewModel extends ReactiveViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _sharedService = locator<SharedService>();
   final _postService = locator<PostService>();
-  final _videoCallService = locator<VideoCallService>();
+  // final _videoCallService = locator<VideoCallService>();
   final _dialogService = locator<DialogService>();
   final _notificationService = locator<NotificationService>();
   final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-
+  final _chatService = locator<ChatService>();
   // IO.Socket get videoSocket => _videoCallService.socket;
 
+  String _chatUnreadCount = '';
   int get currentIndex => _sharedService.currentIndex;
 
   User? get currentUser => _authenticationService.currentUser;
+
+  String get chatUnreadCount => _chatUnreadCount;
 
   navigateToProfile() => _navigationService.navigateTo(Routes.profileView);
 
@@ -68,6 +73,22 @@ class MainViewModel extends ReactiveViewModel {
   dispose() {
     // videoSocket.dispose();
     // videoSocket.disconnect();
+  }
+
+  void getConversationList() async {
+    setBusy(true);
+    try {
+      List<Conversation> conversations =
+          await _chatService.getConversationList();
+      int count = 0;
+      for (var element in conversations) {
+        print('element: ${element.toJson()}');
+        count += element.unReadCount!;
+      }
+      _chatUnreadCount = '$count';
+    } finally {
+      setBusy(false);
+    }
   }
 
   setCurrentIndex(int value) {
@@ -127,7 +148,7 @@ class MainViewModel extends ReactiveViewModel {
   }
 
   @override
-  List<ReactiveServiceMixin> get reactiveServices => [_sharedService];
+  List<ListenableServiceMixin> get listenableServices => [_sharedService];
 
   void navigateBack() => _navigationService.back();
 

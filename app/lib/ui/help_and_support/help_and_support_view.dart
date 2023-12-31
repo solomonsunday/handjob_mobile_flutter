@@ -62,9 +62,9 @@ class HelpAndSupportView extends StatelessWidget with $HelpAndSupportView {
                     ),
                     const SizedBox(height: AppSize.s24),
                     InputField(
-                      label: 'Enter email',
-                      hintText: 'e.g example@gmail.com',
-                      keyBoardType: TextInputType.emailAddress,
+                      label: 'Subject',
+                      hintText: 'Enter subject..',
+                      keyBoardType: TextInputType.text,
                       controller: titleController,
                       focusnode: titleFocusNode,
                     ),

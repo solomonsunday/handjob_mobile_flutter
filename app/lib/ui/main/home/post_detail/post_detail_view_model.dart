@@ -12,7 +12,7 @@ import '../../../../services/comment.service.dart';
 
 const String CREATE_COMMENT_BUSY = 'CREATE_COMMENT_BUSY';
 
-class PostDetailViewModel extends ReactiveViewModel {
+class PostDetailViewModel extends FormViewModel {
   final _navigationService = locator<NavigationService>();
   final _commentService = locator<CommentService>();
   final _authenticationService = locator<AuthenticationService>();
@@ -64,12 +64,31 @@ class PostDetailViewModel extends ReactiveViewModel {
     }
   }
 
-  replyComment(Comment comment) {
-    String textToSelect = '@${comment.authorEmployer}';
-    messageController.text = "@${comment.authorEmployer} ";
+  replyComment(Comment comment) async {
+    print('comment ${comment?.author?.toJson()}');
+    String textToSelect = '@${comment.author?.firstName}';
+    messageController.text = "@${comment.author?.firstName} ";
     messageController.selection =
         TextSelection(baseOffset: 0, extentOffset: textToSelect.length - 1);
-    notifyListeners();
+    // notifyListeners();
+     if (messageController.text.isEmpty) return;
+
+    Map<String, dynamic> formData = {
+      "message": messageController.text,
+      "replyTo": comment.id,
+    };
+    print('formdata: $formData');
+    setBusyForObject(CREATE_COMMENT_BUSY, true);
+    try {
+      await _commentService.createComment(_post!.id!, formData);
+      messageController.clear();
+      _post!.commentCount = _post!.commentCount! + 1;
+      notifyListeners();
+    } finally {
+      setBusyForObject(CREATE_COMMENT_BUSY, false);
+      await _commentService.getComments(_post!.id!);
+      notifyListeners();
+    }
   }
 
   @override

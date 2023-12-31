@@ -10,7 +10,7 @@ import '../models/conversation.model.dart';
 const String CHAT_SOCKET_SERVER_URL =
     'https://api-jobplicant.herokuapp.com/notigateway';
 
-class ChatService with ReactiveServiceMixin {
+class ChatService with ListenableServiceMixin {
   Dio dioClient = locator<DioClient>().dio;
 
   late IO.Socket socket;
@@ -58,7 +58,8 @@ class ChatService with ReactiveServiceMixin {
   Future<bool> createChat(Map<String, dynamic> formData) async {
     // socket.emit('chat_msg_to_client', formData);
     var response = await dioClient.post('/chat', data: formData);
-    // print('response data : ${response.data}');
+    print('response data : ${response.data}');
+   
 
     return true;
   }

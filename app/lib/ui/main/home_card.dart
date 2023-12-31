@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -372,7 +374,26 @@ class HomeCardViewModel extends BaseViewModel {
   bool _isLiked = false;
   bool get isLiked => _isLiked;
 
+  Timer? _debounce;
+
+// change debouce duration accordingly
+  Duration _debouceDuration = const Duration(milliseconds: 500);
+
+  // Don't forgot to dispose it as it can cause performance issues.
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
   Future onLikePost(Post post) async {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(_debouceDuration, () async {
+      await handleLikePost(post);
+    });
+  }
+
+  Future<void> handleLikePost(Post post) async {
     post.liked = !post.liked!;
     if (post.liked!) {
       post.likes = post.likes! + 1;
@@ -417,6 +438,7 @@ class HomeCardViewModel extends BaseViewModel {
 
     try {
       await _postService.deletePost(id);
+      // await _postService.getPosts();
       Fluttertoast.showToast(
         msg: 'Post has been deleted!',
         toastLength: Toast.LENGTH_LONG,
@@ -424,6 +446,7 @@ class HomeCardViewModel extends BaseViewModel {
       );
     } finally {
       notifyListeners();
+      setBusyForObject(DELETE_POST, false);
     }
   }
 }

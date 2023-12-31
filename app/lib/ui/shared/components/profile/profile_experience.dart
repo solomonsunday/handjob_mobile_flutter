@@ -8,7 +8,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 
 import '../../../../app/app.locator.dart';
-import '../../../../enums/bottom_sheet_type.dart';
+import '../../../../enums/bottom_sheet_type.dart'; 
 import '../../../../models/experience.model.dart';
 import '../../../../models/user.model.dart';
 import '../../../../services/authentication.service.dart';

@@ -5,6 +5,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:ui_package/ui_package.dart';
 
+import '../../../../enums/bottom_sheet_type.dart';
 import '../../../../models/applicant.model.dart';
 import '../../../../models/applied_job.model.dart';
 import '../../../../models/user.model.dart';
@@ -19,12 +20,14 @@ class JobDetailViewModel extends BaseViewModel {
   final _instantJobService = locator<InstantJobService>();
   final _dialogService = locator<DialogService>();
   final _authenticationService = locator<AuthenticationService>();
+  final _bottomSheetService = locator<BottomSheetService>();
 
   bool _isWaitingToBeAccepted = false;
   bool get isWaitingToBeAccepted => _isWaitingToBeAccepted;
   User? get currentUser => _authenticationService.currentUser;
   int _applicantCount = 0;
   int get applicantCount => _applicantCount;
+  User? get user => _authenticationService.currentUser;
 
   navigateBack() => _navigationService.back();
 
@@ -54,6 +57,30 @@ class JobDetailViewModel extends BaseViewModel {
       description: "Are you sure you want to apply for this job?",
     );
     if (!response!.confirmed) return;
+
+    if ((user?.phoneNumber ?? "").isEmpty) {
+      var dialogResponse = await _dialogService.showDialog(
+        description:
+            "Kindly add your phone number in your profile to apply for this job.",
+        title: "Phone number required",
+        buttonTitle: "Update Phone number",
+        cancelTitle: "Cancel",
+      );
+
+      print('dialog confirmed response: ${dialogResponse?.confirmed}');
+      if (dialogResponse != null && dialogResponse.confirmed) {
+        _bottomSheetService.showCustomSheet(
+          variant: BottomSheetType.profile_contact,
+          data: user,
+          isScrollControlled: true,
+          ignoreSafeArea: true,
+          enterBottomSheetDuration: const Duration(milliseconds: 400),
+          exitBottomSheetDuration: const Duration(milliseconds: 200),
+          enableDrag: true,
+        );
+      }
+      return;
+    }
 
     try {
       setBusyForObject(APPLY_JOB, true);

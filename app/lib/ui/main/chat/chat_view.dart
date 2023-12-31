@@ -15,7 +15,7 @@ class ChatView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ChatViewModel>.reactive(
         viewModelBuilder: () => ChatViewModel(),
-        onModelReady: (model) {
+        onViewModelReady: (model) {
           model.initializeView();
           model.getConversationList();
         },
