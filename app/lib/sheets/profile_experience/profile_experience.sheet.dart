@@ -185,11 +185,12 @@ class ProfileExperienceSheet extends StatelessWidget
                     fieldViewBuilder: (context, textEditingController,
                             focusNode, onFieldSubmitted) =>
                         InputField(
-                      label: 'Location *',
+                      label: 'Location',
                       controller: locationController,
                       focusnode: focusNode,
                       onTap: onFieldSubmitted,
                       fillColor: ColorManager.kWhiteColor,
+                      requiredField: true,
                     ),
                   ),
                   const SizedBox(height: AppSize.s12),

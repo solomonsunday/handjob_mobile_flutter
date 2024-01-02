@@ -8,9 +8,10 @@ import 'package:ui_package/ui_package.dart';
 
 import '../../home_card.dart';
 import 'comment_item/comment_item_view.dart';
+import 'post_detail_view.form.dart';
 
 @FormView(fields: [FormTextField(name: 'message')])
-class PostDetailView extends StatelessWidget {
+class PostDetailView extends StatelessWidget with $PostDetailView {
   const PostDetailView({
     Key? key,
     required this.post,
@@ -24,8 +25,12 @@ class PostDetailView extends StatelessWidget {
     return ViewModelBuilder<PostDetailViewModel>.nonReactive(
       viewModelBuilder: () => PostDetailViewModel(),
       onViewModelReady: (model) async {
+        syncFormWithViewModel(model);
         model.updatePost(post);
         await model.getComments();
+      },
+      onDispose: (viewModel) {
+        disposeForm();
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -127,50 +132,57 @@ class CommentFormView extends ViewModelWidget<PostDetailViewModel> {
 
   @override
   Widget build(BuildContext context, PostDetailViewModel model) {
+    print("text form: ${model.messageValue}");
     return Container(
       padding: const EdgeInsets.all(AppPadding.p24),
       decoration: const BoxDecoration(
         color: ColorManager.kWhiteColor,
       ),
-      child: InputField(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSize.s12),
-          borderSide: const BorderSide(
-            color: ColorManager.kDarkColor,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSize.s12),
-          borderSide: const BorderSide(
-            color: ColorManager.kGrey3,
-          ),
-        ),
-        // prefixIcon: Icon(Icons.person),
-        suffixIcon: GestureDetector(
-          onTap: model.busy(CREATE_COMMENT_BUSY) ? null : model.createComment,
-          child: model.busy(CREATE_COMMENT_BUSY)
-              ? const Padding(
-                  padding: EdgeInsets.all(20),
-                  child: SizedBox(
-                    height: 4,
-                    width: 4,
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 1.5,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          ColorManager.kDarkColor,
+      child: Column(
+        children: [
+          Text(model.messageValue ?? "", style: TextStyle(fontSize: 14)),
+          InputField(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppSize.s12),
+              borderSide: const BorderSide(
+                color: ColorManager.kDarkColor,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppSize.s12),
+              borderSide: const BorderSide(
+                color: ColorManager.kGrey3,
+              ),
+            ),
+            // prefixIcon: Icon(Icons.person),
+            suffixIcon: GestureDetector(
+              onTap:
+                  model.busy(CREATE_COMMENT_BUSY) ? null : model.createComment,
+              child: model.busy(CREATE_COMMENT_BUSY)
+                  ? const Padding(
+                      padding: EdgeInsets.all(20),
+                      child: SizedBox(
+                        height: 4,
+                        width: 4,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 1.5,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              ColorManager.kDarkColor,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                )
-              : Icon(
-                  color: model.messageController.text.isEmpty
-                      ? ColorManager.kGrey
-                      : ColorManager.kPrimaryColor,
-                  Icons.send),
-        ),
-        controller: model.messageController,
+                    )
+                  : Icon(
+                      color: model.messageValue?.isEmpty ?? false
+                          ? ColorManager.kGrey
+                          : ColorManager.kPrimaryColor,
+                      Icons.send),
+            ),
+            controller: model.messageController,
+          ),
+        ],
       ),
     );
   }

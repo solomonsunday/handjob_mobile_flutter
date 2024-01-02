@@ -32,16 +32,16 @@ class SplashViewViewModel extends BaseViewModel {
       return;
     }
 
-    bool authResponse = await _authenticationService.isAuthenticated();
-    if (authResponse) {
-      await _authenticationService.getCurrentBaseUser();
-      _navigationService.replaceWith(Routes.mainView);
-      return;
-    }
+    // bool authResponse = await _authenticationService.isAuthenticated();
+    // if (authResponse) {
+    //   await _authenticationService.getCurrentBaseUser();
+    //   _navigationService.replaceWith(Routes.mainView);
+    //   return;
+    // }
 
-    navigateToLogin();
+    // navigateToLogin();
 
-    return;
+    // return;
     try {
       bool authResponse = await _authenticationService.isAuthenticated();
       if (authResponse) {

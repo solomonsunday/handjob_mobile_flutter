@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:handjob_mobile/app/app.locator.dart';
 import 'package:handjob_mobile/app/app.router.dart';
 import 'package:handjob_mobile/services/notification.service.dart';
 import 'package:handjob_mobile/services/post.service.dart';
+import 'package:handjob_mobile/ui/main/main_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -10,10 +13,11 @@ import '../../../models/notification.model.dart' as Notif;
 import '../../../models/post.model.dart';
 import '../../../models/user.model.dart';
 import '../../../services/authentication.service.dart';
+import '../main_view_model.dart';
 
 const String POST_BUSY = "POST_BUSY";
 
-class HomeViewModel extends ReactiveViewModel {
+class HomeViewModel extends MainViewModel {
   final _navigationService = locator<NavigationService>();
   final _postService = locator<PostService>();
   final _authenticationService = locator<AuthenticationService>();
@@ -57,11 +61,32 @@ class HomeViewModel extends ReactiveViewModel {
       _navigationService.navigateToApplicantProfileView(applicantId: id);
 
   handleSearch(String value) async {
-    setBusyForObject(POST_BUSY, true);
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(_debouceDuration, () async {
+      await searchPost(value);
+    });
+  }
+
+  Future<void> searchPost(String query) async {
+    // setBusyForObject(POST_BUSY, true);
     try {
-      await _postService.getPosts(search: value);
+      await _postService.getPosts(search: query);
     } finally {
       setBusyForObject(POST_BUSY, false);
     }
+  }
+
+  navigateToCreatePost() => setCurrentIndex(MainView.POST_VIEW);
+
+  Timer? _debounce;
+
+// change debouce duration accordingly
+  Duration _debouceDuration = const Duration(milliseconds: 500);
+
+  // Don't forgot to dispose it as it can cause performance issues.
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
   }
 }

@@ -80,6 +80,17 @@ class ResetPasswordView extends StatelessWidget with $ResetPasswordView {
                     focusnode: passwordFocusNode,
                     keyBoardType: TextInputType.emailAddress,
                     fillColor: ColorManager.kWhiteColor,
+                    obscureText: model.passwordVisibility,
+                    suffixIcon: GestureDetector(
+                      onTap: model.togglePasswordVisibility,
+                      child: Icon(
+                        model.passwordVisibility
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        size: AppSize.s24,
+                        color: ColorManager.kDarkCharcoal,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: AppSize.s12),
                   InputField(
@@ -88,6 +99,17 @@ class ResetPasswordView extends StatelessWidget with $ResetPasswordView {
                     focusnode: confirmPasswordFocusNode,
                     keyBoardType: TextInputType.emailAddress,
                     fillColor: ColorManager.kWhiteColor,
+                    obscureText: model.confirmPasswordVisibility,
+                    suffixIcon: GestureDetector(
+                      onTap: model.toggleConfirmPasswordVisibility,
+                      child: Icon(
+                        model.confirmPasswordVisibility
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        size: AppSize.s24,
+                        color: ColorManager.kDarkCharcoal,
+                      ),
+                    ),
                   ),
 
                   const SizedBox(height: AppSize.s40),

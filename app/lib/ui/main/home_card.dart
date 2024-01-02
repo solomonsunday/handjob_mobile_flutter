@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -287,7 +289,7 @@ class HomeCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  model.isLiked || (post.liked ?? false)
+                                  post.liked!
                                       ? Icons.favorite
                                       : Icons.favorite_outline,
                                   color: ColorManager.kDarkColor,
@@ -372,18 +374,34 @@ class HomeCardViewModel extends BaseViewModel {
   bool _isLiked = false;
   bool get isLiked => _isLiked;
 
+  Timer? _debounce;
+
+// change debouce duration accordingly
+  Duration _debouceDuration = const Duration(milliseconds: 500);
+
+  // Don't forgot to dispose it as it can cause performance issues.
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
   Future onLikePost(Post post) async {
-    _isLiked = !_isLiked;
-    if (post.likes != null) {
-      // if (_isLiked && post.likes! > 0) {
-      //   // if already liked, check if the value is greater than 0 and remove 1..
-      //   post.likes = post.likes! - 1;
-      // } else if (!_isLiked && post.likes! > 0) {
-      //   post.likes = post.likes! + 1;
-      // }
-       post.likes = _isLiked && post.likes! > 0 ? (post.likes ?? 0) + 1 : (post.likes ?? 0) - 1;
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(_debouceDuration, () async {
+      await handleLikePost(post);
+    });
+  }
+
+  Future<void> handleLikePost(Post post) async {
+    post.liked = !post.liked!;
+    if (post.liked!) {
+      post.likes = post.likes! + 1;
+    } else {
+      post.likes = post.likes! - 1;
     }
     notifyListeners();
+
     setBusyForObject(LIKE_POST, true);
 
     try {
@@ -399,8 +417,8 @@ class HomeCardViewModel extends BaseViewModel {
       print('error liking: ${e.response?.data ?? "error unknown"}');
       post.likes = (post.likes ?? 0) - 1;
       _isLiked = false;
-      Fluttertoast.showToast(
-          msg: 'Unable to like post. please try again later');
+      // Fluttertoast.showToast(
+      //     msg: 'Unable to like post. please try again later');
     } finally {
       setBusyForObject(LIKE_POST, false);
       notifyListeners();
@@ -420,6 +438,7 @@ class HomeCardViewModel extends BaseViewModel {
 
     try {
       await _postService.deletePost(id);
+      // await _postService.getPosts();
       Fluttertoast.showToast(
         msg: 'Post has been deleted!',
         toastLength: Toast.LENGTH_LONG,
@@ -427,6 +446,7 @@ class HomeCardViewModel extends BaseViewModel {
       );
     } finally {
       notifyListeners();
+      setBusyForObject(DELETE_POST, false);
     }
   }
 }

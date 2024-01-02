@@ -26,7 +26,7 @@ class MainView extends StatelessWidget {
         await model.fetchCountries();
         await model.fetchQualification();
         await model.fetchProfessionTypes();
-
+        model.getConversationList();
       },
       viewModelBuilder: () => MainViewModel(),
       onDispose: (model) {
@@ -100,7 +100,8 @@ class MainView extends StatelessWidget {
             ),
             BottomNavBarItem(
               isIconBadge: true,
-              badgeCounter: '8',
+              badgeCounter:
+                  model.chatUnreadCount == '0' ? '' : model.chatUnreadCount,
               icon: Icons.chat_bubble,
               title: Text(
                 'Chats',

@@ -12,7 +12,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<HomeViewModel>.reactive(
+    return ViewModelBuilder<HomeViewModel>.nonReactive(
         viewModelBuilder: () => HomeViewModel(),
         builder: (_, model, child) {
           return Scaffold(
@@ -28,13 +28,6 @@ class HomeView extends StatelessWidget {
                   color: ColorManager.kWhiteColor,
                 ),
               ),
-              // title: Text(
-              //   'HandWorker',
-              //   style: getBoldStyle(
-              //     color: ColorManager.kWhiteColor,
-              //     fontSize: 20,
-              //   ),
-              // ),
               title: SizedBox(
                 height: 50,
                 width: 240,
@@ -47,18 +40,30 @@ class HomeView extends StatelessWidget {
                 NotificationIconWidget(),
               ],
             ),
-            body: model.loadingPosts
-                ? const PostViewSkeleton()
-                : const Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      HomeSearchWidget(),
-                      Expanded(child: HomePostWidget()),
-                    ],
-                  ),
+            body: const _HomeContentView(),
           );
         });
+  }
+}
+
+class _HomeContentView extends ViewModelWidget<HomeViewModel> {
+  const _HomeContentView({super.key});
+
+  @override
+  Widget build(BuildContext context, HomeViewModel model) {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      child: model.loadingPosts
+          ? const PostViewSkeleton()
+          : const Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                HomeSearchWidget(),
+                Expanded(child: HomePostWidget()),
+              ],
+            ),
+    );
   }
 }
 
@@ -163,29 +168,51 @@ class HomePostWidget extends ViewModelWidget<HomeViewModel> {
         ? const Center(
             child: CircularProgressIndicator.adaptive(),
           )
-        : ListView.builder(
-            controller: model.scrollController,
-            addAutomaticKeepAlives: false,
-            itemCount: model.posts.length,
-            itemBuilder: (BuildContext context, int index) {
-              return HomeCard(
-                onAuthorClick: (id) {
-                  if (id == model.currentUser?.id) {
-                    model.navigateToProfile();
-                    return;
-                  }
-                  model.navigateToAuthorProfile(id);
+        : model.posts.isEmpty
+            ? Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'No posts available!',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    DefaultButton(
+                      onPressed: model.navigateToCreatePost,
+                      title: 'Create Post',
+                      paddingHeight: 10,
+                    ),
+                  ],
+                ),
+              )
+            : ListView.builder(
+                controller: model.scrollController,
+                addAutomaticKeepAlives: false,
+                itemCount: model.posts.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return HomeCard(
+                    onAuthorClick: (id) {
+                      if (id == model.currentUser?.id) {
+                        model.navigateToProfile();
+                        return;
+                      }
+                      model.navigateToAuthorProfile(id);
+                    },
+                    post: model.posts[index],
+                    onImageClick: () {
+                      model.onPostImageClick(model.posts[index], index);
+                    },
+                    inPosition: model.offet <= (320 * index) &&
+                        model.offet >= (320 * index) - 140,
+                    key: ObjectKey(index),
+                  );
                 },
-                post: model.posts[index],
-                onImageClick: () {
-                  model.onPostImageClick(model.posts[index], index);
-                },
-                inPosition: model.offet <= (320 * index) &&
-                    model.offet >= (320 * index) - 140,
-                key: ObjectKey(index),
               );
-            },
-          );
   }
 }
 

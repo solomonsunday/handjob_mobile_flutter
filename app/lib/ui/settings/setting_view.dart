@@ -64,10 +64,10 @@ class SettingView extends StatelessWidget {
                     ],
                   ),
                   children: [
-                    if (index == 0) const VideoCallPreferenceWidget(),
-                    if (index == 1) const NotificationPreferenceWidget(),
-                    if (index == 2) const SigninSecurityPreferenceWidget(),
-                    if (index == 3) const PolicyPreferenceWidget(),
+                    // if (index == 0) const VideoCallPreferenceWidget(),
+                    // if (index == 1) const NotificationPreferenceWidget(),
+                    if (index == 1) const SigninSecurityPreferenceWidget(),
+                    if (index == 2) const PolicyPreferenceWidget(),
                   ],
                 );
               },

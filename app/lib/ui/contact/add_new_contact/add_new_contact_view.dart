@@ -20,7 +20,7 @@ class AddNewContactView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddNewContactViewModel>.nonReactive(
         viewModelBuilder: () => AddNewContactViewModel(),
-        onModelReady: (model) async {
+        onViewModelReady: (model) async {
           await model.fetchAllContacts();
         },
         builder: (context, model, child) {
@@ -84,15 +84,17 @@ class AddNewContactListView extends ViewModelWidget<AddNewContactViewModel> {
 
   @override
   Widget build(BuildContext context, AddNewContactViewModel model) {
-    return ListView.builder(
-      itemCount: (model.contactList ?? []).length,
-      itemBuilder: (BuildContext context, int index) {
-        Contact contact = model.contactList![index];
-        return AddNewContactListItem(
-          contact: contact,
-        );
-      },
-    );
+    return model.busy(ALL_CONTACT_LIST_REQUEST)
+        ? const Center(child: CircularProgressIndicator())
+        : ListView.builder(
+            itemCount: (model.contactList ?? []).length,
+            itemBuilder: (BuildContext context, int index) {
+              Contact contact = model.contactList![index];
+              return AddNewContactListItem(
+                contact: contact,
+              );
+            },
+          );
   }
 }
 

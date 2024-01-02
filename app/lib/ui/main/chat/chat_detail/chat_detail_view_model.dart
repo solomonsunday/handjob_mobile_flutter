@@ -72,7 +72,7 @@ class ChatDetailViewModel extends ReactiveViewModel {
   }
 
   @override
-  List<ReactiveServiceMixin> get reactiveServices => [_chatService];
+  List<ListenableServiceMixin> get listenableServices => [_chatService];
 
   void createChat(Contact contact) async {
     if (chatMessageController.text.isEmpty) return;
@@ -88,8 +88,9 @@ class ChatDetailViewModel extends ReactiveViewModel {
       "videoUrl": ""
     };
     try {
+      
       await _chatService.createChat(formData);
-      // await _chatService.getChatsWithPartner(contact.id!);
+      await _chatService.getChatsWithPartner(contact.id!);
 
     } on DioError catch (e) {
       print('error: $e');
