@@ -393,8 +393,8 @@ class HomeCardViewModel extends BaseViewModel {
         await _postService.disLikePost(post.id!);
       }
       post = await _postService.getPost(post.id!);
-      Fluttertoast.showToast(
-          msg: 'You just ${_isLiked ? 'liked' : 'unliked'} a post');
+      // Fluttertoast.showToast(
+      //     msg: 'You just ${_isLiked ? 'liked' : 'unliked'} a post');
     } on DioError catch (e) {
       print('error liking: ${e.response?.data ?? "error unknown"}');
       post.likes = (post.likes ?? 0) - 1;
