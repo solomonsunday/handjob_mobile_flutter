@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:stacked/stacked.dart';
 
@@ -43,7 +42,7 @@ class CommentService with ListenableServiceMixin {
         newResponsePostMap.map((x) => Comment.fromJson(x)).toList();
     _comments = comments;
     notifyListeners();
-    print('comments: $_comments');
+    print('comments: ${_comments.map((e) => e.toJson()).toList()}');
     return comments;
   }
 

@@ -23,6 +23,9 @@ Comment _$CommentFromJson(Map<String, dynamic> json) => Comment(
           ? null
           : Author.fromJson(json['author'] as Map<String, dynamic>),
       liked: json['liked'] as bool?,
+      replies: (json['replies'] as List<dynamic>?)
+          ?.map((e) => Comment.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$CommentToJson(Comment instance) => <String, dynamic>{
@@ -40,4 +43,5 @@ Map<String, dynamic> _$CommentToJson(Comment instance) => <String, dynamic>{
       'location': instance.location,
       'author': instance.author,
       'liked': instance.liked,
+      'replies': instance.replies,
     };

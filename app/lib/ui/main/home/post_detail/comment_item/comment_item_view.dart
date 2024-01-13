@@ -75,7 +75,8 @@ class CommentItemView extends StatelessWidget {
                         )
                       ]),
                       const SizedBox(height: AppSize.s8),
-                      _buildCommentReplies(count: 0),
+                      _buildCommentReplies(
+                          count: comment?.replies?.length ?? 0),
                     ],
                   ),
                 ),

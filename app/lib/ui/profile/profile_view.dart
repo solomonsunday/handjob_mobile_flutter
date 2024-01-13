@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:ui_package/ui_package.dart';
 
+import '../../utils/contants.dart';
 import '../shared/components/profile/profile_contact.dart';
 import '../shared/components/profile/profile_education_apprenticeship.dart';
 import '../shared/components/profile/profile_experience.dart';
@@ -85,34 +86,45 @@ class ProfileView extends StatelessWidget {
                     sendEmail: null,
                     makePhoneCall: null,
                   )),
-                  const SliverToBoxAdapter(
-                      child: SizedBox(height: AppSize.s12)),
-                  SliverToBoxAdapter(
-                    child: ProfileExperience(
-                      currentUser: model.currentUser,
-                      showExperienceSheet: () =>
-                          model.showExperienceSheet(null),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: ProfileEducationApprenticeship(
-                      currentUser: model.currentUser,
-                      showEducationApprenticeSheet: () =>
-                          model.showEducationApprenticeSheet(),
-                    ),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: Divider(
-                      color: ColorManager.kPrimary100Color,
-                      thickness: 1,
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: ProfilePortfolio(
-                      currentUser: model.currentUser,
-                      showPortfolioSheet: () => model.showPortfolioSheet(),
-                    ),
-                  ),
+                  model.currentUser?.accountType == ACCOUNT_INSTANT_HIRE
+                      ? Container()
+                      : const SliverToBoxAdapter(
+                          child: SizedBox(height: AppSize.s12)),
+                  model.currentUser?.accountType == ACCOUNT_INSTANT_HIRE
+                      ? Container()
+                      : SliverToBoxAdapter(
+                          child: ProfileExperience(
+                            currentUser: model.currentUser,
+                            showExperienceSheet: () =>
+                                model.showExperienceSheet(null),
+                          ),
+                        ),
+                  model.currentUser?.accountType == ACCOUNT_INSTANT_HIRE
+                      ? Container()
+                      : SliverToBoxAdapter(
+                          child: ProfileEducationApprenticeship(
+                            currentUser: model.currentUser,
+                            showEducationApprenticeSheet: () =>
+                                model.showEducationApprenticeSheet(),
+                          ),
+                        ),
+                  model.currentUser?.accountType == ACCOUNT_INSTANT_HIRE
+                      ? Container()
+                      : const SliverToBoxAdapter(
+                          child: Divider(
+                            color: ColorManager.kPrimary100Color,
+                            thickness: 1,
+                          ),
+                        ),
+                  model.currentUser?.accountType == ACCOUNT_INSTANT_HIRE
+                      ? Container()
+                      : SliverToBoxAdapter(
+                          child: ProfilePortfolio(
+                            currentUser: model.currentUser,
+                            showPortfolioSheet: () =>
+                                model.showPortfolioSheet(),
+                          ),
+                        ),
                   const SliverToBoxAdapter(
                     child: Divider(
                       color: ColorManager.kPrimary100Color,

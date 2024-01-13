@@ -18,6 +18,7 @@
 #import "FlutterRTCDataChannel.h"
 #import "FlutterRTCDesktopCapturer.h"
 #import "FlutterRTCFrameCapturer.h"
+#import "FlutterRTCFrameCryptor.h"
 #import "FlutterRTCMediaStream.h"
 #import "FlutterRTCPeerConnection.h"
 #import "FlutterRTCVideoRenderer.h"

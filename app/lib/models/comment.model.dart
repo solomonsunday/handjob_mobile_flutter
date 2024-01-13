@@ -20,6 +20,7 @@ class Comment {
   String? location;
   Author? author;
   bool? liked;
+  List<Comment>? replies;
 
   Comment({
     this.id,
@@ -36,6 +37,7 @@ class Comment {
     this.location,
     this.author,
     this.liked,
+    this.replies,
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) =>

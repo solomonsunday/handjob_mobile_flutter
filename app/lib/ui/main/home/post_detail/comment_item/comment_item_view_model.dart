@@ -15,13 +15,13 @@ class CommentItemViewModel extends ReactiveViewModel {
   final _authenticationService = locator<AuthenticationService>();
 
   User? get currentUser => _authenticationService.currentUser;
-  bool _isLiked = false;
+  final bool _isLiked = false;
   bool get isLiked => _isLiked;
 
   Timer? _debounce;
 
 // change debouce duration accordingly
-  Duration _debouceDuration = const Duration(milliseconds: 500);
+  final Duration _debouceDuration = const Duration(milliseconds: 500);
 
   Future<void> likeComment(Comment comment) async {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
@@ -31,8 +31,12 @@ class CommentItemViewModel extends ReactiveViewModel {
   }
 
   Future<void> handleLikeComment(Comment comment) async {
-    _isLiked = !_isLiked;
-    comment.likes = (comment.likes ?? 0) + 1;
+    comment.liked = comment.liked == null ? true : !comment.liked!;
+    if (comment.liked!) {
+      comment.likes = comment.likes! + 1;
+    } else {
+      comment.likes = comment.likes! - 1;
+    }
     notifyListeners();
     setBusyForObject(LIKE_COMMENT, true);
     try {

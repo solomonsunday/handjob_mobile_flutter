@@ -116,6 +116,7 @@ class CommentView extends ViewModelWidget<PostDetailViewModel> {
                 physics: const BouncingScrollPhysics(),
                 itemCount: model.comments.length,
                 shrinkWrap: true,
+                padding: const EdgeInsets.only(bottom: 80.0),
                 itemBuilder: (context, index) {
                   return CommentItemView(
                     comment: model.comments[index],
@@ -140,7 +141,6 @@ class CommentFormView extends ViewModelWidget<PostDetailViewModel> {
       ),
       child: Column(
         children: [
-          Text(model.messageValue ?? "", style: TextStyle(fontSize: 14)),
           InputField(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppSize.s12),
@@ -175,6 +175,7 @@ class CommentFormView extends ViewModelWidget<PostDetailViewModel> {
                       ),
                     )
                   : Icon(
+                      size: 30,
                       color: model.messageValue?.isEmpty ?? false
                           ? ColorManager.kGrey
                           : ColorManager.kPrimaryColor,

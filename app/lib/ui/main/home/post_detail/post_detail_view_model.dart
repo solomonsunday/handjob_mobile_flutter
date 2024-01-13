@@ -21,6 +21,9 @@ class PostDetailViewModel extends FormViewModel {
   Post? _post;
   Post? get postId => _post;
 
+  Comment? _commentToReply;
+  Comment? get commentToReply => _commentToReply;
+
   TextEditingController messageController = TextEditingController();
 
   List<Comment> get comments => _commentService.comments;
@@ -50,6 +53,9 @@ class PostDetailViewModel extends FormViewModel {
     Map<String, dynamic> formData = {
       "message": messageController.text,
     };
+    if(commentToReply != null ) {
+       formData["replyTo"] = commentToReply?.id;
+    }
     print('formdata: $formData');
     setBusyForObject(CREATE_COMMENT_BUSY, true);
     try {
@@ -73,22 +79,23 @@ class PostDetailViewModel extends FormViewModel {
     // notifyListeners();
      if (messageController.text.isEmpty) return;
 
-    Map<String, dynamic> formData = {
-      "message": messageController.text,
-      "replyTo": comment.id,
-    };
-    print('formdata: $formData');
-    setBusyForObject(CREATE_COMMENT_BUSY, true);
-    try {
-      await _commentService.createComment(_post!.id!, formData);
-      messageController.clear();
-      _post!.commentCount = _post!.commentCount! + 1;
-      notifyListeners();
-    } finally {
-      setBusyForObject(CREATE_COMMENT_BUSY, false);
-      await _commentService.getComments(_post!.id!);
-      notifyListeners();
-    }
+    _commentToReply = comment;
+    // Map<String, dynamic> formData = {
+    //   "message": messageController.text,
+    //   "replyTo": comment?.id,
+    // };
+    // print('formdata: $formData');
+    // setBusyForObject(CREATE_COMMENT_BUSY, true);
+    // try {
+    //   await _commentService.createComment(_post!.id!, formData);
+    //   messageController.clear();
+    //   _post!.commentCount = _post!.commentCount! + 1;
+    //   notifyListeners();
+    // } finally {
+    //   setBusyForObject(CREATE_COMMENT_BUSY, false);
+    //   await _commentService.getComments(_post!.id!);
+    //   notifyListeners();
+    // }
   }
 
   @override
