@@ -32,7 +32,8 @@ class AuthView extends StatelessWidget with $AuthView {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   const SizedBox(height: AppSize.s24),
-                  SizedBox(width: 250, child: Image.asset('assets/images/1.png')),
+                  SizedBox(
+                      width: 250, child: Image.asset('assets/images/1.png')),
                   const SizedBox(height: AppSize.s24),
                   Text(
                     'Login to your account',
@@ -148,7 +149,7 @@ class AuthView extends StatelessWidget with $AuthView {
                     ],
                   ),
                   const SizedBox(height: AppSize.s40),
-                  Column(
+                  const Column(
                     children: [
                       // SizedBox(
                       //   child: DefaultButton(
@@ -169,28 +170,28 @@ class AuthView extends StatelessWidget with $AuthView {
                       //     buttonTextColor: ColorManager.kDarkColor,
                       //   ),
                       // ),
-                      const SizedBox(height: AppSize.s8),
+                      SizedBox(height: AppSize.s8),
                       SizedBox(
-                        child: DefaultButton(
-                          paddingHeight: 22,
-                          onPressed: model.handleGoogleAuth,
-                          title: 'Via Google',
-                          fontSize: FontSize.s12,
-                          leadingIcon: SvgPicture.asset(
-                            'assets/images/google_icon.svg',
+                          // child: DefaultButton(
+                          //   paddingHeight: 22,
+                          //   onPressed: model.handleGoogleAuth,
+                          //   title: 'Via Google',
+                          //   fontSize: FontSize.s12,
+                          //   leadingIcon: SvgPicture.asset(
+                          //     'assets/images/google_icon.svg',
+                          //   ),
+                          //   leadingIconColor: ColorManager.kDarkColor,
+                          //   buttonBgColor: ColorManager.kWhiteColor,
+                          //   border: Border.all(
+                          //     width: 1,
+                          //     color: ColorManager.kDarkColor,
+                          //   ),
+                          //   borderRadius: AppSize.s12,
+                          //   buttonTextColor: ColorManager.kDarkColor,
+                          //   busy: model.busy(GOOGLE_AUTH),
+                          //   disabled: model.busy(GOOGLE_AUTH),
+                          // ),
                           ),
-                          leadingIconColor: ColorManager.kDarkColor,
-                          buttonBgColor: ColorManager.kWhiteColor,
-                          border: Border.all(
-                            width: 1,
-                            color: ColorManager.kDarkColor,
-                          ),
-                          borderRadius: AppSize.s12,
-                          buttonTextColor: ColorManager.kDarkColor,
-                          busy: model.busy(GOOGLE_AUTH),
-                          disabled: model.busy(GOOGLE_AUTH),
-                        ),
-                      ),
                     ],
                   ),
                   const SizedBox(height: AppSize.s32),

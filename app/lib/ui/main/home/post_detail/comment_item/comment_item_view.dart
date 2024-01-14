@@ -11,9 +11,11 @@ class CommentItemView extends StatelessWidget {
     Key? key,
     required this.comment,
     this.replyComment,
+    this.isReplyView = false,
   }) : super(key: key);
   final Comment? comment;
   final Function(Comment)? replyComment;
+  final bool isReplyView;
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CommentItemViewModel>.reactive(
@@ -75,8 +77,13 @@ class CommentItemView extends StatelessWidget {
                         )
                       ]),
                       const SizedBox(height: AppSize.s8),
-                      _buildCommentReplies(
-                          count: comment?.replies?.length ?? 0),
+                      isReplyView
+                          ? Container()
+                          : _buildCommentReplies(
+                              count: comment?.replies?.length ?? 0,
+                              onReplyTap: () =>
+                                  model.onReplyTap(comment?.replies ?? []),
+                            ),
                     ],
                   ),
                 ),
@@ -94,24 +101,27 @@ class CommentItemView extends StatelessWidget {
         });
   }
 
-  _buildCommentReplies({required int count}) {
-    return Container(
-      child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildDash(),
-            const SizedBox(width: AppSize.s12),
-            Text(
-              'View $count more replies',
-              style: getRegularStyle(
-                color: ColorManager.kGrey4,
-                fontSize: 8,
+  _buildCommentReplies({required int count, Function()? onReplyTap}) {
+    return GestureDetector(
+      onTap: onReplyTap,
+      child: Container(
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildDash(),
+              const SizedBox(width: AppSize.s12),
+              Text(
+                'View $count more replies',
+                style: getRegularStyle(
+                  color: ColorManager.kGrey4,
+                  fontSize: 8,
+                ),
               ),
-            ),
-            const SizedBox(width: AppSize.s12),
-            _buildDash(),
-          ]),
+              const SizedBox(width: AppSize.s12),
+              _buildDash(),
+            ]),
+      ),
     );
   }
 

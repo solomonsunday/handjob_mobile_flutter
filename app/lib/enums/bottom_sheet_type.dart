@@ -6,4 +6,5 @@ enum BottomSheetType {
   verify_phone_number,
   profile_portfolio,
   edit_instant_job,
+  reply_sheet,
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:ui_package/ui_package.dart';
@@ -173,22 +172,22 @@ class CustomerSignupView extends StatelessWidget with $CustomerSignupView {
                     ),
                     // Text('form valid: ${model.formIsValid} tos: ${model.tos}'),
                     const SizedBox(height: AppSize.s24),
-                    DefaultButton(
-                      onPressed: () async {
-                        await model.signUpWithGoogleAuth();
-                      },
-                      title: "Sign up with your Google account",
-                      fontWeight: FontWeightManager.regular,
-                      fontSize: FontSize.s12,
-                      leadingIcon: SvgPicture.asset(
-                        'assets/images/google_icon.svg',
-                      ),
-                      buttonType: ButtonType.outline,
-                      borderRadius: AppSize.s12,
-                      paddingHeight: 10,
-                      busy: model.busy(GOOGLE_AUTH),
-                      busyColor: ColorManager.kSecondaryColor,
-                    ),
+                    // DefaultButton(
+                    //   onPressed: () async {
+                    //     await model.signUpWithGoogleAuth();
+                    //   },
+                    //   title: "Sign up with your Google account",
+                    //   fontWeight: FontWeightManager.regular,
+                    //   fontSize: FontSize.s12,
+                    //   leadingIcon: SvgPicture.asset(
+                    //     'assets/images/google_icon.svg',
+                    //   ),
+                    //   buttonType: ButtonType.outline,
+                    //   borderRadius: AppSize.s12,
+                    //   paddingHeight: 10,
+                    //   busy: model.busy(GOOGLE_AUTH),
+                    //   busyColor: ColorManager.kSecondaryColor,
+                    // ),
                     const SizedBox(height: AppSize.s48),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

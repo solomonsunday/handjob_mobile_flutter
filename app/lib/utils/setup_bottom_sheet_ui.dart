@@ -4,6 +4,7 @@ import 'package:handjob_mobile/sheets/profile_education/profile_education.sheet.
 import 'package:handjob_mobile/sheets/profile_experience/profile_experience.sheet.dart';
 import 'package:handjob_mobile/sheets/profile_portfolio/profile_portfolio.sheet.dart';
 import 'package:handjob_mobile/sheets/profile_service.sheet.dart';
+import 'package:handjob_mobile/sheets/reply/reply.sheet.dart';
 import 'package:handjob_mobile/sheets/verify_phone/verify_phone.sheet.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -28,6 +29,8 @@ void setupBottomSheetUi() {
         ProfilePortfolioSheet(request: sheetRequest, completer: completer),
     BottomSheetType.edit_instant_job: (context, sheetRequest, completer) =>
         EditInstantJobSheetView(request: sheetRequest, completer: completer),
+    BottomSheetType.reply_sheet: (context, sheetRequest, completer) =>
+        ReplySheet(request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);

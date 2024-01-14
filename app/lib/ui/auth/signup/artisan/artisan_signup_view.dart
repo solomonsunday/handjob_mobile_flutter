@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:handjob_mobile/ui/auth/signup/artisan/artisan_signup_view.form.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -194,18 +193,18 @@ class ArtisanSignupView extends StatelessWidget with $ArtisanSignupView {
                 ),
                 // Text('form valid: ${model.formIsValid}, tos: ${model.tos}'),
                 const SizedBox(height: AppSize.s48),
-                DefaultButton(
-                  onPressed: () {},
-                  title: "Sign up with your Google account",
-                  fontWeight: FontWeightManager.regular,
-                  fontSize: FontSize.s12,
-                  leadingIcon: SvgPicture.asset(
-                    'assets/images/google_icon.svg',
-                  ),
-                  buttonType: ButtonType.outline,
-                  borderRadius: AppSize.s12,
-                  paddingHeight: 10,
-                ),
+                // DefaultButton(
+                //   onPressed: () {},
+                //   title: "Sign up with your Google account",
+                //   fontWeight: FontWeightManager.regular,
+                //   fontSize: FontSize.s12,
+                //   leadingIcon: SvgPicture.asset(
+                //     'assets/images/google_icon.svg',
+                //   ),
+                //   buttonType: ButtonType.outline,
+                //   borderRadius: AppSize.s12,
+                //   paddingHeight: 10,
+                // ),
                 const SizedBox(height: AppSize.s24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

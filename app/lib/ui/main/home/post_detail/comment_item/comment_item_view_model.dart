@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:handjob_mobile/enums/bottom_sheet_type.dart';
 import 'package:handjob_mobile/services/comment.service.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../../app/app.locator.dart';
 import '../../../../../models/comment.model.dart';
@@ -13,6 +15,7 @@ const String LIKE_COMMENT = 'LIKE_COMMENT';
 class CommentItemViewModel extends ReactiveViewModel {
   final _commentService = locator<CommentService>();
   final _authenticationService = locator<AuthenticationService>();
+  final _bottomSheetService = locator<BottomSheetService>();
 
   User? get currentUser => _authenticationService.currentUser;
   final bool _isLiked = false;
@@ -44,6 +47,15 @@ class CommentItemViewModel extends ReactiveViewModel {
     } finally {
       setBusyForObject(LIKE_COMMENT, false);
     }
+  }
+
+  onReplyTap(List<Comment> comments) {
+    _bottomSheetService.showCustomSheet(
+      variant: BottomSheetType.reply_sheet,
+      data: comments,
+      enableDrag: true,
+      isScrollControlled: false,
+    );
   }
 
   @override
